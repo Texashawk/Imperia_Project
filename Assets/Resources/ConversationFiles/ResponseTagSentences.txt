@@ -11,6 +11,7 @@
 [HATE]This is not the end for you and me. Not by a long mile.
 [HATE]We will not end this today.
 [HATE]I have no end of malice for you and yours.
+[HATE][+PASSION]Only death will be justice for what you have done today. Never forget that.
 [HATE]Cruelty such as you have shown me today has only one response.
 [HATE][AI]Logically, it is realistic to assume that you and I will operate in enemy mode for the forseeable future.
 [PLEASED]I'm thrilled you have done this, Your Excellence.
@@ -20,5 +21,6 @@
 [PLEASED][AI]It is quite logical for you to make this decision, and I am therefore pleased at said decision.
 [PLEASED][AI]My logic subroutines indicate that this decision has positive accelerators for my long-term strategies. I am grateful.
 [PLEASED]Thanks, Your Excellence! That's great news!
+[PLEASED]Cool. I am very happy that you have done this, [EMPEROR]. Rest assured that my friends will think likewise.
 [PLEASED]Awesome. That's really good to hear.
 [PLEASED][-PASSION]It is pleasing to see this decision was made. I am happy.
