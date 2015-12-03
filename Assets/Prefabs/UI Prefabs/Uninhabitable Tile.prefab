@@ -1,0 +1,270 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &102572
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 22417740}
+  - 222: {fileID: 22220700}
+  - 114: {fileID: 11462010}
+  - 114: {fileID: 11474070}
+  m_Layer: 5
+  m_Name: Tile Stat
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &129896
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 22462574}
+  - 222: {fileID: 22247952}
+  - 114: {fileID: 11474208}
+  - 114: {fileID: 11420174}
+  - 114: {fileID: 11448694}
+  m_Layer: 5
+  m_Name: Uninhabitable Tile
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &11420174
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 129896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fa415a25ed3ec84186c40b16ddefe21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TooltipItem: {fileID: 190212, guid: 663a10d67a21c2949a6a2971bf2cd739, type: 2}
+  forestPic: {fileID: 21300000, guid: 77a5c679fcadc3e429198c48f3203640, type: 3}
+  mountainPic: {fileID: 21300000, guid: e02e824a49accda48b3c973286d4878d, type: 3}
+  junglePic: {fileID: 21300000, guid: 226301af7294e51448ead733e58ee60d, type: 3}
+  plainsPic: {fileID: 21300000, guid: 74b116403bd74b5429475f629cc539db, type: 3}
+  barrenPic: {fileID: 21300000, guid: 918f7c4fb56cd16419058740cb2912fe, type: 3}
+  lavaPic: {fileID: 21300000, guid: 022d5bb71994e7a4ba22c0d487fedeef, type: 3}
+  oceanPic: {fileID: 21300000, guid: 418583769f34bf34dba1cbc209f2344c, type: 3}
+  desertPic: {fileID: 21300000, guid: d82689c02350e4545af51ea0f840300e, type: 3}
+  volcanicPic: {fileID: 21300000, guid: 9aa7a0d4da4ea21468d90ebbfcf31047, type: 3}
+  deadPic: {fileID: 21300000, guid: 918f7c4fb56cd16419058740cb2912fe, type: 3}
+  icePic: {fileID: 21300000, guid: 898926edafb776e4fa613db4e42380f5, type: 3}
+  impassiblePic: {fileID: 21300000, guid: 8ac349c6b8ecd824eab1b900e03b306d, type: 3}
+--- !u!114 &11448694
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 129896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf744d0d1fa7ec94ea0c25cfb7bae436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TooltipItem: {fileID: 126560, guid: cd928a98b89bc104f8c4d33c5bf8775d, type: 2}
+--- !u!114 &11462010
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 102572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: .990999997}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 7d784a79791c95d47876b7b4581f9208, type: 3}
+    m_FontSize: 16
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 4
+    m_RichText: 1
+    m_HorizontalOverflow: 1
+    m_VerticalOverflow: 1
+    m_LineSpacing: 1
+  m_Text: Bio
+--- !u!114 &11474070
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 102572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1573420865, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: .938000023}
+  m_EffectDistance: {x: -1, y: -1}
+  m_UseGraphicAlpha: 1
+--- !u!114 &11474208
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 129896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: .591000021}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 21300000, guid: aa45d199a30c79946aa7e2d74929f6e3, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!222 &22220700
+CanvasRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 102572}
+--- !u!222 &22247952
+CanvasRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 129896}
+--- !u!224 &22417740
+RectTransform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 102572}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 22462574}
+  m_RootOrder: 0
+  m_AnchorMin: {x: .5, y: .5}
+  m_AnchorMax: {x: .5, y: .5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 21.3999996, y: 20.2999992}
+  m_Pivot: {x: .5, y: .5}
+--- !u!224 &22462574
+RectTransform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 129896}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 22417740}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_AnchorMin: {x: .5, y: .5}
+  m_AnchorMax: {x: .5, y: .5}
+  m_AnchoredPosition: {x: -644.5, y: -339.5}
+  m_SizeDelta: {x: 45, y: 45}
+  m_Pivot: {x: .5, y: .5}
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: TooltipItem
+      value: 
+      objectReference: {fileID: 126560, guid: cd928a98b89bc104f8c4d33c5bf8775d, type: 2}
+    - target: {fileID: 0}
+      propertyPath: forestPic
+      value: 
+      objectReference: {fileID: 21300000, guid: 77a5c679fcadc3e429198c48f3203640,
+        type: 3}
+    - target: {fileID: 0}
+      propertyPath: mountainPic
+      value: 
+      objectReference: {fileID: 21300000, guid: e02e824a49accda48b3c973286d4878d,
+        type: 3}
+    - target: {fileID: 0}
+      propertyPath: junglePic
+      value: 
+      objectReference: {fileID: 21300000, guid: 226301af7294e51448ead733e58ee60d,
+        type: 3}
+    - target: {fileID: 0}
+      propertyPath: plainsPic
+      value: 
+      objectReference: {fileID: 21300000, guid: 74b116403bd74b5429475f629cc539db,
+        type: 3}
+    - target: {fileID: 0}
+      propertyPath: barrenPic
+      value: 
+      objectReference: {fileID: 21300000, guid: 918f7c4fb56cd16419058740cb2912fe,
+        type: 3}
+    - target: {fileID: 0}
+      propertyPath: lavaPic
+      value: 
+      objectReference: {fileID: 21300000, guid: 022d5bb71994e7a4ba22c0d487fedeef,
+        type: 3}
+    - target: {fileID: 0}
+      propertyPath: oceanPic
+      value: 
+      objectReference: {fileID: 21300000, guid: 418583769f34bf34dba1cbc209f2344c,
+        type: 3}
+    - target: {fileID: 0}
+      propertyPath: desertPic
+      value: 
+      objectReference: {fileID: 21300000, guid: d82689c02350e4545af51ea0f840300e,
+        type: 3}
+    - target: {fileID: 0}
+      propertyPath: deadPic
+      value: 
+      objectReference: {fileID: 21300000, guid: 918f7c4fb56cd16419058740cb2912fe,
+        type: 3}
+    - target: {fileID: 0}
+      propertyPath: icePic
+      value: 
+      objectReference: {fileID: 21300000, guid: 898926edafb776e4fa613db4e42380f5,
+        type: 3}
+    - target: {fileID: 0}
+      propertyPath: volcanicPic
+      value: 
+      objectReference: {fileID: 21300000, guid: 9aa7a0d4da4ea21468d90ebbfcf31047,
+        type: 3}
+    - target: {fileID: 0}
+      propertyPath: impassiblePic
+      value: 
+      objectReference: {fileID: 21300000, guid: 8ac349c6b8ecd824eab1b900e03b306d,
+        type: 3}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 129896}
+  m_IsPrefabParent: 1

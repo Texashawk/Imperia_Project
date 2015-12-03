@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Root xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Row>
+		<ID>HAWK01</ID>
+		<NAME>Hawken</NAME>
+		<RANK>0</RANK>
+		<LEADER_TITLE>Grand Duke</LEADER_TITLE>
+		<YEAR>2940</YEAR>
+		<HISTORY>One of the newer Houses, they rose to power in 2940, when the young Octavius Hawken discovered a way to convert aluminum to keramium, an incredibly light and strong substance that could be used to coat traditional metals, but provide incredible protection using only 1/10 of the metal required. Naturally, this cut down tremendously on costs, particularly with aircraft and military craft, as well as lessen the stresses on starships. The House, as a result of this discovery and a savvy negotiation with the War Prime of the time, resulted in the House being given a tremendous grant for further research on their House seat of Illitch. As a result, over the last 110 years the House has been given over to war research for the Empire, to the disgust and some fear of the other Houses. They are also the only House that is allowed a personal military, for purposes of experimentation. The current leader, Grand Duke Altus Hawken, is seen as somewhat more expansionist then his predecessors, and with the idea that his House is ‘new money’, is watched with equal parts scorn and trepidation. The affiliation of the House means that the War Prime is heavily influenced by this House, which could lead to trouble should the House move too far away from the Emperor.</HISTORY>
+		<RIVAL_HOUSE>HORL001</RIVAL_HOUSE>
+		<SCIENCE_TRADITION>80</SCIENCE_TRADITION>
+		<HIGH_TECH_TRADITION>70</HIGH_TECH_TRADITION>
+		<GOV_TRADITION>35</GOV_TRADITION>
+		<MAN_TRADITION>35</MAN_TRADITION>
+		<WAR_TRADITION>20</WAR_TRADITION>
+		<TRADE_TRADITION>15</TRADE_TRADITION>
+		<FARMING_TRADITION>5</FARMING_TRADITION>
+		<MINING_TRADITION>10</MINING_TRADITION>
+		<SPECIALTY>0</SPECIALTY>
+		<PERSONALITY>0</PERSONALITY>
+		<STABILITY>3</STABILITY>
+		<WEALTH>3</WEALTH>
+		<AMBITION>1</AMBITION>
+		<TRAIT_1>12</TRAIT_1>
+		<TRAIT_MOD_1>1</TRAIT_MOD_1>
+		<TRAIT_2>20</TRAIT_2>
+		<TRAIT_MOD_2>2</TRAIT_MOD_2>
+		<TRAIT_3>2</TRAIT_3>
+		<TRAIT_MOD_3>3</TRAIT_MOD_3>
+	</Row>
+	<Row>
+		<ID>HALY01</ID>
+		<NAME>Halcyon-Musharraf</NAME>
+		<RANK>0</RANK>
+		<LEADER_TITLE>Lord Augur</LEADER_TITLE>
+		<YEAR>2605</YEAR>
+		<HISTORY>This House can trace its ancestry back to two key players in the Populist Revolt of 2602: Tristane Halcyon and Asha Musharraf. They see their dynastic duty to be to keep a check on the Emperor's excesses, in the spirit of their forebears. As such, they view Primacy as the birthright of their House. Halcyon and Musharraf met in their youth at the court of the aging Magnus II. The second-in-line and the heir respectively to backwater planets, they were brought from their remote homeworlds in one of Magnus II's diligent efforts to maintain the links of friendship and fealty between the Throne and its governors. Both intelligent and idealistic youths, they saw in their close contemporary - the young Magnus III - the arrogance and cruelty that would mark his reign, and found it repellent. Musharraf, long fascinated by the democratic ideals of centuries gone by, formulated the ideological basis of what would become the Populist movement; the charismatic Halcyon was her messenger, pouring her elixir in the ears of key players around the future Emperor even before he came into his inheritance. The two were inseparable; come the revolution, they both took seats on the Prime Council, and their subsequent marriage was an event grand beyond the wildest hopes of their families. Since that triumphant union, the pair's descendants have almost continuously held seats on the Council - though with varying success...</HISTORY>
+		<SCIENCE_TRADITION>15</SCIENCE_TRADITION>
+		<HIGH_TECH_TRADITION>20</HIGH_TECH_TRADITION>
+		<GOV_TRADITION>80</GOV_TRADITION>
+		<MAN_TRADITION>35</MAN_TRADITION>
+		<WAR_TRADITION>35</WAR_TRADITION>
+		<TRADE_TRADITION>10</TRADE_TRADITION>
+		<FARMING_TRADITION>70</FARMING_TRADITION>
+		<MINING_TRADITION>5</MINING_TRADITION>
+	</Row>
+	<Row>
+		<ID>VANR01</ID>
+		<NAME>Van Rigel</NAME>
+		<RANK>0</RANK>
+		<LEADER_TITLE>High Star</LEADER_TITLE>
+		<YEAR>2355</YEAR>
+		<HISTORY>This old House can be traced back almost 700 years, during the time of the second Xyl Invasion. It is rumored that the original Human Commander was a member of the family that became House Van Rigel, though this was never proven. The original head of the House, Karl Van Rigel, known to be an astronomy nut, took the name from his original name of Van Rouse because he liked the name of the star. He took the astrographic theme one step further when he named the head of Household the 'High Star'. While this was good for some chuckles initially, the House's unswerving dedication to the preservation of New Terra was not. Over the centuries, this House became known as humanity's One Shining Star, working tirelessly to ensure that the human race would not be put in mortal jeopardy again. While this House is not large, it is very influential and they are excellent at the art of warfare and producing the modern weapons of war.</HISTORY>
+		<SCIENCE_TRADITION>60</SCIENCE_TRADITION>
+		<HIGH_TECH_TRADITION>50</HIGH_TECH_TRADITION>
+		<GOV_TRADITION>40</GOV_TRADITION>
+		<MAN_TRADITION>80</MAN_TRADITION>
+		<WAR_TRADITION>50</WAR_TRADITION>
+		<TRADE_TRADITION>20</TRADE_TRADITION>
+		<FARMING_TRADITION>15</FARMING_TRADITION>
+		<MINING_TRADITION>40</MINING_TRADITION>
+		<SPECIALTY>1</SPECIALTY>
+		<PERSONALITY>0</PERSONALITY>
+		<STABILITY>3</STABILITY>
+		<WEALTH>2</WEALTH>
+		<AMBITION>2</AMBITION>
+		<TRAIT_1>12</TRAIT_1>
+		<TRAIT_MOD_1>3</TRAIT_MOD_1>
+		<TRAIT_2>15</TRAIT_2>
+		<TRAIT_MOD_2>3</TRAIT_MOD_2>
+		<TRAIT_3>20</TRAIT_3>
+		<TRAIT_MOD_3>1</TRAIT_MOD_3>
+	</Row>
+	<Row>
+		<ID>HORL001</ID>
+		<NAME>Horlock</NAME>
+		<RANK>0</RANK>
+		<LEADER_TITLE>Grand Captain</LEADER_TITLE>
+		<YEAR>2415</YEAR>
+		<HISTORY>This House was originally formed as a reaction to keep power from the Emperor's hands. The first Grand Captain, Howard Horlock, was violently opposed to allowing so much power in the hands of an Emperor who did not represent the many. He was killed attempting to assassinate the first Sun Emperor, Magnus I, but he left with his son Zed a history and the knowledge to continue the crusade. While House Horlock has never been very large as far as holdings, what they do hold they manage well and are considered experts in wringing every last bit of efficiency from a planet or system. Members yearn for the day when they might rise up again against the Imperial Faction, and take the Empire for their own, so that it might best be protected in the manner deemed best - by absolute force and control.</HISTORY>
+		<RIVAL_HOUSE>HAWK001</RIVAL_HOUSE>
+		<SCIENCE_TRADITION>35</SCIENCE_TRADITION>
+		<HIGH_TECH_TRADITION>20</HIGH_TECH_TRADITION>
+		<GOV_TRADITION>75</GOV_TRADITION>
+		<MAN_TRADITION>20</MAN_TRADITION>
+		<WAR_TRADITION>80</WAR_TRADITION>
+		<TRADE_TRADITION>35</TRADE_TRADITION>
+		<FARMING_TRADITION>20</FARMING_TRADITION>
+		<MINING_TRADITION>25</MINING_TRADITION>
+		<SPECIALTY>0</SPECIALTY>
+		<PERSONALITY>4</PERSONALITY>
+		<STABILITY>1</STABILITY>
+		<WEALTH>1</WEALTH>
+		<AMBITION>0</AMBITION>
+		<TRAIT_1>3</TRAIT_1>
+		<TRAIT_MOD_1>3</TRAIT_MOD_1>
+		<TRAIT_2>13</TRAIT_2>
+		<TRAIT_MOD_2>3</TRAIT_MOD_2>
+		<TRAIT_3>18</TRAIT_3>
+		<TRAIT_MOD_3>2</TRAIT_MOD_3>
+	</Row>
+	<Row>
+		<ID>KIRA001</ID>
+		<NAME>Kiraly-Finn</NAME>
+		<RANK>0</RANK>
+		<LEADER_TITLE>Lord Almarch</LEADER_TITLE>
+		<YEAR>2390</YEAR>
+		<HISTORY>Heavily invested in the Technik movement, this dynasty's family ties sit uncomfortably with the Technik ethos. More than five hundred years ago, General Zoltan Kiraly-Finn was one of Zed Pierce's original co-conspirators in the foundation of the Empire. His loyal service earned him and his descendants a sector, and for centuries they were the Emperors' most loyal stalwarts. But over the generations, especially with the rise of the trade houses in the 29th century, their star waned. In what seemed their fading years, the newly-inheriting Tera Kiraly-Finn refused to continue acquiescing. Instead, she turned to the nascent 'Technik' movement - which had begun as a niche subculture among the New Terran academic elite - and ran with it, pushing their innovations as far as she dared. More importantly, she made their ethos cool. Yet despite her achievements, the movement never quite trusted her, or her children and grandchildren. Their conversion to it was in the name of family loyalty, not true belief, and that suspicion still lingers...</HISTORY>
+		<SCIENCE_TRADITION>80</SCIENCE_TRADITION>
+		<HIGH_TECH_TRADITION>70</HIGH_TECH_TRADITION>
+		<GOV_TRADITION>10</GOV_TRADITION>
+		<MAN_TRADITION>20</MAN_TRADITION>
+		<WAR_TRADITION>15</WAR_TRADITION>
+		<TRADE_TRADITION>35</TRADE_TRADITION>
+		<FARMING_TRADITION>35</FARMING_TRADITION>
+		<MINING_TRADITION>5</MINING_TRADITION>
+		<SPECIALTY>0</SPECIALTY>
+		<PERSONALITY>2</PERSONALITY>
+		<STABILITY>0</STABILITY>
+		<WEALTH>1</WEALTH>
+		<AMBITION>1</AMBITION>
+	</Row>
+	<Row>
+		<ID>IOGA001</ID>
+		<NAME>High Iogarajah</NAME>
+		<RANK>0</RANK>
+		<HISTORY>House Iogarajah's greatest crisis came in 2885 with the 'High' branch's wholesale conversion to Asceticism. Seeing their cousins as abandoning their familial responsibilities, the Low branch's influential neuter second child and admiral Vladi Seraf Iogarajah took it upon themself, with the tacit backing of the Low patriarch Matall, to reclaim the High branch's worlds for the greater honour of the Family. It took the intervention of the Imperial fleet prevented a devastating civil war, the Admiral standing down only at the very brink of open insurrection. The scars from that near-miss have yet to heal, even now, almost two centuries later...</HISTORY>
+		<RIVAL_HOUSE>IOGA002</RIVAL_HOUSE>
+		<SCIENCE_TRADITION>15</SCIENCE_TRADITION>
+		<HIGH_TECH_TRADITION>70</HIGH_TECH_TRADITION>
+		<GOV_TRADITION>35</GOV_TRADITION>
+		<MAN_TRADITION>35</MAN_TRADITION>
+		<WAR_TRADITION>10</WAR_TRADITION>
+		<TRADE_TRADITION>20</TRADE_TRADITION>
+		<FARMING_TRADITION>80</FARMING_TRADITION>
+		<MINING_TRADITION>5</MINING_TRADITION>
+		<SPECIALTY>4</SPECIALTY>
+		<PERSONALITY>2</PERSONALITY>
+		<STABILITY>1</STABILITY>
+		<WEALTH>2</WEALTH>
+		<AMBITION>3</AMBITION>
+	</Row>
+	<Row>
+		<ID>IOGA002</ID>
+		<NAME>Low Iogarajah</NAME>
+		<RANK>0</RANK>
+		<HISTORY>House Iogarajah's greatest crisis came in 2885 with the 'High' branch's wholesale conversion to Asceticism. Seeing their cousins as abandoning their familial responsibilities, the Low branch's influential neuter second child and admiral Vladi Seraf Iogarajah took it upon themself, with the tacit backing of the Low patriarch Matall, to reclaim the High branch's worlds for the greater honour of the Family. It took the intervention of the Imperial fleet prevented a devastating civil war, the Admiral standing down only at the very brink of open insurrection. The scars from that near-miss have yet to heal, even now, almost two centuries later...</HISTORY>
+		<RIVAL_HOUSE>IOGA001</RIVAL_HOUSE>
+		<SCIENCE_TRADITION>15</SCIENCE_TRADITION>
+		<HIGH_TECH_TRADITION>70</HIGH_TECH_TRADITION>
+		<GOV_TRADITION>35</GOV_TRADITION>
+		<MAN_TRADITION>10</MAN_TRADITION>
+		<WAR_TRADITION>80</WAR_TRADITION>
+		<TRADE_TRADITION>20</TRADE_TRADITION>
+		<FARMING_TRADITION>35</FARMING_TRADITION>
+		<MINING_TRADITION>5</MINING_TRADITION>
+		<SPECIALTY>2</SPECIALTY>
+		<PERSONALITY>4</PERSONALITY>
+		<STABILITY>1</STABILITY>
+		<WEALTH>3</WEALTH>
+		<AMBITION>0</AMBITION>
+	</Row>
+	<Row>
+		<ID>WALD001</ID>
+		<NAME>Waldegrave</NAME>
+		<RANK>0</RANK>
+		<HISTORY>One of the numerous Houses tracing their station to their role in Pierce's Revolution, the Waldegrave clan's carefully-maintained martial traditions evoke ancient Earth's Spartans as much as any modern dynasty's drill program. Nurtured in the harsh worlds of the Outer Rim, their austerely vigorous way of life was always ill-suited to governance, and as a result - to their great shame - Maarten Waldegrave lost the family's throneworld to a popular revolt in what they refer to as the Catastrophe of 2744. Since that day, the family have repeatedly sought Imperial permission to retake the world, without success - and no child of theirs has been named Maarten.</HISTORY>
+		<SCIENCE_TRADITION>25</SCIENCE_TRADITION>
+		<HIGH_TECH_TRADITION>15</HIGH_TECH_TRADITION>
+		<GOV_TRADITION>5</GOV_TRADITION>
+		<MAN_TRADITION>20</MAN_TRADITION>
+		<WAR_TRADITION>90</WAR_TRADITION>
+		<TRADE_TRADITION>35</TRADE_TRADITION>
+		<FARMING_TRADITION>0</FARMING_TRADITION>
+		<MINING_TRADITION>60</MINING_TRADITION>
+		<SPECIALTY>1</SPECIALTY>
+		<PERSONALITY>4</PERSONALITY>
+		<STABILITY>2</STABILITY>
+		<WEALTH>0</WEALTH>
+		<AMBITION>1</AMBITION>
+	</Row>
+</Root>

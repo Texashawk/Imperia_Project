@@ -1,0 +1,24 @@
+[BETRAYAL]I can not believe you have betrayed me this way!
+[BETRAYAL][+PASSION]This is unbelievable. How can you stab me in the back like this? You'll pay for this, [EMPEROR]!
+[BETRAYAL]I have served you for my entire life, and this is the knife I get? I will get my revenge!
+[BETRAYAL][+PASSION]I will not stand for this! YOU WILL BURN FOR THIS!!
+[BETRAYAL][-PASSION]Why... why have you done this, Your Excellence? Why?
+[BETRAYAL][-PASSION]I weep for what you have wrought on me this day, Your Excellence.
+[BETRAYAL][[AI]It is most illogical that you have altered our previous relationship in this way, with such little notice.
+[HATE][+PASSION]I despise you to the end of days.
+[HATE]I will remember, and hate you for this.
+[HATE][-PASSION]I may be quiet, but my hatred for you crackles within me like lightning.
+[HATE]This is not the end for you and me. Not by a long mile.
+[HATE]We will not end this today.
+[HATE]I have no end of malice for you and yours.
+[HATE]Cruelty such as you have shown me today has only one response.
+[HATE][AI]Logically, it is realistic to assume that you and I will operate in enemy mode for the forseeable future.
+[PLEASED]I'm thrilled you have done this, Your Excellence.
+[PLEASED]Wow! Awesome! Good job, Your Excellence!
+[PLEASED][+PASSION]Incredible! The stars themselves beam at your great works.
+[PLEASED][-PASSION]I am pleased that you have chosen to undertake this course of action, Your Excellence.
+[PLEASED][AI]It is quite logical for you to make this decision, and I am therefore pleased at said decision.
+[PLEASED][AI]My logic subroutines indicate that this decision has positive accelerators for my long-term strategies. I am grateful.
+[PLEASED]Thanks, Your Excellence! That's great news!
+[PLEASED]Awesome. That's really good to hear.
+[PLEASED][-PASSION]It is pleasing to see this decision was made. I am happy.
