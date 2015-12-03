@@ -87,7 +87,7 @@ namespace CivCreator
                     {
                         if (cData.HouseID == otherCData.HouseID)
                         {
-                            trustModifier += 70; // if you are in the same house, huge bonus
+                            trustModifier += 75; // if you are in the same house, huge bonus (change)
                             fearModifier -= 50;
                         }
                         else if (cData.AssignedHouse.Personality == otherCData.AssignedHouse.Personality)
