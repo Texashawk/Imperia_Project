@@ -66,14 +66,29 @@ using ConversationAI;
 
         public static void ReadEventDescriptions()
         {
-            // civilization name lists
+        // event descriptions
+            FileInfo sourceFile = null; // the source file from a text file
+            TextReader readFile = null;
+
             try
             {
                 string line = null;
                 string path = Application.dataPath;
                 bool fileEmpty = false;
+                sourceFile = new FileInfo(path + "/Resources/eventDescriptions.txt");
 
-                System.IO.TextReader readFile = new StreamReader(path + "/Resources/eventDescriptions.txt");
+                if (sourceFile != null && sourceFile.Exists)
+                {
+                    readFile = sourceFile.OpenText(); // returns StreamReader
+                }
+                else
+                {
+                    TextAsset eventData = (TextAsset)Resources.Load("eventDescriptions", typeof(TextAsset));
+                    readFile = new StringReader(eventData.text);
+                }
+            
+                //StreamReader readFile = new StreamReader(path + "/Resources/eventDescriptions.txt");
+
                 while (!fileEmpty)
                 {
                     line = readFile.ReadLine();
@@ -507,13 +522,30 @@ using ConversationAI;
 
         public static void PopulatePlanetTraitTables()
         {
+            FileInfo sourceFile = null; // the source file from a text file
+            TextReader readFile = null;
+
             try
             {
                 string line = null;
                 string path = Application.dataPath;
                 bool fileEmpty = false;
+                sourceFile = new FileInfo(path + "/Resources/planetTraitsData.txt");
 
-                System.IO.TextReader readFile = new StreamReader(path + "/Resources/planetTraitsData.txt");
+                if (sourceFile != null && sourceFile.Exists)
+                {
+                    readFile = sourceFile.OpenText(); // returns StreamReader
+                }
+                else
+                {
+                    TextAsset eventData = (TextAsset)Resources.Load("planetTraitsData", typeof(TextAsset));
+                    readFile = new StringReader(eventData.text);
+                }
+                //string line = null;
+                //string path = Application.dataPath;
+                //bool fileEmpty = false;
+
+                //readFile = new StreamReader(path + "/Resources/planetTraitsData.txt");
 
                 while (!fileEmpty) // until the line hits a null object
                 {
