@@ -608,41 +608,70 @@ using ConversationAI;
 
         public static void PopulateObjectNameLists()
         {
+
+            FileInfo sourceFile = null; // the source file from a text file
+            TextReader readFile = null;
+
             // planet name lists
             try
             {
                 string line = null;
                 string path = Application.dataPath;
                 bool fileEmpty = false;
+                sourceFile = new FileInfo(path + "/Resources/systemNames.txt");
 
-                System.IO.TextReader readFile = new StreamReader(path + "/Resources/systemNames.txt"); // change to planet names when file is added!
-                while (!fileEmpty)
+                if (sourceFile != null && sourceFile.Exists)
                 {
-                    line = readFile.ReadLine();
-                    if (line != null)
-                    {
-                        planetNameList.Add(line);
-                    }
-                    else
-                        fileEmpty = true;
+                    readFile = sourceFile.OpenText(); // returns StreamReader
                 }
-                readFile.Close();
-                readFile = null;
-            }
+                else
+                {
+                    TextAsset eventData = (TextAsset)Resources.Load("systemNames", typeof(TextAsset));
+                    readFile = new StringReader(eventData.text);
+                }
+
+                //System.IO.TextReader readFile = new StreamReader(path + "/Resources/systemNames.txt"); // change to planet names when file is added!
+                while (!fileEmpty)
+                    {
+                        line = readFile.ReadLine();
+                        if (line != null)
+                        {
+                            planetNameList.Add(line);
+                        }
+                        else
+                            fileEmpty = true;
+                    }
+                    readFile.Close();
+                    readFile = null;
+                }
             catch (IOException ex)
             {
                 Debug.LogError("Could not read file; error:" + ex.ToString());
             }
 
             // system name lists
+            sourceFile = null;
+            readFile = null;
+
             try
             {
                 string line = null;
                 string path = Application.dataPath;
                 bool fileEmpty = false;
+                sourceFile = new FileInfo(path + "/Resources/systemNames.txt");
 
-                System.IO.TextReader readFile = new StreamReader(path + "/Resources/systemNames.txt");
-                while (!fileEmpty)
+                if (sourceFile != null && sourceFile.Exists)
+                {
+                    readFile = sourceFile.OpenText(); // returns StreamReader
+                }
+                else
+                {
+                    TextAsset eventData = (TextAsset)Resources.Load("systemNames", typeof(TextAsset));
+                    readFile = new StringReader(eventData.text);
+                }
+
+            //System.IO.TextReader readFile = new StreamReader(path + "/Resources/systemNames.txt");
+            while (!fileEmpty)
                 {
                     line = readFile.ReadLine();
                     if (line != null)
@@ -654,7 +683,8 @@ using ConversationAI;
                 }
                 readFile.Close();
                 readFile = null;
-            }
+                sourceFile = null;
+        }
             catch (IOException ex)
             {
                 Debug.LogError("Could not read file; error:" + ex.ToString());
@@ -666,9 +696,20 @@ using ConversationAI;
                 string line = null;
                 string path = Application.dataPath;
                 bool fileEmpty = false;
+                sourceFile = new FileInfo(path + "/Resources/civNames.txt");
 
-                System.IO.TextReader readFile = new StreamReader(path + "/Resources/civNames.txt");
-                while (!fileEmpty)
+                if (sourceFile != null && sourceFile.Exists)
+                {
+                    readFile = sourceFile.OpenText(); // returns StreamReader
+                }
+                else
+                {
+                    TextAsset eventData = (TextAsset)Resources.Load("civNames", typeof(TextAsset));
+                    readFile = new StringReader(eventData.text);
+                }
+
+            //System.IO.TextReader readFile = new StreamReader(path + "/Resources/civNames.txt");
+            while (!fileEmpty)
                 {
                     line = readFile.ReadLine();
                     if (line != null)
@@ -680,7 +721,8 @@ using ConversationAI;
                 }
                 readFile.Close();
                 readFile = null;
-            }
+                sourceFile = null;
+        }
             catch (IOException ex)
             {
                 Debug.LogError("Could not read file; error:" + ex.ToString());
@@ -692,46 +734,70 @@ using ConversationAI;
                 string line = null;
                 string path = Application.dataPath;
                 bool fileEmpty = false;
+                sourceFile = new FileInfo(path + "/Resources/civSurNames.txt");
 
-                System.IO.TextReader readFile = new StreamReader(path + "/Resources/civSurNames.txt");
-                while (!fileEmpty)
+                if (sourceFile != null && sourceFile.Exists)
                 {
-                    line = readFile.ReadLine();
-                    if (line != null)
-                    {
-                        civSurNameList.Add(line);
-                    }
-                    else
-                        fileEmpty = true;
+                    readFile = sourceFile.OpenText(); // returns StreamReader
                 }
-                readFile.Close();
-                readFile = null;
+                else
+                {
+                    TextAsset eventData = (TextAsset)Resources.Load("civSurNames", typeof(TextAsset));
+                    readFile = new StringReader(eventData.text);
+                }
+
+                //System.IO.TextReader readFile = new StreamReader(path + "/Resources/civSurNames.txt");
+                while (!fileEmpty)
+                    {
+                        line = readFile.ReadLine();
+                        if (line != null)
+                        {
+                            civSurNameList.Add(line);
+                        }
+                        else
+                            fileEmpty = true;
+                    }
+                    readFile.Close();
+                    readFile = null;
+                    sourceFile = null;
             }
             catch (IOException ex)
             {
                 Debug.LogError("Could not read file; error:" + ex.ToString());
             }
 
-            // character name lists
+            // house name lists
             try
             {
                 string line = null;
                 string path = Application.dataPath;
                 bool fileEmpty = false;
+                sourceFile = new FileInfo(path + "/Resources/commonHouseNameList.txt");
 
-                System.IO.TextReader readFile = new StreamReader(path + "/Resources/commonHouseNameList.txt");
-                while (!fileEmpty)
+                if (sourceFile != null && sourceFile.Exists)
                 {
-                    line = readFile.ReadLine();
-                    if (line != null)
-                    {
-                        commonHouseNameList.Add(line);
-                    }
-                    else
-                        fileEmpty = true;
+                    readFile = sourceFile.OpenText(); // returns StreamReader
                 }
-                readFile.Close();
-                readFile = null;
+                else
+                {
+                    TextAsset eventData = (TextAsset)Resources.Load("commonHouseNameList", typeof(TextAsset));
+                    readFile = new StringReader(eventData.text);
+                }
+
+                // System.IO.TextReader readFile = new StreamReader(path + "/Resources/commonHouseNameList.txt");
+                while (!fileEmpty)
+                    {
+                        line = readFile.ReadLine();
+                        if (line != null)
+                        {
+                            commonHouseNameList.Add(line);
+                        }
+                        else
+                            fileEmpty = true;
+                    }
+                        readFile.Close();
+                        readFile = null;
+                        sourceFile = null;
             }
             catch (IOException ex)
             {
@@ -743,9 +809,20 @@ using ConversationAI;
                 string line = null;
                 string path = Application.dataPath;
                 bool fileEmpty = false;
+                sourceFile = new FileInfo(path + "/Resources/characterFirstNamesFemale.txt");
 
-                System.IO.TextReader readFile = new StreamReader(path + "/Resources/characterFirstNamesFemale.txt");
-                while (!fileEmpty)
+                if (sourceFile != null && sourceFile.Exists)
+                {
+                    readFile = sourceFile.OpenText(); // returns StreamReader
+                }
+                else
+                {
+                    TextAsset eventData = (TextAsset)Resources.Load("characterFirstNamesFemale", typeof(TextAsset));
+                    readFile = new StringReader(eventData.text);
+                }
+
+            // System.IO.TextReader readFile = new StreamReader(path + "/Resources/characterFirstNamesFemale.txt");
+            while (!fileEmpty)
                 {
                     line = readFile.ReadLine();
                     if (line != null)
@@ -757,6 +834,7 @@ using ConversationAI;
                 }
                 readFile.Close();
                 readFile = null;
+                sourceFile = null;
             }
             catch (IOException ex)
             {
@@ -768,9 +846,20 @@ using ConversationAI;
                 string line = null;
                 string path = Application.dataPath;
                 bool fileEmpty = false;
+                sourceFile = new FileInfo(path + "/Resources/characterFirstNamesMale.txt");
 
-                System.IO.TextReader readFile = new StreamReader(path + "/Resources/characterFirstNamesMale.txt");
-                while (!fileEmpty)
+                if (sourceFile != null && sourceFile.Exists)
+                {
+                    readFile = sourceFile.OpenText(); // returns StreamReader
+                }
+                else
+                {
+                    TextAsset eventData = (TextAsset)Resources.Load("characterFirstNamesMale", typeof(TextAsset));
+                    readFile = new StringReader(eventData.text);
+                }
+
+            // System.IO.TextReader readFile = new StreamReader(path + "/Resources/characterFirstNamesMale.txt");
+            while (!fileEmpty)
                 {
                     line = readFile.ReadLine();
                     if (line != null)
@@ -782,6 +871,7 @@ using ConversationAI;
                 }
                 readFile.Close();
                 readFile = null;
+                sourceFile = null;
             }
             catch (IOException ex)
             {
