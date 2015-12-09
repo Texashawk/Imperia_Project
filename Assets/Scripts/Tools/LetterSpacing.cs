@@ -160,7 +160,7 @@ set
 
 }
 
-#if UNITY_5_2 
+//#if UNITY_5_2 
 
 /**
 * Note: Unity 5.2.1 ModifyMesh(Mesh mesh) used VertexHelper.FillMesh(mesh);
@@ -399,334 +399,334 @@ charIdx = currentMatchedTag.Length + currentMatchedTag.Index - 1;
         }
 
 
-#else
+//#else
 
 
-        public override void ModifyVertices(List<UIVertex> verts)
+//        public override void ModifyVertices(List<UIVertex> verts)
 
 
-       {
+//       {
 
 
-           if (!IsActive()) return;
-
-
-
-
-
-            Text text = GetComponent<Text>();
-
-
-            if (text == null)
-
-
-          {
-
-
-                Debug.LogWarning("LetterSpacing: Missing Text component");
-
-
-             return;
-
-
-           }
+//           if (!IsActive()) return;
 
 
 
 
 
-           string[] lines = text.text.Split('\n');
+//            Text text = GetComponent<Text>();
 
 
-           Vector3  pos;
+//            if (text == null)
 
 
-            float    letterOffset    = spacing * (float)text.fontSize / 100f;
+//          {
 
 
-           float    alignmentFactor = 0;
+//                Debug.LogWarning("LetterSpacing: Missing Text component");
 
 
-            int      glyphIdx        = 0;
+//             return;
+
+
+//           }
 
 
 
 
 
-           bool isRichText = useRichText && text.supportRichText;
+//           string[] lines = text.text.Split('\n');
 
 
-           IEnumerator matchedTagCollection = null; //when using RichText this will collect all tags (index, length, value)
+//           Vector3  pos;
 
 
-            Match currentMatchedTag = null;
+//            float    letterOffset    = spacing * (float)text.fontSize / 100f;
+
+
+//           float    alignmentFactor = 0;
+
+
+//            int      glyphIdx        = 0;
+
+
+
+
+
+//           bool isRichText = useRichText && text.supportRichText;
+
+
+//           IEnumerator matchedTagCollection = null; //when using RichText this will collect all tags (index, length, value)
+
+
+//            Match currentMatchedTag = null;
 
 
            
 
 
-            switch (text.alignment)
+//            switch (text.alignment)
 
 
-           {
+//           {
 
 
-               case TextAnchor.LowerLeft:
+//               case TextAnchor.LowerLeft:
 
 
-               case TextAnchor.MiddleLeft:
+//               case TextAnchor.MiddleLeft:
 
 
-               case TextAnchor.UpperLeft:
+//               case TextAnchor.UpperLeft:
 
 
-                  alignmentFactor = 0f;
+//                  alignmentFactor = 0f;
 
 
-                   break;
-
-
- 
-
-
-                case TextAnchor.LowerCenter:
-
-
-               case TextAnchor.MiddleCenter:
-
-
-                case TextAnchor.UpperCenter:
-
-
-                   alignmentFactor = 0.5f;
-
-
-                   break;
+//                   break;
 
 
  
 
 
-               case TextAnchor.LowerRight:
+//                case TextAnchor.LowerCenter:
 
 
-                case TextAnchor.MiddleRight:
+//               case TextAnchor.MiddleCenter:
 
 
-              case TextAnchor.UpperRight:
+//                case TextAnchor.UpperCenter:
 
 
-                    alignmentFactor = 1f;
+//                   alignmentFactor = 0.5f;
 
 
-                    break;
-
-
-           }
-
-
-
-
-
-            for (int lineIdx = 0; lineIdx < lines.Length; lineIdx++)
-
-
-            {
-
-
-               string line = lines[lineIdx];
-
-
-
-
-
-                int lineLength = line.Length;
-
-
-
-
-
-               if (isRichText)
-
-
-               {
-
-
-                   matchedTagCollection = GetRegexMatchedTagCollection(line, out lineLength);
-
-
-                  currentMatchedTag = null;
-
-
-                   if (matchedTagCollection.MoveNext())
-
-
-                   {
-
-
-                       currentMatchedTag = (Match)matchedTagCollection.Current;
-
-
-                  }
-
-
-                }
-
-
-
-
-
-               float lineOffset = (lineLength -1) * letterOffset * alignmentFactor;
-
-
-
-
-
-               for (int charIdx = 0, charPositionIndex =0; charIdx < line.Length; charIdx++, charPositionIndex++)
-
-
-                {
-
-
-                   if (isRichText)
-
-
-                   {
-
-
-                       if (currentMatchedTag != null && currentMatchedTag.Index == charIdx)
-
-
-                       {
-
-
-                            charIdx = currentMatchedTag.Length + currentMatchedTag.Index - 1;
-
-
-                           glyphIdx = currentMatchedTag.Length + currentMatchedTag.Index - 1;
-
-
-                           charPositionIndex--;
-
-
-                           currentMatchedTag = null;
-
-
-                           if (matchedTagCollection.MoveNext())
-
-
-                           {
-
-
-                               currentMatchedTag = (Match)matchedTagCollection.Current;
-
-
-                           }
-
-
-                       }
-
-
-                   }
-
-
-
-
-
-                  int idx1 = glyphIdx * 4 + 0;
-
-
-                   int idx2 = glyphIdx * 4 + 1;
-
-
-                   int idx3 = glyphIdx * 4 + 2;
-
-
-                  int idx4 = glyphIdx * 4 + 3;
-
-
-
-
-
-                   // Check for truncated text (doesn't generate verts for all characters)
-
-
-                    if (idx4 > verts.Count - 1) return;
-
-
-
-
-
-                   UIVertex vert1 = verts[idx1];
-
-
-                   UIVertex vert2 = verts[idx2];
-
-
-                   UIVertex vert3 = verts[idx3];
-
-
-                    UIVertex vert4 = verts[idx4];
-
-
-
-
-
-                   pos = Vector3.right * (letterOffset * charPositionIndex - lineOffset);
-
-
-
-
-
-                   vert1.position += pos;
-
-
-                   vert2.position += pos;
-
-
-                  vert3.position += pos;
-
-
-                  vert4.position += pos;
+//                   break;
 
 
  
 
 
-                   verts[idx1] = vert1;
+//               case TextAnchor.LowerRight:
 
 
-                   verts[idx2] = vert2;
+//                case TextAnchor.MiddleRight:
 
 
-                  verts[idx3] = vert3;
+//              case TextAnchor.UpperRight:
 
 
-                   verts[idx4] = vert4;
+//                    alignmentFactor = 1f;
 
 
-                   glyphIdx++;
+//                    break;
 
 
-              }
+//           }
 
 
 
 
 
-              // Offset for carriage return character that still generates verts
+//            for (int lineIdx = 0; lineIdx < lines.Length; lineIdx++)
 
 
-               glyphIdx++;
+//            {
 
 
-           }
+//               string line = lines[lineIdx];
 
 
-      }
 
 
-#endif
+
+//                int lineLength = line.Length;
+
+
+
+
+
+//               if (isRichText)
+
+
+//               {
+
+
+//                   matchedTagCollection = GetRegexMatchedTagCollection(line, out lineLength);
+
+
+//                  currentMatchedTag = null;
+
+
+//                   if (matchedTagCollection.MoveNext())
+
+
+//                   {
+
+
+//                       currentMatchedTag = (Match)matchedTagCollection.Current;
+
+
+//                  }
+
+
+//                }
+
+
+
+
+
+//               float lineOffset = (lineLength -1) * letterOffset * alignmentFactor;
+
+
+
+
+
+//               for (int charIdx = 0, charPositionIndex =0; charIdx < line.Length; charIdx++, charPositionIndex++)
+
+
+//                {
+
+
+//                   if (isRichText)
+
+
+//                   {
+
+
+//                       if (currentMatchedTag != null && currentMatchedTag.Index == charIdx)
+
+
+//                       {
+
+
+//                            charIdx = currentMatchedTag.Length + currentMatchedTag.Index - 1;
+
+
+//                           glyphIdx = currentMatchedTag.Length + currentMatchedTag.Index - 1;
+
+
+//                           charPositionIndex--;
+
+
+//                           currentMatchedTag = null;
+
+
+//                           if (matchedTagCollection.MoveNext())
+
+
+//                           {
+
+
+//                               currentMatchedTag = (Match)matchedTagCollection.Current;
+
+
+//                           }
+
+
+//                       }
+
+
+//                   }
+
+
+
+
+
+//                  int idx1 = glyphIdx * 4 + 0;
+
+
+//                   int idx2 = glyphIdx * 4 + 1;
+
+
+//                   int idx3 = glyphIdx * 4 + 2;
+
+
+//                  int idx4 = glyphIdx * 4 + 3;
+
+
+
+
+
+//                   // Check for truncated text (doesn't generate verts for all characters)
+
+
+//                    if (idx4 > verts.Count - 1) return;
+
+
+
+
+
+//                   UIVertex vert1 = verts[idx1];
+
+
+//                   UIVertex vert2 = verts[idx2];
+
+
+//                   UIVertex vert3 = verts[idx3];
+
+
+//                    UIVertex vert4 = verts[idx4];
+
+
+
+
+
+//                   pos = Vector3.right * (letterOffset * charPositionIndex - lineOffset);
+
+
+
+
+
+//                   vert1.position += pos;
+
+
+//                   vert2.position += pos;
+
+
+//                  vert3.position += pos;
+
+
+//                  vert4.position += pos;
+
+
+ 
+
+
+//                   verts[idx1] = vert1;
+
+
+//                   verts[idx2] = vert2;
+
+
+//                  verts[idx3] = vert3;
+
+
+//                   verts[idx4] = vert4;
+
+
+//                   glyphIdx++;
+
+
+//              }
+
+
+
+
+
+//              // Offset for carriage return character that still generates verts
+
+
+//               glyphIdx++;
+
+
+//           }
+
+
+//      }
+
+
+//#endif
 
 
        private IEnumerator GetRegexMatchedTagCollection(string line, out int lineLengthWithoutTags)
