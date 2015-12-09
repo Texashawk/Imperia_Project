@@ -84,6 +84,11 @@ public class GlobalGameData : MonoBehaviour
         NumberOfAICivs = 8; // static number to test UnityEngine.Random.Range(4, 7); // test
         PlayerEmpireName = "New Human Empire";
         gameVersion = gameVersionNumber.ToString("N4") + gameVersionSuffix;
+        //DataManager.InitializeData(); // intialize data all in one place (test)
+    }
+
+    void Start()
+    {
         DataManager.InitializeData(); // intialize data all in one place (test)
     }
 

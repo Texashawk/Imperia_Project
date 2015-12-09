@@ -861,8 +861,8 @@ MonoBehaviour:
   createWorldGameScreen: {fileID: 2800000, guid: 9d34b5c3f9bfa4b44af7fd4bd07f57ea,
     type: 3}
   createEmperorScreen: {fileID: 2800000, guid: a258d86b9f4f07b49b33a7610932a6ba, type: 3}
-  gameVersionNumber: .200299993
-  gameVersionSuffix: a
+  gameVersionNumber: .200399995
+  gameVersionSuffix: b
   gameVersion: 
   CivsGenerated: 0
 --- !u!114 &1999651315

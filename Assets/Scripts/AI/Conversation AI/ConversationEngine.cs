@@ -55,14 +55,31 @@ namespace ConversationAI
 
         private static void ReadGenericSentenceData()
         {
+            FileInfo sourceFile = null; // the source file from a text file
+            TextReader readFile = null;
+
             // generic sentence data
             try
             {
                 string line = null;
                 string path = Application.dataPath;
                 bool fileEmpty = false;
+                sourceFile = new FileInfo(path + "/Resources/ConversationFiles/IntroGenericSentences.txt");
 
-                System.IO.TextReader readFile = new StreamReader(path + "/Resources/ConversationFiles/IntroGenericSentences.txt");
+                if (sourceFile != null && sourceFile.Exists)
+                {
+                    readFile = sourceFile.OpenText(); // returns StreamReader
+                }
+                else
+                {
+                    TextAsset eventData = Resources.Load("ConversationFiles/IntroGenericSentences") as TextAsset;
+                    if (eventData != null)
+                        readFile = new StringReader(eventData.text);
+                    else
+                        Debug.Log("Can't find the file inside the resources bundle!");
+                }
+
+                //System.IO.TextReader readFile = new StreamReader(path + "/Resources/ConversationFiles/IntroGenericSentences.txt");
                 while (!fileEmpty)
                 {
                     line = readFile.ReadLine();
@@ -88,8 +105,20 @@ namespace ConversationAI
                 string line = null;
                 string path = Application.dataPath;
                 bool fileEmpty = false;
+                sourceFile = new FileInfo(path + "/Resources/ConversationFiles/IntroGreetingSentences.txt");
 
-                System.IO.TextReader readFile = new StreamReader(path + "/Resources/ConversationFiles/IntroGreetingSentences.txt");
+                if (sourceFile != null && sourceFile.Exists)
+                {
+                    readFile = sourceFile.OpenText(); // returns StreamReader
+                }
+                else
+                {
+                    TextAsset eventData = (TextAsset)Resources.Load("ConversationFiles/IntroGreetingSentences", typeof(TextAsset));
+                    if (eventData != null)
+                        readFile = new StringReader(eventData.text);
+                }
+
+                //System.IO.TextReader readFile = new StreamReader(path + "/Resources/ConversationFiles/IntroGreetingSentences.txt");
                 while (!fileEmpty)
                 {
                     line = readFile.ReadLine();
@@ -116,8 +145,20 @@ namespace ConversationAI
                 string line = null;
                 string path = Application.dataPath;
                 bool fileEmpty = false;
+                sourceFile = new FileInfo(path + "/Resources/ConversationFiles/ResponseTagSentences.txt");
 
-                System.IO.TextReader readFile = new StreamReader(path + "/Resources/ConversationFiles/ResponseTagSentences.txt");
+                if (sourceFile != null && sourceFile.Exists)
+                {
+                    readFile = sourceFile.OpenText(); // returns StreamReader
+                }
+                else
+                {
+                    TextAsset eventData = (TextAsset)Resources.Load("ConversationFiles/ResponseTagSentences", typeof(TextAsset));
+                    if (eventData != null)
+                        readFile = new StringReader(eventData.text);
+                }
+
+                //System.IO.TextReader readFile = new StreamReader(path + "/Resources/ConversationFiles/ResponseTagSentences.txt");
                 while (!fileEmpty)
                 {
                     line = readFile.ReadLine();

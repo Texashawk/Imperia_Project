@@ -1015,18 +1015,32 @@ public class GenerateGameObject
 
     public static void PopulatePlanetGenerationTables()
     {
+        FileInfo sourceFile = null; // the source file from a text file
+        TextReader readFile = null;
+
         try
         {
             string line = null;
-            string path = Application.dataPath + "/Resources/planetGenerationData.txt";
+            string path = Application.dataPath;
             bool fileEmpty = false;
+            sourceFile = new FileInfo(path + "/Resources/planetGenerationData.txt");
+
+            if (sourceFile != null && sourceFile.Exists)
+            {
+                readFile = sourceFile.OpenText(); // returns StreamReader
+            }
+            else
+            {
+                TextAsset eventData = (TextAsset)Resources.Load("planetGenerationData", typeof(TextAsset));
+                readFile = new StringReader(eventData.text);
+            }
 
             PlanetGenerationData pGenData = new PlanetGenerationData();
            
             int spotIdx = 0;
             int typeIdx = 0;
             
-            System.IO.TextReader readFile = new StreamReader(path);
+            //System.IO.TextReader readFile = new StreamReader(path);
 
             while (!fileEmpty) // until the line hits a null object
             {
@@ -1119,13 +1133,27 @@ public class GenerateGameObject
 
     public static void PopulateRegionTypeTables()
     {
+        FileInfo sourceFile = null; // the source file from a text file
+        TextReader readFile = null;
+
         try
         {
             string line = null;
             string path = Application.dataPath;
             bool fileEmpty = false;
+            sourceFile = new FileInfo(path + "/Resources/regionTypeData.txt");
 
-            System.IO.TextReader readFile = new StreamReader(path + "/Resources/regionTypeData.txt");
+            if (sourceFile != null && sourceFile.Exists)
+            {
+                readFile = sourceFile.OpenText(); // returns StreamReader
+            }
+            else
+            {
+                TextAsset eventData = (TextAsset)Resources.Load("regionTypeData", typeof(TextAsset));
+                readFile = new StringReader(eventData.text);
+            }
+
+            //System.IO.TextReader readFile = new StreamReader(path + "/Resources/regionTypeData.txt");
 
             while (!fileEmpty) // until the line hits a null object
             {
