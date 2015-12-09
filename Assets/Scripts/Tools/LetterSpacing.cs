@@ -119,11 +119,11 @@ namespace UnityEngine.UI
 {
 [AddComponentMenu("UI/Effects/Letter Spacing", 15)]
 
-#if UNITY_5_2
+//#if UNITY_5_2
     public class LetterSpacing : BaseMeshEffect
-#else
-    public class LetterSpacing : BaseVertexEffect
-#endif
+//#else
+//    public class LetterSpacing : BaseVertexEffect
+//#endif
 
 {
 
