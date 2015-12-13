@@ -1,148 +1,151 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-	<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-	<ProductVersion>10.0.20506</ProductVersion>
-	<SchemaVersion>2.0</SchemaVersion>
-	<RootNamespace></RootNamespace>
-	<ProjectGuid>{D03B634C-9F9F-00CA-F5FC-86F990084528}</ProjectGuid>
-	<OutputType>Library</OutputType>
-	<AppDesignerFolder>Properties</AppDesignerFolder>
-	<AssemblyName>Assembly-CSharp</AssemblyName>
-	<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-	<FileAlignment>512</FileAlignment>
-	<BaseDirectory>Assets</BaseDirectory>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <RootNamespace>
+    </RootNamespace>
+    <ProjectGuid>{1CF806BE-BA59-2BAD-697F-718E28633B8C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <AssemblyName>Assembly-CSharp</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <BaseDirectory>Assets</BaseDirectory>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-	<DebugSymbols>true</DebugSymbols>
-	<DebugType>full</DebugType>
-	<Optimize>false</Optimize>
-	<OutputPath>Temp\bin\Debug\</OutputPath>
-	<DefineConstants>DEBUG;TRACE;UNITY_5_2_3;UNITY_5_2;UNITY_5;ENABLE_NEW_BUGREPORTER;ENABLE_2D_PHYSICS;ENABLE_4_6_FEATURES;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_DUCK_TYPING;ENABLE_FRAME_DEBUGGER;ENABLE_GENERICS;ENABLE_HOME_SCREEN;ENABLE_IMAGEEFFECTS;ENABLE_LIGHT_PROBES_LEGACY;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_PLUGIN_INSPECTOR;ENABLE_SHADOWS;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_RAKNET;ENABLE_UNET;ENABLE_UNITYEVENTS;ENABLE_VR;ENABLE_WEBCAM;ENABLE_WWW;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_HUB;ENABLE_CLOUD_PROJECT_ID;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_METRICS;ENABLE_REFLECTION_BUFFERS;INCLUDE_DYNAMIC_GI;INCLUDE_GI;INCLUDE_IL2CPP;INCLUDE_DIRECTX12;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;ENABLE_LOCALIZATION;ENABLE_ANDROID_ATLAS_ETC1_COMPRESSION;UNITY_STANDALONE_WIN;UNITY_STANDALONE;ENABLE_SUBSTANCE;ENABLE_TEXTUREID_MAP;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_LOG_MIXED_STACKTRACE;ENABLE_UNITYWEBREQUEST;ENABLE_EVENT_QUEUE;ENABLE_WEBSOCKET_HOST;ENABLE_MONO;DEVELOPMENT_BUILD;ENABLE_PROFILER;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_WIN;CROSS_PLATFORM_INPUT</DefineConstants>
-	<ErrorReport>prompt</ErrorReport>
-	<WarningLevel>4</WarningLevel>
-	<NoWarn>0169</NoWarn>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Temp\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;UNITY_5_2_3;UNITY_5_2;UNITY_5;ENABLE_NEW_BUGREPORTER;ENABLE_2D_PHYSICS;ENABLE_4_6_FEATURES;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_DUCK_TYPING;ENABLE_FRAME_DEBUGGER;ENABLE_GENERICS;ENABLE_HOME_SCREEN;ENABLE_IMAGEEFFECTS;ENABLE_LIGHT_PROBES_LEGACY;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_PLUGIN_INSPECTOR;ENABLE_SHADOWS;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_RAKNET;ENABLE_UNET;ENABLE_UNITYEVENTS;ENABLE_VR;ENABLE_WEBCAM;ENABLE_WWW;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_HUB;ENABLE_CLOUD_PROJECT_ID;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_METRICS;ENABLE_REFLECTION_BUFFERS;INCLUDE_DYNAMIC_GI;INCLUDE_GI;INCLUDE_IL2CPP;INCLUDE_DIRECTX12;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;ENABLE_LOCALIZATION;ENABLE_ANDROID_ATLAS_ETC1_COMPRESSION;UNITY_STANDALONE_WIN;UNITY_STANDALONE;ENABLE_SUBSTANCE;ENABLE_TEXTUREID_MAP;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_LOG_MIXED_STACKTRACE;ENABLE_UNITYWEBREQUEST;ENABLE_EVENT_QUEUE;ENABLE_WEBSOCKET_HOST;ENABLE_MONO;DEVELOPMENT_BUILD;ENABLE_PROFILER;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_WIN;CROSS_PLATFORM_INPUT</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0169</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-	<DebugType>pdbonly</DebugType>
-	<Optimize>true</Optimize>
-	<OutputPath>Temp\bin\Release\</OutputPath>
-	<ErrorReport>prompt</ErrorReport>
-	<WarningLevel>4</WarningLevel>
-	<NoWarn>0169</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Temp\bin\Release\</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0169</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-	<Reference Include="System" />
+    <Reference Include="System" />
     <Reference Include="System.XML" />
-	<Reference Include="System.Core" />
-	<Reference Include="System.Xml.Linq" />
-	<Reference Include="UnityEngine">
-	  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
-	</Reference>
-	<Reference Include="UnityEditor">
-	  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
-	</Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="UnityEngine">
+      <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor">
+      <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Fading.cs" />
-     <Compile Include="Assets\Scripts\AI\Conversation AI\ConversationEngine.cs" />
-     <Compile Include="Assets\Scripts\AI\Planet Development AI\PlanetDevelopmentAI.cs" />
-     <Compile Include="Assets\Scripts\CivCreator.cs" />
-     <Compile Include="Assets\Scripts\Data Objects\Actions.cs" />
-     <Compile Include="Assets\Scripts\Data Objects\CharacterObjects.cs" />
-     <Compile Include="Assets\Scripts\Data Objects\Civilization.cs" />
-     <Compile Include="Assets\Scripts\Data Objects\EconomicObjects.cs" />
-     <Compile Include="Assets\Scripts\Data Objects\GameEvents.cs" />
-     <Compile Include="Assets\Scripts\Data Objects\PlanetObjects.cs" />
-     <Compile Include="Assets\Scripts\Data Objects\Province.cs" />
-     <Compile Include="Assets\Scripts\DisplayGalaxyMapElements.cs" />
-     <Compile Include="Assets\Scripts\DisplayGalaxyStellarObjects.cs" />
-     <Compile Include="Assets\Scripts\GalaxyCameraScript.cs" />
-     <Compile Include="Assets\Scripts\GalaxyCreator.cs" />
-     <Compile Include="Assets\Scripts\GalaxyScreen.cs" />
-     <Compile Include="Assets\Scripts\GameData\GalaxyData.cs" />
-     <Compile Include="Assets\Scripts\GameData\GlobalGameData.cs" />
-     <Compile Include="Assets\Scripts\GameData\GraphicAssets.cs" />
-     <Compile Include="Assets\Scripts\GenerateGameObject.cs" />
-     <Compile Include="Assets\Scripts\Interfaces\IStateBase.cs" />
-     <Compile Include="Assets\Scripts\SoundManager.cs" />
-     <Compile Include="Assets\Scripts\StateManager.cs" />
-     <Compile Include="Assets\Scripts\States\BeginState.cs" />
-     <Compile Include="Assets\Scripts\States\GalaxyMapState.cs" />
-     <Compile Include="Assets\Scripts\States\NewGameState.cs" />
-     <Compile Include="Assets\Scripts\States\SetupState.cs" />
-     <Compile Include="Assets\Scripts\StellarObjects.cs" />
-     <Compile Include="Assets\Scripts\Tools\ActionTooltip.cs" />
-     <Compile Include="Assets\Scripts\Tools\BringToFront.cs" />
-     <Compile Include="Assets\Scripts\Tools\CharacterScreenActivation.cs" />
-     <Compile Include="Assets\Scripts\Tools\CharacterTooltip.cs" />
-     <Compile Include="Assets\Scripts\Tools\CharacterTraitTooltip.cs" />
-     <Compile Include="Assets\Scripts\Tools\Constants.cs" />
-     <Compile Include="Assets\Scripts\Tools\DataManager.cs" />
-     <Compile Include="Assets\Scripts\Tools\HelperFunctions.cs" />
-     <Compile Include="Assets\Scripts\Tools\LetterSpacing.cs" />
-     <Compile Include="Assets\Scripts\Tools\ModalPanel.cs" />
-     <Compile Include="Assets\Scripts\Tools\PlanetDataBox.cs" />
-     <Compile Include="Assets\Scripts\Tools\ProvinceSelect.cs" />
-     <Compile Include="Assets\Scripts\Tools\RegionCensusTooltip.cs" />
-     <Compile Include="Assets\Scripts\Tools\RegionTooltip.cs" />
-     <Compile Include="Assets\Scripts\Tools\TraitTooltip.cs" />
-     <Compile Include="Assets\Scripts\TurnEngine.cs" />
-     <Compile Include="Assets\Scripts\UI\Character Screen UI\ActionButton.cs" />
-     <Compile Include="Assets\Scripts\UI\Character Screen UI\ActionScrollView.cs" />
-     <Compile Include="Assets\Scripts\UI\Character Screen UI\RelationsButton.cs" />
-     <Compile Include="Assets\Scripts\UI\Character Screen UI\RelationsScrollView.cs" />
-     <Compile Include="Assets\Scripts\UI\Galaxy View UI\EventButton.cs" />
-     <Compile Include="Assets\Scripts\UI\Galaxy View UI\EventScrollView.cs" />
-     <Compile Include="Assets\Scripts\Views\CharacterScreen.cs" />
-     <Compile Include="Assets\Scripts\Views\DiploView.cs" />
-     <Compile Include="Assets\Scripts\Views\EmperorView.cs" />
-     <Compile Include="Assets\Scripts\Views\FinanceView.cs" />
-     <Compile Include="Assets\Scripts\Views\IntelView.cs" />
-     <Compile Include="Assets\Scripts\Views\PlanetView.cs" />
-     <Compile Include="Assets\Scripts\Views\ScienceView.cs" />
-     <Compile Include="Assets\Scripts\Views\ShowGameCreationStats.cs" />
-     <Compile Include="Assets\Scripts\Views\SubModeManager.cs" />
-     <Compile Include="Assets\Scripts\Views\SystemView.cs" />
-     <Compile Include="Assets\Scripts\Views\WarView.cs" />
-     <None Include="Assets\Resources\Action XML Data.xml" />
-     <None Include="Assets\Resources\characterFirstNamesFemale.txt" />
-     <None Include="Assets\Shaders\WaterBlurFinal.shader" />
-     <None Include="Assets\Resources\ConversationFiles\IntroGreetingSentences.txt" />
-     <None Include="Assets\Resources\ConversationFiles\ResponseTagSentences.txt" />
-     <None Include="Assets\Resources\Character Trait XML Data.xml" />
-     <None Include="Assets\Resources\ConversationFiles\IntroGenericSentences.txt" />
-     <None Include="Assets\Resources\systemNames.txt" />
-     <None Include="Assets\Shaders\WaterBlurModified.shader" />
-     <None Include="Assets\Resources\planetTraitsData.txt" />
-     <None Include="Assets\Resources\civSurNames.txt" />
-     <None Include="Assets\Resources\HouseTablesXMLData.xml" />
-     <None Include="Assets\Resources\planetGenerationData.txt" />
-     <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
-     <None Include="Assets\Resources\characterFirstNamesMale.txt" />
-     <None Include="Assets\Resources\civNames.txt" />
-     <None Include="Assets\Resources\commonHouseNameList.txt" />
-     <None Include="Assets\Resources\eventDescriptions.txt" />
-     <None Include="Assets\Resources\regionTypeData.txt" />
-     <None Include="Assets\Resources\PlanetTraitXMLData.xml" />
-     <None Include="Assets\Standard Assets\Cameras\CameraGuidelines.txt" />
- <Reference Include="UnityEngine.UI">
- <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.Networking">
- <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
- </Reference>
- <Reference Include="Mono.Cecil">
- <HintPath>C:/Program Files/Unity/Editor/Data/Managed/Mono.Cecil.dll</HintPath>
- </Reference>
- <Reference Include="UnityEditor.iOS.Extensions.Xcode">
- <HintPath>C:/Program Files/Unity/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
- </Reference>
+    <Compile Include="Assets\Fading.cs" />
+    <Compile Include="Assets\Scripts\AI\Conversation AI\ConversationEngine.cs" />
+    <Compile Include="Assets\Scripts\AI\Planet Development AI\PlanetDevelopmentAI.cs" />
+    <Compile Include="Assets\Scripts\CivCreator.cs" />
+    <Compile Include="Assets\Scripts\Data Objects\Actions.cs" />
+    <Compile Include="Assets\Scripts\Data Objects\CharacterObjects.cs" />
+    <Compile Include="Assets\Scripts\Data Objects\Civilization.cs" />
+    <Compile Include="Assets\Scripts\Data Objects\EconomicObjects.cs" />
+    <Compile Include="Assets\Scripts\Data Objects\GameEvents.cs" />
+    <Compile Include="Assets\Scripts\Data Objects\PlanetObjects.cs" />
+    <Compile Include="Assets\Scripts\Data Objects\Province.cs" />
+    <Compile Include="Assets\Scripts\DisplayGalaxyMapElements.cs" />
+    <Compile Include="Assets\Scripts\DisplayGalaxyStellarObjects.cs" />
+    <Compile Include="Assets\Scripts\GalaxyCameraScript.cs" />
+    <Compile Include="Assets\Scripts\GalaxyCreator.cs" />
+    <Compile Include="Assets\Scripts\GalaxyScreen.cs" />
+    <Compile Include="Assets\Scripts\GameData\GalaxyData.cs" />
+    <Compile Include="Assets\Scripts\GameData\GlobalGameData.cs" />
+    <Compile Include="Assets\Scripts\GameData\GraphicAssets.cs" />
+    <Compile Include="Assets\Scripts\GenerateGameObject.cs" />
+    <Compile Include="Assets\Scripts\Interfaces\IStateBase.cs" />
+    <Compile Include="Assets\Scripts\SoundManager.cs" />
+    <Compile Include="Assets\Scripts\StateManager.cs" />
+    <Compile Include="Assets\Scripts\States\BeginState.cs" />
+    <Compile Include="Assets\Scripts\States\GalaxyMapState.cs" />
+    <Compile Include="Assets\Scripts\States\NewGameState.cs" />
+    <Compile Include="Assets\Scripts\States\SetupState.cs" />
+    <Compile Include="Assets\Scripts\StellarObjects.cs" />
+    <Compile Include="Assets\Scripts\Tools\ActionTooltip.cs" />
+    <Compile Include="Assets\Scripts\Tools\BringToFront.cs" />
+    <Compile Include="Assets\Scripts\Tools\CharacterScreenActivation.cs" />
+    <Compile Include="Assets\Scripts\Tools\CharacterTooltip.cs" />
+    <Compile Include="Assets\Scripts\Tools\CharacterTraitTooltip.cs" />
+    <Compile Include="Assets\Scripts\Tools\Constants.cs" />
+    <Compile Include="Assets\Scripts\Tools\DataManager.cs" />
+    <Compile Include="Assets\Scripts\Tools\HelperFunctions.cs" />
+    <Compile Include="Assets\Scripts\Tools\LetterSpacing.cs" />
+    <Compile Include="Assets\Scripts\Tools\ModalPanel.cs" />
+    <Compile Include="Assets\Scripts\Tools\PlanetDataBox.cs" />
+    <Compile Include="Assets\Scripts\Tools\ProvinceSelect.cs" />
+    <Compile Include="Assets\Scripts\Tools\RegionCensusTooltip.cs" />
+    <Compile Include="Assets\Scripts\Tools\RegionTooltip.cs" />
+    <Compile Include="Assets\Scripts\Tools\TraitTooltip.cs" />
+    <Compile Include="Assets\Scripts\TurnEngine.cs" />
+    <Compile Include="Assets\Scripts\UI\Character Screen UI\ActionButton.cs" />
+    <Compile Include="Assets\Scripts\UI\Character Screen UI\ActionScrollView.cs" />
+    <Compile Include="Assets\Scripts\UI\Character Screen UI\RelationsButton.cs" />
+    <Compile Include="Assets\Scripts\UI\Character Screen UI\RelationsScrollView.cs" />
+    <Compile Include="Assets\Scripts\UI\Galaxy View UI\EventButton.cs" />
+    <Compile Include="Assets\Scripts\UI\Galaxy View UI\EventScrollView.cs" />
+    <Compile Include="Assets\Scripts\Views\CharacterScreen.cs" />
+    <Compile Include="Assets\Scripts\Views\DiploView.cs" />
+    <Compile Include="Assets\Scripts\Views\EmperorView.cs" />
+    <Compile Include="Assets\Scripts\Views\FinanceView.cs" />
+    <Compile Include="Assets\Scripts\Views\IntelView.cs" />
+    <Compile Include="Assets\Scripts\Views\PlanetView.cs" />
+    <Compile Include="Assets\Scripts\Views\ScienceView.cs" />
+    <Compile Include="Assets\Scripts\Views\ShowGameCreationStats.cs" />
+    <Compile Include="Assets\Scripts\Views\SubModeManager.cs" />
+    <Compile Include="Assets\Scripts\Views\SystemView.cs" />
+    <Compile Include="Assets\Scripts\Views\WarView.cs" />
+    <None Include="Assets\Resources\Action XML Data.xml" />
+    <None Include="Assets\Resources\characterFirstNamesFemale.txt" />
+    <None Include="Assets\Shaders\WaterBlurFinal.shader" />
+    <None Include="Assets\Resources\ConversationFiles\IntroGreetingSentences.txt" />
+    <None Include="Assets\Resources\ConversationFiles\ResponseTagSentences.txt" />
+    <None Include="Assets\Resources\Character Trait XML Data.xml" />
+    <None Include="Assets\Resources\ConversationFiles\IntroGenericSentences.txt" />
+    <None Include="Assets\Resources\systemNames.txt" />
+    <None Include="Assets\Shaders\WaterBlurModified.shader" />
+    <None Include="Assets\Resources\planetTraitsData.txt" />
+    <None Include="Assets\Resources\civSurNames.txt" />
+    <None Include="Assets\Resources\HouseTablesXMLData.xml" />
+    <None Include="Assets\Resources\planetGenerationData.txt" />
+    <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
+    <None Include="Assets\Resources\characterFirstNamesMale.txt" />
+    <None Include="Assets\Resources\civNames.txt" />
+    <None Include="Assets\Resources\commonHouseNameList.txt" />
+    <None Include="Assets\Resources\eventDescriptions.txt" />
+    <None Include="Assets\Resources\regionTypeData.txt" />
+    <None Include="Assets\Resources\PlanetTraitXMLData.xml" />
+    <None Include="Assets\Standard Assets\Cameras\CameraGuidelines.txt" />
+    <Reference Include="UnityEngine.UI">
+      <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Networking">
+      <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil">
+      <HintPath>C:/Program Files/Unity/Editor/Data/Managed/Mono.Cecil.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Xcode">
+      <HintPath>C:/Program Files/Unity/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
-      <Project>{DAF8F126-9042-10F5-C580-0FEE7F5B3FB9}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
+      <Project>{DAF8F126-9042-10F5-C580-0FEE7F5B3FB9}</Project>
+      <Name>Assembly-CSharp-firstpass</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -152,5 +155,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  
 </Project>
