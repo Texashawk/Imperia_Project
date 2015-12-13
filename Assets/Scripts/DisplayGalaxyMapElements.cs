@@ -2,6 +2,7 @@
 using System.Collections;
 using CameraScripts;
 using UnityEngine.UI;
+using UI.Manager;
 
 public class DisplayGalaxyMapElements : MonoBehaviour
 {
@@ -33,7 +34,7 @@ public class DisplayGalaxyMapElements : MonoBehaviour
 
     void RemoveUIObjects()
     {
-        if (mainCamera.GetComponent<GalaxyCameraScript>().zoomLevel >= GalaxyCameraScript.cameraZoomLevel.System)  // take away things that don't belong in the system view
+        if (mainCamera.GetComponent<GalaxyCameraScript>().ZoomLevel >= UIManager.eViewMode.System)  // take away things that don't belong in the system view
         {
             rosette.SetActive(false);
             //zoomValueText.SetActive(false);

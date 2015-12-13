@@ -24,3 +24,5 @@ obj/
 ehthumbs.db
 Thumbs.db
 Library/shadercompiler-32bit-1.log
+*.csproj
+obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache

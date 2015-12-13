@@ -9,6 +9,7 @@ using Screens.Galaxy;
 using HelperFunctions;
 using CharacterObjects;
 using Tooltips;
+using UI.Manager;
 
 public class PlanetView : MonoBehaviour {
 
@@ -126,7 +127,7 @@ public class PlanetView : MonoBehaviour {
         screenWidthRatio = ((float)Screen.width / 1920f);
         screenHeightRatio = ((float)Screen.height / 1080f);
 
-        if (gScriptRef.zoomLevel == GalaxyCameraScript.cameraZoomLevel.Planet)
+        if (gScriptRef.ZoomLevel == UIManager.eViewMode.Planet)
         {
             if (!planetDataLoaded) // load selected planet data into pData ref if needed or changed
             {

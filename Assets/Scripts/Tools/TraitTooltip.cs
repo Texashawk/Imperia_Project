@@ -3,6 +3,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using StellarObjects;
 using CameraScripts;
+using UI.Manager;
 
 public class TraitTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
 
@@ -66,7 +67,7 @@ public class TraitTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         string name = "";
         string desc = "";
         // draw according to screen
-        if (galCameraRef.zoomLevel == GalaxyCameraScript.cameraZoomLevel.Planet)
+        if (galCameraRef.ZoomLevel == UIManager.eViewMode.Planet)
         {
             TooltipItem.transform.localPosition = new Vector3(toolTipOriginalLocation.x + TooltipItem.GetComponent<RectTransform>().rect.width + 270, toolTipOriginalLocation.y - 30, toolTipOriginalLocation.z);
         }

@@ -2,18 +2,19 @@ using UnityEngine;
 using System.Collections;
 using GalaxyCreator;
 using StellarObjects;
+using UI.Manager;
 
 namespace CameraScripts
 {
 public class GalaxyCameraScript : MonoBehaviour {
 
-    public enum cameraZoomLevel : int
-    {
-        Galaxy,
-        Province,
-        System,
-        Planet
-    };
+    //public enum cameraZoomLevel : int
+    //{
+    //    Galaxy,
+    //    Province,
+    //    System,
+    //    Planet
+    //};
 
 	private float mouseWheelValue = 0.0f;
 	private bool moveMapUp = false;
@@ -25,8 +26,9 @@ public class GalaxyCameraScript : MonoBehaviour {
     private float zoomSensitivity = 50f;
     private Camera mainC; // camera reference
     private GlobalGameData gDataRef;
+    private UIManager uiManagerRef;
 
-    [HideInInspector]public cameraZoomLevel zoomLevel;
+    [HideInInspector]public UIManager.eViewMode ZoomLevel;
 	private const int scrollSpeedVariable = 1200;
 	[HideInInspector]public bool systemZoomActive = false;
     [HideInInspector]public bool planetZoomActive = false;
@@ -59,6 +61,7 @@ public class GalaxyCameraScript : MonoBehaviour {
 	void Start () {
         mainC = GameObject.Find("Main Camera").GetComponent<Camera>();
         gDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+        uiManagerRef = GameObject.Find("UI Engine").GetComponent<UIManager>();
         mainC.fieldOfView = maxZoomLevel;
         zoom = mainC.fieldOfView;
         galaxyHeight = gDataRef.GalaxySizeHeight;
@@ -72,9 +75,11 @@ public class GalaxyCameraScript : MonoBehaviour {
         scaleRatio = (Screen.height / 1920f) * (Screen.width / 1080f);
        
         if (gDataRef.uiSubMode == GlobalGameData.eSubMode.None && !gDataRef.modalIsActive)  // only work in no submode
-        {  
-            if (provinceZoomActive && !systemZoomActive && provinceTarget != null)        
-                ZoomToProvince(provinceTarget);
+        {
+                if (provinceZoomActive && !systemZoomActive && provinceTarget != null)
+                {
+                    ZoomToProvince(provinceTarget);
+                }
             
             if (systemZoomActive && !planetZoomActive && starTarget != null)
                 ZoomToSystem(starTarget);
@@ -155,7 +160,7 @@ public class GalaxyCameraScript : MonoBehaviour {
 
     void CheckForMapPan()
     {
-        if (zoomLevel < cameraZoomLevel.System && !provinceZoomActive) // don't pan the map if in system or planet view or if in province mode
+        if (ZoomLevel < UIManager.eViewMode.System && !provinceZoomActive) // don't pan the map if in system or planet view or if in province mode
         {
             // check for map movement
             if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
@@ -189,7 +194,7 @@ public class GalaxyCameraScript : MonoBehaviour {
         float moveRightVector = transform.position.x + scrollSpeedVariable;
         float moveLeftVector = transform.position.x - scrollSpeedVariable;
 
-        if (zoomLevel <= cameraZoomLevel.Province) // don't pan map if in system or planet mode
+        if (ZoomLevel <= UIManager.eViewMode.Province) // don't pan map if in system or planet mode
         {
             if (moveMapUp && (yLocation <= galaxyHeight) && (yLocation >= -galaxyHeight))
             {
@@ -347,24 +352,24 @@ public class GalaxyCameraScript : MonoBehaviour {
     {
         if (zoom > galaxyMinZoomLevel)
         {
-            zoomLevel = cameraZoomLevel.Galaxy;
+            ZoomLevel = UIManager.eViewMode.Galaxy;
             systemZoomActive = false;
             planetZoomActive = false;
         }
         else if ((zoom <= galaxyMinZoomLevel) && (zoom > systemMinZoomLevel))
         {
-            zoomLevel = cameraZoomLevel.Province;
+            ZoomLevel = UIManager.eViewMode.Province;
             systemZoomActive = false;
             planetZoomActive = false;
         }
         else if ((zoom <= provinceMinZoomLevel) && (zoom > planetMinZoomLevel))
         {
-            zoomLevel = cameraZoomLevel.System;
+            ZoomLevel = UIManager.eViewMode.System;
             planetZoomActive = false;
             provinceZoomActive = false;
         }
         else
-            zoomLevel = cameraZoomLevel.Planet;
+            ZoomLevel = UIManager.eViewMode.Planet;
     }
 }
 }

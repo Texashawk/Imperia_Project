@@ -6,10 +6,8 @@ using System;
 using UnityEngine.UI;
 using Screens.Galaxy;
 using StellarObjects;
-using CivObjects;
-using HelperFunctions;
-using CharacterObjects;
 using UnityEngine.Events;
+using UI.Manager;
 
 public class SystemView : MonoBehaviour {
 
@@ -58,7 +56,7 @@ public class SystemView : MonoBehaviour {
 
     void OnGUI()
     {
-        if (gScriptRef.zoomLevel == GalaxyCameraScript.cameraZoomLevel.System)
+        if (gScriptRef.ZoomLevel == UIManager.eViewMode.System)
         {
             ShowSystemView();
             if (DrawPanelSummary)
@@ -70,7 +68,7 @@ public class SystemView : MonoBehaviour {
 
     void Update()
     {
-        if (gScriptRef.zoomLevel == GalaxyCameraScript.cameraZoomLevel.System)
+        if (gScriptRef.ZoomLevel == UIManager.eViewMode.System)
         {
             if (gameDataRef.RequestGraphicRefresh)
             {
@@ -268,7 +266,7 @@ public class SystemView : MonoBehaviour {
 
     void ResetDrawStates()
     {
-        if ((gScriptRef.zoomLevel == GalaxyCameraScript.cameraZoomLevel.Province || gScriptRef.zoomLevel == GalaxyCameraScript.cameraZoomLevel.Galaxy))
+        if ((gScriptRef.ZoomLevel == UIManager.eViewMode.Province || gScriptRef.ZoomLevel == UIManager.eViewMode.Galaxy))
         {
             systemIntelLevel.enabled = false;
         }
