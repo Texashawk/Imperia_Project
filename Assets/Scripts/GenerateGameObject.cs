@@ -169,11 +169,11 @@ public class GenerateGameObject
         }
 
         // skill ratings
-        newCiv.FarmingBaseRating = UnityEngine.Random.Range(70, 100) - (int)newCiv.Type * 10;
-        newCiv.MiningBaseRating = UnityEngine.Random.Range(50, 90) - (int)newCiv.Type * 10;
-        newCiv.ScienceBaseRating = UnityEngine.Random.Range(0, 50) + (int)newCiv.Type * 10;
-        newCiv.HighTechBaseRating = UnityEngine.Random.Range(0, 40) + (int)newCiv.Type * 10;
-        newCiv.ManufacturingBaseRating = UnityEngine.Random.Range(5, 50) + (int)newCiv.Type * 10;
+        //newCiv.FarmingBaseRating = UnityEngine.Random.Range(70, 100) - (int)newCiv.Type * 10;
+        //newCiv.MiningBaseRating = UnityEngine.Random.Range(50, 90) - (int)newCiv.Type * 10;
+        //newCiv.ScienceBaseRating = UnityEngine.Random.Range(0, 50) + (int)newCiv.Type * 10;
+        //newCiv.HighTechBaseRating = UnityEngine.Random.Range(0, 40) + (int)newCiv.Type * 10;
+        //newCiv.ManufacturingBaseRating = UnityEngine.Random.Range(5, 50) + (int)newCiv.Type * 10;
 
         // tolerance
         newCiv.PlanetMinTolerance = UnityEngine.Random.Range(40, 60); // sets the base minimum habitable world a civilization is willing to tolerate

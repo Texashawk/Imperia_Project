@@ -106,12 +106,12 @@ public static class PlanetDevelopmentAI
                 // use traits to also determine specific biases
                 if (vic.Traits.Exists(p => p.Name.ToUpper() == "TECHNOPHILE"))
                 {
-                    labPriority += UnityEngine.Random.Range(0, 2f);
+                    labPriority += Random.Range(0, 2f);
                 }
 
                 if (vic.Traits.Exists(p => p.Name.ToUpper() == "INDUSTRIALIST"))
                 {
-                    factoryPriority += UnityEngine.Random.Range(0, 2f);
+                    factoryPriority += Random.Range(0, 2f);
                 }
 
                 if (vic.Traits.Exists(p => p.Name.ToUpper() == "TECHNOPHOBE"))
@@ -121,7 +121,7 @@ public static class PlanetDevelopmentAI
 
                 if (vic.Traits.Exists(p => p.Name.ToUpper() == "BUREAUCRAT"))
                 {
-                    adminPriority += UnityEngine.Random.Range(0, 2f);
+                    adminPriority += Random.Range(0, 2f);
                 }
 
                 // normalize results below 0
