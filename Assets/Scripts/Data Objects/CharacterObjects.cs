@@ -261,6 +261,7 @@ namespace CharacterObjects
         public float PragmaticInfluence { get; set; }
         public float TyrannicalInfluence { get; set; }
         public string EmperorModelID { get; set; }
+        public string EmperorSuffix { get; set; } // what letter of the line the leader is
 
         public House AssignedHouse
         {
@@ -487,12 +488,14 @@ namespace CharacterObjects
 
         public string Name { get; set; }
         public string ID { get; set; }
+        public string AffiliatedCiv { get; set; }
         public eHouseRank Rank { get; set; }
         public eHouseSpecialty Specialty { get; set; }
         public eHousePersonality Personality { get; set; }
         public eHouseStability Stability { get; set; }
         public eHouseWealth Wealth { get; set; }
         public eHouseAmbition Ambition { get; set; }
+        public bool IsRulingHouse { get; set; }
 
         // Traditions are values from 1-100 that determine how much a particular sector of activity has been learned and passed through the House for generations.
         // Great Houses might have values near 80, Minor Houses might have values near 40, and common Houses will have values around 5-10 (small and diffuse Houses don't accrue tradition)

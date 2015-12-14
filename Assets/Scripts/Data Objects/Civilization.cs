@@ -181,15 +181,33 @@ namespace CivObjects
                 List<PlanetData> pList = new List<PlanetData>();
                 foreach (string pID in PlanetIDList)
                 {
-                    if (HelperFunctions.DataRetrivalFunctions.GetPlanet(pID) != null)
+                    if (DataRetrivalFunctions.GetPlanet(pID) != null)
                     {
-                        pList.Add(HelperFunctions.DataRetrivalFunctions.GetPlanet(pID));
+                        pList.Add(DataRetrivalFunctions.GetPlanet(pID));
                     }           
                 }
 
                 return pList;
             }
         }
+
+        public List<House> HouseList
+        {
+            get
+            {
+                List<House> hList = new List<House>();
+                foreach (House hData in DataRetrivalFunctions.GetHouseList())
+                {
+                    if (hData.AffiliatedCiv == ID)
+                    {
+                        hList.Add(hData);
+                    }
+                }
+
+                return hList;
+            }           
+        }
+
         public List<Pops> PopList // dynamic depending on pops in regions (not all pops in all regions are loyal!)
         {
             get
@@ -212,7 +230,7 @@ namespace CivObjects
             get
             {
                 List<Region> rList = new List<Region>();
-                foreach (PlanetData pData in HelperFunctions.DataRetrivalFunctions.GetCivPlanetList(this))
+                foreach (PlanetData pData in DataRetrivalFunctions.GetCivPlanetList(this))
                 {
                     foreach (Region rData in pData.RegionList)
                     {

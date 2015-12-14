@@ -1236,7 +1236,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 {
                     if (p.PlanetHappinessLevel < 30)
                     {
-                        int migrationChance = UnityEngine.Random.Range(0, 100);
+                        int migrationChance = Random.Range(0, 100);
                         if (migrationChance + p.PlanetHappinessLevel + (100 - p.UnrestLevel) < Constants.Constants.MigrationTarget)
                         {
                             p.IsMigratingOffPlanet = true;
@@ -2293,7 +2293,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 }
                 
                 // then choose a region from this list
-                int regionChoice = UnityEngine.Random.Range(0, regionsEligible.Count);
+                int regionChoice = Random.Range(0, regionsEligible.Count);
                 if (levType == "Farm")
                 {              
                     HelperFunctions.DataRetrivalFunctions.GetRegion(regionsEligible[regionChoice]).FarmingLevel += 1;

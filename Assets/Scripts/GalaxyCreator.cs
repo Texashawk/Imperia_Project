@@ -106,8 +106,8 @@ namespace GalaxyCreator
         Vector3 GenerateLocation()
         {
             Vector3 pLoc;
-            pLoc.x = UnityEngine.Random.Range(-galaxySizeWidth, galaxySizeWidth);
-            pLoc.y = UnityEngine.Random.Range(-galaxySizeHeight, galaxySizeHeight);
+            pLoc.x = Random.Range(-galaxySizeWidth, galaxySizeWidth);
+            pLoc.y = Random.Range(-galaxySizeHeight, galaxySizeHeight);
             pLoc.z = 0;
 
             return pLoc;

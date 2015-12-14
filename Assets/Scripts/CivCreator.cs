@@ -30,9 +30,9 @@ namespace CivCreator
             GenerateAICivs();
             GenerateCommonHouses(); // generate houses
             GenerateHouseStats(); // generate the other house status
-            GenerateCharacters(); // generate characters for the global pool
-            GenerateCivLeaders();
+            GenerateCharacters(); // generate characters for the global pool           
             AssignHouses(); // assign houses
+            GenerateCivLeaders();
             GenerateRelationships(); // determine everyone's relationship to everyone else
             GenerateProvinces(); // generate provinces for each civilization
             DetermineSystemCapitals();
@@ -58,10 +58,10 @@ namespace CivCreator
         {
             foreach (Civilization civ in gameDataRef.CivList)
             {
-                int poolCount = UnityEngine.Random.Range(120 - ((int)civ.Size * 5), 120); // generate from 60-120 characters initially
+                int poolCount = Random.Range(120 - ((int)civ.Size * 5), 120); // generate from 60-120 characters initially
                 for (int x = 0; x < poolCount; x++)
                 {
-                    gameDataRef.CharacterList.Add(GenerateGameObject.GenerateNewCharacter(CharacterObjects.Character.eRole.Pool, civ.ID)); // assign the character to the global list
+                    gameDataRef.CharacterList.Add(GenerateGameObject.GenerateNewCharacter(Character.eRole.Pool, civ.ID)); // assign the character to the global list
                 }
             }
         }
@@ -107,8 +107,8 @@ namespace CivCreator
                             fearModifier += 10;
                         }
 
-                        baseTrust = UnityEngine.Random.Range(0, 80);
-                        baseFear = UnityEngine.Random.Range(0, 60);
+                        baseTrust = Random.Range(0, 80);
+                        baseFear = Random.Range(0, 60);
 
                         baseTrust += trustModifier;
                         baseFear += fearModifier;
@@ -228,7 +228,7 @@ namespace CivCreator
                             {
                                 if (baseTrust > 60)
                                 {
-                                    int chance = UnityEngine.Random.Range(0, 3);
+                                    int chance = Random.Range(0, 3);
                                     if (chance == 0)
                                         newRelationship.RelationshipState = Relationship.eRelationshipState.Allies;
                                     else if (chance <= 2)
@@ -239,7 +239,7 @@ namespace CivCreator
 
                                 else if (baseTrust < 30)
                                 {
-                                    int chance = UnityEngine.Random.Range(0, 5);
+                                    int chance = Random.Range(0, 5);
                                     if (chance == 0)
                                         newRelationship.RelationshipState = Relationship.eRelationshipState.Rivals;
                                     else if (chance == 1)
@@ -255,7 +255,7 @@ namespace CivCreator
                         {
                             if (baseTrust > 70)
                             {
-                                int chance = UnityEngine.Random.Range(0,15);
+                                int chance = Random.Range(0,15);
                                 if (chance <= 2)
                                     newRelationship.RelationshipState = Relationship.eRelationshipState.Allies;
                                 else if (chance <= 7)
@@ -270,7 +270,7 @@ namespace CivCreator
 
                             else if (baseTrust < 30)
                             {
-                                int chance = UnityEngine.Random.Range(0, 6) - (int)(baseTrust / 10);
+                                int chance = Random.Range(0, 6) - (int)(baseTrust / 10);
                                 if (chance == 0)
                                     if (cData.Influence < (otherCData.Influence * 1.5f))
                                         newRelationship.RelationshipState = Relationship.eRelationshipState.Predator;
@@ -308,16 +308,18 @@ namespace CivCreator
                 civCharList = gameDataRef.CharacterList.FindAll(p => p.CivID == civ.ID);
 
             tryAssignLeader:
-                int choice = UnityEngine.Random.Range(0, civCharList.Count);
+                int choice = Random.Range(0, civCharList.Count);
                 if (civCharList[choice].Role == Character.eRole.Pool)
                 {
                     civCharList[choice].Role = Character.eRole.Emperor;
-                    civCharList[choice].BaseActionPoints = UnityEngine.Random.Range(3, 7); // temporary
+                    civCharList[choice].BaseActionPoints = Random.Range(3, 7); // temporary
                     if (civ.HumanCiv)
                     {
-                        civCharList[choice].BenevolentInfluence = UnityEngine.Random.Range(1f, 5f);
-                        civCharList[choice].PragmaticInfluence = UnityEngine.Random.Range(5f, 10f);
-                        civCharList[choice].TyrannicalInfluence = UnityEngine.Random.Range(1f, 5f);
+                        civCharList[choice].BenevolentInfluence = Random.Range(1f, 5f);
+                        civCharList[choice].PragmaticInfluence = Random.Range(5f, 10f);
+                        civCharList[choice].TyrannicalInfluence = Random.Range(1f, 5f);
+                        civCharList[choice].Name = "STEVE I";
+                        //civCharList[choice].HouseID = 
                     }
                     civCharList[choice].PlanetLocationID = civ.CapitalPlanetID;
                     civ.LeaderID = civCharList[choice].ID;
@@ -336,8 +338,8 @@ namespace CivCreator
 
             foreach (string name in DataManager.commonHouseNameList)
             {
-                int creationChance = UnityEngine.Random.Range(0, 100);
-                if (creationChance > 90) // only one out of 5 houses will be generated
+                int creationChance = Random.Range(0, 100);
+                if (creationChance > 90) // only one out of 10 houses will be generated
                 {
                     House comHouse = new House(); // generate temp house
                     houseNumber += 1;
@@ -345,18 +347,18 @@ namespace CivCreator
                     comHouse.ID = "COM" + houseNumber.ToString("N0");
                     comHouse.Rank = House.eHouseRank.Common;
                     
-                    comHouse.Power = UnityEngine.Random.Range(0, 10); // power from 1-10
-                    comHouse.Influence = UnityEngine.Random.Range(0, 10); // influence from 1-10
-                    comHouse.Age = UnityEngine.Random.Range(20, 500); // age of the house
-                    comHouse.FarmingTradition = UnityEngine.Random.Range(0, 20);
-                    comHouse.GovernmentTradition = UnityEngine.Random.Range(0, 10);
-                    comHouse.HighTechTradition = UnityEngine.Random.Range(0, 10);
-                    comHouse.ManufacturingTradition = UnityEngine.Random.Range(0, 15);
-                    comHouse.MiningTradition = UnityEngine.Random.Range(0, 10);
-                    comHouse.ScienceTradition = UnityEngine.Random.Range(0, 10);
-                    comHouse.TradeTradition = UnityEngine.Random.Range(0, 10);
-                    comHouse.WarTradition = UnityEngine.Random.Range(0, 10);
-                    comHouse.Specialty = (House.eHouseSpecialty)UnityEngine.Random.Range(0, 7);
+                    comHouse.Power = Random.Range(0, 10); // power from 1-10
+                    comHouse.Influence = Random.Range(0, 10); // influence from 1-10
+                    comHouse.Age = Random.Range(20, 500); // age of the house
+                    comHouse.FarmingTradition = Random.Range(0, 20);
+                    comHouse.GovernmentTradition = Random.Range(0, 10);
+                    comHouse.HighTechTradition = Random.Range(0, 10);
+                    comHouse.ManufacturingTradition = Random.Range(0, 15);
+                    comHouse.MiningTradition = Random.Range(0, 10);
+                    comHouse.ScienceTradition = Random.Range(0, 10);
+                    comHouse.TradeTradition = Random.Range(0, 10);
+                    comHouse.WarTradition = Random.Range(0, 10);
+                    comHouse.Specialty = (House.eHouseSpecialty)Random.Range(0, 7);
                     comHouse.History = "The common House of " + name + " has an undistinguished tradition. Established to no fanfare in the year " + (3050 - comHouse.Age).ToString("N0") + ", the House has continued as unremarkably as it started.";
                     Debug.Log("Common House of " + name + " Created");
                     gameDataRef.HouseList.Add(comHouse);
@@ -371,40 +373,51 @@ namespace CivCreator
 
             foreach (House gHouse in greatHouseList)
             {
-                gHouse.Influence = UnityEngine.Random.Range(40, 80); // temporary code; will be derived once Holdings and house Wealth are generated
+                gHouse.Influence = Random.Range(40, 80); // temporary code; will be derived once Holdings and house Wealth are generated
+                gHouse.IsRulingHouse = false; // initially set all houses to false
             }
+
+            House leadingHouse = new House();
+
+            foreach (House gHouse in greatHouseList)
+            {
+                if (gHouse.Influence > leadingHouse.Influence)
+                    leadingHouse = gHouse;
+            }
+
+            leadingHouse.IsRulingHouse = true; // set the highest influence House to be the ruling House
         }
 
         void AssignHouses()
         {
-            Civilization humanCiv = gameDataRef.CivList[0]; // only the player empire has Houses
+            Civilization currentCiv = gameDataRef.CivList[0]; // only the player empire has Houses, but this will change very soon! (Add a loop to go through each civ
             List<Character> civCharList = new List<Character>();
             List<House>commonHouseList = gameDataRef.HouseList.FindAll(p => p.Rank == House.eHouseRank.Common);
             List<House> minorHouseList = gameDataRef.HouseList.FindAll(p => p.Rank == House.eHouseRank.Minor);
             List<House>greatHouseList = gameDataRef.HouseList.FindAll(p => p.Rank == House.eHouseRank.Great);
-            civCharList = gameDataRef.CharacterList.FindAll(p => p.CivID == humanCiv.ID);
+            civCharList = gameDataRef.CharacterList.FindAll(p => p.CivID == currentCiv.ID);
 
             foreach (Character cData in civCharList)
             {
-                int houseTypeChance = UnityEngine.Random.Range(0, 100);
+                int houseTypeChance = Random.Range(0, 100);
 
                 if (houseTypeChance < Constants.Constants.CommonHouseChance)
                 {
-                    int houseAssignment = UnityEngine.Random.Range(0, commonHouseList.Count);
+                    int houseAssignment = Random.Range(0, commonHouseList.Count);
                     cData.HouseID = commonHouseList[houseAssignment].ID;
-                    cData.Wealth = ((int)(commonHouseList[houseAssignment].Wealth + 1) * UnityEngine.Random.Range(1, 4)) / 25; // set wealth based on house
+                    cData.Wealth = ((int)(commonHouseList[houseAssignment].Wealth + 1) * Random.Range(1, 4)) / 25; // set wealth based on house
                 }
                 else if (houseTypeChance < Constants.Constants.MinorHouseChance + Constants.Constants.CommonHouseChance)
                 {
-                    int houseAssignment = UnityEngine.Random.Range(0, minorHouseList.Count);
+                    int houseAssignment = Random.Range(0, minorHouseList.Count);
                     cData.HouseID = minorHouseList[houseAssignment].ID;
-                    cData.Wealth = ((int)(minorHouseList[houseAssignment].Wealth + 1) * UnityEngine.Random.Range(1, 7)) / 25; // set wealth based on house
+                    cData.Wealth = ((int)(minorHouseList[houseAssignment].Wealth + 1) * Random.Range(1, 7)) / 25; // set wealth based on house
                 }
                 else
                 {
-                    int houseAssignment = UnityEngine.Random.Range(0, greatHouseList.Count);
+                    int houseAssignment = Random.Range(0, greatHouseList.Count);
                     cData.HouseID = greatHouseList[houseAssignment].ID;
-                    cData.Wealth = ((int)(greatHouseList[houseAssignment].Wealth + 1) * UnityEngine.Random.Range(1, 15)) / 25; // set wealth based on house
+                    cData.Wealth = ((int)(greatHouseList[houseAssignment].Wealth + 1) * Random.Range(1, 15)) / 25; // set wealth based on house
                 }
                 string creationType = "born to";
                 if (cData.Lifeform == Character.eLifeformType.Machine || cData.Lifeform == Character.eLifeformType.Hybrid || cData.Lifeform == Character.eLifeformType.AI)
@@ -433,11 +446,11 @@ namespace CivCreator
             civCharList = gameDataRef.CharacterList.FindAll(p => p.CivID == humanCiv.ID);
 
             tryAssignDomPrime:
-                int choice = UnityEngine.Random.Range(0, civCharList.Count);
+                int choice = Random.Range(0, civCharList.Count);
                 if (civCharList[choice].Role == Character.eRole.Pool)
                 {
                     civCharList[choice].Role = Character.eRole.DomesticPrime;
-                    civCharList[choice].TimeInPosition = UnityEngine.Random.Range(0, (civCharList[choice].Age - 18));
+                    civCharList[choice].TimeInPosition = Random.Range(0, (civCharList[choice].Age - 18));
                     civCharList[choice].PlanetLocationID = humanCiv.CapitalPlanetID;
                 }
                 else // if already assigned, try again
@@ -446,11 +459,11 @@ namespace CivCreator
                 }
 
             tryAssignIntPrime:
-                int intChoice = UnityEngine.Random.Range(0, civCharList.Count);
+                int intChoice = Random.Range(0, civCharList.Count);
                 if (civCharList[intChoice].Role == Character.eRole.Pool)
                 {
                     civCharList[intChoice].Role = Character.eRole.IntelPrime;
-                    civCharList[choice].TimeInPosition = UnityEngine.Random.Range(0,(civCharList[choice].Age - 18));
+                    civCharList[choice].TimeInPosition = Random.Range(0,(civCharList[choice].Age - 18));
                     civCharList[intChoice].PlanetLocationID = humanCiv.CapitalPlanetID;
                 }
                 else // if already assigned, try again
@@ -492,23 +505,23 @@ namespace CivCreator
                     {
                  
                     tryAssignCharacter:
-                        int houseType = UnityEngine.Random.Range(0, 100);
+                        int houseType = Random.Range(0, 100);
                         int choice = 0;
                         Character provGov = null;
 
                         if (houseType < Constants.Constants.ChanceProvinceGovernorGreat)
                         {
-                            choice = UnityEngine.Random.Range(0, civGreatHouseCharacterList.Count);
+                            choice = Random.Range(0, civGreatHouseCharacterList.Count);
                             provGov = civGreatHouseCharacterList[choice];
                         }
                         else if (houseType < Constants.Constants.ChanceProvinceGovernorGreat + Constants.Constants.ChanceProvinceGovernorMinor)
                         {
-                            choice = UnityEngine.Random.Range(0, civMinorHouseCharacterList.Count);
+                            choice = Random.Range(0, civMinorHouseCharacterList.Count);
                             provGov = civMinorHouseCharacterList[choice];
                         }
                         else
                         {
-                            choice = UnityEngine.Random.Range(0, civCommonHouseCharacterList.Count);
+                            choice = Random.Range(0, civCommonHouseCharacterList.Count);
                             provGov = civCommonHouseCharacterList[choice];
                         }
 
@@ -517,7 +530,7 @@ namespace CivCreator
                             provGov.Role = Character.eRole.ProvinceGovernor;
                             provGov.PlanetLocationID = pData.CapitalPlanetID;
                             provGov.ProvinceAssignedID = pData.ID;
-                            provGov.TimeInPosition = UnityEngine.Random.Range(0, (provGov.Age - 18));
+                            provGov.TimeInPosition = Random.Range(0, (provGov.Age - 18));
                             provGov.History += "In " + (gameDataRef.GameDate - provGov.TimeInPosition).ToString("G0") + ", " + provGov.GenderPronoun.ToLower() +" was assigned as provincial governor of the " + pData.Name + " province.";
                             Debug.Log("Province governor assigned to " + pData.Name + " province.");
                         }
@@ -532,7 +545,7 @@ namespace CivCreator
                     foreach (Province pData in provDataList)
                     {
                     tryAssignCharacter:
-                        int choice = UnityEngine.Random.Range(0, civCharList.Count);
+                        int choice = Random.Range(0, civCharList.Count);
                         if (civCharList[choice].Role == Character.eRole.Pool)
                         {
                             civCharList[choice].Role = Character.eRole.ProvinceGovernor;
@@ -555,23 +568,23 @@ namespace CivCreator
                     {
 
                     tryAssignCharacter:
-                        int houseType = UnityEngine.Random.Range(0, 100);
+                        int houseType = Random.Range(0, 100);
                         int choice = 0;
                         Character sysGov = null;
 
                         if (houseType < Constants.Constants.ChanceSystemGovernorGreat)
                         {
-                            choice = UnityEngine.Random.Range(0, civGreatHouseCharacterList.Count);
+                            choice = Random.Range(0, civGreatHouseCharacterList.Count);
                             sysGov = civGreatHouseCharacterList[choice];
                         }
                         else if (houseType < Constants.Constants.ChanceSystemGovernorGreat + Constants.Constants.ChanceSystemGovernorMinor)
                         {
-                            choice = UnityEngine.Random.Range(0, civMinorHouseCharacterList.Count);
+                            choice = Random.Range(0, civMinorHouseCharacterList.Count);
                             sysGov = civMinorHouseCharacterList[choice];
                         }
                         else
                         {
-                            choice = UnityEngine.Random.Range(0, civCommonHouseCharacterList.Count);
+                            choice = Random.Range(0, civCommonHouseCharacterList.Count);
                             sysGov = civCommonHouseCharacterList[choice];
                         }
 
@@ -580,8 +593,8 @@ namespace CivCreator
                             sysGov.Role = Character.eRole.SystemGovernor;
                             sysGov.PlanetLocationID = sData.SystemCapitalID;
                             sysGov.SystemAssignedID = sData.ID;
-                            sysGov.TimeInPosition = UnityEngine.Random.Range(0, (sysGov.Age - 18));
-                            sysGov.History += "In " + (gameDataRef.GameDate - UnityEngine.Random.Range(0, (sysGov.Age - 18))).ToString("G0") + ", " + sysGov.GenderPronoun.ToLower() + " was assigned as system governor of the " + sData.Name + " system.";
+                            sysGov.TimeInPosition = Random.Range(0, (sysGov.Age - 18));
+                            sysGov.History += "In " + (gameDataRef.GameDate - Random.Range(0, (sysGov.Age - 18))).ToString("G0") + ", " + sysGov.GenderPronoun.ToLower() + " was assigned as system governor of the " + sData.Name + " system.";
                             Debug.Log("System governor assigned to " + sData.Name);
                         }
                         else // if already assigned, try again
@@ -595,7 +608,7 @@ namespace CivCreator
                     foreach (StarData sData in sDataList)
                     {
                     tryAssignCharacter:
-                        int choice = UnityEngine.Random.Range(0, civCharList.Count);
+                        int choice = Random.Range(0, civCharList.Count);
                         if (civCharList[choice].Role == Character.eRole.Pool)
                         {
                             civCharList[choice].Role = Character.eRole.SystemGovernor;
@@ -617,23 +630,23 @@ namespace CivCreator
                     {
 
                     tryAssignCharacter:
-                        int houseType = UnityEngine.Random.Range(0, 100);
+                        int houseType = Random.Range(0, 100);
                         int choice = 0;
                         Character viceroy = null;
 
                         if (houseType < Constants.Constants.ChanceViceroyGreat)
                         {
-                            choice = UnityEngine.Random.Range(0, civGreatHouseCharacterList.Count);
+                            choice = Random.Range(0, civGreatHouseCharacterList.Count);
                             viceroy = civGreatHouseCharacterList[choice];
                         }
                         else if (houseType < Constants.Constants.ChanceViceroyGreat + Constants.Constants.ChanceViceroyMinor)
                         {
-                            choice = UnityEngine.Random.Range(0, civMinorHouseCharacterList.Count);
+                            choice = Random.Range(0, civMinorHouseCharacterList.Count);
                             viceroy = civMinorHouseCharacterList[choice];
                         }
                         else
                         {
-                            choice = UnityEngine.Random.Range(0, civCommonHouseCharacterList.Count);
+                            choice = Random.Range(0, civCommonHouseCharacterList.Count);
                             viceroy = civCommonHouseCharacterList[choice];
                         }
 
@@ -643,8 +656,8 @@ namespace CivCreator
                             viceroy.PlanetLocationID = pData.ID;
                             viceroy.PlanetAssignedID = pData.ID;
                             pData.OverdriveMultiplier = 1; // initially assigned, test, remove eventually (this will be determined internally by the viceroy build plan)
-                            viceroy.TimeInPosition = UnityEngine.Random.Range(0, (viceroy.Age - 18));
-                            viceroy.History += "In " + (gameDataRef.GameDate - UnityEngine.Random.Range(0, (viceroy.Age - 18))).ToString("G0") + ", " + viceroy.GenderPronoun.ToLower() + " was assigned as planetary viceroy of " + pData.Name + ".";
+                            viceroy.TimeInPosition = Random.Range(0, (viceroy.Age - 18));
+                            viceroy.History += "In " + (gameDataRef.GameDate - Random.Range(0, (viceroy.Age - 18))).ToString("G0") + ", " + viceroy.GenderPronoun.ToLower() + " was assigned as planetary viceroy of " + pData.Name + ".";
                             Debug.Log("Viceroy assigned to " + pData.Name);
                         }
                         else // if already assigned, try again
@@ -658,13 +671,13 @@ namespace CivCreator
                     foreach (PlanetData pData in pDataList)
                     {
                     tryAssignCharacter:
-                        int choice = UnityEngine.Random.Range(0, civCharList.Count);
+                        int choice = Random.Range(0, civCharList.Count);
                         if (civCharList[choice].Role == Character.eRole.Pool)
                         {
                             civCharList[choice].Role = Character.eRole.Viceroy;
                             civCharList[choice].PlanetLocationID = pData.ID;
                             civCharList[choice].PlanetAssignedID = pData.ID;
-                            civCharList[choice].History += "In " + (gameDataRef.GameDate - UnityEngine.Random.Range(0, (civCharList[choice].Age - 18))).ToString("G0") + ", " + civCharList[choice].GenderPronoun.ToLower() + " was assigned as planetary viceroy of " + pData.Name + ".";
+                            civCharList[choice].History += "In " + (gameDataRef.GameDate - Random.Range(0, (civCharList[choice].Age - 18))).ToString("G0") + ", " + civCharList[choice].GenderPronoun.ToLower() + " was assigned as planetary viceroy of " + pData.Name + ".";
                         }
                         else
                         {
@@ -684,11 +697,11 @@ namespace CivCreator
 
                 foreach (PlanetData pData in pDataList)
                 {
-                    pData.PercentGPPForTax = UnityEngine.Random.Range(.15f, .25f);
-                    pData.PercentGPPForImports = UnityEngine.Random.Range(.25f, Constants.Constants.MaxGPPAllocatedForImports);
-                    pData.PercentGPPForTrade = UnityEngine.Random.Range(.1f, Constants.Constants.MaxGPPAllocatedForTrade);
-                    pData.CommerceTax = UnityEngine.Random.Range(.3f, .5f);
-                    pData.FoodRetailPercentHold = UnityEngine.Random.Range(.1f, .4f);
+                    pData.PercentGPPForTax = Random.Range(.15f, .25f);
+                    pData.PercentGPPForImports = Random.Range(.25f, Constants.Constants.MaxGPPAllocatedForImports);
+                    pData.PercentGPPForTrade = Random.Range(.1f, Constants.Constants.MaxGPPAllocatedForTrade);
+                    pData.CommerceTax = Random.Range(.3f, .5f);
+                    pData.FoodRetailPercentHold = Random.Range(.1f, .4f);
                 }
             }
         }
@@ -724,13 +737,13 @@ namespace CivCreator
             newCiv.Size = Civilization.eCivSize.Major;
             newCiv.Range = (int)(gameDataRef.GalaxySizeWidth / 2.3f);
             newCiv.PlanetMinTolerance = 45;
-            newCiv.AstronomyRating = UnityEngine.Random.Range(6,11) * 1000;
+            newCiv.AstronomyRating = Random.Range(6,11) * 1000;
             newCiv.ID = "CIV0"; // use this to reference the player's civ
             newCiv.HumanCiv = true;
 
             PlanetData pData;
             List<PlanetData> terranSystemPlanetList = gData.GalaxyStarDataList.Find(p => p.Name == "Neo-Sirius").PlanetList;
-            pData = terranSystemPlanetList[UnityEngine.Random.Range(0, terranSystemPlanetList.Count)];
+            pData = terranSystemPlanetList[Random.Range(0, terranSystemPlanetList.Count)];
 
             // create the human homeworld manually;
             pData.Name = "New Terra";
@@ -782,7 +795,7 @@ namespace CivCreator
                     else
                     {
                         planet.IntelLevel = star.IntelValue / 2;
-                        planet.ScanLevel = (float)(star.IntelValue / 10f) * UnityEngine.Random.Range(.2f, 1f);
+                        planet.ScanLevel = (float)(star.IntelValue / 10f) * Random.Range(.2f, 1f);
                     }
                 }
             }
@@ -832,7 +845,7 @@ namespace CivCreator
                     sDataList = HelperFunctions.DataRetrivalFunctions.GetCivSystemList(civ);
 
                     // get a size for each province and then create it with provinces in range
-                    int provinceSize = UnityEngine.Random.Range(2, civ.CivMaxProvinceSize); // vary each province size
+                    int provinceSize = Random.Range(2, civ.CivMaxProvinceSize); // vary each province size
                     int maxDist = civ.AdminRating * 90; // max dist between systems
                     int count = 0;
                     bool provinceValid = false;
@@ -844,7 +857,7 @@ namespace CivCreator
                         // generate province name
                         if (DataManager.systemNameList.Count > 0)
                         {
-                            var nameIndex = UnityEngine.Random.Range(0, DataManager.systemNameList.Count);
+                            var nameIndex = Random.Range(0, DataManager.systemNameList.Count);
                             newProvince.Name = DataManager.systemNameList[nameIndex];
                             DataManager.systemNameList.RemoveAt(nameIndex);
                             DataManager.systemNameList.TrimExcess();
@@ -852,7 +865,7 @@ namespace CivCreator
                         else
                             newProvince.Name = "Generic Province";
 
-                        newProvince.ID = "PRO" + UnityEngine.Random.Range(0, 10000);
+                        newProvince.ID = "PRO" + Random.Range(0, 10000);
                         newProvince.OwningCivID = civ.ID;
                         int x = 0;                     
                         bool allSystemsChecked = false;
@@ -890,7 +903,7 @@ namespace CivCreator
                                 // generate province name
                                 if (DataManager.systemNameList.Count > 0)
                                 {
-                                    var nameIndex = UnityEngine.Random.Range(0, DataManager.systemNameList.Count);
+                                    var nameIndex = Random.Range(0, DataManager.systemNameList.Count);
                                     nProv.Name = DataManager.systemNameList[nameIndex];
                                     DataManager.systemNameList.RemoveAt(nameIndex);
                                     DataManager.systemNameList.TrimExcess();
@@ -898,7 +911,7 @@ namespace CivCreator
                                 else
                                     nProv.Name = "Generic Province";
 
-                                nProv.ID = "PRO" + UnityEngine.Random.Range(0, 10000);
+                                nProv.ID = "PRO" + Random.Range(0, 10000);
                                 nProv.OwningCivID = civ.ID;
                                 sData.AssignedProvinceID = nProv.ID;
                                 sData.IsProvinceHub = true;

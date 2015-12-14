@@ -346,9 +346,14 @@ namespace HelperFunctions
             return "none"; 
         }
 
+        public static List<House> GetHouseList()
+        {
+            GlobalGameData gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            return gameDataRef.HouseList;
+        }
+
         public static House GetHouse(string hID)
         {
-            //DataManager dManager = GameObject.Find("GameManager").GetComponent<DataManager>();
             GlobalGameData gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
 
             return gameDataRef.HouseList.Find(p => p.ID == hID);

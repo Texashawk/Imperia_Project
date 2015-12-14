@@ -100,7 +100,7 @@ namespace Actions
 
             // create a unique ID until it does not exist in any other challenge (highly unlikely, but still)
             do
-                newChallenge.ChallengeID = UnityEngine.Random.Range(0, 999999).ToString("N0") + (char)UnityEngine.Random.Range(0, 25); // create a unique ID;
+                newChallenge.ChallengeID = Random.Range(0, 999999).ToString("N0") + (char)Random.Range(0, 25); // create a unique ID;
             while (gDataRef.ChallengeList.Exists(p => p.ChallengeID == newChallenge.ChallengeID));
 
             newChallenge.CharacterChallengerID = challengerCharID;
@@ -159,11 +159,11 @@ namespace Actions
 
             if (cData.Relationships[eData.ID].Trust > 50)
             {
-                cData.Relationships[eData.ID].Trust += UnityEngine.Random.Range(0, (speechEffectiveness / 5));
+                cData.Relationships[eData.ID].Trust += Random.Range(0, (speechEffectiveness / 5));
             }
             else
             {
-                cData.Relationships[eData.ID].Trust += UnityEngine.Random.Range(0, (speechEffectiveness / 8)); // less effective when more hated
+                cData.Relationships[eData.ID].Trust += Random.Range(0, (speechEffectiveness / 8)); // less effective when more hated
             }
 
             // now determine effect of characters around them, checking each character individually
@@ -173,20 +173,20 @@ namespace Actions
                 {
                     if (cData.Relationships[cID].RelationshipState == Relationship.eRelationshipState.Friends || cData.Relationships[cID].RelationshipState == Relationship.eRelationshipState.Allies)
                     {
-                        cData.Relationships[cID].Trust += UnityEngine.Random.Range(0, (speechEffectiveness / 8));
-                        HelperFunctions.DataRetrivalFunctions.GetCharacter(cID).Relationships[eData.ID].Trust += UnityEngine.Random.Range(0, (speechEffectiveness / 10)); // improve trust slightly with the emperor
+                        cData.Relationships[cID].Trust += Random.Range(0, (speechEffectiveness / 8));
+                        HelperFunctions.DataRetrivalFunctions.GetCharacter(cID).Relationships[eData.ID].Trust += Random.Range(0, (speechEffectiveness / 10)); // improve trust slightly with the emperor
                     }
 
                     if (cData.Relationships[cID].RelationshipState == Relationship.eRelationshipState.Rivals || cData.Relationships[cID].RelationshipState == Relationship.eRelationshipState.Vendetta)
                     {
-                        cData.Relationships[cID].Trust -= UnityEngine.Random.Range(0, (speechEffectiveness / 8));
-                        HelperFunctions.DataRetrivalFunctions.GetCharacter(cID).Relationships[eData.ID].Trust -= UnityEngine.Random.Range(0, (speechEffectiveness / 10)); // distrusts slightly with the emperor
+                        cData.Relationships[cID].Trust -= Random.Range(0, (speechEffectiveness / 8));
+                        HelperFunctions.DataRetrivalFunctions.GetCharacter(cID).Relationships[eData.ID].Trust -= Random.Range(0, (speechEffectiveness / 10)); // distrusts slightly with the emperor
                     }
 
                     if (cData.Relationships[cID].RelationshipState == Relationship.eRelationshipState.Vengeance)
                     {
-                        cData.Relationships[cID].Trust -= UnityEngine.Random.Range(0, (speechEffectiveness / 6));
-                        HelperFunctions.DataRetrivalFunctions.GetCharacter(cID).Relationships[eData.ID].Trust -= UnityEngine.Random.Range(0, (speechEffectiveness / 6)); // distrusts a lot with the emperor
+                        cData.Relationships[cID].Trust -= Random.Range(0, (speechEffectiveness / 6));
+                        HelperFunctions.DataRetrivalFunctions.GetCharacter(cID).Relationships[eData.ID].Trust -= Random.Range(0, (speechEffectiveness / 6)); // distrusts a lot with the emperor
                     }
                 }
             }         
@@ -210,15 +210,15 @@ namespace Actions
             // code to change the relationships here
             conversationFlags += "[HATE]";
 
-            speechEffectiveness = UnityEngine.Random.Range(30, reprimandingChar.Charm) + UnityEngine.Random.Range(0, reprimandingChar.Intelligence);
+            speechEffectiveness = Random.Range(30, reprimandingChar.Charm) + Random.Range(0, reprimandingChar.Intelligence);
 
             if (reprimandedChar.Relationships[reprimandingChar.ID].Trust > 50)
             {
-                reprimandedChar.Relationships[reprimandingChar.ID].Trust -= UnityEngine.Random.Range(0, (speechEffectiveness / 5));
+                reprimandedChar.Relationships[reprimandingChar.ID].Trust -= Random.Range(0, (speechEffectiveness / 5));
             }
             else
             {
-                reprimandedChar.Relationships[reprimandingChar.ID].Trust -= UnityEngine.Random.Range(0, (speechEffectiveness / 8)); // less effective when more hated
+                reprimandedChar.Relationships[reprimandingChar.ID].Trust -= Random.Range(0, (speechEffectiveness / 8)); // less effective when more hated
             }
 
             // now determine effect of characters around them, checking each character individually
@@ -228,20 +228,20 @@ namespace Actions
                 {
                     if (reprimandedChar.Relationships[cID].RelationshipState == Relationship.eRelationshipState.Friends || reprimandedChar.Relationships[cID].RelationshipState == Relationship.eRelationshipState.Allies)
                     {
-                        reprimandedChar.Relationships[cID].Trust += UnityEngine.Random.Range(0, (speechEffectiveness / 8));
-                        HelperFunctions.DataRetrivalFunctions.GetCharacter(cID).Relationships[reprimandingChar.ID].Trust -= UnityEngine.Random.Range(0, (speechEffectiveness / 10)); // improve trust slightly with the emperor
+                        reprimandedChar.Relationships[cID].Trust += Random.Range(0, (speechEffectiveness / 8));
+                        HelperFunctions.DataRetrivalFunctions.GetCharacter(cID).Relationships[reprimandingChar.ID].Trust -= Random.Range(0, (speechEffectiveness / 10)); // improve trust slightly with the emperor
                     }
 
                     if (reprimandedChar.Relationships[cID].RelationshipState == Relationship.eRelationshipState.Rivals || reprimandedChar.Relationships[cID].RelationshipState == Relationship.eRelationshipState.Vendetta)
                     {
-                        reprimandedChar.Relationships[cID].Trust -= UnityEngine.Random.Range(0, (speechEffectiveness / 8));
-                        HelperFunctions.DataRetrivalFunctions.GetCharacter(cID).Relationships[reprimandingChar.ID].Trust += UnityEngine.Random.Range(0, (speechEffectiveness / 10)); // distrusts slightly with the emperor
+                        reprimandedChar.Relationships[cID].Trust -= Random.Range(0, (speechEffectiveness / 8));
+                        HelperFunctions.DataRetrivalFunctions.GetCharacter(cID).Relationships[reprimandingChar.ID].Trust += Random.Range(0, (speechEffectiveness / 10)); // distrusts slightly with the emperor
                     }
 
                     if (reprimandedChar.Relationships[cID].RelationshipState == Relationship.eRelationshipState.Vengeance)
                     {
-                        reprimandedChar.Relationships[cID].Trust -= UnityEngine.Random.Range(0, (speechEffectiveness / 6));
-                        HelperFunctions.DataRetrivalFunctions.GetCharacter(cID).Relationships[reprimandingChar.ID].Trust += UnityEngine.Random.Range(0, (speechEffectiveness / 6)); // distrusts a lot with the emperor
+                        reprimandedChar.Relationships[cID].Trust -= Random.Range(0, (speechEffectiveness / 6));
+                        HelperFunctions.DataRetrivalFunctions.GetCharacter(cID).Relationships[reprimandingChar.ID].Trust += Random.Range(0, (speechEffectiveness / 6)); // distrusts a lot with the emperor
                     }
                 }
             }
@@ -267,7 +267,7 @@ namespace Actions
             if ((firstCharacterInitialState.RelationshipState != Relationship.eRelationshipState.Vendetta) && (firstCharacterInitialState.RelationshipState != Relationship.eRelationshipState.Predator))
             {
                 // create a challenge!               
-                activeChallengeID = CreateChallenge(challengingChar.ID, insultedChar.ID, UnityEngine.Random.Range(0, challengingChar.Influence / 10));
+                activeChallengeID = CreateChallenge(challengingChar.ID, insultedChar.ID, Random.Range(0, challengingChar.Influence / 10));
                 secondCharacterInitialState.GrudgeLevel += .1f; // increase the grudge level
                 actionResult += "CHALLENGE ISSUED!";
                 conversationFlags += "[HATE]";
@@ -309,7 +309,7 @@ namespace Actions
 
                     if (insultedChar.Passion > 60 && insultedChar.Discretion < 30) // check for outrage/passion for challenged to raise the stakes
                     {
-                        CreateChallenge(insultedChar.ID, challengingChar.ID, UnityEngine.Random.Range(6, 15)); // if so, create new challenge!
+                        CreateChallenge(insultedChar.ID, challengingChar.ID, Random.Range(6, 15)); // if so, create new challenge!
                     }
                 }
 
@@ -325,7 +325,7 @@ namespace Actions
                 if (chalList.Exists(p => p.CharacterChallengerID == challengingChar.ID))
                 {
                     curChallenge = chalList.Find(p => p.CharacterChallengerID == challengingChar.ID);
-                    curChallenge.InfluenceStakedOnChallenge += UnityEngine.Random.Range(2, 7);
+                    curChallenge.InfluenceStakedOnChallenge += Random.Range(2, 7);
                 }
             }
 
@@ -342,7 +342,7 @@ namespace Actions
 
                         if (insultedChar.Passion > 60 && insultedChar.Discretion < 30) // check for outrage/passion for challenged to raise the stakes
                         {
-                            CreateChallenge(insultedChar.ID, challengingChar.ID, UnityEngine.Random.Range(3, 10));
+                            CreateChallenge(insultedChar.ID, challengingChar.ID, Random.Range(3, 10));
                         }
                     }             
                 }
@@ -358,7 +358,7 @@ namespace Actions
                 actionResult += "BETRAYAL!";
                 conversationFlags += "[BETRAY]";
                 challengingChar.Honor -= Random.Range(5, 15); // challenge character loses honor
-                HelperFunctions.DataRetrivalFunctions.GetChallenge(activeChallengeID).InfluenceStakedOnChallenge += UnityEngine.Random.Range(3, 7);
+                HelperFunctions.DataRetrivalFunctions.GetChallenge(activeChallengeID).InfluenceStakedOnChallenge += Random.Range(3, 7);
             }
 
             if (secondCharacterInitialState.RelationshipState == Relationship.eRelationshipState.Spouse)
@@ -367,7 +367,7 @@ namespace Actions
                 actionResult += "BETRAYAL!";
                 conversationFlags += "[BETRAY]";
                 challengingChar.Honor -= Random.Range(5, 15); // challenge character loses honor
-                HelperFunctions.DataRetrivalFunctions.GetChallenge(activeChallengeID).InfluenceStakedOnChallenge += UnityEngine.Random.Range(3, 7);
+                HelperFunctions.DataRetrivalFunctions.GetChallenge(activeChallengeID).InfluenceStakedOnChallenge += Random.Range(3, 7);
             }
 
             if (activeChallengeID != "")
