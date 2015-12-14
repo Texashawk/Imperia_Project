@@ -52,12 +52,12 @@ namespace CivObjects
             }
         }
         public string LeaderID { get; set; }
-        public List<GameEvents.GameEvent> LastTurnEvents = new List<GameEvents.GameEvent>(); // events from the last turn go here
+        public List<GameEvent> LastTurnEvents = new List<GameEvent>(); // events from the last turn go here
         public int AstronomyRating { get; set; } // used to determine what information about a star can be gleaned from the civ's technology level
         public int PlanetMinTolerance { get; set; }
         public int CivMaxProvinceSize { get; set; } // used to set the maximum size of provinces
 
-        // ratings for generating pop skill ratings from this civilization
+        // ratings for generating pop skill ratings from this civilization, derived from the Houses that make up the civ
         public int MiningBaseRating { get; set; }
         public int FarmingBaseRating { get; set; }
         public int ManufacturingBaseRating { get; set; }
