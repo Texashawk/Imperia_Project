@@ -1,9 +1,7 @@
 using UnityEngine;
-using System.Collections;
 using System;
 using System.Collections.Generic;
 using Random = UnityEngine.Random;
-using UnityEngine.UI;
 using PlanetObjects;
 using Constants;
 using CivObjects;
@@ -168,9 +166,9 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
             {
                 if (IntelValue == 0)
                     return eStellarIntelLevel.None;
-                else if (IntelValue <= Constants.Constants.LowIntelLevelMax)
+                else if (IntelValue <= Constants.Constant.LowIntelLevelMax)
                     return eStellarIntelLevel.Low;
-                else if (IntelValue <= Constants.Constants.MediumIntelLevelMax)
+                else if (IntelValue <= Constants.Constant.MediumIntelLevelMax)
                     return eStellarIntelLevel.Medium;
                 else
                     return eStellarIntelLevel.High;
@@ -556,7 +554,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         {
             get
             {
-                return AverageDevelopmentLevel * TotalPopulation * Constants.Constants.BaseEconFactor;
+                return AverageDevelopmentLevel * TotalPopulation * Constant.BaseEconFactor;
             }
         }
 
@@ -753,23 +751,23 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 {
                     case 1:
                         {
-                            return Constants.Constants.Level1StarbaseCapacity;                         
+                            return Constants.Constant.Level1StarbaseCapacity;                         
                         }
                     case 2:
                         {
-                            return Constants.Constants.Level2StarbaseCapacity;                        
+                            return Constants.Constant.Level2StarbaseCapacity;                        
                         }
                     case 3:
                         {
-                            return Constants.Constants.Level3StarbaseCapacity;                          
+                            return Constants.Constant.Level3StarbaseCapacity;                          
                         }
                     case 4:
                         {
-                            return Constants.Constants.Level4StarbaseCapacity;                          
+                            return Constants.Constant.Level4StarbaseCapacity;                          
                         }
                     case 5:
                         {
-                            return Constants.Constants.Level5StarbaseCapacity;                    
+                            return Constants.Constant.Level5StarbaseCapacity;                    
                         }
                     default:
                         {
@@ -1237,7 +1235,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                     if (p.PlanetHappinessLevel < 30)
                     {
                         int migrationChance = Random.Range(0, 100);
-                        if (migrationChance + p.PlanetHappinessLevel + (100 - p.UnrestLevel) < Constants.Constants.MigrationTarget)
+                        if (migrationChance + p.PlanetHappinessLevel + (100 - p.UnrestLevel) < Constants.Constant.MigrationTarget)
                         {
                             p.IsMigratingOffPlanet = true;
                         }
@@ -1513,26 +1511,25 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         // trade functions
         public bool IsTradeAgreementValid(PlanetData proposedPlanet, string resource)
         {
-            bool supportsTrade = false;
+           
             bool hasFood = false;
             bool hasEnergy = false;
             bool hasAlpha = false;
             bool hasHeavy = false;
             bool hasRare = false;
-            bool hasExportCapability = false;
-            bool hasStarBaseCapacity = false;
+           
             bool validTradeAgreementPossible = false;
 
             // first check that base is acceptable
             if ((ProvGovSupport != eSupportLevel.None) || (SysGovSupport != eSupportLevel.None)) // province gov must be on board
             {
-                supportsTrade = true;                   // step 1     
+                //supportsTrade = true;                   // step 1     
                 if (IsTradeHub)
                 {
-                    hasExportCapability = true;         // step 2
+                    //hasExportCapability = true;         // step 2
                     if (StarbaseLevel > 0)
                     {
-                        hasStarBaseCapacity = true;     // and step 3
+                        //hasStarBaseCapacity = true;     // and step 3
                         validTradeAgreementPossible = true; //  you've gotten this far with 3 checks, a trade is valid as long as there's capacity and materials available
                     }
                 }
@@ -1682,24 +1679,24 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
 
             if (AlphaBPsGeneratedMonthly > 0)
             {
-                if (Constants.Constants.AlphaMaterialsPerFarmLevel <= TotalAlphaBPsAllocatedFarms)
+                if (Constants.Constant.AlphaMaterialsPerFarmLevel <= TotalAlphaBPsAllocatedFarms)
                 {
                     alphaBPsReachedForFarm = true;
-                    alphaBPMultiplier = (int)(TotalAlphaBPsAllocatedFarms / Constants.Constants.AlphaMaterialsPerFarmLevel);
+                    alphaBPMultiplier = (int)(TotalAlphaBPsAllocatedFarms / Constants.Constant.AlphaMaterialsPerFarmLevel);
                 }
 
-                if (Constants.Constants.HeavyMaterialsPerFarmLevel <= TotalHeavyBPsAllocatedFarms)
+                if (Constants.Constant.HeavyMaterialsPerFarmLevel <= TotalHeavyBPsAllocatedFarms)
                 {
                     heavyBPsReachedForFarm = true;
-                    heavyBPMultiplier = (int)(TotalHeavyBPsAllocatedFarms / Constants.Constants.HeavyMaterialsPerFarmLevel);
+                    heavyBPMultiplier = (int)(TotalHeavyBPsAllocatedFarms / Constants.Constant.HeavyMaterialsPerFarmLevel);
                     if (heavyBPMultiplier == 0)
                         heavyBPMultiplier = 1;
                 }
 
-                if (Constants.Constants.RareMaterialsPerFarmLevel <= TotalRareBPsAllocatedFarms)
+                if (Constants.Constant.RareMaterialsPerFarmLevel <= TotalRareBPsAllocatedFarms)
                 {
                     rareBPsReachedForFarm = true;
-                    rareBPMultiplier = (int)(TotalRareBPsAllocatedFarms / Constants.Constants.RareMaterialsPerFarmLevel);
+                    rareBPMultiplier = (int)(TotalRareBPsAllocatedFarms / Constants.Constant.RareMaterialsPerFarmLevel);
                     if (rareBPMultiplier == 0)
                         rareBPMultiplier = 1;
                 }
@@ -1728,10 +1725,10 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 {
                     float previousTotal = TotalHeavyBPsAllocatedFarms;
                     TotalAlphaBPsAllocatedFarms += (float)(AlphaBPsGeneratedMonthly * BuildPlan.FarmsAllocation);
-                    if (TotalAlphaBPsAllocatedFarms > Constants.Constants.AlphaMaterialsPerFarmLevel)
+                    if (TotalAlphaBPsAllocatedFarms > Constants.Constant.AlphaMaterialsPerFarmLevel)
                     {
-                        AlphaBPsUsed = Constants.Constants.AlphaMaterialsPerFarmLevel - previousTotal;
-                        TotalAlphaBPsAllocatedFarms = Constants.Constants.AlphaMaterialsPerFarmLevel;  
+                        AlphaBPsUsed = Constants.Constant.AlphaMaterialsPerFarmLevel - previousTotal;
+                        TotalAlphaBPsAllocatedFarms = Constants.Constant.AlphaMaterialsPerFarmLevel;  
                     }
                     else
                     {
@@ -1744,10 +1741,10 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 {
                     float previousTotal = TotalHeavyBPsAllocatedFarms;
                     TotalHeavyBPsAllocatedFarms += (float)(HeavyBPsGeneratedMonthly * BuildPlan.FarmsAllocation);
-                    if (TotalHeavyBPsAllocatedFarms > Constants.Constants.HeavyMaterialsPerFarmLevel)
+                    if (TotalHeavyBPsAllocatedFarms > Constants.Constant.HeavyMaterialsPerFarmLevel)
                     {
-                        HeavyBPsUsed = Constants.Constants.HeavyMaterialsPerFarmLevel - previousTotal;
-                        TotalHeavyBPsAllocatedFarms = Constants.Constants.HeavyMaterialsPerFarmLevel;  
+                        HeavyBPsUsed = Constants.Constant.HeavyMaterialsPerFarmLevel - previousTotal;
+                        TotalHeavyBPsAllocatedFarms = Constants.Constant.HeavyMaterialsPerFarmLevel;  
                     }
                     else
                     {
@@ -1759,11 +1756,11 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 {
                     float previousTotal = TotalRareBPsAllocatedFarms;
                     TotalRareBPsAllocatedFarms += (float)(RareBPsGeneratedMonthly * BuildPlan.FarmsAllocation);
-                    if (TotalRareBPsAllocatedFarms > Constants.Constants.RareMaterialsPerFarmLevel)
+                    if (TotalRareBPsAllocatedFarms > Constants.Constant.RareMaterialsPerFarmLevel)
                     {
 
-                        RareBPsUsed = Constants.Constants.RareMaterialsPerFarmLevel - previousTotal;
-                        TotalRareBPsAllocatedFarms = Constants.Constants.RareMaterialsPerFarmLevel;                      
+                        RareBPsUsed = Constants.Constant.RareMaterialsPerFarmLevel - previousTotal;
+                        TotalRareBPsAllocatedFarms = Constants.Constant.RareMaterialsPerFarmLevel;                      
                     }
                     else
                     {
@@ -1772,7 +1769,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 }
 
                 float TotalBPs = TotalAlphaBPsAllocatedFarms + TotalHeavyBPsAllocatedFarms + TotalRareBPsAllocatedFarms;
-                float TotalBPsNeeded = Constants.Constants.AlphaMaterialsPerFarmLevel + Constants.Constants.RareMaterialsPerFarmLevel + Constants.Constants.HeavyMaterialsPerFarmLevel;
+                float TotalBPsNeeded = Constants.Constant.AlphaMaterialsPerFarmLevel + Constants.Constant.RareMaterialsPerFarmLevel + Constants.Constant.HeavyMaterialsPerFarmLevel;
 
                 if (FarmLevelBuilt)
                 {
@@ -1801,24 +1798,24 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
 
             if (AlphaBPsGeneratedMonthly > 0)
             {
-                if (Constants.Constants.AlphaMaterialsPerHighTechLevel <= TotalAlphaBPsAllocatedHighTech)
+                if (Constants.Constant.AlphaMaterialsPerHighTechLevel <= TotalAlphaBPsAllocatedHighTech)
                 {
                     alphaBPsReachedForHighTech = true;
-                    alphaBPMultiplier = (int)(TotalAlphaBPsAllocatedHighTech / Constants.Constants.AlphaMaterialsPerHighTechLevel);
+                    alphaBPMultiplier = (int)(TotalAlphaBPsAllocatedHighTech / Constants.Constant.AlphaMaterialsPerHighTechLevel);
                 }
 
-                if (Constants.Constants.HeavyMaterialsPerHighTechLevel <= TotalHeavyBPsAllocatedHighTech)
+                if (Constants.Constant.HeavyMaterialsPerHighTechLevel <= TotalHeavyBPsAllocatedHighTech)
                 {
                     heavyBPsReachedForHighTech = true;
-                    heavyBPMultiplier = (int)(TotalHeavyBPsAllocatedHighTech / Constants.Constants.HeavyMaterialsPerHighTechLevel);
+                    heavyBPMultiplier = (int)(TotalHeavyBPsAllocatedHighTech / Constants.Constant.HeavyMaterialsPerHighTechLevel);
                     if (heavyBPMultiplier == 0)
                         heavyBPMultiplier = 1;
                 }
 
-                if (Constants.Constants.RareMaterialsPerHighTechLevel <= TotalRareBPsAllocatedHighTech)
+                if (Constants.Constant.RareMaterialsPerHighTechLevel <= TotalRareBPsAllocatedHighTech)
                 {
                     rareBPsReachedForHighTech = true;
-                    rareBPMultiplier = (int)(TotalRareBPsAllocatedHighTech / Constants.Constants.RareMaterialsPerHighTechLevel);
+                    rareBPMultiplier = (int)(TotalRareBPsAllocatedHighTech / Constants.Constant.RareMaterialsPerHighTechLevel);
                     if (rareBPMultiplier == 0)
                         rareBPMultiplier = 1;
                 }
@@ -1847,10 +1844,10 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 {
                     float previousTotal = TotalHeavyBPsAllocatedHighTech;
                     TotalAlphaBPsAllocatedHighTech += (float)(AlphaBPsGeneratedMonthly * BuildPlan.HighTechAllocation);
-                    if (TotalAlphaBPsAllocatedHighTech > Constants.Constants.AlphaMaterialsPerHighTechLevel)
+                    if (TotalAlphaBPsAllocatedHighTech > Constants.Constant.AlphaMaterialsPerHighTechLevel)
                     {
-                        AlphaBPsUsed = Constants.Constants.AlphaMaterialsPerHighTechLevel - previousTotal;
-                        TotalAlphaBPsAllocatedHighTech = Constants.Constants.AlphaMaterialsPerHighTechLevel;
+                        AlphaBPsUsed = Constants.Constant.AlphaMaterialsPerHighTechLevel - previousTotal;
+                        TotalAlphaBPsAllocatedHighTech = Constants.Constant.AlphaMaterialsPerHighTechLevel;
                     }
                     else
                     {
@@ -1863,10 +1860,10 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 {
                     float previousTotal = TotalHeavyBPsAllocatedHighTech;
                     TotalHeavyBPsAllocatedHighTech += (float)(HeavyBPsGeneratedMonthly * BuildPlan.HighTechAllocation);
-                    if (TotalHeavyBPsAllocatedHighTech > Constants.Constants.HeavyMaterialsPerHighTechLevel)
+                    if (TotalHeavyBPsAllocatedHighTech > Constants.Constant.HeavyMaterialsPerHighTechLevel)
                     {
-                        HeavyBPsUsed = Constants.Constants.HeavyMaterialsPerHighTechLevel - previousTotal;
-                        TotalHeavyBPsAllocatedHighTech = Constants.Constants.HeavyMaterialsPerHighTechLevel;
+                        HeavyBPsUsed = Constants.Constant.HeavyMaterialsPerHighTechLevel - previousTotal;
+                        TotalHeavyBPsAllocatedHighTech = Constants.Constant.HeavyMaterialsPerHighTechLevel;
                     }
                     else
                     {
@@ -1878,11 +1875,11 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 {
                     float previousTotal = TotalRareBPsAllocatedHighTech;
                     TotalRareBPsAllocatedHighTech += (float)(RareBPsGeneratedMonthly * BuildPlan.HighTechAllocation);
-                    if (TotalRareBPsAllocatedHighTech > Constants.Constants.RareMaterialsPerHighTechLevel)
+                    if (TotalRareBPsAllocatedHighTech > Constants.Constant.RareMaterialsPerHighTechLevel)
                     {
 
-                        RareBPsUsed = Constants.Constants.RareMaterialsPerHighTechLevel - previousTotal;
-                        TotalRareBPsAllocatedHighTech = Constants.Constants.RareMaterialsPerHighTechLevel;
+                        RareBPsUsed = Constants.Constant.RareMaterialsPerHighTechLevel - previousTotal;
+                        TotalRareBPsAllocatedHighTech = Constants.Constant.RareMaterialsPerHighTechLevel;
                     }
                     else
                     {
@@ -1891,7 +1888,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 }
 
                 float TotalBPs = TotalAlphaBPsAllocatedHighTech + TotalHeavyBPsAllocatedHighTech + TotalRareBPsAllocatedHighTech;
-                float TotalBPsNeeded = Constants.Constants.AlphaMaterialsPerHighTechLevel + Constants.Constants.RareMaterialsPerHighTechLevel + Constants.Constants.HeavyMaterialsPerHighTechLevel;
+                float TotalBPsNeeded = Constants.Constant.AlphaMaterialsPerHighTechLevel + Constants.Constant.RareMaterialsPerHighTechLevel + Constants.Constant.HeavyMaterialsPerHighTechLevel;
 
                 if (HighTechLevelBuilt)
                 {
@@ -1922,24 +1919,24 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
 
             if (AlphaBPsGeneratedMonthly > 0)
             {
-                if (Constants.Constants.AlphaMaterialsPerFactoryLevel <= TotalAlphaBPsAllocatedFactory)
+                if (Constants.Constant.AlphaMaterialsPerFactoryLevel <= TotalAlphaBPsAllocatedFactory)
                 {
                     alphaBPsReachedForFactory = true;
-                    alphaBPMultiplier = (int)(TotalAlphaBPsAllocatedFactory / Constants.Constants.AlphaMaterialsPerFactoryLevel);
+                    alphaBPMultiplier = (int)(TotalAlphaBPsAllocatedFactory / Constants.Constant.AlphaMaterialsPerFactoryLevel);
                 }
 
-                if (Constants.Constants.HeavyMaterialsPerFactoryLevel <= TotalHeavyBPsAllocatedFactory)
+                if (Constants.Constant.HeavyMaterialsPerFactoryLevel <= TotalHeavyBPsAllocatedFactory)
                 {
                     heavyBPsReachedForFactory = true;
-                    heavyBPMultiplier = (int)(TotalHeavyBPsAllocatedFactory / Constants.Constants.HeavyMaterialsPerFactoryLevel);
+                    heavyBPMultiplier = (int)(TotalHeavyBPsAllocatedFactory / Constants.Constant.HeavyMaterialsPerFactoryLevel);
                     if (heavyBPMultiplier == 0)
                         heavyBPMultiplier = 1;
                 }
 
-                if (Constants.Constants.RareMaterialsPerFactoryLevel <= TotalRareBPsAllocatedFactory)
+                if (Constants.Constant.RareMaterialsPerFactoryLevel <= TotalRareBPsAllocatedFactory)
                 {
                     rareBPsReachedForFactory = true;
-                    rareBPMultiplier = (int)(TotalRareBPsAllocatedFactory / Constants.Constants.RareMaterialsPerFactoryLevel);
+                    rareBPMultiplier = (int)(TotalRareBPsAllocatedFactory / Constants.Constant.RareMaterialsPerFactoryLevel);
                     if (rareBPMultiplier == 0)
                         rareBPMultiplier = 1;
                 }
@@ -1968,10 +1965,10 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 {
                     float previousTotal = TotalHeavyBPsAllocatedFactory;
                     TotalAlphaBPsAllocatedFactory += (float)(AlphaBPsGeneratedMonthly * BuildPlan.FactoryAllocation);
-                    if (TotalAlphaBPsAllocatedFactory > Constants.Constants.AlphaMaterialsPerFactoryLevel)
+                    if (TotalAlphaBPsAllocatedFactory > Constants.Constant.AlphaMaterialsPerFactoryLevel)
                     {
-                        AlphaBPsUsed = Constants.Constants.AlphaMaterialsPerFactoryLevel - previousTotal;
-                        TotalAlphaBPsAllocatedFactory = Constants.Constants.AlphaMaterialsPerFactoryLevel;
+                        AlphaBPsUsed = Constants.Constant.AlphaMaterialsPerFactoryLevel - previousTotal;
+                        TotalAlphaBPsAllocatedFactory = Constants.Constant.AlphaMaterialsPerFactoryLevel;
                     }
                     else
                     {
@@ -1984,10 +1981,10 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 {
                     float previousTotal = TotalHeavyBPsAllocatedFactory;
                     TotalHeavyBPsAllocatedFactory += (float)(HeavyBPsGeneratedMonthly * BuildPlan.FactoryAllocation);
-                    if (TotalHeavyBPsAllocatedFactory > Constants.Constants.HeavyMaterialsPerFactoryLevel)
+                    if (TotalHeavyBPsAllocatedFactory > Constants.Constant.HeavyMaterialsPerFactoryLevel)
                     {
-                        HeavyBPsUsed = Constants.Constants.HeavyMaterialsPerFactoryLevel - previousTotal;
-                        TotalHeavyBPsAllocatedFactory = Constants.Constants.HeavyMaterialsPerFactoryLevel;
+                        HeavyBPsUsed = Constants.Constant.HeavyMaterialsPerFactoryLevel - previousTotal;
+                        TotalHeavyBPsAllocatedFactory = Constants.Constant.HeavyMaterialsPerFactoryLevel;
                     }
                     else
                     {
@@ -1999,11 +1996,11 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 {
                     float previousTotal = TotalRareBPsAllocatedFactory;
                     TotalRareBPsAllocatedFactory += (float)(RareBPsGeneratedMonthly * BuildPlan.FactoryAllocation);
-                    if (TotalRareBPsAllocatedFactory > Constants.Constants.RareMaterialsPerFactoryLevel)
+                    if (TotalRareBPsAllocatedFactory > Constants.Constant.RareMaterialsPerFactoryLevel)
                     {
 
-                        RareBPsUsed = Constants.Constants.RareMaterialsPerFactoryLevel - previousTotal;
-                        TotalRareBPsAllocatedFactory = Constants.Constants.RareMaterialsPerFactoryLevel;
+                        RareBPsUsed = Constants.Constant.RareMaterialsPerFactoryLevel - previousTotal;
+                        TotalRareBPsAllocatedFactory = Constants.Constant.RareMaterialsPerFactoryLevel;
                     }
                     else
                     {
@@ -2012,7 +2009,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 }
 
                 float TotalBPs = TotalAlphaBPsAllocatedFactory + TotalHeavyBPsAllocatedFactory + TotalRareBPsAllocatedFactory;
-                float TotalBPsNeeded = Constants.Constants.AlphaMaterialsPerFactoryLevel + Constants.Constants.RareMaterialsPerFactoryLevel + Constants.Constants.HeavyMaterialsPerFactoryLevel;
+                float TotalBPsNeeded = Constants.Constant.AlphaMaterialsPerFactoryLevel + Constants.Constant.RareMaterialsPerFactoryLevel + Constants.Constant.HeavyMaterialsPerFactoryLevel;
 
                 if (FactoryLevelBuilt)
                 {
@@ -2042,24 +2039,24 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
             
             if (AlphaBPsGeneratedMonthly > 0)
             {
-                if (Constants.Constants.AlphaMaterialsPerMineLevel <= TotalAlphaBPsAllocatedMine)
+                if (Constants.Constant.AlphaMaterialsPerMineLevel <= TotalAlphaBPsAllocatedMine)
                 {
                     alphaBPsReachedForMine = true;
-                    alphaBPMultiplier = (int)(TotalAlphaBPsAllocatedMine / Constants.Constants.AlphaMaterialsPerMineLevel);
+                    alphaBPMultiplier = (int)(TotalAlphaBPsAllocatedMine / Constants.Constant.AlphaMaterialsPerMineLevel);
                 }
 
-                if (Constants.Constants.HeavyMaterialsPerMineLevel <= TotalHeavyBPsAllocatedMine)
+                if (Constants.Constant.HeavyMaterialsPerMineLevel <= TotalHeavyBPsAllocatedMine)
                 {
                     heavyBPsReachedForMine = true;
-                    heavyBPMultiplier = (int)(TotalHeavyBPsAllocatedMine / Constants.Constants.HeavyMaterialsPerMineLevel);
+                    heavyBPMultiplier = (int)(TotalHeavyBPsAllocatedMine / Constants.Constant.HeavyMaterialsPerMineLevel);
                     if (heavyBPMultiplier == 0)
                         heavyBPMultiplier = 1;
                 }
 
-                if (Constants.Constants.RareMaterialsPerMineLevel <= TotalRareBPsAllocatedMine)
+                if (Constants.Constant.RareMaterialsPerMineLevel <= TotalRareBPsAllocatedMine)
                 {
                     rareBPsReachedForMine = true;
-                    rareBPMultiplier = (int)(TotalRareBPsAllocatedMine / Constants.Constants.RareMaterialsPerMineLevel);
+                    rareBPMultiplier = (int)(TotalRareBPsAllocatedMine / Constants.Constant.RareMaterialsPerMineLevel);
                     if (rareBPMultiplier == 0)
                         rareBPMultiplier = 1;
                 }
@@ -2088,10 +2085,10 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 {
                     float previousTotal = TotalHeavyBPsAllocatedMine;
                     TotalAlphaBPsAllocatedMine += (float)(AlphaBPsGeneratedMonthly * BuildPlan.MineAllocation);
-                    if (TotalAlphaBPsAllocatedMine > Constants.Constants.AlphaMaterialsPerMineLevel)
+                    if (TotalAlphaBPsAllocatedMine > Constants.Constant.AlphaMaterialsPerMineLevel)
                     {
-                        AlphaBPsUsed = Constants.Constants.AlphaMaterialsPerMineLevel - previousTotal;
-                        TotalAlphaBPsAllocatedMine = Constants.Constants.AlphaMaterialsPerMineLevel;
+                        AlphaBPsUsed = Constants.Constant.AlphaMaterialsPerMineLevel - previousTotal;
+                        TotalAlphaBPsAllocatedMine = Constants.Constant.AlphaMaterialsPerMineLevel;
                     }
                     else
                     {
@@ -2104,10 +2101,10 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 {
                     float previousTotal = TotalHeavyBPsAllocatedMine;
                     TotalHeavyBPsAllocatedMine += (float)(HeavyBPsGeneratedMonthly * BuildPlan.MineAllocation);
-                    if (TotalHeavyBPsAllocatedMine > Constants.Constants.HeavyMaterialsPerMineLevel)
+                    if (TotalHeavyBPsAllocatedMine > Constants.Constant.HeavyMaterialsPerMineLevel)
                     {
-                        HeavyBPsUsed = Constants.Constants.HeavyMaterialsPerMineLevel - previousTotal;
-                        TotalHeavyBPsAllocatedMine = Constants.Constants.HeavyMaterialsPerMineLevel;
+                        HeavyBPsUsed = Constants.Constant.HeavyMaterialsPerMineLevel - previousTotal;
+                        TotalHeavyBPsAllocatedMine = Constants.Constant.HeavyMaterialsPerMineLevel;
                     }
                     else
                     {
@@ -2119,11 +2116,11 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 {
                     float previousTotal = TotalRareBPsAllocatedMine;
                     TotalRareBPsAllocatedMine += (float)(RareBPsGeneratedMonthly * BuildPlan.MineAllocation);
-                    if (TotalRareBPsAllocatedMine > Constants.Constants.RareMaterialsPerMineLevel)
+                    if (TotalRareBPsAllocatedMine > Constants.Constant.RareMaterialsPerMineLevel)
                     {
 
-                        RareBPsUsed = Constants.Constants.RareMaterialsPerMineLevel - previousTotal;
-                        TotalRareBPsAllocatedMine = Constants.Constants.RareMaterialsPerMineLevel;
+                        RareBPsUsed = Constants.Constant.RareMaterialsPerMineLevel - previousTotal;
+                        TotalRareBPsAllocatedMine = Constants.Constant.RareMaterialsPerMineLevel;
                     }
                     else
                     {
@@ -2132,7 +2129,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 }
 
                 float TotalBPs = TotalAlphaBPsAllocatedMine + TotalHeavyBPsAllocatedMine + TotalRareBPsAllocatedMine;
-                float TotalBPsNeeded = Constants.Constants.AlphaMaterialsPerMineLevel + Constants.Constants.RareMaterialsPerMineLevel + Constants.Constants.HeavyMaterialsPerMineLevel;
+                float TotalBPsNeeded = Constants.Constant.AlphaMaterialsPerMineLevel + Constants.Constant.RareMaterialsPerMineLevel + Constants.Constant.HeavyMaterialsPerMineLevel;
 
                 if (MineLevelBuilt)
                 {
@@ -2159,9 +2156,9 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
             int heavyBPMultiplier = 0;
             int rareBPMultiplier = 0;
             
-            float AlphaMaterialsRequired = Constants.Constants.AlphaMaterialsPerInfraLevel * (100 / AdjustedBio) * Mathf.Pow(targetRegion.HabitatationInfrastructureLevel,3);
-            float HeavyMaterialsRequired = Constants.Constants.HeavyMaterialsPerInfraLevel * (100 / AdjustedBio) * Mathf.Pow(targetRegion.HabitatationInfrastructureLevel, 3);
-            float RareMaterialsRequired = Constants.Constants.RareMaterialsPerInfraLevel * (100 / AdjustedBio) * Mathf.Pow(targetRegion.HabitatationInfrastructureLevel, 3);
+            float AlphaMaterialsRequired = Constants.Constant.AlphaMaterialsPerInfraLevel * (100 / AdjustedBio) * Mathf.Pow(targetRegion.HabitatationInfrastructureLevel,3);
+            float HeavyMaterialsRequired = Constants.Constant.HeavyMaterialsPerInfraLevel * (100 / AdjustedBio) * Mathf.Pow(targetRegion.HabitatationInfrastructureLevel, 3);
+            float RareMaterialsRequired = Constants.Constant.RareMaterialsPerInfraLevel * (100 / AdjustedBio) * Mathf.Pow(targetRegion.HabitatationInfrastructureLevel, 3);
 
             if (AlphaBPsGeneratedMonthly > 0)
             {
@@ -3085,10 +3082,10 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                     }
                     else if (employment > .25f)
                     {
-                        regionFarmDesire = (regionFarmDesire / employment) * Constants.Constants.FarmJobDesirability; // then divide by the employment ratio
+                        regionFarmDesire = (regionFarmDesire / employment) * Constants.Constant.FarmJobDesirability; // then divide by the employment ratio
                     }
                     else
-                        regionFarmDesire = (regionFarmDesire / .25f) * Constants.Constants.FarmJobDesirability; // if too low then cap at 25%
+                        regionFarmDesire = (regionFarmDesire / .25f) * Constants.Constant.FarmJobDesirability; // if too low then cap at 25%
                     totalFarmDesire += regionFarmDesire;
                 }
 
@@ -3114,10 +3111,10 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                     }
                     else if (employment > .25f)
                     {
-                        regionMiningDesire = (regionMiningDesire / employment) * Constants.Constants.MineJobDesirability; // then divide by the employment ratio
+                        regionMiningDesire = (regionMiningDesire / employment) * Constants.Constant.MineJobDesirability; // then divide by the employment ratio
                     }
                     else
-                        regionMiningDesire = (regionMiningDesire / .25f) * Constants.Constants.MineJobDesirability; // if too low then cap at 25%
+                        regionMiningDesire = (regionMiningDesire / .25f) * Constants.Constant.MineJobDesirability; // if too low then cap at 25%
                     
                     totalMiningDesire += regionMiningDesire;
                 }
@@ -3144,10 +3141,10 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                     }
                     else if (employment > .25f)
                     {
-                        regionEngineerDesire = (regionEngineerDesire / employment) * Constants.Constants.BuilderJobDesirability; // then divide by the employment ratio
+                        regionEngineerDesire = (regionEngineerDesire / employment) * Constants.Constant.BuilderJobDesirability; // then divide by the employment ratio
                     }
                     else
-                        regionEngineerDesire = (regionEngineerDesire / .25f) * Constants.Constants.BuilderJobDesirability; // if too low then cap at 25%
+                        regionEngineerDesire = (regionEngineerDesire / .25f) * Constants.Constant.BuilderJobDesirability; // if too low then cap at 25%
 
                     totalEngineerDesire += regionEngineerDesire;
                 }
@@ -3174,10 +3171,10 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                     }
                     else if (employment > .25f)
                     {
-                        regionFluxmenDesire = (regionFluxmenDesire / employment) * Constants.Constants.EngineerJobDesirability; // then divide by the employment ratio
+                        regionFluxmenDesire = (regionFluxmenDesire / employment) * Constants.Constant.EngineerJobDesirability; // then divide by the employment ratio
                     }
                     else
-                        regionFluxmenDesire = (regionFluxmenDesire / .25f) * Constants.Constants.EngineerJobDesirability; // if too low then cap at 25%
+                        regionFluxmenDesire = (regionFluxmenDesire / .25f) * Constants.Constant.EngineerJobDesirability; // if too low then cap at 25%
 
                     totalFluxmenDesire += regionFluxmenDesire;
                 }
@@ -3204,10 +3201,10 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                     }
                     else if (employment > .25f)
                     {
-                        regionScientistDesire = (regionScientistDesire / employment) * Constants.Constants.ScientistJobDesirability; // then divide by the employment ratio
+                        regionScientistDesire = (regionScientistDesire / employment) * Constants.Constant.ScientistJobDesirability; // then divide by the employment ratio
                     }
                     else
-                        regionScientistDesire = (regionScientistDesire / .25f) * Constants.Constants.ScientistJobDesirability; // if too low then cap at 25%
+                        regionScientistDesire = (regionScientistDesire / .25f) * Constants.Constant.ScientistJobDesirability; // if too low then cap at 25%
 
                     totalScientistDesire += regionScientistDesire;
                 }
@@ -3269,12 +3266,12 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         {
             get
             {
-                float farmingDevelopmentLevel = FarmingLevel * Constants.Constants.FarmingDevelopmentModifier;
-                float miningDevelopmentLevel = MiningLevel * Constants.Constants.MiningDevelopmentModifier;
-                float highTechDevelopmentLevel = HighTechLevel * Constants.Constants.HighTechDevelopmentModifier;
-                float scienceDevelopmentLevel = ScienceLevel * Constants.Constants.ScienceDevelopmentModifier;
-                float manufacturingDevelopmentLevel = ManufacturingLevel * Constants.Constants.ManufacturingDevelopmentModifier;
-                float governmentDevelopmentLevel = TotalAdmin * Constants.Constants.GovernmentDevelopmentModifier;
+                float farmingDevelopmentLevel = FarmingLevel * Constants.Constant.FarmingDevelopmentModifier;
+                float miningDevelopmentLevel = MiningLevel * Constants.Constant.MiningDevelopmentModifier;
+                float highTechDevelopmentLevel = HighTechLevel * Constants.Constant.HighTechDevelopmentModifier;
+                float scienceDevelopmentLevel = ScienceLevel * Constants.Constant.ScienceDevelopmentModifier;
+                float manufacturingDevelopmentLevel = ManufacturingLevel * Constants.Constant.ManufacturingDevelopmentModifier;
+                float governmentDevelopmentLevel = TotalAdmin * Constants.Constant.GovernmentDevelopmentModifier;
 
                 int developedRegions = RegionList.FindAll(p => p.PopsInTile.Count > 0).Count;
 

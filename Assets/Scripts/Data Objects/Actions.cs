@@ -117,13 +117,16 @@ namespace Actions
             GlobalGameData gDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
             activeChallenge.WinnerOfChallengeID = winningCharacterID;
             activeChallenge.LoserOfChallengeID = losingCharacterID;
+
+            // adjust influence gained/lost depending on challenge result
             HelperFunctions.DataRetrivalFunctions.GetCharacter(activeChallenge.WinnerOfChallengeID).BaseInfluence += activeChallenge.InfluenceStakedOnChallenge;
             HelperFunctions.DataRetrivalFunctions.GetCharacter(activeChallenge.LoserOfChallengeID).BaseInfluence -= activeChallenge.InfluenceStakedOnChallenge;
 
+            // change the relationship states of both characters
             HelperFunctions.DataRetrivalFunctions.GetCharacter(activeChallenge.WinnerOfChallengeID).Relationships[losingCharacterID].RelationshipState = Relationship.eRelationshipState.Vendetta;
             HelperFunctions.DataRetrivalFunctions.GetCharacter(activeChallenge.LoserOfChallengeID).Relationships[winningCharacterID].RelationshipState = Relationship.eRelationshipState.Vendetta;
 
-            // probably should add debug output, log output, or event code here
+            // probably should add debug output, log output, or event code here, remove the challenge from the active challenge list
             gDataRef.ChallengeList.Remove(activeChallenge);
         }
 

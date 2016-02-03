@@ -676,7 +676,7 @@ public class GenerateGameObject
         // Step 3b: Generate traits
         int traitMax = gameDataRef.CharacterTraitList.Count - 1;
         int traitMin = 0;
-        int totalTraits = UnityEngine.Random.Range(1, Constants.Constants.MaxCharTraits);
+        int totalTraits = UnityEngine.Random.Range(1, Constants.Constant.MaxCharTraits);
         int traitCount = 0;
         while (traitCount < totalTraits)
         {

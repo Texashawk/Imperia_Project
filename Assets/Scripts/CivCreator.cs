@@ -401,13 +401,13 @@ namespace CivCreator
             {
                 int houseTypeChance = Random.Range(0, 100);
 
-                if (houseTypeChance < Constants.Constants.CommonHouseChance)
+                if (houseTypeChance < Constants.Constant.CommonHouseChance)
                 {
                     int houseAssignment = Random.Range(0, commonHouseList.Count);
                     cData.HouseID = commonHouseList[houseAssignment].ID;
                     cData.Wealth = ((int)(commonHouseList[houseAssignment].Wealth + 1) * Random.Range(1, 4)) / 25; // set wealth based on house
                 }
-                else if (houseTypeChance < Constants.Constants.MinorHouseChance + Constants.Constants.CommonHouseChance)
+                else if (houseTypeChance < Constants.Constant.MinorHouseChance + Constants.Constant.CommonHouseChance)
                 {
                     int houseAssignment = Random.Range(0, minorHouseList.Count);
                     cData.HouseID = minorHouseList[houseAssignment].ID;
@@ -509,12 +509,12 @@ namespace CivCreator
                         int choice = 0;
                         Character provGov = null;
 
-                        if (houseType < Constants.Constants.ChanceProvinceGovernorGreat)
+                        if (houseType < Constants.Constant.ChanceProvinceGovernorGreat)
                         {
                             choice = Random.Range(0, civGreatHouseCharacterList.Count);
                             provGov = civGreatHouseCharacterList[choice];
                         }
-                        else if (houseType < Constants.Constants.ChanceProvinceGovernorGreat + Constants.Constants.ChanceProvinceGovernorMinor)
+                        else if (houseType < Constants.Constant.ChanceProvinceGovernorGreat + Constants.Constant.ChanceProvinceGovernorMinor)
                         {
                             choice = Random.Range(0, civMinorHouseCharacterList.Count);
                             provGov = civMinorHouseCharacterList[choice];
@@ -572,12 +572,12 @@ namespace CivCreator
                         int choice = 0;
                         Character sysGov = null;
 
-                        if (houseType < Constants.Constants.ChanceSystemGovernorGreat)
+                        if (houseType < Constants.Constant.ChanceSystemGovernorGreat)
                         {
                             choice = Random.Range(0, civGreatHouseCharacterList.Count);
                             sysGov = civGreatHouseCharacterList[choice];
                         }
-                        else if (houseType < Constants.Constants.ChanceSystemGovernorGreat + Constants.Constants.ChanceSystemGovernorMinor)
+                        else if (houseType < Constants.Constant.ChanceSystemGovernorGreat + Constants.Constant.ChanceSystemGovernorMinor)
                         {
                             choice = Random.Range(0, civMinorHouseCharacterList.Count);
                             sysGov = civMinorHouseCharacterList[choice];
@@ -634,12 +634,12 @@ namespace CivCreator
                         int choice = 0;
                         Character viceroy = null;
 
-                        if (houseType < Constants.Constants.ChanceViceroyGreat)
+                        if (houseType < Constants.Constant.ChanceViceroyGreat)
                         {
                             choice = Random.Range(0, civGreatHouseCharacterList.Count);
                             viceroy = civGreatHouseCharacterList[choice];
                         }
-                        else if (houseType < Constants.Constants.ChanceViceroyGreat + Constants.Constants.ChanceViceroyMinor)
+                        else if (houseType < Constants.Constant.ChanceViceroyGreat + Constants.Constant.ChanceViceroyMinor)
                         {
                             choice = Random.Range(0, civMinorHouseCharacterList.Count);
                             viceroy = civMinorHouseCharacterList[choice];
@@ -698,8 +698,8 @@ namespace CivCreator
                 foreach (PlanetData pData in pDataList)
                 {
                     pData.PercentGPPForTax = Random.Range(.15f, .25f);
-                    pData.PercentGPPForImports = Random.Range(.25f, Constants.Constants.MaxGPPAllocatedForImports);
-                    pData.PercentGPPForTrade = Random.Range(.1f, Constants.Constants.MaxGPPAllocatedForTrade);
+                    pData.PercentGPPForImports = Random.Range(.25f, Constants.Constant.MaxGPPAllocatedForImports);
+                    pData.PercentGPPForTrade = Random.Range(.1f, Constants.Constant.MaxGPPAllocatedForTrade);
                     pData.CommerceTax = Random.Range(.3f, .5f);
                     pData.FoodRetailPercentHold = Random.Range(.1f, .4f);
                 }

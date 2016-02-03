@@ -65,14 +65,14 @@ namespace HelperFunctions
 
         public static string ConvertCharacterValueToDescription(int number, int intelLevel)
         {
-            if (intelLevel < Constants.Constants.LowIntelLevelMax)
+            if (intelLevel < Constants.Constant.LowIntelLevelMax)
             {
                 if (number < 50)
                     return "low";
                 else 
                     return "high";
             }
-            else if (intelLevel < Constants.Constants.MediumIntelLevelMax)
+            else if (intelLevel < Constants.Constant.MediumIntelLevelMax)
             {
                 if (number < 40)
                     return "low";
@@ -81,7 +81,7 @@ namespace HelperFunctions
                 else
                     return "high";
             }
-            else if (intelLevel < Constants.Constants.HighIntelMax)
+            else if (intelLevel < Constants.Constant.HighIntelMax)
             {
                 if (number < 20)
                     return "poor";

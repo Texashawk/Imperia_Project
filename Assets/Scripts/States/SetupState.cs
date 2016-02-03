@@ -7,12 +7,9 @@ namespace Assets.Scripts.States
 {
     public class SetupState : IStateBase
     {
-
         private StateManager manager;
         private GalaxyData gData;
         private GlobalGameData gameData;
-        private Text planetCount;
-        private GameObject gamePanel;
         public GameObject[] starObjects;
 
         public SetupState(StateManager managerRef)

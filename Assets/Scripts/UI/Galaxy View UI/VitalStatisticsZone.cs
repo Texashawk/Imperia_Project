@@ -5,10 +5,9 @@ public class VitalStatisticsZone : MonoBehaviour {
 
     private Text gameDate;
     private Text emperorPoSup;
-    private Text emperorAP;
     private Text emperorStatusText;
     private Text emperorBenevolentInfluence;
-    private Text emperorPragmaticInfluence;
+    //private Text emperorPragmaticInfluence;
     private Text emperorTyrannicalInfluence;
     private Text emperorPower;
     private GlobalGameData gameDataRef;
@@ -20,7 +19,7 @@ public class VitalStatisticsZone : MonoBehaviour {
         gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>(); // get global game data (date, location, version, etc)
         gameDate = GameObject.Find("GameDate").GetComponent<Text>();
         emperorPoSup = GameObject.Find("Popular Support").GetComponent<Text>();
-        emperorAP = GameObject.Find("Action Points").GetComponent<Text>();
+        
         emperorStatusText = GameObject.Find("Emperor Status").GetComponent<Text>();
         emperorPower = GameObject.Find("Emperor Power").GetComponent<Text>();
         emperorBenevolentInfluence = GameObject.Find("Benevolent Influence").GetComponent<Text>();
@@ -37,7 +36,7 @@ public class VitalStatisticsZone : MonoBehaviour {
     void UpdateVitalStatisticsZone()
     {       
         gameDate.text = gameDataRef.GameDate.ToString("F1"); // display date
-        emperorAP.text = HelperFunctions.DataRetrivalFunctions.GetCivLeader("CIV0").ActionPoints.ToString("N0"); // get human leader
+       
         emperorPoSup.text = (HelperFunctions.DataRetrivalFunctions.GetCivLeader("CIV0").EmperorPoSup * 100).ToString("N0") + "%";
         emperorBenevolentInfluence.text = HelperFunctions.DataRetrivalFunctions.GetCivLeader("CIV0").BenevolentInfluence.ToString("N0");
         emperorStatusText.text = "EMPEROR " + HelperFunctions.DataRetrivalFunctions.GetCivLeader("CIV0").Name.ToUpper() + " I, YOUR GLORIOUS REIGN BEGINS. MAY THE CELESTIAL EMPIRE LAST FOREVER.";

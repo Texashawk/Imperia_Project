@@ -2,9 +2,6 @@
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using CharacterObjects;
-using StellarObjects;
-using PlanetObjects;
-using System.Collections;
 using HelperFunctions;
 using Tooltips;
 using ConversationAI;
@@ -30,7 +27,7 @@ public class CharacterScreen : MonoBehaviour, IPointerClickHandler
     Text drive;
     Text charm;
     Text intel;
-    Text poSup;
+    //Text poSup;
     Text honor;
     Text piety;
     Text empathy;
@@ -166,16 +163,16 @@ public class CharacterScreen : MonoBehaviour, IPointerClickHandler
         {
             history.text = cData.History;
             history.color = Color.green;
-            wealth.text = HelperFunctions.StringConversions.ConvertFloatDollarToText(cData.Wealth);
+            wealth.text = StringConversions.ConvertFloatDollarToText(cData.Wealth);
             health.text = cData.Health.ToString().ToUpper();
-            drive.text = HelperFunctions.StringConversions.ConvertCharacterValueToDescription(cData.Passion, cData.IntelLevel);
-            intelligence.text = HelperFunctions.StringConversions.ConvertCharacterValueToDescription(cData.Intelligence, cData.IntelLevel);
-            influence.text = HelperFunctions.StringConversions.ConvertCharacterValueToDescription(cData.Influence, cData.IntelLevel);
-            charm.text = HelperFunctions.StringConversions.ConvertCharacterValueToDescription(cData.Charm, cData.IntelLevel);
-            honor.text = HelperFunctions.StringConversions.ConvertCharacterValueToDescription(cData.Honor, cData.IntelLevel);
-            passion.text = HelperFunctions.StringConversions.ConvertCharacterValueToDescription(cData.Passion, cData.IntelLevel);
-            empathy.text = HelperFunctions.StringConversions.ConvertCharacterValueToDescription(cData.Empathy, cData.IntelLevel);
-            piety.text = HelperFunctions.StringConversions.ConvertCharacterValueToDescription(cData.Piety, cData.IntelLevel);
+            drive.text = StringConversions.ConvertCharacterValueToDescription(cData.Passion, cData.IntelLevel);
+            intelligence.text = StringConversions.ConvertCharacterValueToDescription(cData.Intelligence, cData.IntelLevel);
+            influence.text = StringConversions.ConvertCharacterValueToDescription(cData.Influence, cData.IntelLevel);
+            charm.text = StringConversions.ConvertCharacterValueToDescription(cData.Charm, cData.IntelLevel);
+            honor.text = StringConversions.ConvertCharacterValueToDescription(cData.Honor, cData.IntelLevel);
+            passion.text = StringConversions.ConvertCharacterValueToDescription(cData.Passion, cData.IntelLevel);
+            empathy.text = StringConversions.ConvertCharacterValueToDescription(cData.Empathy, cData.IntelLevel);
+            piety.text = StringConversions.ConvertCharacterValueToDescription(cData.Piety, cData.IntelLevel);
         }
     }
 
@@ -187,6 +184,7 @@ public class CharacterScreen : MonoBehaviour, IPointerClickHandler
         trait3.text = "\n";
         trait4.text = "\n";
 
+        // populate each trait text in sequence
         if (cData.Traits.Count > 0)
             trait1.text = cData.Traits[0].Name.ToUpper();
         if (cData.Traits.Count > 1)
@@ -201,7 +199,7 @@ public class CharacterScreen : MonoBehaviour, IPointerClickHandler
     {
         if (!CommTextGenerated)
         {
-            CommText.text = ConversationAI.ConversationEngine.GenerateInitialDialogue(cData); // super basic call
+            CommText.text = ConversationEngine.GenerateInitialDialogue(cData); // super basic call
             CommTextGenerated = true;
         }
     }
@@ -223,9 +221,9 @@ public class CharacterScreen : MonoBehaviour, IPointerClickHandler
         }
         else
         {
-            assignment = HelperFunctions.DataRetrivalFunctions.GetCivilization(cData.CivID).Name;
+            assignment = DataRetrivalFunctions.GetCivilization(cData.CivID).Name;
         }
-        characterRank.text = HelperFunctions.StringConversions.ConvertRoleEnum(cData.Role).ToUpper() + " OF " + assignment.ToUpper();
+        characterRank.text = StringConversions.ConvertRoleEnum(cData.Role).ToUpper() + " OF " + assignment.ToUpper();
     }
 
     void DrawChainOfCommand()

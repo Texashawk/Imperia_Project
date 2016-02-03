@@ -98,7 +98,7 @@ namespace CivObjects
                         totalFood += pData.FoodDifference;
                 }
 
-                foodPrice = (TotalResourcesGenerated / totalFood) * Constants.Constants.ResourceBaseCost;
+                foodPrice = (TotalResourcesGenerated / totalFood) * Constants.Constant.ResourceBaseCost;
                 return foodPrice;
             }
         }
@@ -115,7 +115,7 @@ namespace CivObjects
                         totalEnergy += pData.EnergyDifference;
                 }
 
-                energyPrice = (TotalResourcesGenerated / totalEnergy) * Constants.Constants.ResourceBaseCost;
+                energyPrice = (TotalResourcesGenerated / totalEnergy) * Constants.Constant.ResourceBaseCost;
                 return energyPrice;
             }
         }
@@ -133,7 +133,7 @@ namespace CivObjects
                         totalAlpha += pData.AlphaPreProductionDifference;
                 }
 
-                alphaPrice = (TotalResourcesGenerated / totalAlpha) * Constants.Constants.ResourceBaseCost;
+                alphaPrice = (TotalResourcesGenerated / totalAlpha) * Constants.Constant.ResourceBaseCost;
                 return alphaPrice;
             }
         }
@@ -151,7 +151,7 @@ namespace CivObjects
                         totalHeavy += pData.HeavyPreProductionDifference;
                 }
 
-                heavyPrice = (TotalResourcesGenerated / totalHeavy) * Constants.Constants.ResourceBaseCost;
+                heavyPrice = (TotalResourcesGenerated / totalHeavy) * Constants.Constant.ResourceBaseCost;
                 return heavyPrice;
             }
         }
@@ -168,7 +168,7 @@ namespace CivObjects
                         totalRare += pData.RarePreProductionDifference;
                 }
 
-                rarePrice = (TotalResourcesGenerated / totalRare) * Constants.Constants.ResourceBaseCost;
+                rarePrice = (TotalResourcesGenerated / totalRare) * Constants.Constant.ResourceBaseCost;
                 return rarePrice;
             }
         }

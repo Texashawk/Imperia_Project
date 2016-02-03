@@ -46,8 +46,6 @@ public class PlanetView : MonoBehaviour {
     private GameObject economicDisplayButton;
     private List<GameObject> tileList = new List<GameObject>();
     private List<GameObject> planetObjectsDrawnList = new List<GameObject>();
-    private Vector3 originalPlanetRingPosition;
-    private Vector3 originalSecondaryPlanetRingPosition;
     private float alphaValue = 0f;
     private float planetAlphaValue = 255f;
     private float wireAlphaValue = 0f;

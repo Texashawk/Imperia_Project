@@ -228,12 +228,12 @@ namespace PlanetObjects
         {
             get
             {
-                float farmingDevelopmentLevel = FarmingLevel * Constants.Constants.FarmingDevelopmentModifier;
-                float miningDevelopmentLevel = MiningLevel * Constants.Constants.MiningDevelopmentModifier;
-                float highTechDevelopmentLevel = HighTechLevel * Constants.Constants.HighTechDevelopmentModifier;
-                float scienceDevelopmentLevel = ScienceLevel * Constants.Constants.ScienceDevelopmentModifier;
-                float manufacturingDevelopmentLevel = ManufacturingLevel * Constants.Constants.ManufacturingDevelopmentModifier;
-                float governmentDevelopmentLevel = GovernmentLevel * Constants.Constants.GovernmentDevelopmentModifier;
+                float farmingDevelopmentLevel = FarmingLevel * Constants.Constant.FarmingDevelopmentModifier;
+                float miningDevelopmentLevel = MiningLevel * Constants.Constant.MiningDevelopmentModifier;
+                float highTechDevelopmentLevel = HighTechLevel * Constants.Constant.HighTechDevelopmentModifier;
+                float scienceDevelopmentLevel = ScienceLevel * Constants.Constant.ScienceDevelopmentModifier;
+                float manufacturingDevelopmentLevel = ManufacturingLevel * Constants.Constant.ManufacturingDevelopmentModifier;
+                float governmentDevelopmentLevel = GovernmentLevel * Constants.Constant.GovernmentDevelopmentModifier;
 
                 return (farmingDevelopmentLevel + miningDevelopmentLevel + highTechDevelopmentLevel + scienceDevelopmentLevel + manufacturingDevelopmentLevel + governmentDevelopmentLevel);
             }
@@ -744,9 +744,7 @@ namespace PlanetObjects
         public List<string> PopIDsInTile = new List<string>(); // ID accessors for pops assigned to tile (for save games)
         public List<Pops> PopsInTile = new List<Pops>();
         
-        #region Tile derived variables
-        // derived vars
-        private float fluxmenPopRating = 0;
+        #region Tile derived variables 
         public float FluxmenPopRating
         {
             get
@@ -775,8 +773,6 @@ namespace PlanetObjects
                 return fluxmenPopRating;
             }
         }
-
-        private float farmingPopRating = 0;
         public float FarmingPopRating
         {
             get
@@ -873,7 +869,6 @@ namespace PlanetObjects
             }
         }
 
-        private float manufacturingPopRating;
         public float ManufacturingPopRating
         {
             get
@@ -965,12 +960,12 @@ namespace PlanetObjects
             {
                 float energyUsed = 0f;
 
-                energyUsed += Constants.Constants.EnergyBaseUsagePerPop * PopsInTile.Count; // total up energy use of everyone in the region
-                energyUsed += Constants.Constants.FarmingBaseEnergyUsage * FarmsStaffed; // total up energy use of all farms
-                energyUsed += Constants.Constants.HighTechBaseEnergyUsage * HighTechFacilitiesStaffed;
-                energyUsed += Constants.Constants.MiningBaseEnergyUsage * MinesStaffed; // total up energy use of all farms
-                energyUsed += Constants.Constants.ScienceBaseEnergyUsage * LabsStaffed;
-                energyUsed += Constants.Constants.ManufacturingBaseEnergyUsage * FactoriesStaffed;
+                energyUsed += Constants.Constant.EnergyBaseUsagePerPop * PopsInTile.Count; // total up energy use of everyone in the region
+                energyUsed += Constants.Constant.FarmingBaseEnergyUsage * FarmsStaffed; // total up energy use of all farms
+                energyUsed += Constants.Constant.HighTechBaseEnergyUsage * HighTechFacilitiesStaffed;
+                energyUsed += Constants.Constant.MiningBaseEnergyUsage * MinesStaffed; // total up energy use of all farms
+                energyUsed += Constants.Constant.ScienceBaseEnergyUsage * LabsStaffed;
+                energyUsed += Constants.Constant.ManufacturingBaseEnergyUsage * FactoriesStaffed;
 
                 return energyUsed;
             }
@@ -982,11 +977,11 @@ namespace PlanetObjects
             {
                 float alphaUsed = 0f;
 
-                alphaUsed += Constants.Constants.FarmingBaseAlphaUsage * FarmsStaffed; // total up energy use of all farms
-                alphaUsed += Constants.Constants.HighTechBaseAlphaUsage * HighTechFacilitiesStaffed;
-                alphaUsed += Constants.Constants.MiningBaseAlphaUsage * MinesStaffed; // total up energy use of all farms
-                alphaUsed += Constants.Constants.ScienceBaseAlphaUsage * LabsStaffed;
-                alphaUsed += Constants.Constants.ManufacturingBaseAlphaUsage * FactoriesStaffed;
+                alphaUsed += Constants.Constant.FarmingBaseAlphaUsage * FarmsStaffed; // total up energy use of all farms
+                alphaUsed += Constants.Constant.HighTechBaseAlphaUsage * HighTechFacilitiesStaffed;
+                alphaUsed += Constants.Constant.MiningBaseAlphaUsage * MinesStaffed; // total up energy use of all farms
+                alphaUsed += Constants.Constant.ScienceBaseAlphaUsage * LabsStaffed;
+                alphaUsed += Constants.Constant.ManufacturingBaseAlphaUsage * FactoriesStaffed;
 
                 return alphaUsed;
             }
@@ -998,11 +993,11 @@ namespace PlanetObjects
             {
                 float heavyUsed = 0f;
 
-                heavyUsed += Constants.Constants.FarmingBaseHeavyUsage * FarmsStaffed; // total up energy use of all farms
-                heavyUsed += Constants.Constants.HighTechBaseHeavyUsage * HighTechFacilitiesStaffed;
-                heavyUsed += Constants.Constants.MiningBaseHeavyUsage * MinesStaffed; // total up energy use of all farms
-                heavyUsed += Constants.Constants.ScienceBaseHeavyUsage * LabsStaffed;
-                heavyUsed += Constants.Constants.ManufacturingBaseHeavyUsage * FactoriesStaffed;
+                heavyUsed += Constants.Constant.FarmingBaseHeavyUsage * FarmsStaffed; // total up energy use of all farms
+                heavyUsed += Constants.Constant.HighTechBaseHeavyUsage * HighTechFacilitiesStaffed;
+                heavyUsed += Constants.Constant.MiningBaseHeavyUsage * MinesStaffed; // total up energy use of all farms
+                heavyUsed += Constants.Constant.ScienceBaseHeavyUsage * LabsStaffed;
+                heavyUsed += Constants.Constant.ManufacturingBaseHeavyUsage * FactoriesStaffed;
 
                 return heavyUsed;
             }
@@ -1014,11 +1009,11 @@ namespace PlanetObjects
             {
                 float rareUsed = 0f;
 
-                rareUsed += Constants.Constants.FarmingBaseRareUsage * FarmsStaffed; // total up energy use of all farms
-                rareUsed += Constants.Constants.HighTechBaseRareUsage * HighTechFacilitiesStaffed;
-                rareUsed += Constants.Constants.MiningBaseRareUsage * MinesStaffed; // total up energy use of all farms
-                rareUsed += Constants.Constants.ScienceBaseRareUsage * LabsStaffed;
-                rareUsed += Constants.Constants.ManufacturingBaseRareUsage * FactoriesStaffed;
+                rareUsed += Constants.Constant.FarmingBaseRareUsage * FarmsStaffed; // total up energy use of all farms
+                rareUsed += Constants.Constant.HighTechBaseRareUsage * HighTechFacilitiesStaffed;
+                rareUsed += Constants.Constant.MiningBaseRareUsage * MinesStaffed; // total up energy use of all farms
+                rareUsed += Constants.Constant.ScienceBaseRareUsage * LabsStaffed;
+                rareUsed += Constants.Constant.ManufacturingBaseRareUsage * FactoriesStaffed;
 
                 return rareUsed;
             }
@@ -1030,7 +1025,7 @@ namespace PlanetObjects
             {
                 float foodUsed = 0f;
 
-                foodUsed += Constants.Constants.FoodBaseUsagePerPop * PopsInTile.Count; // total up energy use of everyone in the region
+                foodUsed += Constants.Constant.FoodBaseUsagePerPop * PopsInTile.Count; // total up energy use of everyone in the region
 
                 return foodUsed;
             }

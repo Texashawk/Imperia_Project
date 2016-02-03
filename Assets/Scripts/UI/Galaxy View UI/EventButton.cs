@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 using GameEvents;
 using CameraScripts;
 using StellarObjects;
@@ -9,7 +8,7 @@ using StellarObjects;
 public class EventButton : MonoBehaviour
 {
     private string buttonID;
-    private string characterID;
+    //private string characterID;
     private string planetLocationID;
     private string systemLocationID;
     private GraphicAssets gAssets;

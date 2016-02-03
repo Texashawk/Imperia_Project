@@ -187,15 +187,15 @@ namespace Tooltips
                 {
                     intelLevelText = "NONE";
                 }
-                else if (cData.IntelLevel > 0 && cData.IntelLevel < Constants.Constants.LowIntelLevelMax)
+                else if (cData.IntelLevel > 0 && cData.IntelLevel < Constants.Constant.LowIntelLevelMax)
                 {
                     intelLevelText = "LOW";
                 }
-                else if (cData.IntelLevel < Constants.Constants.MediumIntelLevelMax)
+                else if (cData.IntelLevel < Constants.Constant.MediumIntelLevelMax)
                 {
                     intelLevelText = "MEDIUM";
                 }
-                else if (cData.IntelLevel < Constants.Constants.HighIntelMax)
+                else if (cData.IntelLevel < Constants.Constant.HighIntelMax)
                 {
                     intelLevelText = "HIGH";
                 }

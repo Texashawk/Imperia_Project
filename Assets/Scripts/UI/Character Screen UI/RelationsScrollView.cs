@@ -30,7 +30,7 @@ public class RelationsScrollView : MonoBehaviour
             {
                 bool relationshipIsKnown = false;
                 // check for at least high level of intel on both characters to know their relationship
-                if ((cData.IntelLevel > Constants.Constants.LowIntelLevelMax && cha.IntelLevel > Constants.Constants.LowIntelLevelMax) || cha.Role == Character.eRole.Emperor)
+                if ((cData.IntelLevel > Constants.Constant.LowIntelLevelMax && cha.IntelLevel > Constants.Constant.LowIntelLevelMax) || cha.Role == Character.eRole.Emperor)
                 {
                     relationshipIsKnown = true;
                 }

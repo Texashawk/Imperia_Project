@@ -11,6 +11,7 @@ public class DynamicResourcesZone : MonoBehaviour
     private Text empireTreasuryExpenses;
     private Text focusObjectName;
     private UIManager uiManagerRef;
+    private Text emperorAP;
 
     // Use this for initialization
     void Awake()
@@ -21,6 +22,7 @@ public class DynamicResourcesZone : MonoBehaviour
         empireTreasuryRevenues = GameObject.Find("EmpireTreasuryRevenues").GetComponent<Text>();
         empireTreasuryExpenses = GameObject.Find("EmpireTreasuryExpenses").GetComponent<Text>();
         focusObjectName = GameObject.Find("Focus Object Name").GetComponent<Text>();
+        emperorAP = GameObject.Find("Action Points").GetComponent<Text>();
     }
 
     // Update is called once per frame
@@ -40,6 +42,7 @@ public class DynamicResourcesZone : MonoBehaviour
             focusObjectName.text = "THE CELESTIAL EMPIRE"; // your empire's name
 
         empireTreasuryRevenues.text = HelperFunctions.StringConversions.ConvertFloatDollarToText(gameDataRef.CivList[0].Revenues);//.ToString("N2") + " M";
-        empireTreasuryExpenses.text = HelperFunctions.StringConversions.ConvertFloatDollarToText(gameDataRef.CivList[0].Expenses); //.ToString("N2") + " M";       
+        empireTreasuryExpenses.text = HelperFunctions.StringConversions.ConvertFloatDollarToText(gameDataRef.CivList[0].Expenses); //.ToString("N2") + " M";
+        emperorAP.text = HelperFunctions.DataRetrivalFunctions.GetCivLeader("CIV0").ActionPoints.ToString("N0"); // get human leader   
     }
 }

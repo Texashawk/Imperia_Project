@@ -182,7 +182,7 @@ public class TurnEngine : MonoBehaviour {
             }
         }
 
-        if (topPlanetValue > Constants.Constants.StellarMigrationThreshold + UnityEngine.Random.Range(0,200)) // if the best value is above a certain threshold
+        if (topPlanetValue > Constants.Constant.StellarMigrationThreshold + UnityEngine.Random.Range(0,200)) // if the best value is above a certain threshold
         {
             List<Region> eligibleRegionList = new List<Region>();
             foreach (Region rData in topPlanet.RegionList.ToArray())
@@ -347,27 +347,27 @@ public class TurnEngine : MonoBehaviour {
 
         if (pData.FoodExportAvailable > 0)
         {
-            newTrade.FoodSent = pData.FoodExportAvailable / Constants.Constants.SupplyPlanetLow;
+            newTrade.FoodSent = pData.FoodExportAvailable / Constants.Constant.SupplyPlanetLow;
         }
 
         if (pData.EnergyExportAvailable > 0)
         {
-            newTrade.EnergySent = pData.EnergyExportAvailable / Constants.Constants.SupplyPlanetLow;
+            newTrade.EnergySent = pData.EnergyExportAvailable / Constants.Constant.SupplyPlanetLow;
         }
 
         if (pData.AlphaExportAvailable > 0)
         {
-            newTrade.AlphaSent = pData.AlphaExportAvailable / Constants.Constants.SupplyPlanetLow;
+            newTrade.AlphaSent = pData.AlphaExportAvailable / Constants.Constant.SupplyPlanetLow;
         }
 
         if (pData.HeavyExportAvailable > 0)
         {
-            newTrade.HeavySent = pData.HeavyExportAvailable / Constants.Constants.SupplyPlanetLow;
+            newTrade.HeavySent = pData.HeavyExportAvailable / Constants.Constant.SupplyPlanetLow;
         }
 
         if (pData.RareExportAvailable > 0)
         {
-            newTrade.RareSent = pData.RareExportAvailable / Constants.Constants.SupplyPlanetLow;
+            newTrade.RareSent = pData.RareExportAvailable / Constants.Constant.SupplyPlanetLow;
         }
 
         Debug.Log("Supply trade created from " + newTrade.ExportPlanet.Name + " to " + newTrade.ImportPlanet.Name + " for " + newTrade.TotalSent.ToString("N2") + " units, costing " + newTrade.Cost.ToString("N2") + ".");

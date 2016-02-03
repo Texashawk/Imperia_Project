@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using StellarObjects;
+﻿using StellarObjects;
 using HelperFunctions;
+using Constants;
 using CivObjects;
 
 namespace EconomicObjects
@@ -25,7 +23,7 @@ namespace EconomicObjects
             get
             {
                 float distance = 0f;
-                distance = HelperFunctions.Formulas.MeasureDistanceBetweenSystems(ImportPlanet.System, ExportPlanet.System);
+                distance = Formulas.MeasureDistanceBetweenSystems(ImportPlanet.System, ExportPlanet.System);
                 if (distance < 10)
                     distance = 10;
                 return distance;
@@ -41,7 +39,7 @@ namespace EconomicObjects
         {
             get
             {
-                return HelperFunctions.DataRetrivalFunctions.GetPlanet(ImportPlanetID);
+                return DataRetrivalFunctions.GetPlanet(ImportPlanetID);
             }
         }
 
@@ -49,7 +47,7 @@ namespace EconomicObjects
         {
             get
             {
-                return HelperFunctions.DataRetrivalFunctions.GetPlanet(ExportPlanetID);
+                return DataRetrivalFunctions.GetPlanet(ExportPlanetID);
             }
         }
 
@@ -57,7 +55,7 @@ namespace EconomicObjects
         {
             get
             {
-                Civilization civ = HelperFunctions.DataRetrivalFunctions.GetCivilization(ExportPlanet.Owner.ID);
+                Civilization civ = DataRetrivalFunctions.GetCivilization(ExportPlanet.Owner.ID);
               
                 float baseResourceCost = 0f;
                 float totalCost = 0f;
@@ -86,7 +84,7 @@ namespace EconomicObjects
                     CostModifier = .25f; // huge discount for supply trades
                 }
 
-                totalCost = ((baseResourceCost * (Distance / Constants.Constants.DistanceModifier)) * CostModifier) * Constants.Constants.BaseTradeFactor;
+                totalCost = ((baseResourceCost * (Distance / Constant.DistanceModifier)) * CostModifier) * Constant.BaseTradeFactor;
                 return totalCost;
             }
         }

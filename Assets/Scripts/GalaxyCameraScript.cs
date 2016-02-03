@@ -42,7 +42,7 @@ public class GalaxyCameraScript : MonoBehaviour {
     public Province provinceTarget = null;
     private Vector3 cameraSystemPosition; // stores the camera position when in system view
     private Vector3 cameraPlanetPosition; // stores the camera position when in planet view
-    private Vector3 cameraProvincePosition; // stores the camera position when in province view
+    //private Vector3 cameraProvincePosition; // stores the camera position when in province view
     private float scaleRatio;
 
     public const int galaxyMinZoomLevel = 120;

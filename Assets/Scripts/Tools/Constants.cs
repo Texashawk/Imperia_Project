@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace Constants
 {
-    public class Constants
+    public static class Constant
     {
         // intel level consts
         public const int LowIntelLevelMax = 3;

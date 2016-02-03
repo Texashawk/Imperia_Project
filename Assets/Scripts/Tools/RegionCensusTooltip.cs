@@ -7,27 +7,12 @@ using HelperFunctions;
 
 public class RegionCensusTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-
-    private bool tooltipDisplayed = false; // initially set false
     public GameObject TooltipItem; // the rect transform
     private Canvas planetUICanvas;
-   
     private GalaxyData gDataRef;
-    private Image regionImage;
     private Region rData;
     private GameObject toolTipObject; // the actual tooltip object
-    private Text tileIDText;
-    private Text currentPopText;
-    private Text maxPopText;
-    private Text regionType;
-    private Camera uiCamera;
-
-    // development level text
-    private Text agLevelText;
-    private Text manLevelText;
-    private Text sciLevelText;
-    private Text hiTechLevelText;
-    private Text miningLevelText;
+    private Camera uiCamera;  
 
     // input vars
     float mouseWheelValue = 0f;
@@ -45,7 +30,7 @@ public class RegionCensusTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
         {
             if (toolTipObject != null)
             {
-                tooltipDisplayed = false;
+                
                 transform.localScale = new Vector3(1, 1, 1);
                 GameObject.Destroy(toolTipObject);
             }
@@ -58,7 +43,7 @@ public class RegionCensusTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
         {
             if (hit.transform.name == this.name)
             {
-                tooltipDisplayed = true;  // set as active the tooltip
+                //tooltipDisplayed = true;  // set as active the tooltip
                 //transform.localScale = new Vector3(1.5f, 1.5f, 1.5f); // make the square a little bigger when moused over
                 if (toolTipObject == null)
                     DrawTooltip();
@@ -67,7 +52,7 @@ public class RegionCensusTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
             {
                 if (toolTipObject != null)
                 {
-                    tooltipDisplayed = false;
+                    //tooltipDisplayed = false;
                     //transform.localScale = new Vector3(1, 1, 1);
                     GameObject.Destroy(toolTipObject);
                 }
@@ -77,7 +62,7 @@ public class RegionCensusTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
         {
             if (toolTipObject != null)
             {
-                tooltipDisplayed = false;
+                //tooltipDisplayed = false;
                 //transform.localScale = new Vector3(1, 1, 1);
                 GameObject.Destroy(toolTipObject);
             }
@@ -91,7 +76,7 @@ public class RegionCensusTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        tooltipDisplayed = true;  // set as active the tooltip
+        //tooltipDisplayed = true;  // set as active the tooltip
         DrawTooltip();
     }
 
@@ -160,7 +145,7 @@ public class RegionCensusTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        tooltipDisplayed = false;
+        //tooltipDisplayed = false;
         transform.localScale = new Vector3(1, 1, 1);
         GameObject.Destroy(toolTipObject);
     }

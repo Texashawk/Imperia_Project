@@ -1,13 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using StellarObjects;
 using PlanetObjects;
 using HelperFunctions;
 
 public class RegionTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler{
 
-	private bool tooltipDisplayed = false; // initially set false
     public GameObject TooltipItem; // the rect transform
     private Canvas planetUICanvas;
     public Sprite forestPic;
@@ -22,22 +20,10 @@ public class RegionTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public Sprite deadPic;
     public Sprite icePic;
     public Sprite impassiblePic;
-    private GalaxyData gDataRef;
-    private Image regionImage;
+    private GalaxyData gDataRef;    
     private Region rData;
-    private GameObject toolTipObject; // the actual tooltip object
-    private Text tileIDText;
-    private Text currentPopText;
-    private Text maxPopText;
-    private Text regionType;
+    private GameObject toolTipObject; // the actual tooltip object  
     private Camera uiCamera;
-
-    // development level text
-    private Text agLevelText;
-    private Text manLevelText;
-    private Text sciLevelText;
-    private Text hiTechLevelText;
-    private Text miningLevelText;
 
     // input vars
     float mouseWheelValue = 0f;
@@ -55,7 +41,7 @@ public class RegionTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         {
             if (toolTipObject != null)
             {
-                tooltipDisplayed = false;
+                
                 transform.localScale = new Vector3(1, 1, 1);
                 GameObject.Destroy(toolTipObject);
             }
@@ -68,27 +54,23 @@ public class RegionTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         {
             if (hit.transform.name == this.name)
             {
-                tooltipDisplayed = true;  // set as active the tooltip
-                //transform.localScale = new Vector3(1.5f, 1.5f, 1.5f); // make the square a little bigger when moused over
                 if (toolTipObject == null)
                     DrawTooltip(); 
             }
+
             else
             {
                 if (toolTipObject != null)
                 {
-                    tooltipDisplayed = false;
-                    //transform.localScale = new Vector3(1, 1, 1);
                     GameObject.Destroy(toolTipObject);
                 }
             }        
         }
+
         else
         {
             if (toolTipObject != null)
             {
-                tooltipDisplayed = false;
-                //transform.localScale = new Vector3(1, 1, 1);
                 GameObject.Destroy(toolTipObject);
             }
         }
@@ -101,15 +83,13 @@ public class RegionTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        //tooltipDisplayed = true;  // set as active the tooltip
-        //transform.localScale = new Vector3(1.5f, 1.5f, 1.5f); // make the square a little bigger when moused over
-        //DrawTooltip();
+      
     }
 
     private void DrawTooltip()
     {
         toolTipObject = Instantiate(TooltipItem, Camera.main.WorldToScreenPoint(transform.position), Quaternion.identity) as GameObject;
-        rData = HelperFunctions.DataRetrivalFunctions.GetRegion(transform.name);
+        rData = DataRetrivalFunctions.GetRegion(transform.name);
         //toolTipObject.transform.Find("Tile Name").GetComponent<Text>().text = rData.ID; // assign the name to the text object child
         Color popColor = Color.white;
 
@@ -208,7 +188,7 @@ public class RegionTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        tooltipDisplayed = false;
+        
         transform.localScale = new Vector3(1, 1, 1);
         GameObject.Destroy(toolTipObject);
     }

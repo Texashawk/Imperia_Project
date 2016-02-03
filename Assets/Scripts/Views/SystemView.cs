@@ -21,13 +21,11 @@ public class SystemView : MonoBehaviour {
     private List<GameObject> systemObjectsDrawnList = new List<GameObject>();
     private float alphaValue = 0f; // change back to 0 when fix the issue with corouting and vars taking too much CPU
     private bool DrawPanelSummary = false;  
-    private bool waitActive = false;
     private Text systemIntelLevel;
     private Text systemIntelText;
     private Text lowIntelLevelPlanetData;
     private Text noIntelLevelPlanetData;
     private Text noStellarObjectText;
-    //private Image systemGovernorImage;
 
     //events
     public class PointerClickEvent : UnityEvent<bool> { }; // empty class
@@ -274,7 +272,7 @@ public class SystemView : MonoBehaviour {
         noIntelLevelPlanetData.enabled = false;
         noStellarObjectText.enabled = false;
         DrawPanelSummary = false; // reset all 'draw flags'
-        waitActive = false;
+        
         for (int x = 0; x < systemObjectsDrawnList.Count; x++)
         {
             Destroy(systemObjectsDrawnList[x]);         
@@ -294,7 +292,6 @@ public class SystemView : MonoBehaviour {
 
     IEnumerator Wait1Second()
     {
-        waitActive = true;
         yield return new WaitForSeconds(1.0f);       
     }
 

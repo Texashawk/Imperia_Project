@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System;
 using CivObjects;
 using UI.Manager;
+using TMPro; // Text Mesh Pro
 
 namespace Screens.Galaxy
 {
@@ -60,8 +61,8 @@ namespace Screens.Galaxy
         private Image button;
 
         //private Text starDataTextLine;
-        private Text secondaryDataTextLine;
-        private Text secondaryZoomValueLine;
+        private TextMeshProUGUI cameraZoomLevelLine;
+        private TextMeshProUGUI cameraZoomValueLine;
         private GalaxyData galaxyDataRef;
         private GalaxyCameraScript gCameraRef;
         private GameObject eventScrollView;
@@ -76,8 +77,8 @@ namespace Screens.Galaxy
         private GameObject starmapSprite;
         private GameObject backingSphere;
 
-        private Text galaxyMapModeInfo;
-        private Text galaxyMapSubModeInfo;
+        private TextMeshProUGUI galaxyMapModeInfo;
+        private TextMeshProUGUI galaxyMapSubModeInfo;
         private Camera mainCamera;
         private Canvas mainUIOverlay;
         private Canvas galaxyPlanetInfoCanvas;
@@ -93,7 +94,6 @@ namespace Screens.Galaxy
         private bool provinceLinesDrawn = false; // are province lines drawn?
         private bool systemTrailCreated = false; // is background trail created?
         private bool rangeCirclesGenerated = false; // have range circles been drawn?
-        private bool statsUpdated = false;
         private bool mapInOverviewMode = false; // is the map in province or galaxy mode?
         public bool EventPanelActive = true; // set visibilty
         private GameObject eventPanelButton;
@@ -102,7 +102,7 @@ namespace Screens.Galaxy
         private GameObject systemUICanvas;
         private GameObject selectedUnitInfoCanvas;
         private GameObject systemHeaderImage; // system / planet header
-        private Text systemDisplaySystemName;
+        private TextMeshProUGUI systemDisplaySystemName;
         private Text versionNumber;
         private Text systemDisplaySecondaryDataLine;
         private Text systemDisplayTertiaryDataLine;
@@ -121,8 +121,8 @@ namespace Screens.Galaxy
             starmapSprite = GameObject.Find("Y-Axis Grid");
             systemHeaderImage = GameObject.Find("System Header Image");
             
-            secondaryDataTextLine = GameObject.Find("CameraZoomValue").GetComponent<Text>();
-            secondaryZoomValueLine = GameObject.Find("CameraZoomInfo").GetComponent<Text>();
+            cameraZoomLevelLine = GameObject.Find("CameraZoomValue").GetComponent<TextMeshProUGUI>();
+            cameraZoomValueLine = GameObject.Find("CameraZoomInfo").GetComponent<TextMeshProUGUI>();
             
             backingSphere = GameObject.Find("Backing Sphere");
                     
@@ -130,11 +130,11 @@ namespace Screens.Galaxy
             systemUICanvas = GameObject.Find("System UI Canvas");
             eventScrollView = GameObject.Find("Event ScrollView");
             selectedUnitInfoCanvas = GameObject.Find("Selected Unit Information Canvas");
-            systemDisplaySystemName = GameObject.Find("System Name Text").GetComponent<Text>();
+            systemDisplaySystemName = GameObject.Find("System Name Text").GetComponent<TextMeshProUGUI>();
             systemDisplaySecondaryDataLine = GameObject.Find("Secondary Header Line").GetComponent<Text>();
             systemDisplayTertiaryDataLine = GameObject.Find("Tertiary Header Line").GetComponent<Text>();
-            galaxyMapModeInfo = GameObject.Find("MapModeInfo").GetComponent<Text>();
-            galaxyMapSubModeInfo = GameObject.Find("MapSubModeInfo").GetComponent<Text>();
+            galaxyMapModeInfo = GameObject.Find("MapModeInfo").GetComponent<TextMeshProUGUI>();
+            galaxyMapSubModeInfo = GameObject.Find("MapSubModeInfo").GetComponent<TextMeshProUGUI>();
             vitalStatisticsZone = GameObject.Find("Vital Statistics Zone").GetComponent<Image>();
 
             button = GameObject.Find("War Button").GetComponent<Image>();
@@ -373,7 +373,6 @@ namespace Screens.Galaxy
                 listGalaxyUIObjectsCreated.Clear(); // clear out any range circles, lines, system pips, etc
                 GenerateCivilizationRangeCircles();
                 DrawGalaxyMapUI(); // refresh UI
-                statsUpdated = false; // reset empire data bar stats
                 gameDataRef.RequestGraphicRefresh = false;
             }
 
@@ -735,8 +734,8 @@ namespace Screens.Galaxy
             string debugMode = "";
             if (gameDataRef.DebugMode)
                 debugMode = "(DEBUG)";
-            secondaryDataTextLine.text = "ZOOM: " + fov.ToString("N1");
-            secondaryZoomValueLine.text = mainCamera.GetComponent<GalaxyCameraScript>().ZoomLevel.ToString().ToUpper() + " " + debugMode;
+            cameraZoomLevelLine.text = "ZOOM: " + fov.ToString("N1");
+            cameraZoomValueLine.text = mainCamera.GetComponent<GalaxyCameraScript>().ZoomLevel.ToString().ToUpper() + " " + debugMode;
         }
 
         void HideStellarDataBlocks()
@@ -821,7 +820,7 @@ namespace Screens.Galaxy
                             if (!gameDataRef.DebugMode)
                             {
                                 text.textObject.GetComponent<Text>().text = starData.Name.ToUpper();
-                                if (starData.IntelValue > Constants.Constants.MediumIntelLevelMax)
+                                if (starData.IntelValue > Constants.Constant.MediumIntelLevelMax)
                                     textColor = text.ownerColor;
                                 else
                                     textColor = Color.grey;
