@@ -48,7 +48,6 @@ public class SystemView : MonoBehaviour {
         lowIntelLevelPlanetData = GameObject.Find("Low Intel Level Text").GetComponent<Text>();
         noIntelLevelPlanetData = GameObject.Find("No Intel Level Text").GetComponent<Text>();
         noStellarObjectText = GameObject.Find("No Stellar Object Text").GetComponent<Text>();
-        //systemGovernorImage = GameObject.Find("Character Image").GetComponent<Image>();
         lowIntelLevelPlanetData.enabled = false;
     }
 
@@ -139,36 +138,6 @@ public class SystemView : MonoBehaviour {
             systemIntelLevel.color = Color.yellow;
         else
             systemIntelLevel.color = Color.green;
-
-        // draw system governor picture if there is one
-        //if (selectedStarData.IntelValue >= HighIntelLevel)
-        //{
-        //    if (selectedStarData.IsOccupied)
-        //    {
-        //        systemGovernorImage.enabled = true;
-        //        string sysGovID = HelperFunctions.DataRetrivalFunctions.GetSystemGovernorID(selectedStarData.ID);
-        //        if (sysGovID != "none")
-        //        {
-        //            Character sysGov = HelperFunctions.DataRetrivalFunctions.GetCharacter(sysGovID);
-        //            if (graphicsDataRef.CharacterList.Find(p => p.name == sysGov.PictureID))
-        //            {
-        //                systemGovernorImage.sprite = graphicsDataRef.CharacterList.Find(p => p.name == sysGov.PictureID);
-        //            }
-        //        }
-        //        else
-        //        {
-        //            systemGovernorImage.enabled = false;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        systemGovernorImage.enabled = false;
-        //    }
-        //}
-        //else
-        //{
-        //    systemGovernorImage.enabled = false;
-        //}
 
     }
 
