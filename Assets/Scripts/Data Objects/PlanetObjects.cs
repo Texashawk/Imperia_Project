@@ -112,7 +112,7 @@ namespace PlanetObjects
                 string cID = "";
                 int civNumber = 0;
                 int maxPower = 0;
-                int[] powerGrid = new int[HelperFunctions.DataRetrivalFunctions.GetGameDataObject().CivList.Count]; // set up a 2 dim array with the total civs on one side and the pop power on the other
+                int[] powerGrid = new int[DataRetrivalFunctions.GetGameDataObject().CivList.Count]; // set up a 2 dim array with the total civs on one side and the pop power on the other
 
                 foreach (Pops pop in PopsInTile)
                 {
@@ -129,7 +129,7 @@ namespace PlanetObjects
                     }
                 }
 
-                cID = HelperFunctions.DataRetrivalFunctions.GetGameDataObject().CivList[civNumber].ID;
+                cID = DataRetrivalFunctions.GetGameDataObject().CivList[civNumber].ID;
                 return cID;
             }
         }// owning civilization; generate dynamically depending on pop power in a given region

@@ -1,23 +1,97 @@
 ﻿using StellarObjects;
 using HelperFunctions;
 using Constants;
+using System;
 using CivObjects;
 
 namespace EconomicObjects
 {
-    public class TradeAgreement
+
+    public class TradeAgreement // This represents the active and pending trades in the game
     {
-        public enum eAgreementStatus : int
+        public enum eTradeStatus : int
+        {
+            Request, // in request status
+            Accepted, // has been accepted by the exporting planet's vic
+            Denied, // has been denied and will be removed in end of turn processing
+            Active, // is active and a fleet has been created and is actively moving resources for this trade
+            Complete // all runs of trade have been completed and trade will be removed in end of turn processing
+        }
+
+        public enum eTradeGoodRequested : int
+        {
+            Food,
+            Energy,
+            Basic,
+            Heavy,
+            Rare
+        }
+
+        public int AmountRequested { get; set; }
+        public decimal OfferPerUnit { get; set; }
+        public int RunsRequested { get; set; }
+
+        private double _securityModifier;
+        public double SecurityModifier
+        {
+            get { return _securityModifier; }
+            set { } // need to write the derived code once security levels are added to planets
+        }
+
+        private decimal _energyNeeded;
+        public decimal EnergyNeeded
+        {
+            get { return _energyNeeded; }
+            set { } // need to write the derived code to determine energy used
+        }
+
+        public string ImportingPlanetID { get; set; } // importing and exporting planet IDs (pass IDs to minimize memory used)
+        public string ExportingPlanetID { get; set; }
+
+        private decimal _shippingCost;
+        public decimal ShippingCost
+        {
+            get { return _shippingCost; }
+            set
+            {
+                PlanetData exportPlanet = DataRetrivalFunctions.GetPlanet(ExportingPlanetID);
+                PlanetData importPlanet = DataRetrivalFunctions.GetPlanet(ImportingPlanetID);
+
+                float distanceBetweenPlanets = Formulas.MeasureDistanceBetweenSystems(importPlanet.System, exportPlanet.System);
+                float energyRequired = (distanceBetweenPlanets * AmountRequested) * Constant.EnergyUsedPerLightYearCoeff;
+                decimal energyCostPerUnit = (decimal)(energyRequired / AmountRequested);
+                decimal shippingCost = energyCostPerUnit * (decimal)(Math.Exp(SecurityModifier) / 5) + 1;
+                _shippingCost = shippingCost;
+            }
+        }
+        private decimal _currentProfit;
+        public decimal CurrentProfit
+        {
+            get { return _currentProfit; }
+            set { } // write derived variable for determining profit of current trade proposal
+        }
+    }
+
+    public class TradeFleet // This will have to be changed to reflect the new trade system, probably will have to be called TradeFleet
+    {
+        public enum eTradeFleetStatus : int
         {
             Active,
             Inactive_Support,
-            Inactive_Resources,
-            Inactive_Pirates,
-            Supply_Trade,
-            Cancelled
+            Inactive_Resources,       
+            Mothballed
         }
-        public eAgreementStatus Status { get; set; }
-        public int LengthOfTime { get; set; }
+
+        public enum eTradeFleetType : int
+        {
+            Supply,
+            Economic
+        }
+
+        public string Name { get; set;} // name of fleet - for flavor only
+        public eTradeFleetStatus Status { get; set; }
+        public eTradeFleetType Type { get; set; }
+        public int RunsRemaining { get; set; } // how many times the trade fleet will make the current run
         public float Distance
         {
             get
@@ -30,9 +104,8 @@ namespace EconomicObjects
             }
         }
 
-        public string ImportPlanetID { get; set; }
-        public string ExportPlanetID { get; set; }
-        public float CostModifier { get; set; }
+        public string ImportPlanetID { get; set; } // importing planet
+        public string ExportPlanetID { get; set; } // exporting planet
 
         // get planets
         public PlanetData ImportPlanet
@@ -55,51 +128,22 @@ namespace EconomicObjects
         {
             get
             {
-                Civilization civ = DataRetrivalFunctions.GetCivilization(ExportPlanet.Owner.ID);
-              
-                float baseResourceCost = 0f;
-                float totalCost = 0f;
-                float _costModifier = 1.0f; // chance in cost based on support level of governors
-
-                baseResourceCost = (FoodSent * civ.CurrentFoodPrice);
-                baseResourceCost += (EnergySent * civ.CurrentEnergyPrice);
-                baseResourceCost += (AlphaSent * civ.CurrentAlphaPrice);
-                baseResourceCost += (HeavySent * civ.CurrentHeavyPrice);
-                baseResourceCost += (RareSent * civ.CurrentRarePrice);
-
-                // determine cost modifier
-                if (ImportPlanet.ProvGovSupport == eSupportLevel.Partial)
-                    _costModifier += 1f;
-                if (ImportPlanet.SysGovSupport == eSupportLevel.Partial)
-                    _costModifier += .5f;
-                if (ImportPlanet.SysGovSupport == eSupportLevel.Full && ImportPlanet.System.Governor.HouseID == ExportPlanet.Viceroy.HouseID)
-                    _costModifier = _costModifier / 2;
-                if (ImportPlanet.ProvGovSupport == eSupportLevel.Full && ImportPlanet.System.Province.Governor.HouseID == ExportPlanet.Viceroy.HouseID)
-                    _costModifier = _costModifier / 2;
-
-                CostModifier = _costModifier;
-
-                if (Status == eAgreementStatus.Supply_Trade)
-                {
-                    CostModifier = .25f; // huge discount for supply trades
-                }
-
-                totalCost = ((baseResourceCost * (Distance / Constant.DistanceModifier)) * CostModifier) * Constant.BaseTradeFactor;
-                return totalCost;
+                return 0;
             }
         }
 
-        public float EnergySent { get; set; }
-        public float FoodSent { get; set; }
-        public float AlphaSent { get; set; }
-        public float HeavySent { get; set; }
-        public float RareSent { get; set; }
+        public float EnergyOnBoard { get; set; }
+        public float FoodOnBoard { get; set; }
+        public float BasicOnBoard { get; set; }
+        public float HeavyOnBoard { get; set; }
+        public float RareOnBoard { get; set; }
+
         public float TotalSent
         {
             get
             {
                 float totalSent = 0;
-                totalSent = EnergySent + FoodSent + AlphaSent + HeavySent + RareSent;
+                totalSent = EnergyOnBoard + FoodOnBoard + BasicOnBoard + HeavyOnBoard + RareOnBoard;
                 return totalSent;
             }
         }

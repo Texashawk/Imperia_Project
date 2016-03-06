@@ -10,7 +10,7 @@ Material:
   m_Shader: {fileID: 4800000, guid: edfcf888cd11d9245b91d2883049a57e, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 5
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 3000
   stringTagMap: {}
   m_SavedProperties:
     serializedVersion: 2
@@ -24,12 +24,130 @@ Material:
           m_Offset: {x: 0, y: 0}
       data:
         first:
+          name: _BumpMap
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _DetailNormalMap
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _ParallaxMap
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _OcclusionMap
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _EmissionMap
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _DetailMask
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _DetailAlbedoMap
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _MetallicGlossMap
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
           name: _FaceTex
         second:
           m_Texture: {fileID: 0}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _OutlineTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _Cube
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
     m_Floats:
+      data:
+        first:
+          name: _SrcBlend
+        second: 1
+      data:
+        first:
+          name: _DstBlend
+        second: 0
+      data:
+        first:
+          name: _Cutoff
+        second: .5
+      data:
+        first:
+          name: _Parallax
+        second: .0199999996
+      data:
+        first:
+          name: _ZWrite
+        second: 1
+      data:
+        first:
+          name: _Glossiness
+        second: .5
+      data:
+        first:
+          name: _BumpScale
+        second: 1
+      data:
+        first:
+          name: _OcclusionStrength
+        second: 1
+      data:
+        first:
+          name: _DetailNormalMapScale
+        second: 1
+      data:
+        first:
+          name: _UVSec
+        second: 0
+      data:
+        first:
+          name: _Mode
+        second: 0
+      data:
+        first:
+          name: _Metallic
+        second: 0
       data:
         first:
           name: _Stencil
@@ -52,11 +170,167 @@ Material:
         second: 255
       data:
         first:
+          name: _FaceDilate
+        second: 0
+      data:
+        first:
+          name: _OutlineWidth
+        second: 0
+      data:
+        first:
+          name: _OutlineSoftness
+        second: 0
+      data:
+        first:
+          name: _GlowOffset
+        second: 0
+      data:
+        first:
+          name: _GlowInner
+        second: .0500000007
+      data:
+        first:
+          name: _GlowOuter
+        second: .0500000007
+      data:
+        first:
+          name: _GlowPower
+        second: .75
+      data:
+        first:
+          name: _WeightNormal
+        second: 0
+      data:
+        first:
+          name: _WeightBold
+        second: .5
+      data:
+        first:
+          name: _ShaderFlags
+        second: 0
+      data:
+        first:
+          name: _ScaleRatioA
+        second: 1
+      data:
+        first:
+          name: _ScaleRatioB
+        second: 1
+      data:
+        first:
+          name: _ScaleRatioC
+        second: 1
+      data:
+        first:
+          name: _TextureWidth
+        second: 512
+      data:
+        first:
+          name: _TextureHeight
+        second: 512
+      data:
+        first:
+          name: _GradientScale
+        second: 5
+      data:
+        first:
+          name: _ScaleX
+        second: 1
+      data:
+        first:
+          name: _ScaleY
+        second: 1
+      data:
+        first:
+          name: _PerspectiveFilter
+        second: .875
+      data:
+        first:
           name: _VertexOffsetX
         second: 0
       data:
         first:
           name: _VertexOffsetY
+        second: 0
+      data:
+        first:
+          name: _FaceUVSpeedX
+        second: 0
+      data:
+        first:
+          name: _FaceUVSpeedY
+        second: 0
+      data:
+        first:
+          name: _OutlineUVSpeedX
+        second: 0
+      data:
+        first:
+          name: _OutlineUVSpeedY
+        second: 0
+      data:
+        first:
+          name: _Bevel
+        second: .5
+      data:
+        first:
+          name: _BevelOffset
+        second: 0
+      data:
+        first:
+          name: _BevelWidth
+        second: 0
+      data:
+        first:
+          name: _BevelClamp
+        second: 0
+      data:
+        first:
+          name: _BevelRoundness
+        second: 0
+      data:
+        first:
+          name: _LightAngle
+        second: 3.14159989
+      data:
+        first:
+          name: _SpecularPower
+        second: 2
+      data:
+        first:
+          name: _Reflectivity
+        second: 10
+      data:
+        first:
+          name: _Diffuse
+        second: .5
+      data:
+        first:
+          name: _Ambient
+        second: .5
+      data:
+        first:
+          name: _BumpOutline
+        second: 0
+      data:
+        first:
+          name: _BumpFace
+        second: 0
+      data:
+        first:
+          name: _UnderlayOffsetX
+        second: 0
+      data:
+        first:
+          name: _UnderlayOffsetY
+        second: 0
+      data:
+        first:
+          name: _UnderlayDilate
+        second: 0
+      data:
+        first:
+          name: _UnderlaySoftness
         second: 0
       data:
         first:
@@ -69,8 +343,48 @@ Material:
     m_Colors:
       data:
         first:
+          name: _EmissionColor
+        second: {r: 0, g: 0, b: 0, a: 1}
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
           name: _FaceColor
         second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _OutlineColor
+        second: {r: 0, g: 0, b: 0, a: 1}
+      data:
+        first:
+          name: _GlowColor
+        second: {r: 0, g: 1, b: 0, a: .5}
+      data:
+        first:
+          name: _SpecularColor
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _ReflectFaceColor
+        second: {r: 0, g: 0, b: 0, a: 1}
+      data:
+        first:
+          name: _ReflectOutlineColor
+        second: {r: 0, g: 0, b: 0, a: 1}
+      data:
+        first:
+          name: _EnvMatrixRotation
+        second: {r: 0, g: 0, b: 0, a: 0}
+      data:
+        first:
+          name: _UnderlayColor
+        second: {r: 0, g: 0, b: 0, a: .5}
+      data:
+        first:
+          name: _MaskCoord
+        second: {r: 0, g: 0, b: 100000, a: 100000}
 --- !u!28 &2837812
 Texture2D:
   m_ObjectHideFlags: 1
@@ -115,7 +429,7 @@ MonoBehaviour:
   m_fontInfo:
     Name: Function
     PointSize: 79
-    Scale: 0
+    Scale: 1
     CharacterCount: 97
     LineHeight: 91
     Baseline: 0
@@ -127,22 +441,22 @@ MonoBehaviour:
     SubSize: .5
     Underline: -10.4279995
     UnderlineThickness: 5.45100021
-    TabWidth: 0
+    TabWidth: 190
     Padding: 0
     AtlasWidth: 512
     AtlasHeight: 512
-  fontHashCode: 0
+  fontHashCode: -1865898078
   atlas: {fileID: 2837812}
   material: {fileID: 2154200}
-  materialHashCode: 0
+  materialHashCode: 910248681
   m_glyphInfoList:
   - id: 32
     x: 5
     y: 507
-    width: 0
-    height: 0
+    width: 19
+    height: 92
     xOffset: 0
-    yOffset: 0
+    yOffset: 72
     xAdvance: 19
   - id: 33
     x: 182

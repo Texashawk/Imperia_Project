@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using StellarObjects;
 using CameraScripts;
 using HelperFunctions;
+using TMPro;
 
 public class ProvinceSelect : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
@@ -19,13 +20,13 @@ public class ProvinceSelect : MonoBehaviour, IPointerClickHandler, IPointerEnter
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        originalColor = GetComponent<Text>().color;
-        GetComponent<Text>().color = Color.yellow;
+        originalColor = GetComponent<TextMeshProUGUI>().color;
+        GetComponent<TextMeshProUGUI>().color = Color.yellow;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {        
-        GetComponent<Text>().color = originalColor;
+        GetComponent<TextMeshProUGUI>().color = originalColor;
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -34,7 +35,7 @@ public class ProvinceSelect : MonoBehaviour, IPointerClickHandler, IPointerEnter
         {
             if (tag == "Province")
             {
-                galCameraRef.provinceTarget = HelperFunctions.DataRetrivalFunctions.GetProvince(transform.name);
+                galCameraRef.provinceTarget = DataRetrivalFunctions.GetProvince(transform.name);
                 galCameraRef.systemZoomActive = false;
                 galCameraRef.planetZoomActive = false;
                 galCameraRef.provinceZoomActive = true;

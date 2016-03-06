@@ -50,7 +50,7 @@ public class GlobalGameData : MonoBehaviour
     public List<Civilization> CivList = new List<Civilization>();
     public List<Pops> PopList = new List<Pops>(); // univeral population list in game
     public List<Challenge> ChallengeList = new List<Challenge>(); // tracks current challenges between different characters
-    public List<TradeAgreement> ActiveTradeAgreements = new List<TradeAgreement>();
+    public List<TradeFleet> ActiveTradeFleets = new List<TradeFleet>();
     public List<Character> CharacterList = new List<Character>();
     public List<CharacterAction> CharacterActionList = new List<CharacterAction>();
     public List<CharacterTrait> CharacterTraitList = new List<CharacterTrait>();

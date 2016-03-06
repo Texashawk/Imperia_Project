@@ -10,6 +10,7 @@ using HelperFunctions;
 using EconomicObjects;
 using GameEvents;
 using Constants;
+using Assets.Scripts.Managers;
 
 public class TurnEngine : MonoBehaviour {
 
@@ -32,7 +33,7 @@ public class TurnEngine : MonoBehaviour {
                 MigratePopsBetweenPlanets(civ); // and if there are any pops who want to leave, check for where   
             }
         }
-        UpdateTrades();
+        //UpdateTrades();
         UpdateEmperor();
         gDataRef.UpdateGameDate();
         gDataRef.RequestGraphicRefresh = true;
@@ -40,7 +41,7 @@ public class TurnEngine : MonoBehaviour {
 
     public void ExecuteNewTurn() // this is the master turn execution function
     {   
-        UpdateTrades();
+        //UpdateTrades();
         UpdateAllCivs();
         UpdateEmperor();
         gDataRef.UpdateGameDate(); // advance the year
@@ -103,8 +104,11 @@ public class TurnEngine : MonoBehaviour {
 
     private void UpdateTrades()
     {
-        UpdateTradeAgreements();
-        UpdateResourceStockBalances();
+        DeterminePendingTradeRequestStatus();
+        TradeManager.UpdateActiveTradeFleets(); // this will update the location and status of all active trade fleets
+        TradeManager.GenerateNewTradeFleets(); // this will create new trade fleets that will begin to move next month towards their destination
+        TradeManager.DeactivateTradeFleets(); // this will deactivate any trade fleets that have completed their journey and do not have any runs left
+        TradeManager.UpdateResourceStockBalances();
     }
 
     private void UpdatePlanets(Civilization civ) // this is where all planet-update functions go to save time
@@ -340,53 +344,42 @@ public class TurnEngine : MonoBehaviour {
 
     private void CreateSupplyTrade(PlanetData pData)
     {
-        TradeAgreement newTrade = new TradeAgreement();
+        TradeFleet newTrade = new TradeFleet();
         newTrade.ExportPlanetID = pData.ID;
-        newTrade.Status = TradeAgreement.eAgreementStatus.Supply_Trade;
+        newTrade.Status = TradeFleet.eTradeFleetStatus.Active;
+        newTrade.Type = TradeFleet.eTradeFleetType.Supply;
         newTrade.ImportPlanetID = pData.SupplyToPlanetID;
 
         if (pData.FoodExportAvailable > 0)
         {
-            newTrade.FoodSent = pData.FoodExportAvailable / Constants.Constant.SupplyPlanetLow;
+            newTrade.FoodOnBoard = pData.FoodExportAvailable / Constants.Constant.SupplyPlanetLow;
         }
 
         if (pData.EnergyExportAvailable > 0)
         {
-            newTrade.EnergySent = pData.EnergyExportAvailable / Constants.Constant.SupplyPlanetLow;
+            newTrade.EnergyOnBoard = pData.EnergyExportAvailable / Constants.Constant.SupplyPlanetLow;
         }
 
         if (pData.AlphaExportAvailable > 0)
         {
-            newTrade.AlphaSent = pData.AlphaExportAvailable / Constants.Constant.SupplyPlanetLow;
+            newTrade.BasicOnBoard = pData.AlphaExportAvailable / Constants.Constant.SupplyPlanetLow;
         }
 
         if (pData.HeavyExportAvailable > 0)
         {
-            newTrade.HeavySent = pData.HeavyExportAvailable / Constants.Constant.SupplyPlanetLow;
+            newTrade.HeavyOnBoard = pData.HeavyExportAvailable / Constants.Constant.SupplyPlanetLow;
         }
 
         if (pData.RareExportAvailable > 0)
         {
-            newTrade.RareSent = pData.RareExportAvailable / Constants.Constant.SupplyPlanetLow;
+            newTrade.RareOnBoard = pData.RareExportAvailable / Constants.Constant.SupplyPlanetLow;
         }
 
         Debug.Log("Supply trade created from " + newTrade.ExportPlanet.Name + " to " + newTrade.ImportPlanet.Name + " for " + newTrade.TotalSent.ToString("N2") + " units, costing " + newTrade.Cost.ToString("N2") + ".");
-        gDataRef.ActiveTradeAgreements.Add(newTrade);
+        gDataRef.ActiveTradeFleets.Add(newTrade);
     }
 
-    private void UpdateResourceStockBalances()
-    {
-        foreach (PlanetData pData in galDataRef.GalaxyPlanetDataList)
-        {
-            pData.FoodStored += pData.FoodDifference;
-            pData.EnergyStored += pData.EnergyDifference;
-            pData.AlphaStored += pData.AlphaTotalDifference;
-            pData.HeavyStored += pData.HeavyPreProductionDifference;
-            pData.RareStored += pData.RarePreProductionDifference;
-        }
-    }
-
-    private void UpdateTradeAgreements()
+    private void DeterminePendingTradeRequestStatus()
     {
         Civilization civ = gDataRef.CivList[0]; // human civ
        
@@ -427,63 +420,63 @@ public class TurnEngine : MonoBehaviour {
     private void UpdatePlanetTradeInfo(PlanetData pData)
     {
         // update trade stats
-        List<TradeAgreement> expList = new List<TradeAgreement>();
-        List<TradeAgreement> impList = new List<TradeAgreement>();
+        List<TradeFleet> expList = new List<TradeFleet>();
+        List<TradeFleet> impList = new List<TradeFleet>();
 
         float totalImports = 0f;
         float totalExports = 0f;
 
-        if (gDataRef.ActiveTradeAgreements.Exists(p => p.ExportPlanetID == pData.ID))
+        if (gDataRef.ActiveTradeFleets.Exists(p => p.ExportPlanetID == pData.ID))
         {
-            expList = gDataRef.ActiveTradeAgreements.FindAll(p => p.ExportPlanetID == pData.ID);
+            expList = gDataRef.ActiveTradeFleets.FindAll(p => p.ExportPlanetID == pData.ID);
         }
 
-        if (gDataRef.ActiveTradeAgreements.Exists(p => p.ImportPlanetID == pData.ID))
+        if (gDataRef.ActiveTradeFleets.Exists(p => p.ImportPlanetID == pData.ID))
         {
-            impList = gDataRef.ActiveTradeAgreements.FindAll(p => p.ImportPlanetID == pData.ID);
+            impList = gDataRef.ActiveTradeFleets.FindAll(p => p.ImportPlanetID == pData.ID);
         }
 
-        foreach (TradeAgreement t in expList)
+        foreach (TradeFleet t in expList)
         {
             totalExports += t.Cost;
         }
         pData.ExportRevenue = totalExports;
 
-        foreach (TradeAgreement t in impList)
+        foreach (TradeFleet t in impList)
         {
             totalImports += t.Cost;
         }
         pData.ImportCosts = totalImports;
 
         float totalFood = 0f;
-        foreach (TradeAgreement t in impList)
+        foreach (TradeFleet t in impList)
         {
-            if (t.FoodSent > 0)
-                totalFood += t.FoodSent;
+            if (t.FoodOnBoard > 0)
+                totalFood += t.FoodOnBoard;
         }
         pData.FoodImported = totalFood;
 
         totalFood = 0f;
-        foreach (TradeAgreement t in expList)
+        foreach (TradeFleet t in expList)
         {
-            if (t.FoodSent > 0)
-                totalFood += t.FoodSent;
+            if (t.FoodOnBoard > 0)
+                totalFood += t.FoodOnBoard;
         }
         pData.FoodExported = totalFood;
 
         float totalEnergy = 0f;
-        foreach (TradeAgreement t in impList)
+        foreach (TradeFleet t in impList)
         {
-            if (t.EnergySent > 0)
-                totalEnergy += t.EnergySent;
+            if (t.EnergyOnBoard > 0)
+                totalEnergy += t.EnergyOnBoard;
         }
         pData.EnergyImported = totalEnergy;
 
         totalEnergy = 0f;
-        foreach (TradeAgreement t in expList)
+        foreach (TradeFleet t in expList)
         {
-            if (t.EnergySent > 0)
-                totalEnergy += t.EnergySent;
+            if (t.EnergyOnBoard > 0)
+                totalEnergy += t.EnergyOnBoard;
         }
         pData.EnergyExported = totalEnergy;  
     }
@@ -514,85 +507,85 @@ public class TurnEngine : MonoBehaviour {
             
             if (exportPlanet.IsTradeAgreementValid(needyPlanet, resource)) // check for food agreement (is there enough food to send?)
             {
-                TradeAgreement newTrade = new TradeAgreement();
+                TradeFleet newTrade = new TradeFleet();
                 newTrade.ExportPlanetID = exportPlanet.ID;
-                newTrade.Status = TradeAgreement.eAgreementStatus.Active;
+                newTrade.Status = TradeFleet.eTradeFleetStatus.Active;
                 newTrade.ImportPlanetID = needyPlanet.ID;
                 switch (resource)
                 {
                     case "food" :
                         {
                             if (exportPlanet.FoodExportAvailable >= Math.Abs(needyPlanet.FoodDifference))
-                                newTrade.FoodSent = Math.Abs(needyPlanet.FoodDifference);
+                                newTrade.FoodOnBoard = Math.Abs(needyPlanet.FoodDifference);
                             else if (exportPlanet.FoodExportAvailable > 0)
-                                newTrade.FoodSent = exportPlanet.FoodExportAvailable;
+                                newTrade.FoodOnBoard = exportPlanet.FoodExportAvailable;
                             else
-                                newTrade.FoodSent = 0; // no food avail, error check
+                                newTrade.FoodOnBoard = 0; // no food avail, error check
 
-                            if (newTrade.FoodSent >= exportPlanet.StarbaseCapacityRemaining)
+                            if (newTrade.FoodOnBoard >= exportPlanet.StarbaseCapacityRemaining)
                             {
-                                newTrade.FoodSent = exportPlanet.StarbaseCapacityRemaining;
+                                newTrade.FoodOnBoard = exportPlanet.StarbaseCapacityRemaining;
                             }
                             break;
                         }
                     case "energy":
                         {
                             if (exportPlanet.EnergyExportAvailable >= Math.Abs(needyPlanet.EnergyDifference))
-                                newTrade.EnergySent = Math.Abs(needyPlanet.EnergyDifference);
+                                newTrade.EnergyOnBoard = Math.Abs(needyPlanet.EnergyDifference);
                             else if (exportPlanet.EnergyExportAvailable > 0)
-                                newTrade.EnergySent = exportPlanet.EnergyExportAvailable;
+                                newTrade.EnergyOnBoard = exportPlanet.EnergyExportAvailable;
                             else
-                                newTrade.EnergySent = 0;
+                                newTrade.EnergyOnBoard = 0;
 
-                            if (newTrade.EnergySent >= exportPlanet.StarbaseCapacityRemaining)
+                            if (newTrade.EnergyOnBoard >= exportPlanet.StarbaseCapacityRemaining)
                             {
-                                newTrade.EnergySent = exportPlanet.StarbaseCapacityRemaining;
+                                newTrade.EnergyOnBoard = exportPlanet.StarbaseCapacityRemaining;
                             }
                             break;
                         }
                     case "alpha":
                         {
                             if (exportPlanet.AlphaExportAvailable >= Math.Abs(needyPlanet.AlphaPreProductionDifference))
-                                newTrade.AlphaSent = Math.Abs(needyPlanet.AlphaPreProductionDifference);
+                                newTrade.BasicOnBoard = Math.Abs(needyPlanet.AlphaPreProductionDifference);
                             else if (exportPlanet.AlphaExportAvailable > 0)
-                                newTrade.AlphaSent = exportPlanet.AlphaExportAvailable;
+                                newTrade.BasicOnBoard = exportPlanet.AlphaExportAvailable;
                             else
-                                newTrade.AlphaSent = 0;
+                                newTrade.BasicOnBoard = 0;
 
-                            if (newTrade.AlphaSent >= exportPlanet.StarbaseCapacityRemaining)
+                            if (newTrade.BasicOnBoard >= exportPlanet.StarbaseCapacityRemaining)
                             {
-                                newTrade.AlphaSent = exportPlanet.StarbaseCapacityRemaining;
+                                newTrade.BasicOnBoard = exportPlanet.StarbaseCapacityRemaining;
                             }
                             break;
                         }
                     case "heavy":
                         {
                             if (exportPlanet.HeavyExportAvailable >= Math.Abs(needyPlanet.HeavyPreProductionDifference))
-                                newTrade.HeavySent = Math.Abs(needyPlanet.HeavyPreProductionDifference);
+                                newTrade.HeavyOnBoard = Math.Abs(needyPlanet.HeavyPreProductionDifference);
                             else if (exportPlanet.HeavyExportAvailable > 0)
-                                newTrade.HeavySent = exportPlanet.HeavyExportAvailable;
+                                newTrade.HeavyOnBoard = exportPlanet.HeavyExportAvailable;
                             else
-                                newTrade.HeavySent = 0;
+                                newTrade.HeavyOnBoard = 0;
 
-                            if (newTrade.HeavySent >= exportPlanet.StarbaseCapacityRemaining)
+                            if (newTrade.HeavyOnBoard >= exportPlanet.StarbaseCapacityRemaining)
                             {
-                                newTrade.HeavySent = exportPlanet.StarbaseCapacityRemaining;
+                                newTrade.HeavyOnBoard = exportPlanet.StarbaseCapacityRemaining;
                             }
                             break;
                         }
                     case "rare":
                         {
                             if (exportPlanet.RareExportAvailable >= Math.Abs(needyPlanet.RarePreProductionDifference))
-                                newTrade.RareSent = Math.Abs(needyPlanet.RarePreProductionDifference);
+                                newTrade.RareOnBoard = Math.Abs(needyPlanet.RarePreProductionDifference);
                             else if (exportPlanet.RareExportAvailable > 0)
-                                newTrade.RareSent = exportPlanet.RareExportAvailable;
+                                newTrade.RareOnBoard = exportPlanet.RareExportAvailable;
                             else
-                                newTrade.RareSent = 0;
+                                newTrade.RareOnBoard = 0;
 
                             //starbase capacity check
-                            if (newTrade.RareSent >= exportPlanet.StarbaseCapacityRemaining)
+                            if (newTrade.RareOnBoard >= exportPlanet.StarbaseCapacityRemaining)
                             {
-                                newTrade.RareSent = exportPlanet.StarbaseCapacityRemaining;
+                                newTrade.RareOnBoard = exportPlanet.StarbaseCapacityRemaining;
                             }
                             break;
                         } 
@@ -602,8 +595,8 @@ public class TurnEngine : MonoBehaviour {
 
                 if (newTrade.TotalSent >= 0.01) // minimum threshold amount for trades, also check for capacity of the trade
                 {
-                    Debug.Log("Trade of " + newTrade.TotalSent.ToString("N2") + " " + resource + " to " + newTrade.ImportPlanet.Name + " from " + newTrade.ExportPlanet.Name + " over " + newTrade.Distance.ToString("N1") + " LY for $" + newTrade.Cost.ToString("N2") + " with a " + newTrade.CostModifier.ToString("N1") + " modifier.");
-                    gDataRef.ActiveTradeAgreements.Add(newTrade); // add the new agreement
+                    //Debug.Log("Trade of " + newTrade.TotalSent.ToString("N2") + " " + resource + " to " + newTrade.ImportPlanet.Name + " from " + newTrade.ExportPlanet.Name + " over " + newTrade.Distance.ToString("N1") + " LY for $" + newTrade.Cost.ToString("N2") + " with a " + newTrade.CostModifier.ToString("N1") + " modifier.");
+                    gDataRef.ActiveTradeFleets.Add(newTrade); // add the new agreement
                 }
 
                 // update the trade info for each planet

@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-
+﻿
 namespace Constants
 {
     public static class Constant
@@ -75,6 +73,7 @@ namespace Constants
         public const float SupplyPlanetLow = 4f; // 25%
         public const float SupplyPlanetModerate = 2f; // 50%
         public const float SupplyPlanetHigh = 1.5f; // 66%
+        public const float EnergyUsedPerLightYearCoeff = .001f;
 
         // starbase throughput levels
         public const int Level1StarbaseCapacity = 15;

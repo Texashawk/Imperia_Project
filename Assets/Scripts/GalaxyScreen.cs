@@ -794,7 +794,7 @@ namespace Screens.Galaxy
                         {
                             StarData starData = text.stellarObject.GetComponent<Star>().starData;
                             textColor = CheckBioStatus(starData);
-                            text.textObject.GetComponent<Text>().text = starData.Name.ToUpper();
+                            text.textObject.GetComponent<TextMeshProUGUI>().text = starData.Name.ToUpper();
                         }
                         else
                         {
@@ -808,7 +808,7 @@ namespace Screens.Galaxy
                         {
                             StarData starData = text.stellarObject.GetComponent<Star>().starData;
 
-                            text.textObject.GetComponent<Text>().text = starData.Name.ToUpper(); //+ civNames;
+                            text.textObject.GetComponent<TextMeshProUGUI>().text = starData.Name.ToUpper(); //+ civNames;
                         }
                         textColor = Color.gray;
                     }
@@ -819,7 +819,7 @@ namespace Screens.Galaxy
                             StarData starData = text.stellarObject.GetComponent<Star>().starData;
                             if (!gameDataRef.DebugMode)
                             {
-                                text.textObject.GetComponent<Text>().text = starData.Name.ToUpper();
+                                text.textObject.GetComponent<TextMeshProUGUI>().text = starData.Name.ToUpper();
                                 if (starData.IntelValue > Constants.Constant.MediumIntelLevelMax)
                                     textColor = text.ownerColor;
                                 else
@@ -827,7 +827,7 @@ namespace Screens.Galaxy
                             }
                             else
                             {
-                                text.textObject.GetComponent<Text>().text = starData.Name.ToUpper() + "(" + starData.WorldLocation.x.ToString("N0") + "," + starData.WorldLocation.y.ToString("N0") + ")" + text.ownerName + text.ownerTolerance;// stellarObject.civNames;
+                                text.textObject.GetComponent<TextMeshProUGUI>().text = starData.Name.ToUpper() + "(" + starData.WorldLocation.x.ToString("N0") + "," + starData.WorldLocation.y.ToString("N0") + ")" + text.ownerName + text.ownerTolerance;// stellarObject.civNames;
                                 textColor = text.ownerColor;
                             }
                         }
@@ -852,8 +852,8 @@ namespace Screens.Galaxy
                                     scanColor = Color.green;
                                 alphaLevel = GetAlphaGalaxyFadeValue();
                                 text.textObject.SetActive(true);
-                                text.textObject.GetComponent<Text>().fontSize = 10;
-                                text.textObject.GetComponent<Text>().text = starData.IntelLevel.ToString().ToUpper();
+                                text.textObject.GetComponent<TextMeshProUGUI>().fontSize = 10;
+                                text.textObject.GetComponent<TextMeshProUGUI>().text = starData.IntelLevel.ToString().ToUpper() + " INTEL";
 
                                 textColor = new Color(scanColor.r, scanColor.g, scanColor.b, alphaLevel);
                             }
@@ -863,28 +863,28 @@ namespace Screens.Galaxy
 
                                 alphaLevel = GetAlphaProvinceFadeValue();
                                 text.textObject.SetActive(true);
-                                text.textObject.GetComponent<Text>().fontSize = 10;
+                                text.textObject.GetComponent<TextMeshProUGUI>().fontSize = 10;
                                 if (starData.AssignedProvinceID != "")
                                 {
                                     if (gameDataRef.DebugMode || starData.IntelValue == 10)
                                     {
-                                        text.textObject.GetComponent<Text>().text = HelperFunctions.DataRetrivalFunctions.GetProvince(starData.AssignedProvinceID).Name.ToUpper() + " PROVINCE";
-                                        if (starData.IsProvinceHub)
-                                            text.textObject.GetComponent<Text>().text += " CAPITAL";
+                                        text.textObject.GetComponent<TextMeshProUGUI>().text = HelperFunctions.DataRetrivalFunctions.GetProvince(starData.AssignedProvinceID).Name.ToUpper() + " PROVINCE";
+                                        //if (starData.IsProvinceHub)                                      
+                                            //text.textObject.GetComponent<TextMeshProUGUI>().text; // += " CAPITAL"; // flag as capital on text
                                         textColor = new Color(text.ownerColor.r, text.ownerColor.g, text.ownerColor.b, alphaLevel);
                                     }
                                     else
                                     {
-                                        text.textObject.GetComponent<Text>().text = "UNKNOWN";
+                                        text.textObject.GetComponent<TextMeshProUGUI>().text = "UNKNOWN";
                                         textColor = new Color(Color.grey.r, Color.grey.g, Color.grey.b, alphaLevel);
                                     }
                                 }
                                 else
                                 {
                                     if (gameDataRef.DebugMode || starData.IntelValue == 10)
-                                        text.textObject.GetComponent<Text>().text = "NONE";
+                                        text.textObject.GetComponent<TextMeshProUGUI>().text = "NONE";
                                     else
-                                        text.textObject.GetComponent<Text>().text = "UNKNOWN";
+                                        text.textObject.GetComponent<TextMeshProUGUI>().text = "UNKNOWN";
                                     textColor = new Color(Color.grey.r, Color.grey.g, Color.grey.b, alphaLevel);
                                 }
                             }
@@ -904,26 +904,26 @@ namespace Screens.Galaxy
                                 // set the size of the province label
                                 if (text.provinceBounds.width + text.provinceBounds.height > 5000)
                                 {
-                                    text.textObject.GetComponent<Text>().fontSize = 100;
+                                    text.textObject.GetComponent<TextMeshProUGUI>().fontSize = 100;
                                 }
                                 else if (text.provinceBounds.width + text.provinceBounds.height <= 1000)
                                 {
-                                    text.textObject.GetComponent<Text>().fontSize = 20;
+                                    text.textObject.GetComponent<TextMeshProUGUI>().fontSize = 20;
                                 }
                                 else
-                                    text.textObject.GetComponent<Text>().fontSize = (int)((text.provinceBounds.width + text.provinceBounds.height) / 50);
+                                    text.textObject.GetComponent<TextMeshProUGUI>().fontSize = (int)((text.provinceBounds.width + text.provinceBounds.height) / 50);
 
                                 // set size of bounds for province object
-                                text.textObject.GetComponent<RectTransform>().sizeDelta = new Vector2(text.textObject.GetComponent<Text>().fontSize * text.ownerName.Length, text.textObject.GetComponent<Text>().fontSize);
+                                text.textObject.GetComponent<RectTransform>().sizeDelta = new Vector2(text.textObject.GetComponent<TextMeshProUGUI>().fontSize * text.ownerName.Length, text.textObject.GetComponent<TextMeshProUGUI>().fontSize);
 
                                 if (gameDataRef.DebugMode)
                                 {
-                                    text.textObject.GetComponent<Text>().text = text.ownerName.ToUpper();
+                                    text.textObject.GetComponent<TextMeshProUGUI>().text = text.ownerName.ToUpper();
                                     textColor = new Color(text.ownerColor.r, text.ownerColor.g, text.ownerColor.b, alphaLevel);
                                 }
                                 else
                                 {
-                                    text.textObject.GetComponent<Text>().text = text.ownerName.ToUpper();
+                                    text.textObject.GetComponent<TextMeshProUGUI>().text = text.ownerName.ToUpper();
                                     textColor = new Color(text.ownerColor.r, text.ownerColor.g, text.ownerColor.b, alphaLevel);
                                 }
 
@@ -937,14 +937,16 @@ namespace Screens.Galaxy
                     if (text.blockType == StellarObjectDataBlock.eBlockType.Nebula)
                     {
                         if (fov > 80)
-                            text.textObject.GetComponent<Text>().fontSize = 15;
+                            text.textObject.GetComponent<TextMeshProUGUI>().fontSize = 15;
                         else if (fov > 60)
-                            text.textObject.GetComponent<Text>().fontSize = 20;
+                            text.textObject.GetComponent<TextMeshProUGUI>().fontSize = 20;
                         else
-                            text.textObject.GetComponent<Text>().fontSize = 30;
+                            text.textObject.GetComponent<TextMeshProUGUI>().fontSize = 30;
                     }
 
-                    text.textObject.GetComponent<Text>().color = textColor;
+                    text.textObject.GetComponent<TextMeshProUGUI>().color = textColor; // change text to color of the owning civ
+
+                    // reset location of data line blocks
                     Vector3 nameVector;
                     if (text.blockType != StellarObjectDataBlock.eBlockType.Province)
                     {
@@ -954,14 +956,24 @@ namespace Screens.Galaxy
                     {
                         nameVector = Camera.main.WorldToScreenPoint(text.provinceObjectLocation); // gets the screen point of the star's transform position
                     }
-                    if (text.blockType != StellarObjectDataBlock.eBlockType.Lower)
-                        textLocation = new Vector3(nameVector.x, nameVector.y + 20 + ((120 - zoomValue) / 4.3f), 0); // where the text box is located
-                    else if (text.blockType != StellarObjectDataBlock.eBlockType.Province)
+                    if (text.blockType == StellarObjectDataBlock.eBlockType.Star) // if a system data block
+                        textLocation = nameVector;
+                        //textLocation = new Vector3(nameVector.x - (text.textObject.GetComponent<RectTransform>().rect.width / 2), nameVector.y + 20 + ((120 - zoomValue) / 4.3f), 0); // where the text box is located
+                    else if (text.blockType == StellarObjectDataBlock.eBlockType.Province) // if a province name
                     {
                         textLocation = nameVector;
+                        text.textObject.GetComponentInChildren<Image>().enabled = false; // turn off line
+                        text.textObject.GetComponent<TextMeshProUGUI>().fontSizeMin = 15; // big province names!
+                        text.textObject.GetComponent<TextMeshProUGUI>().enableAutoSizing = false; // big province names!
                     }
-                    else
-                        textLocation = new Vector3(nameVector.x, nameVector.y - 5 - ((120 - zoomValue) / 4.4f), 0); // where the text box is located
+                    else // if lower system data block
+                    {                    
+                        //textLocation = nameVector;
+                        textLocation = new Vector3(nameVector.x, nameVector.y -13, 0); // where the text box is located
+                        text.textObject.GetComponentInChildren<Image>().enabled = false; // turn off line
+                        text.textObject.GetComponent<TextMeshProUGUI>().characterSpacing = 3; // shorten spacing of characters
+                        text.textObject.GetComponent<TextMeshProUGUI>().fontSizeMax = 11; // shorten spacing of characters
+                    }
                     text.textObject.transform.localPosition = new Vector3(textLocation.x - (Screen.width / 2), textLocation.y - (Screen.height / 2), 0); // reset after making a parent to canvas relative coordinates (pivot in center)
 
                 }
@@ -1079,13 +1091,13 @@ namespace Screens.Galaxy
                         textLocation2 = new Vector3(nameVector.x, nameVector.y, 0); // where the lower text box is located
 
                         // create the text objects
-                        GameObject starName = Instantiate(starNameObject, textLocation, Quaternion.identity) as GameObject;                      
+                        GameObject systemUIDataLine = Instantiate(starNameObject, textLocation, Quaternion.identity) as GameObject;                      
                         StellarObjectDataBlock starDataBlock = new StellarObjectDataBlock();  // create a new star data block
-                        GameObject provinceName = Instantiate(starNameObject, textLocation2, Quaternion.identity) as GameObject;
+                        GameObject provinceUIDataLine = Instantiate(starNameObject, textLocation2, Quaternion.identity) as GameObject;
                         StellarObjectDataBlock lowerProvinceDataBlock = new StellarObjectDataBlock(); // create the lower data block for province info
 
-                        starName.transform.SetParent(galaxyPlanetInfoCanvas.transform.Find("Galaxy Data Panel"), true); // attach the blocks to the panel
-                        provinceName.transform.SetParent(galaxyPlanetInfoCanvas.transform.Find("Galaxy Data Panel"), true);  // attach the blocks to the panel
+                        systemUIDataLine.transform.SetParent(galaxyPlanetInfoCanvas.transform.Find("Galaxy Data Panel"), true); // attach the blocks to the panel
+                        provinceUIDataLine.transform.SetParent(galaxyPlanetInfoCanvas.transform.Find("Galaxy Data Panel"), true);  // attach the blocks to the panel
 
                         // add the owning civs if present                      
                         foreach (Civilization civ in gameDataRef.CivList)
@@ -1126,17 +1138,17 @@ namespace Screens.Galaxy
                         }
 
                         if (!gameDataRef.DebugMode)
-                            starName.GetComponent<Text>().text = star.GetComponent<Star>().starData.Name.ToUpper() + "[" + star.GetComponent<Star>().starData.IntelValue.ToString("N0") + "]"; //+ civNames;
+                            systemUIDataLine.GetComponent<TextMeshProUGUI>().text = star.GetComponent<Star>().starData.Name.ToUpper() + "[" + star.GetComponent<Star>().starData.IntelValue.ToString("N0") + "]"; //+ civNames;
                         else
-                            starName.GetComponent<Text>().text = star.GetComponent<Star>().starData.Name.ToUpper() + civNames;
-                        starName.GetComponent<Text>().color = civColor;
-                        starName.transform.localPosition = new Vector3(textLocation.x - (Screen.width / 2),textLocation.y - (Screen.height / 2),0); // reset after making a parent to canvas relative coordinates (pivot in center)
-                        starName.transform.localScale = new Vector3(1, 1, 1); // do not scale
-                        starName.name = star.GetComponent<Star>().starData.ID;
+                            systemUIDataLine.GetComponent<TextMeshProUGUI>().text = star.GetComponent<Star>().starData.Name.ToUpper() + civNames;
+                        systemUIDataLine.GetComponent<TextMeshProUGUI>().color = civColor;
+                        systemUIDataLine.transform.localPosition = new Vector3(textLocation.x - (Screen.width / 2),textLocation.y - (Screen.height / 2),0); // reset after making a parent to canvas relative coordinates (pivot in center)
+                        systemUIDataLine.transform.localScale = new Vector3(1, 1, 1); // do not scale
+                        systemUIDataLine.name = star.GetComponent<Star>().starData.ID;
 
-                        provinceName.transform.localPosition = new Vector3(textLocation.x - (Screen.width / 2), textLocation.y - (Screen.height / 2), 0); // reset after making a parent to canvas relative coordinates (pivot in center)
-                        provinceName.transform.localScale = new Vector3(1, 1, 1); // do not scale
-                        provinceName.name = star.GetComponent<Star>().starData.ID;
+                        provinceUIDataLine.transform.localPosition = new Vector3(textLocation.x - (Screen.width / 2), textLocation.y - (Screen.height / 2), 0); // reset after making a parent to canvas relative coordinates (pivot in center)
+                        provinceUIDataLine.transform.localScale = new Vector3(1, 1, 1); // do not scale
+                        provinceUIDataLine.name = star.GetComponent<Star>().starData.ID;
 
                         // assign to the star data block
                         starDataBlock.objectRotation = 0f;
@@ -1146,7 +1158,7 @@ namespace Screens.Galaxy
                         starDataBlock.ownerColor = civColor;
                         
                         starDataBlock.ownerTolerance = civTolerance;
-                        starDataBlock.textObject = starName;
+                        starDataBlock.textObject = systemUIDataLine;
                         listTextObjectsCreated.Add(starDataBlock);
 
                         // assign to the secondary data block
@@ -1155,7 +1167,7 @@ namespace Screens.Galaxy
                         lowerProvinceDataBlock.blockType = StellarObjectDataBlock.eBlockType.Lower;
                         lowerProvinceDataBlock.stellarObject = star;
                         lowerProvinceDataBlock.ownerColor = civColor;
-                        lowerProvinceDataBlock.textObject = provinceName;
+                        lowerProvinceDataBlock.textObject = provinceUIDataLine;
                         listTextObjectsCreated.Add(lowerProvinceDataBlock);
 
                     }
@@ -1175,11 +1187,11 @@ namespace Screens.Galaxy
                         StellarObjectDataBlock stellarObjectDataBlock = new StellarObjectDataBlock();  // create a new star data block
                         
                         stellarObjectName.transform.SetParent(galaxyPlanetInfoCanvas.transform, true);
-                        stellarObjectName.GetComponent<Text>().text = nebula.GetComponent<Nebula>().nebulaData.Name.ToUpper();
+                        stellarObjectName.GetComponent<TextMeshProUGUI>().text = nebula.GetComponent<Nebula>().nebulaData.Name.ToUpper();
                         stellarObjectName.transform.localPosition = new Vector3(textLocation.x - (Screen.width / 2), textLocation.y - (Screen.height / 2), 1); // reset after making a parent to canvas relative coordinates (pivot in center)
                         stellarObjectName.transform.localScale = new Vector3(1, 1, 1); // do not scale
-                        stellarObjectName.GetComponent<LetterSpacing>().spacing = 40; // space out the letters
-                        stellarObjectName.GetComponent<Text>().fontSize = 20;
+                        stellarObjectName.GetComponent<TextMeshProUGUI>().characterSpacing = 40; // space out the letters
+                        stellarObjectName.GetComponent<TextMeshProUGUI>().fontSize = 20;
 
                         // assign to the star data block
                         stellarObjectDataBlock.objectRotation = nebula.GetComponent<Nebula>().nebulaData.TextRotation;

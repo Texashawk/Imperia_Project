@@ -784,7 +784,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 float baseCapacity = StarbaseCapacity;
                 GlobalGameData gData = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
 
-                foreach (TradeAgreement tradeAg in gData.ActiveTradeAgreements)
+                foreach (TradeFleet tradeAg in gData.ActiveTradeFleets)
                 {
                     if (tradeAg.ExportPlanetID == this.ID)
                     {
@@ -1056,9 +1056,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 return change;
             }
            
-        }
-
-       
+        }     
 
         public void SendTaxUpward()
         {
@@ -1092,20 +1090,20 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
             }
         }
 
-        public List<TradeAgreement> ActiveExportTradeAgreements
+        public List<TradeFleet> ActiveTradeFleets
         {
             get
             {
-                List<TradeAgreement> tradeAgreements = new List<TradeAgreement>();
+                List<TradeFleet> tradeFleets = new List<TradeFleet>();
                 GlobalGameData gData = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
 
-                foreach (TradeAgreement tradeAg in gData.ActiveTradeAgreements)
+                foreach (TradeFleet tradeAg in gData.ActiveTradeFleets)
                 {
                     if (tradeAg.ExportPlanetID == ID)
-                        tradeAgreements.Add(tradeAg);
+                        tradeFleets.Add(tradeAg);
                 }
 
-                return tradeAgreements;
+                return tradeFleets;
             }
         }
         public float FoodExportAvailable
@@ -1115,9 +1113,9 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 float exportAvailable = FoodDifference - DomesticFoodAvailable;
                 if (exportAvailable > 0)
                 {
-                    foreach (TradeAgreement tradeAgreement in ActiveExportTradeAgreements)
+                    foreach (TradeFleet tradeAgreement in ActiveTradeFleets)
                     {
-                        exportAvailable -= tradeAgreement.FoodSent;
+                        exportAvailable -= tradeAgreement.FoodOnBoard;
                     }
                 }
                 else
@@ -1133,9 +1131,9 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 float exportAvailable = EnergyDifference;
                 if (exportAvailable > 0)
                 {
-                    foreach (TradeAgreement tradeAgreement in ActiveExportTradeAgreements)
+                    foreach (TradeFleet tradeAgreement in ActiveTradeFleets)
                     {                     
-                        exportAvailable -= tradeAgreement.EnergySent;                        
+                        exportAvailable -= tradeAgreement.EnergyOnBoard;                        
                     }
                 }
                 else
@@ -1152,9 +1150,9 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 float exportAvailable = AlphaTotalDifference;
                 if (exportAvailable > 0)
                 {
-                    foreach (TradeAgreement tradeAgreement in ActiveExportTradeAgreements)
+                    foreach (TradeFleet tradeAgreement in ActiveTradeFleets)
                     {                       
-                        exportAvailable -= tradeAgreement.AlphaSent;                      
+                        exportAvailable -= tradeAgreement.BasicOnBoard;                      
                     }
                 }
                 else
@@ -1171,9 +1169,9 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 float exportAvailable = HeavyTotalDifference;
                 if (exportAvailable > 0)
                 {
-                    foreach (TradeAgreement tradeAgreement in ActiveExportTradeAgreements)
+                    foreach (TradeFleet tradeAgreement in ActiveTradeFleets)
                     {                       
-                        exportAvailable -= tradeAgreement.HeavySent;                      
+                        exportAvailable -= tradeAgreement.HeavyOnBoard;                      
                     }
                 }
                 else
@@ -1190,9 +1188,9 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 float exportAvailable = RareTotalDifference;
                 if (exportAvailable > 0)
                 {
-                    foreach (TradeAgreement tradeAgreement in ActiveExportTradeAgreements)
+                    foreach (TradeFleet tradeAgreement in ActiveTradeFleets)
                     {                
-                        exportAvailable -= tradeAgreement.RareSent;
+                        exportAvailable -= tradeAgreement.RareOnBoard;
                     }
                 }
                 else
@@ -2156,9 +2154,9 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
             int heavyBPMultiplier = 0;
             int rareBPMultiplier = 0;
             
-            float AlphaMaterialsRequired = Constants.Constant.AlphaMaterialsPerInfraLevel * (100 / AdjustedBio) * Mathf.Pow(targetRegion.HabitatationInfrastructureLevel,3);
-            float HeavyMaterialsRequired = Constants.Constant.HeavyMaterialsPerInfraLevel * (100 / AdjustedBio) * Mathf.Pow(targetRegion.HabitatationInfrastructureLevel, 3);
-            float RareMaterialsRequired = Constants.Constant.RareMaterialsPerInfraLevel * (100 / AdjustedBio) * Mathf.Pow(targetRegion.HabitatationInfrastructureLevel, 3);
+            float AlphaMaterialsRequired = Constant.AlphaMaterialsPerInfraLevel * (100 / AdjustedBio) * Mathf.Pow(targetRegion.HabitatationInfrastructureLevel,3);
+            float HeavyMaterialsRequired = Constant.HeavyMaterialsPerInfraLevel * (100 / AdjustedBio) * Mathf.Pow(targetRegion.HabitatationInfrastructureLevel, 3);
+            float RareMaterialsRequired = Constant.RareMaterialsPerInfraLevel * (100 / AdjustedBio) * Mathf.Pow(targetRegion.HabitatationInfrastructureLevel, 3);
 
             if (AlphaBPsGeneratedMonthly > 0)
             {
@@ -2759,13 +2757,13 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 GlobalGameData gData = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
                 float totalAlpha = 0f;
 
-                if (gData.ActiveTradeAgreements.Exists(p => p.ImportPlanetID == this.ID))
+                if (gData.ActiveTradeFleets.Exists(p => p.ImportPlanetID == this.ID))
                 {
-                    List<TradeAgreement> expList = gData.ActiveTradeAgreements.FindAll(p => p.ImportPlanetID == this.ID);
-                    foreach (TradeAgreement t in expList)
+                    List<TradeFleet> expList = gData.ActiveTradeFleets.FindAll(p => p.ImportPlanetID == this.ID);
+                    foreach (TradeFleet t in expList)
                     {
-                        if (t.AlphaSent > 0)
-                            totalAlpha += t.AlphaSent;
+                        if (t.BasicOnBoard > 0)
+                            totalAlpha += t.BasicOnBoard;
                     }
                 }
                 return totalAlpha;
@@ -2779,13 +2777,13 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 GlobalGameData gData = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
                 float totalAlpha = 0f;
 
-                if (gData.ActiveTradeAgreements.Exists(p => p.ExportPlanetID == this.ID))
+                if (gData.ActiveTradeFleets.Exists(p => p.ExportPlanetID == this.ID))
                 {
-                    List<TradeAgreement> expList = gData.ActiveTradeAgreements.FindAll(p => p.ExportPlanetID == this.ID);
-                    foreach (TradeAgreement t in expList)
+                    List<TradeFleet> expList = gData.ActiveTradeFleets.FindAll(p => p.ExportPlanetID == this.ID);
+                    foreach (TradeFleet t in expList)
                     {
-                        if (t.AlphaSent > 0)
-                            totalAlpha += t.AlphaSent;
+                        if (t.BasicOnBoard > 0)
+                            totalAlpha += t.BasicOnBoard;
                     }
                 }
                 return totalAlpha;
@@ -2799,13 +2797,13 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 GlobalGameData gData = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
                 float totalHeavy = 0f;
 
-                if (gData.ActiveTradeAgreements.Exists(p => p.ImportPlanetID == this.ID))
+                if (gData.ActiveTradeFleets.Exists(p => p.ImportPlanetID == this.ID))
                 {
-                    List<TradeAgreement> expList = gData.ActiveTradeAgreements.FindAll(p => p.ImportPlanetID == this.ID);
-                    foreach (TradeAgreement t in expList)
+                    List<TradeFleet> expList = gData.ActiveTradeFleets.FindAll(p => p.ImportPlanetID == this.ID);
+                    foreach (TradeFleet t in expList)
                     {
-                        if (t.HeavySent > 0)
-                            totalHeavy += t.HeavySent;
+                        if (t.HeavyOnBoard > 0)
+                            totalHeavy += t.HeavyOnBoard;
                     }
                 }
                 return totalHeavy;
@@ -2819,13 +2817,13 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 GlobalGameData gData = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
                 float totalHeavy = 0f;
 
-                if (gData.ActiveTradeAgreements.Exists(p => p.ExportPlanetID == this.ID))
+                if (gData.ActiveTradeFleets.Exists(p => p.ExportPlanetID == this.ID))
                 {
-                    List<TradeAgreement> expList = gData.ActiveTradeAgreements.FindAll(p => p.ExportPlanetID == this.ID);
-                    foreach (TradeAgreement t in expList)
+                    List<TradeFleet> expList = gData.ActiveTradeFleets.FindAll(p => p.ExportPlanetID == this.ID);
+                    foreach (TradeFleet t in expList)
                     {
-                        if (t.HeavySent > 0)
-                            totalHeavy += t.HeavySent;
+                        if (t.HeavyOnBoard > 0)
+                            totalHeavy += t.HeavyOnBoard;
                     }
                 }
                 return totalHeavy;
@@ -2839,13 +2837,13 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 GlobalGameData gData = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
                 float totalRare = 0f;
 
-                if (gData.ActiveTradeAgreements.Exists(p => p.ImportPlanetID == this.ID))
+                if (gData.ActiveTradeFleets.Exists(p => p.ImportPlanetID == this.ID))
                 {
-                    List<TradeAgreement> expList = gData.ActiveTradeAgreements.FindAll(p => p.ImportPlanetID == this.ID);
-                    foreach (TradeAgreement t in expList)
+                    List<TradeFleet> expList = gData.ActiveTradeFleets.FindAll(p => p.ImportPlanetID == this.ID);
+                    foreach (TradeFleet t in expList)
                     {
-                        if (t.RareSent > 0)
-                            totalRare += t.RareSent;
+                        if (t.RareOnBoard > 0)
+                            totalRare += t.RareOnBoard;
                     }
                 }
                 return totalRare;
@@ -2859,13 +2857,13 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 GlobalGameData gData = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
                 float totalRare = 0f;
 
-                if (gData.ActiveTradeAgreements.Exists(p => p.ExportPlanetID == this.ID))
+                if (gData.ActiveTradeFleets.Exists(p => p.ExportPlanetID == this.ID))
                 {
-                    List<TradeAgreement> expList = gData.ActiveTradeAgreements.FindAll(p => p.ExportPlanetID == this.ID);
-                    foreach (TradeAgreement t in expList)
+                    List<TradeFleet> expList = gData.ActiveTradeFleets.FindAll(p => p.ExportPlanetID == this.ID);
+                    foreach (TradeFleet t in expList)
                     {
-                        if (t.RareSent > 0)
-                            totalRare += t.RareSent;
+                        if (t.RareOnBoard > 0)
+                            totalRare += t.RareOnBoard;
                     }
                 }
                 return totalRare;
