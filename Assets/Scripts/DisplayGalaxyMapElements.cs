@@ -2,7 +2,7 @@
 using System.Collections;
 using CameraScripts;
 using UnityEngine.UI;
-using UI.Manager;
+using Managers;
 
 public class DisplayGalaxyMapElements : MonoBehaviour
 {

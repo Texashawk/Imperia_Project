@@ -2,16 +2,16 @@
 using UnityEngine.UI;
 using UI.Manager;
 using StellarObjects;
+using TMPro;
 
 public class DynamicResourcesZone : MonoBehaviour
 {
-
     private GlobalGameData gameDataRef;
-    private Text empireTreasuryRevenues;
-    private Text empireTreasuryExpenses;
-    private Text focusObjectName;
+    private TextMeshProUGUI empireTreasuryRevenues;
+    private TextMeshProUGUI empireTreasuryExpenses;
+    private TextMeshProUGUI focusObjectName;
     private UIManager uiManagerRef;
-    private Text emperorAP;
+    private TextMeshProUGUI emperorAP;
 
     // Use this for initialization
     void Awake()
@@ -19,10 +19,10 @@ public class DynamicResourcesZone : MonoBehaviour
         // initialize all empire bar stats
         gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>(); // get global game data (date, location, version, etc)
         uiManagerRef = GameObject.Find("UI Engine").GetComponent<UIManager>(); // get global game data (date, location, version, etc)
-        empireTreasuryRevenues = GameObject.Find("EmpireTreasuryRevenues").GetComponent<Text>();
-        empireTreasuryExpenses = GameObject.Find("EmpireTreasuryExpenses").GetComponent<Text>();
-        focusObjectName = GameObject.Find("Focus Object Name").GetComponent<Text>();
-        emperorAP = GameObject.Find("Action Points").GetComponent<Text>();
+        empireTreasuryRevenues = GameObject.Find("EmpireTreasuryRevenues").GetComponent<TextMeshProUGUI>();
+        empireTreasuryExpenses = GameObject.Find("EmpireTreasuryExpenses").GetComponent<TextMeshProUGUI>();
+        focusObjectName = GameObject.Find("Focus Object Name").GetComponent<TextMeshProUGUI>();
+        emperorAP = GameObject.Find("Action Points").GetComponent<TextMeshProUGUI>();
     }
 
     // Update is called once per frame

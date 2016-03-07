@@ -102,9 +102,9 @@ namespace Screens.Galaxy
         private GameObject systemUICanvas;
         private GameObject selectedUnitInfoCanvas;
         private GameObject systemHeaderImage; // system / planet header
-        private TextMeshProUGUI systemDisplaySystemName;
+        
         private Text versionNumber;
-        private Text systemDisplaySecondaryDataLine;
+        
         private Text systemDisplayTertiaryDataLine;
         private Text systemIntelLevel;
         private UIManager.eViewMode zoomLevel = UIManager.eViewMode.Galaxy;
@@ -130,9 +130,8 @@ namespace Screens.Galaxy
             systemUICanvas = GameObject.Find("System UI Canvas");
             eventScrollView = GameObject.Find("Event ScrollView");
             selectedUnitInfoCanvas = GameObject.Find("Selected Unit Information Canvas");
-            systemDisplaySystemName = GameObject.Find("System Name Text").GetComponent<TextMeshProUGUI>();
-            systemDisplaySecondaryDataLine = GameObject.Find("Secondary Header Line").GetComponent<Text>();
-            systemDisplayTertiaryDataLine = GameObject.Find("Tertiary Header Line").GetComponent<Text>();
+            
+            //systemDisplayTertiaryDataLine = GameObject.Find("Tertiary Header Line").GetComponent<Text>();
             galaxyMapModeInfo = GameObject.Find("MapModeInfo").GetComponent<TextMeshProUGUI>();
             galaxyMapSubModeInfo = GameObject.Find("MapSubModeInfo").GetComponent<TextMeshProUGUI>();
             vitalStatisticsZone = GameObject.Find("Vital Statistics Zone").GetComponent<Image>();
@@ -1357,9 +1356,7 @@ namespace Screens.Galaxy
         {
             HideStellarObjectsNotInSelectedProvince();
             selectedUnitInfoCanvas.SetActive(true); // show information panel
-            systemDisplaySystemName.text = GetSelectedProvince().Name.ToUpper() + " PROVINCE";
-            systemDisplaySecondaryDataLine.text = GetSelectedProvince().OwningCiv.Name.ToUpper() + " SOVEREIGNITY";
-            systemDisplayTertiaryDataLine.text = GetSelectedProvince().PlanetList.Count.ToString("N0") + " TOTAL PLANETS";
+            
         }
 
         private Province GetSelectedProvince()
