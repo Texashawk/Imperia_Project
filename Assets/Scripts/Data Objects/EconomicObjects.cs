@@ -7,7 +7,7 @@ using CivObjects;
 namespace EconomicObjects
 {
 
-    public class TradeAgreement // This represents the active and pending trades in the game
+    public class Trade // This represents the active and pending trades in the game
     {
         public enum eTradeStatus : int
         {
@@ -30,6 +30,7 @@ namespace EconomicObjects
         public int AmountRequested { get; set; }
         public decimal OfferPerUnit { get; set; }
         public int RunsRequested { get; set; }
+        public string TradeID { get; set; } // randomly generated ID to link trades to trade fleets
 
         private double _securityModifier;
         public double SecurityModifier
@@ -72,6 +73,24 @@ namespace EconomicObjects
         }
     }
 
+    public class TradeProposal // this represents what each viceroy has valued each resource at, how much they want, what type of resource, and how much they are willing to pay for each one
+    {
+        public enum eTradeResource : int
+        {
+            Food,
+            Energy,
+            Basic,
+            Heavy,
+            Rare
+        }
+
+        public eTradeResource TradeResource { get; set; } // what type of resource
+        public float Importance { get; set; } // the assigned importance of this resource
+        public float AmountDesired { get; set; } // how much the viceroy wants to get
+        public float MaxCrownsToPay { get; set; } // max willing to pay for this proposal
+        public bool NoValidTradePartners { get; set; } // are there any valid trade partners?
+    }
+
     public class TradeFleet // This will have to be changed to reflect the new trade system, probably will have to be called TradeFleet
     {
         public enum eTradeFleetStatus : int
@@ -91,6 +110,7 @@ namespace EconomicObjects
         public string Name { get; set;} // name of fleet - for flavor only
         public eTradeFleetStatus Status { get; set; }
         public eTradeFleetType Type { get; set; }
+        public string TradeLinkedID { get; set; } // which trade is linked to this fleet
         public int RunsRemaining { get; set; } // how many times the trade fleet will make the current run
         public float Distance
         {

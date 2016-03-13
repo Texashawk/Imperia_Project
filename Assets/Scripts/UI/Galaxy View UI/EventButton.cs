@@ -12,7 +12,7 @@ public class EventButton : MonoBehaviour
     private string planetLocationID;
     private string systemLocationID;
     private GraphicAssets gAssets;
-    public Text ButtonText;
+    //public Text ButtonText;
     public Image ButtonImage;
     public EventScrollView ScrollView;
 
@@ -23,38 +23,38 @@ public class EventButton : MonoBehaviour
 
     public void SetName(string name)
     {
-        ButtonText.text = name;
+        //ButtonText.text = name;
     }
 
     public void SetAlertLevel(GameEvent.eEventLevel alertLevel)
     {
         Color orange = new Color(1f,.55f,0f);
-        switch (alertLevel)
-        {
-            case GameEvent.eEventLevel.Informational:
-                ButtonText.color = Color.white;
-                break;
+        //switch (alertLevel)
+        //{
+        //    case GameEvent.eEventLevel.Informational:
+        //        ButtonText.color = Color.white;
+        //        break;
 
-            case GameEvent.eEventLevel.Positive:
-                ButtonText.color = Color.green;
-                break;
+        //    case GameEvent.eEventLevel.Positive:
+        //        ButtonText.color = Color.green;
+        //        break;
 
-            case GameEvent.eEventLevel.Moderate:
-                ButtonText.color = Color.yellow;
-                break;
+        //    case GameEvent.eEventLevel.Moderate:
+        //        ButtonText.color = Color.yellow;
+        //        break;
 
-            case GameEvent.eEventLevel.Serious:
-                ButtonText.color = orange;
-                break;
+        //    case GameEvent.eEventLevel.Serious:
+        //        ButtonText.color = orange;
+        //        break;
 
-            case GameEvent.eEventLevel.Critical:
-                ButtonText.color = Color.red;
-                break;
+        //    case GameEvent.eEventLevel.Critical:
+        //        ButtonText.color = Color.red;
+        //        break;
 
-            default:
-                ButtonText.color = Color.white;
-                break;
-        }
+        //    default:
+        //        ButtonText.color = Color.white;
+        //        break;
+        //}
     }
 
     public void SetID(string ID)

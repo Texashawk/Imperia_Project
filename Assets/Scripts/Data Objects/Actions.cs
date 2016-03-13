@@ -208,12 +208,12 @@ namespace Actions
             Relationship firstCharacterInitialState = reprimandingChar.Relationships[reprimandedChar.ID];
             Relationship secondCharacterInitialState = reprimandedChar.Relationships[reprimandingChar.ID];
             string conversationFlags = ""; // flags that are added to the conversation
-            int speechEffectiveness = 0;
+            float speechEffectiveness = 0;
 
             // code to change the relationships here
             conversationFlags += "[HATE]";
 
-            speechEffectiveness = Random.Range(30, reprimandingChar.Charm) + Random.Range(0, reprimandingChar.Intelligence);
+            speechEffectiveness = Random.Range(30f, reprimandingChar.Charm) + Random.Range(0, reprimandingChar.Intelligence);
 
             if (reprimandedChar.Relationships[reprimandingChar.ID].Trust > 50)
             {

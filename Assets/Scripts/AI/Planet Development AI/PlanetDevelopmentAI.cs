@@ -90,8 +90,8 @@ public static class PlanetDevelopmentAI
 
                 adminPriority += ((float)pData.Rank * 1.5f);
 
-                farmPriority += vic.Empathy / 20f; // characters with high Empathy will focus on food and power
-                highTechPriority += vic.Empathy / 20f;
+                farmPriority += vic.Humanity / 20f; // characters with high Empathy will focus on food and power
+                highTechPriority += vic.Humanity / 20f;
 
                 // now determine based on tendencies of viceroy
                 farmPriority += (float)(vic.PopsTendency / 100f);

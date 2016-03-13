@@ -144,16 +144,25 @@ namespace CharacterObjects
         public int Admin { get; set; }
 
         // primary character attributes (will change over the game)
-        public int Honor { get; set; }
-        public int Intelligence { get; set; }
-        public int Passion { get; set; }
-        public int Piety { get; set; }
-        public int Empathy { get; set; }
-        public int Charm { get; set; }
-        public int Drive { get; set; }
-        public int Discretion { get; set; }
-        public int Caution { get; set; }
-        public int Morality { get; set; }
+        
+        
+        
+        // the motive attributes
+        public float Piety { get; set; }
+        public float Honor { get; set; }
+        public float Humanity { get; set; }
+
+        // the emotion attributes
+        public float Passion { get; set; }
+        public float Caution { get; set; }
+        public float Drive { get; set; }
+
+        // the talent attributes
+        public float Intelligence { get; set; }
+        public float Charm { get; set; }  
+        public float Discretion { get; set; }
+       
+        
         
         public string GenderPronoun
         {

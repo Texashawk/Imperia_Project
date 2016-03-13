@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using UI.Manager;
+using Managers;
 using StellarObjects;
 using TMPro;
 
@@ -37,7 +37,7 @@ public class DynamicResourcesZone : MonoBehaviour
         if (uiManagerRef.ViewMode == UIManager.eViewMode.System)
             focusObjectName.text = "THE " + uiManagerRef.SelectedStellarObject.GetComponent<Star>().starData.Name.ToUpper() + " SYSTEM"; // the selected star's name    
         else if (uiManagerRef.ViewMode == UIManager.eViewMode.Planet)
-            focusObjectName.text = "THE PLANET OF " + uiManagerRef.SelectedStellarObject.GetComponent<Planet>().planetData.Name.ToUpper(); // the selected star's name
+            focusObjectName.text = "THE PLANET OF " + uiManagerRef.selectedPlanet.Name.ToUpper(); // the selected star's name
         else
             focusObjectName.text = "THE CELESTIAL EMPIRE"; // your empire's name
 

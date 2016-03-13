@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using StellarObjects;
 using CameraScripts;
 
 namespace Managers  
@@ -17,9 +18,12 @@ namespace Managers
 
         private Camera mainCamera; // accessor for the camera
         private GalaxyCameraScript gCameraRef; // accessor for the camera script
+        private GameObject selectedItemPanel; // reference for the selected item panel
         private float cameraFOV; // current FOV of the camera
 
         public Transform SelectedStellarObject; // what current stellar object is active
+        public PlanetData selectedPlanet; // if a planet is selected, what kind
+        public StarData selectedSystem; // if a system is selected, what kind
 
         // constants for zoom levels 
         public const int galaxyMinZoomLevel = 120;
@@ -36,9 +40,22 @@ namespace Managers
         {
             mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>(); // get global game data (date, location, version, etc)
             gCameraRef = mainCamera.GetComponent<GalaxyCameraScript>(); // get camera ref
+            selectedItemPanel = GameObject.Find("Selected Item Panel"); // selected item panel
         }
 
         // Update is called once per frame
+        void Update()
+        {           
+            if (ViewMode == eViewMode.Galaxy || ViewMode == eViewMode.Province)
+            {
+                selectedItemPanel.SetActive(false);
+            }
+            else
+            {
+                selectedItemPanel.SetActive(true);
+            }
+        }
+
         void LateUpdate()
         {
             cameraFOV = mainCamera.fieldOfView;

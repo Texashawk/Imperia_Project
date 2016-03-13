@@ -1,10 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System;
 using System.Collections.Generic;
 using StellarObjects;
 using HelperFunctions;
-using System.IO;
 using Constants;
 
 namespace PlanetObjects
@@ -101,7 +98,7 @@ namespace PlanetObjects
         {
             get
             {
-                return HelperFunctions.DataRetrivalFunctions.GetPlanet(PlanetLocationID);
+                return DataRetrivalFunctions.GetPlanet(PlanetLocationID);
             }
         }
 

@@ -85,95 +85,51 @@ namespace CivObjects
             }
         }
 
+        // rolling price for each resource in this civilization
+        public float[] Last6MonthsFoodPrices = new float[Constant.RollingMonthsToDeterminePrices];
+        public float[] Last6MonthsEnergyPrices = new float[Constant.RollingMonthsToDeterminePrices];
+        public float[] Last6MonthsBasicPrices = new float[Constant.RollingMonthsToDeterminePrices];
+        public float[] Last6MonthsHeavyPrices = new float[Constant.RollingMonthsToDeterminePrices];
+        public float[] Last6MonthsRarePrices = new float[Constant.RollingMonthsToDeterminePrices];
+
+        // current resource prices for this civ
+        private float _currentFoodPrice;
         public float CurrentFoodPrice
         {
-            get
-            {
-                float totalFood = 1;             
-                float foodPrice = 0;
-
-                foreach (PlanetData pData in PlanetList)
-                {
-                    if (pData.FoodDifference > 0)
-                        totalFood += pData.FoodDifference;
-                }
-
-                foodPrice = (TotalResourcesGenerated / totalFood) * Constants.Constant.ResourceBaseCost;
-                return foodPrice;
-            }
+            get { return _currentFoodPrice; }
+            set { _currentFoodPrice = Mathf.Clamp(value, Constant.MinResourcePrice, Constant.MaxResourcePrice); }
         }
+
+        private float _currentEnergyPrice;
         public float CurrentEnergyPrice
         {
-            get
-            {
-                float totalEnergy = 1;
-                float energyPrice = 0;
-
-                foreach (PlanetData pData in PlanetList)
-                {
-                    if (pData.EnergyDifference > 0)
-                        totalEnergy += pData.EnergyDifference;
-                }
-
-                energyPrice = (TotalResourcesGenerated / totalEnergy) * Constants.Constant.ResourceBaseCost;
-                return energyPrice;
-            }
+            get { return _currentEnergyPrice; }
+            set { _currentEnergyPrice = Mathf.Clamp(value, Constant.MinResourcePrice, Constant.MaxResourcePrice); }
         }
 
-        public float CurrentAlphaPrice
-        {
-            get
-            {
-                float totalAlpha = 1;
-                float alphaPrice = 0;
-
-                foreach (PlanetData pData in PlanetList)
-                {
-                    if (pData.AlphaPreProductionDifference > 0)
-                        totalAlpha += pData.AlphaPreProductionDifference;
-                }
-
-                alphaPrice = (TotalResourcesGenerated / totalAlpha) * Constants.Constant.ResourceBaseCost;
-                return alphaPrice;
-            }
+        private float _currentBasicPrice;
+        public float CurrentBasicPrice
+        {          
+            get { return _currentBasicPrice; }
+            set { _currentBasicPrice = Mathf.Clamp(value, Constant.MinResourcePrice, Constant.MaxResourcePrice); }           
         }
 
+        private float _currentHeavyPrice;
         public float CurrentHeavyPrice
         {
-            get
-            {
-                float totalHeavy = 1;
-                float heavyPrice = 0;
-
-                foreach (PlanetData pData in PlanetList)
-                {
-                    if (pData.HeavyPreProductionDifference > 0)
-                        totalHeavy += pData.HeavyPreProductionDifference;
-                }
-
-                heavyPrice = (TotalResourcesGenerated / totalHeavy) * Constants.Constant.ResourceBaseCost;
-                return heavyPrice;
-            }
+            get { return _currentHeavyPrice; }
+            set { _currentHeavyPrice = Mathf.Clamp(value, Constant.MinResourcePrice, Constant.MaxResourcePrice); }
         }
-        public float CurrentRarePrice
+
+        private float _currentRarePrice;
+        public float CurrentRarePrice    
         {
-            get
-            {
-                float totalRare = 1;
-                float rarePrice = 0;
-
-                foreach (PlanetData pData in PlanetList)
-                {
-                    if (pData.RarePreProductionDifference > 0)
-                        totalRare += pData.RarePreProductionDifference;
-                }
-
-                rarePrice = (TotalResourcesGenerated / totalRare) * Constants.Constant.ResourceBaseCost;
-                return rarePrice;
-            }
+            get { return _currentRarePrice; }
+            set { _currentRarePrice = Mathf.Clamp(value, Constant.MinResourcePrice, Constant.MaxResourcePrice); }
         }
+        
 
-        public List<string> PlanetIDList = new List<string>(); // which planets does the civilization own?
+        public List<string> PlanetIDList = new List<string>(); // which planets does the civilization own (will need to rewrite to take Holdings into account)?
         public List<PlanetData> PlanetList
         {
             get
