@@ -72,11 +72,11 @@ namespace Assets.Scripts.Managers
             foreach (PlanetData pData in civ.PlanetList)
             {
                 // calculate each Importance using the basic formula to generate a base 0-100 Importance
-                pData.FoodImportance = (((50f - (pData.FoodStored / pData.TotalFoodConsumed)) / 5f) + pData.FoodDifference) * Constant.FoodPriority;
-                pData.EnergyImportance = (((50f - (pData.EnergyStored / pData.TotalEnergyConsumed)) / 5f) + pData.EnergyDifference) * Constant.EnergyPriority;
-                pData.BasicImportance = (((50f - (pData.AlphaStored / pData.TotalAlphaMaterialsConsumed)) / 5f) + pData.AlphaTotalDifference) * Constant.BasicPriority;
-                pData.HeavyImportance = (((50f - (pData.HeavyStored / pData.TotalHeavyMaterialsConsumed)) / 5f) + pData.HeavyTotalDifference) * Constant.HeavyPriority;
-                pData.RareImportance = (((50f - (pData.RareStored / pData.TotalRareMaterialsConsumed)) / 5f) + pData.RareTotalDifference) * Constant.RarePriority;
+                pData.FoodImportance = (((50f - (pData.FoodStored / pData.TotalFoodConsumed)) / 5f) - pData.FoodDifference) * Constant.FoodPriority;
+                pData.EnergyImportance = (((50f - (pData.EnergyStored / pData.TotalEnergyConsumed)) / 5f) - pData.EnergyDifference) * Constant.EnergyPriority;
+                pData.BasicImportance = (((50f - (pData.AlphaStored / pData.TotalAlphaMaterialsConsumed)) / 5f) - pData.AlphaTotalDifference) * Constant.BasicPriority;
+                pData.HeavyImportance = (((50f - (pData.HeavyStored / pData.TotalHeavyMaterialsConsumed)) / 5f) - pData.HeavyTotalDifference) * Constant.HeavyPriority;
+                pData.RareImportance = (((50f - (pData.RareStored / pData.TotalRareMaterialsConsumed)) / 5f) - pData.RareTotalDifference) * Constant.RarePriority;
 
                 // now generate the trade proposals for each viceroy
                 GenerateTradeProposals(pData);
@@ -116,6 +116,7 @@ namespace Assets.Scripts.Managers
             Debug.Log("Basic Importance: " + pData.BasicImportance.ToString("N1"));
             Debug.Log("Heavy Importance: " + pData.HeavyImportance.ToString("N1"));
             Debug.Log("Rare Importance: " + pData.RareImportance.ToString("N1"));
+
             // first, determine the budget that can be allocated for these trades by taking the yearly import budget, subtracting the expenses, and dividing by the months left in the year
             maxTotalImportBudget = ((pData.YearlyImportBudget - pData.YearlyImportExpenses) / 10) * (11 - gDataRef.GameMonth); // max allowed total for this month
             Debug.Log("Total Import Budget for this month is " + maxTotalImportBudget.ToString("N1"));
@@ -240,12 +241,13 @@ namespace Assets.Scripts.Managers
                         case Trade.eTradeGoodRequested.Food:
                             tP.TradeResource = TradeProposal.eTradeResource.Food;
                             tP.MaxCrownsToPay = pData.Owner.CurrentFoodPrice * (1f / (pData.Viceroy.Caution / 100f)) / (50f / pData.Viceroy.Intelligence);
+                            float foodBudgetCheck = 0f;
 
                             // raise amount desired by .1 until either amount desired reached or budget for that resource hit
-                            while (maxFoodImportBudget > 0 && tP.AmountDesired < foodUnitsDesired)
+                            while (foodBudgetCheck < maxFoodImportBudget && tP.AmountDesired < foodUnitsDesired)
                             {
                                 tP.AmountDesired += .1f;
-                                maxFoodImportBudget -= tP.AmountDesired * tP.MaxCrownsToPay;
+                                foodBudgetCheck = tP.AmountDesired * tP.MaxCrownsToPay;
                             }
                             break;
 

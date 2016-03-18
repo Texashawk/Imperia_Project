@@ -24,6 +24,7 @@ public class GalaxyCameraScript : MonoBehaviour {
     [HideInInspector]public bool ScrollWheelIsValid { get; set; } // can the scrollwheel be used to manipulate the camera?
 	private float zoomSpeed = 9.5f;
     private float zoomSensitivity = 50f;
+    public const float cameraTilt = 20f;
     private Camera mainC; // camera reference
     private GlobalGameData gDataRef;
     private UIManager uiManagerRef;
@@ -45,13 +46,17 @@ public class GalaxyCameraScript : MonoBehaviour {
     //private Vector3 cameraProvincePosition; // stores the camera position when in province view
     private float scaleRatio;
 
-    public const int galaxyMinZoomLevel = 120;
+    private float tiltYOffset = 0f; // this is the offsetY that is used to counteract the tilt of the camera
     public int galaxyHeight;
     public int galaxyWidth;
-    public const int provinceMinZoomLevel = 40;
+    public const int galaxyZValue = 4000; // how far away the camera is from the galaxy map on a Z axis
+    private const int systemZValue = 2000; // how far the camera is away from the system planet views
+
+    public const int galaxyMinZoomLevel = 30;
+    public const int provinceMinZoomLevel = 30; // was 40
     public const int systemMinZoomLevel = 12;
     public const int planetMinZoomLevel = 2;
-    public const int maxZoomLevel = 135;
+    public const int maxZoomLevel = 60;
     public const int minZoomLevel = 30;
 
     public float zoom;
@@ -67,7 +72,9 @@ public class GalaxyCameraScript : MonoBehaviour {
         galaxyHeight = gDataRef.GalaxySizeHeight;
         galaxyWidth = gDataRef.GalaxySizeWidth;
         ScrollWheelIsValid = true;
-	}
+        float tangent = Mathf.Tan(cameraTilt * Mathf.Deg2Rad);
+        tiltYOffset = galaxyZValue * tangent; // move the camera initially
+        }
 	
 	// Update is called once per frame
     void Update()
@@ -91,22 +98,24 @@ public class GalaxyCameraScript : MonoBehaviour {
             {
                 if ((Input.GetAxis("Mouse ScrollWheel") > mouseWheelValue) || Input.GetButtonDown("Right Mouse Button"))
                 {
-                    transform.position = new Vector3(provinceTarget.ProvinceCenter.x, provinceTarget.ProvinceCenter.y, transform.position.z);
+                    transform.position = new Vector3(provinceTarget.ProvinceCenter.x, provinceTarget.ProvinceCenter.y + tiltYOffset, galaxyZValue);
                     provinceZoomActive = false;
                     provinceZoomComplete = false;
-                    zoom = 120;
+                    provinceTarget = null;
+                    zoom = maxZoomLevel;
                 }
             }
 
             if (systemZoomActive)
                 if ((Input.GetAxis("Mouse ScrollWheel") > mouseWheelValue) || Input.GetButtonDown("Right Mouse Button"))
                 {
-                    transform.position = new Vector3(transform.position.x - 38 - (Screen.width / 10), transform.position.y, transform.position.z);
+                    transform.position = new Vector3(transform.position.x - 38 - (Screen.width / 10), transform.position.y + tiltYOffset, galaxyZValue);
                     systemZoomActive = false;
                     provinceZoomActive = false;
                     provinceZoomComplete = false;
+                    //starTarget = null;s
                     systemZoomComplete = false;
-                    zoom = 80;
+                    zoom = maxZoomLevel;
                 }
 
             if (planetZoomActive)
@@ -117,6 +126,7 @@ public class GalaxyCameraScript : MonoBehaviour {
                     planetZoomActive = false;
                     planetZoomComplete = false;
                     provinceZoomActive = false;
+                    planetTarget = null;
                     provinceZoomComplete = false;
                     systemZoomActive = true;
                     zoom = systemMinZoomLevel;
@@ -154,7 +164,7 @@ public class GalaxyCameraScript : MonoBehaviour {
         else
         {   //int cameraAngle = 15;
             //transform.eulerAngles = new Vector3(180 - cameraAngle + (((180 + (cameraAngle * 30)) / mainC.fieldOfView)), 0, 0); // snap the camera back to 0 (top-down) when not in system zoom mode
-            transform.eulerAngles = new Vector3(180, 0, 0); // was 30,0,0
+            transform.eulerAngles = new Vector3(180 - cameraTilt, 0, 0); // was 30,0,0
         }
     }
 
@@ -196,12 +206,12 @@ public class GalaxyCameraScript : MonoBehaviour {
 
         if (ZoomLevel <= UIManager.eViewMode.Province) // don't pan map if in system or planet mode
         {
-            if (moveMapUp && (yLocation <= galaxyHeight) && (yLocation >= -galaxyHeight))
+            if (moveMapUp && (yLocation <= galaxyHeight + tiltYOffset) && (yLocation >= -galaxyHeight + tiltYOffset))
             {
                 transform.position = new Vector3(transform.position.x, Mathf.Lerp(yLocation, moveUpVector, Time.deltaTime * 3), transform.position.z);
             }
 
-            if (moveMapDown && (yLocation <= galaxyHeight) && (yLocation >= -galaxyHeight))
+            if (moveMapDown && (yLocation <= galaxyHeight + tiltYOffset) && (yLocation >= -galaxyHeight + tiltYOffset))
             {
                 transform.position = new Vector3(transform.position.x, Mathf.Lerp(yLocation, moveDownVector, Time.deltaTime * 3), transform.position.z);
             }
@@ -222,10 +232,10 @@ public class GalaxyCameraScript : MonoBehaviour {
             if (transform.position.x < -galaxyWidth)
                 transform.position = new Vector3(-galaxyWidth, transform.position.y, transform.position.z);
 
-            if (transform.position.y > galaxyHeight)
-                transform.position = new Vector3(transform.position.x, galaxyHeight, transform.position.z);
-            if (transform.position.y < -galaxyHeight)
-                transform.position = new Vector3(transform.position.x, -galaxyHeight, transform.position.z);
+            if (transform.position.y > galaxyHeight + tiltYOffset)
+                transform.position = new Vector3(transform.position.x, galaxyHeight + tiltYOffset, transform.position.z);
+            if (transform.position.y < -galaxyHeight + tiltYOffset)
+                transform.position = new Vector3(transform.position.x, -galaxyHeight + tiltYOffset, transform.position.z);
 
             yield return null;
         }
@@ -278,15 +288,15 @@ public class GalaxyCameraScript : MonoBehaviour {
         {
             if (!planetToSystemZoom)
             {
-                tgtPosition = new Vector3(target.position.x + (leftCameraMove * (Screen.width / 1920f)) + (target.localScale.x / 2), target.position.y + 75 * (Screen.height / 1080f), transform.position.z);
+                tgtPosition = new Vector3(target.position.x + (leftCameraMove * (Screen.width / 1920f)) + (target.localScale.x / 2), target.position.y + 75 * (Screen.height / 1080f), systemZValue);
                 zoom = systemMinZoomLevel; // set system view zoom level
                 StartCoroutine(SystemZoom(tgtPosition));
             }
             
             else
             {
-                tgtPosition = new Vector3(target.position.x + (leftCameraMove * (Screen.width / 1920f)) + (target.localScale.x / 2), target.position.y + 75 * (Screen.height / 1080f), transform.position.z);
-                transform.position = new Vector3 (cameraPlanetPosition.x,cameraPlanetPosition.y,cameraPlanetPosition.z);
+                tgtPosition = new Vector3(target.position.x + (leftCameraMove * (Screen.width / 1920f)) + (target.localScale.x / 2), target.position.y + 75 * (Screen.height / 1080f), systemZValue);
+                transform.position = new Vector3 (cameraPlanetPosition.x,cameraPlanetPosition.y, systemZValue);
                 zoom = systemMinZoomLevel; // set system view zoom level
                 StartCoroutine(SystemZoom(tgtPosition));
             }
@@ -301,7 +311,7 @@ public class GalaxyCameraScript : MonoBehaviour {
     {       
         if (!planetZoomComplete)
         {                
-            Vector3 tgtPosition = new Vector3(planet.position.x, planet.position.y - (55f * scaleRatio), transform.position.z);
+            Vector3 tgtPosition = new Vector3(planet.position.x, planet.position.y - (55f * scaleRatio), systemZValue);
             planet.localScale = new Vector3(25 * scaleRatio, 25 * scaleRatio, 1); // then normalize the size of the planet to show close-up (number is the nominal scale)
             zoom = planetMinZoomLevel; // set planet view zoom level
             StartCoroutine(PlanetZoom(tgtPosition));
@@ -313,7 +323,7 @@ public class GalaxyCameraScript : MonoBehaviour {
 
     IEnumerator PlanetZoom(Vector3 tgtPosition)
     {
-        while (((int)transform.position.x != (int)tgtPosition.x | (int)transform.position.y != (int)tgtPosition.y) && (planetZoomActive))
+        while ((((int)transform.position.x != (int)tgtPosition.x | (int)transform.position.y != (int)tgtPosition.y) | (int)transform.position.z != (int)tgtPosition.z) && (planetZoomActive))
         {
             transform.position = new Vector3(Mathf.Lerp(transform.position.x, tgtPosition.x, Time.deltaTime * (zoomSpeed + 5)), Mathf.Lerp(transform.position.y, tgtPosition.y, Time.deltaTime * (zoomSpeed + 5)), tgtPosition.z); // interpolate the movement
             cameraPlanetPosition = transform.position;
@@ -325,9 +335,9 @@ public class GalaxyCameraScript : MonoBehaviour {
     IEnumerator SystemZoom(Vector3 tgtPosition)
     {
         
-        while(((int)transform.position.x != (int)tgtPosition.x | (int)transform.position.y != (int)tgtPosition.y) && (systemZoomActive) && (!planetZoomActive) && (!provinceZoomActive))
+        while((((int)transform.position.x != (int)tgtPosition.x | (int)transform.position.y != (int)tgtPosition.y) | (int)transform.position.z != (int)tgtPosition.z) && (!planetZoomActive) && (!provinceZoomActive))
         {      
-            transform.position = new Vector3(Mathf.Lerp(transform.position.x, tgtPosition.x, Time.deltaTime * (zoomSpeed + 3)), Mathf.Lerp(transform.position.y, tgtPosition.y, Time.deltaTime * (zoomSpeed + 3)), transform.position.z); // interpolate the movement
+            transform.position = new Vector3(Mathf.Lerp(transform.position.x, tgtPosition.x, Time.deltaTime * (zoomSpeed + 3)), Mathf.Lerp(transform.position.y, tgtPosition.y, Time.deltaTime * (zoomSpeed + 3)), tgtPosition.z); // interpolate the movement
             yield return null;        
         }
 
@@ -340,7 +350,7 @@ public class GalaxyCameraScript : MonoBehaviour {
 
         while (((int)transform.position.x != (int)tgtPosition.x | (int)transform.position.y != (int)tgtPosition.y) && (!systemZoomActive) && (!planetZoomActive) && (provinceZoomActive))
         {
-            transform.position = new Vector3(Mathf.Lerp(transform.position.x, tgtPosition.x, Time.deltaTime * (zoomSpeed + 2)), Mathf.Lerp(transform.position.y, tgtPosition.y, Time.deltaTime * (zoomSpeed + 2)), transform.position.z); // interpolate the movement
+            transform.position = new Vector3(Mathf.Lerp(transform.position.x, tgtPosition.x, Time.deltaTime * (zoomSpeed + 2)), Mathf.Lerp(transform.position.y, tgtPosition.y, Time.deltaTime * (zoomSpeed + 2)), tgtPosition.z); // interpolate the movement
             yield return null;
         }
 

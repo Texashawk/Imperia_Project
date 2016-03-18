@@ -433,7 +433,7 @@ MonoBehaviour:
     CharacterCount: 97
     LineHeight: 91
     Baseline: 0
-    Ascender: 72
+    Ascender: 71.8899994
     Descender: -20
     CenterLine: 0
     SuperscriptOffset: 72
@@ -454,9 +454,9 @@ MonoBehaviour:
     x: 5
     y: 507
     width: 19
-    height: 92
+    height: 91.8899994
     xOffset: 0
-    yOffset: 72
+    yOffset: 71.8899994
     xAdvance: 19
   - id: 33
     x: 182
