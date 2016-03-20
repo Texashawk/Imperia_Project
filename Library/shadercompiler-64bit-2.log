@@ -1,50 +1,12 @@
 Base path: C:/Program Files/Unity/Editor/Data
-Pipe name: \\.\pipe\UnityShaderCompiler-64bit-2-12168
+Pipe name: \\.\pipe\UnityShaderCompiler-64bit-2-15496
 Cmd: getPlatforms
 Cmd: compileSnippet
-  api=4 type=0 insize=15910 outsize=9602 kw=DIRECTIONAL LIGHTMAP_OFF DIRLIGHTMAP_OFF DYNAMICLIGHTMAP_OFF VERTEXLIGHT_ON pd= ok=1
+  api=1 type=0 insize=1050 outsize=425 kw=PIXELSNAP_ON pd= ok=1
 Cmd: compileSnippet
-  api=1 type=0 insize=1005 outsize=350 kw=SHADOWS_CUBE pd= ok=1
+  api=1 type=1 insize=1050 outsize=112 kw=PIXELSNAP_ON pd= ok=1
 Cmd: compileSnippet
-  api=4 type=1 insize=1005 outsize=1119 kw=SHADOWS_CUBE pd= ok=1
-Cmd: compileSnippet
-  api=4 type=0 insize=16153 outsize=9602 kw=DIRECTIONAL LIGHTMAP_OFF DIRLIGHTMAP_OFF DYNAMICLIGHTMAP_OFF VERTEXLIGHT_ON pd= ok=1
-Cmd: compileSnippet
-  api=1 type=0 insize=11040 outsize=2190 kw=SPOT pd= ok=1
-Cmd: compileSnippet
-  api=1 type=0 insize=11040 outsize=2190 kw=DIRECTIONAL_COOKIE pd= ok=1
-Cmd: compileSnippet
-  api=4 type=0 insize=11040 outsize=7603 kw=POINT GLOW_ON pd= ok=1
-Cmd: compileSnippet
-  api=4 type=0 insize=11040 outsize=7603 kw=POINT_COOKIE GLOW_ON pd= ok=1
-Cmd: compileSnippet
-  api=1 type=1 insize=11040 outsize=3454 kw=DIRECTIONAL pd= ok=1
-Cmd: compileSnippet
-  api=1 type=1 insize=11040 outsize=3567 kw=DIRECTIONAL_COOKIE pd= ok=1
-Cmd: compileSnippet
-  api=1 type=1 insize=11040 outsize=4057 kw=DIRECTIONAL GLOW_ON pd= ok=1
-Cmd: compileSnippet
-  api=4 type=1 insize=11040 outsize=11869 kw=POINT_COOKIE GLOW_ON pd= ok=1
-Cmd: compileSnippet
-  api=4 type=0 insize=996 outsize=1964 kw=SHADOWS_CUBE pd= ok=1
-Cmd: compileSnippet
-  api=4 type=1 insize=996 outsize=1119 kw=SHADOWS_CUBE pd= ok=1
-Cmd: compileSnippet
-  api=8 type=0 insize=4781 outsize=9319 kw= pd=UNITY_NO_SCREENSPACE_SHADOWS UNITY_NO_LINEAR_COLORSPACE ok=1
-Cmd: compileSnippet
-  api=8 type=1 insize=4781 outsize=3153 kw=UNDERLAY_ON pd=UNITY_NO_SCREENSPACE_SHADOWS UNITY_NO_LINEAR_COLORSPACE ok=1
-Cmd: compileSnippet
-  api=8 type=0 insize=5491 outsize=9287 kw= pd=UNITY_NO_SCREENSPACE_SHADOWS UNITY_NO_LINEAR_COLORSPACE ok=1
-Cmd: compileSnippet
-  api=8 type=0 insize=5491 outsize=10912 kw=UNDERLAY_ON OUTLINE_ON pd=UNITY_NO_SCREENSPACE_SHADOWS UNITY_NO_LINEAR_COLORSPACE ok=1
-Cmd: compileSnippet
-  api=1 type=1 insize=5491 outsize=504 kw=UNDERLAY_ON pd= ok=1
-Cmd: compileSnippet
-  api=1 type=1 insize=5491 outsize=619 kw=UNDERLAY_ON OUTLINE_ON pd= ok=1
-Cmd: compileSnippet
-  api=4 type=0 insize=1017 outsize=1274 kw= pd= ok=1
-Cmd: compileSnippet
-  api=8 type=1 insize=1017 outsize=1227 kw= pd=UNITY_NO_SCREENSPACE_SHADOWS UNITY_NO_LINEAR_COLORSPACE ok=1
+  api=8 type=1 insize=1050 outsize=1194 kw=PIXELSNAP_ON pd=UNITY_NO_SCREENSPACE_SHADOWS UNITY_NO_LINEAR_COLORSPACE ok=1
 Unhandled exception: Readfile from pipe failed. GLE=The pipe has been ended.
 
 

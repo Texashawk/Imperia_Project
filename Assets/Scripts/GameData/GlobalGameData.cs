@@ -40,7 +40,7 @@ public class GlobalGameData : MonoBehaviour
     public Texture2D createEmperorScreen;
 
     // universal game data
-    public float gameVersionNumber = .001f;
+    public string gameVersionNumber = "unknown";
     public string gameVersionSuffix = "a";
     public string gameVersion = "";
     public float GameDate { get; set; }
@@ -83,7 +83,7 @@ public class GlobalGameData : MonoBehaviour
         TotalSystems = 50;
         NumberOfAICivs = 8; // static number to test UnityEngine.Random.Range(4, 7); // test
         PlayerEmpireName = "New Human Empire";
-        gameVersion = gameVersionNumber.ToString("N4") + gameVersionSuffix;
+        gameVersion = gameVersionNumber + gameVersionSuffix;
         //DataManager.InitializeData(); // intialize data all in one place (test)
     }
 

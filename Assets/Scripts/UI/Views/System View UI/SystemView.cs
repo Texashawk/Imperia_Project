@@ -15,14 +15,13 @@ public class SystemView : MonoBehaviour {
     private GraphicAssets graphicsDataRef;
     private GlobalGameData gameDataRef;
     private GalaxyData galaxyDataRef;
+    private UIManager uiManagerRef;
     private Canvas canvasRef;
     private GalaxyView gScreenRef;
     public GameObject systemPlanetSummaryPanel;
     private List<GameObject> systemObjectsDrawnList = new List<GameObject>();
     private float alphaValue = 0f; // change back to 0 when fix the issue with corouting and vars taking too much CPU
-    private bool DrawPanelSummary = false;  
-    private Text systemIntelLevel;
-    private Text systemIntelText;
+    private bool DrawPanelSummary = false;
     private Text lowIntelLevelPlanetData;
     private Text noIntelLevelPlanetData;
     private Text noStellarObjectText;
@@ -42,6 +41,7 @@ public class SystemView : MonoBehaviour {
         galaxyDataRef = GameObject.Find("GameManager").GetComponent<GalaxyData>();
         gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
         graphicsDataRef = GameObject.Find("GameManager").GetComponent<GraphicAssets>();
+        uiManagerRef = GameObject.Find("UI Engine").GetComponent<UIManager>();
         gScreenRef = GameObject.Find("GameEngine").GetComponent<GalaxyView>();
         lowIntelLevelPlanetData = GameObject.Find("Low Intel Level Text").GetComponent<Text>();
         noIntelLevelPlanetData = GameObject.Find("No Intel Level Text").GetComponent<Text>();
@@ -51,7 +51,7 @@ public class SystemView : MonoBehaviour {
 
     void OnGUI()
     {
-        if (gScriptRef.ZoomLevel == UIManager.eViewMode.System)
+        if (uiManagerRef.ViewMode == ViewManager.eViewLevel.System)
         {
             ShowSystemView();
             if (DrawPanelSummary)
@@ -63,7 +63,7 @@ public class SystemView : MonoBehaviour {
 
     void Update()
     {
-        if (gScriptRef.ZoomLevel == UIManager.eViewMode.System)
+        if (uiManagerRef.ViewMode == ViewManager.eViewLevel.System)
         {
             if (gameDataRef.RequestGraphicRefresh)
             {

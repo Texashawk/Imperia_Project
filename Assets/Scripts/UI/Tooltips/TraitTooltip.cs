@@ -67,7 +67,7 @@ public class TraitTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         string name = "";
         string desc = "";
         // draw according to screen
-        if (galCameraRef.ZoomLevel == UIManager.eViewMode.Planet)
+        if (galCameraRef.ZoomLevel == ViewManager.eViewLevel.Planet)
         {
             TooltipItem.transform.localPosition = new Vector3(toolTipOriginalLocation.x + TooltipItem.GetComponent<RectTransform>().rect.width + 270, toolTipOriginalLocation.y - 30, toolTipOriginalLocation.z);
         }

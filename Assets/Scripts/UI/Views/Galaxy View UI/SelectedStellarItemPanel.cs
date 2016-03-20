@@ -36,7 +36,7 @@ namespace Assets.Scripts.UI
 
         void UpdatePanel() // check for selected objects
         {
-            if (uiManagerRef.ViewMode == UIManager.eViewMode.System && uiManagerRef.selectedSystem != null)
+            if (uiManagerRef.ViewMode == ViewManager.eViewLevel.System && uiManagerRef.selectedSystem != null)
             {
                 StarData starDat = uiManagerRef.selectedSystem;
                 selectedItemName.text = uiManagerRef.selectedSystem.Name.ToUpper();  //show text
@@ -61,7 +61,7 @@ namespace Assets.Scripts.UI
                 }
             }
 
-            else if (uiManagerRef.ViewMode == UIManager.eViewMode.Planet && uiManagerRef.selectedPlanet != null)
+            else if (uiManagerRef.ViewMode == ViewManager.eViewLevel.Planet && uiManagerRef.selectedPlanet != null)
             {
                 selectedItemName.text = uiManagerRef.selectedPlanet.Name.ToUpper();  //show text
                 selectedItemSecondaryInfo.text = "CLASS " + StringConversions.ConvertToRomanNumeral((int)(uiManagerRef.selectedPlanet.Size / 10)) + " " + HelperFunctions.StringConversions.ConvertPlanetEnum(uiManagerRef.selectedPlanet.Type).ToUpper();

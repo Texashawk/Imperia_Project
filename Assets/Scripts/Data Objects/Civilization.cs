@@ -147,6 +147,25 @@ namespace CivObjects
             }
         }
 
+        
+        public List<StarData> SystemList
+        {
+            get
+            {
+                List<StarData> sList = new List<StarData>();
+                foreach (PlanetData pData in PlanetList)
+                {
+                    if (pData.Owner == this)
+                    {
+                        if (!sList.Exists(p => p.ID == pData.SystemID))
+                            sList.Add(pData.System);                      
+                    }
+                }
+
+                return sList;
+            }
+        }
+
         public List<House> HouseList
         {
             get

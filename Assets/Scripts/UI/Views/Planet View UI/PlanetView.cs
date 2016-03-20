@@ -16,6 +16,7 @@ public class PlanetView : MonoBehaviour {
     private GalaxyCameraScript gScriptRef;
     private GlobalGameData gameDataRef;
     private GraphicAssets graphicsDataRef;
+    private UIManager uiManagerRef;
     private GalaxyView gScreen; 
     public GameObject habitableTile;
     public GameObject uninhabitableTile;
@@ -87,8 +88,7 @@ public class PlanetView : MonoBehaviour {
         industryDisplayButton = GameObject.Find("Industry Display Button");
         economicDisplayButton = GameObject.Find("Economic Display Button");
         graphicsDataRef = GameObject.Find("GameManager").GetComponent<GraphicAssets>();
-        
-        
+        uiManagerRef = GameObject.Find("UI Engine").GetComponent<UIManager>();
         starbaseText = GameObject.Find("Starbase Level Label").GetComponent<Text>();
         starbaseValue = GameObject.Find("Starbase Level").GetComponent<Text>();
         starbaseDataPanel = GameObject.Find("Starbase Data Panel").GetComponent<Image>();
@@ -123,7 +123,7 @@ public class PlanetView : MonoBehaviour {
         screenWidthRatio = ((float)Screen.width / 1920f);
         screenHeightRatio = ((float)Screen.height / 1080f);
 
-        if (gScriptRef.ZoomLevel == UIManager.eViewMode.Planet)
+        if (uiManagerRef.ViewMode == ViewManager.eViewLevel.Planet)
         {
             if (!planetDataLoaded) // load selected planet data into pData ref if needed or changed
             {
@@ -519,7 +519,7 @@ public class PlanetView : MonoBehaviour {
         float wireFrameFadeValue = 0f;
 
         StartCoroutine(FadeInPlanet(planetFadeValue));
-        gScreen.GetSelectedPlanet().GetComponent<Planet>().GetComponent<SpriteRenderer>().color = planetColor;
+        selectedPlanet.GetComponent<Planet>().GetComponent<SpriteRenderer>().color = planetColor;
 
         StartCoroutine(FadeOutWireframe(wireFrameFadeValue));
         wireFrameOverlay.GetComponent<SpriteRenderer>().color = wireframeColor;
@@ -611,7 +611,7 @@ public class PlanetView : MonoBehaviour {
 
     void ShowPlanetView()
     {
-        if (HelperFunctions.DataRetrivalFunctions.GetSystem(pData.SystemID).IntelValue >= 5 || gameDataRef.DebugMode)
+        if (DataRetrivalFunctions.GetSystem(pData.SystemID).IntelValue >= 5 || gameDataRef.DebugMode)
         {            
             planetButtonBarBackground.SetActive(true); // turn on background;
             stellarographyPanel.SetActive(true);
@@ -683,11 +683,11 @@ public class PlanetView : MonoBehaviour {
         }
 
         // set domestic prime image
-        if (HelperFunctions.DataRetrivalFunctions.GetPrime(Character.eRole.DomesticPrime) != "none")
+        if (DataRetrivalFunctions.GetPrime(Character.eRole.DomesticPrime) != "none")
         {
             domesticPrimeInfo.gameObject.SetActive(true);
-            string pID = HelperFunctions.DataRetrivalFunctions.GetPrime(Character.eRole.DomesticPrime);
-            Character pGov = HelperFunctions.DataRetrivalFunctions.GetCharacter(pID);
+            string pID = DataRetrivalFunctions.GetPrime(Character.eRole.DomesticPrime);
+            Character pGov = DataRetrivalFunctions.GetCharacter(pID);
             domesticPrimeInfo.GetComponent<CharacterTooltip>().InitializeTooltipData(pGov, -25f);
             domesticPrimeInfo.GetComponent<CharacterScreenActivation>().InitializeData(pGov);
             domesticPrimeInfo.GetComponent<Image>().sprite = graphicsDataRef.CharacterList.Find(p => p.name == pGov.PictureID);
@@ -706,7 +706,7 @@ public class PlanetView : MonoBehaviour {
                 domesticPrimeInfo.Find("Domestic Prime Name").GetComponent<Text>().color = Color.white; // if great house, change color
             }
 
-            if (HelperFunctions.DataRetrivalFunctions.GetPlanet(pGov.PlanetLocationID) != null)
+            if (DataRetrivalFunctions.GetPlanet(pGov.PlanetLocationID) != null)
             {
                 domesticPrimeInfo.Find("Domestic Prime Location").GetComponent<Text>().text = "LOCATED ON " + HelperFunctions.DataRetrivalFunctions.GetPlanet(pGov.PlanetLocationID).Name.ToUpper();
             }
@@ -717,11 +717,11 @@ public class PlanetView : MonoBehaviour {
         }
         
         // set province governor image  
-        if (HelperFunctions.DataRetrivalFunctions.GetProvinceGovernorID(sData.AssignedProvinceID) != "none")
+        if (DataRetrivalFunctions.GetProvinceGovernorID(sData.AssignedProvinceID) != "none")
         {
             provinceGovernorInfo.gameObject.SetActive(true);         
-            string pID = HelperFunctions.DataRetrivalFunctions.GetProvinceGovernorID(sData.AssignedProvinceID);
-            Character pGov = HelperFunctions.DataRetrivalFunctions.GetCharacter(pID);
+            string pID = DataRetrivalFunctions.GetProvinceGovernorID(sData.AssignedProvinceID);
+            Character pGov = DataRetrivalFunctions.GetCharacter(pID);
             provinceGovernorInfo.GetComponent<CharacterTooltip>().InitializeTooltipData(pGov, -23f);
             provinceGovernorInfo.GetComponent<CharacterScreenActivation>().InitializeData(pGov);
             provinceGovernorInfo.GetComponent<Image>().sprite = graphicsDataRef.CharacterList.Find(p => p.name == pGov.PictureID);
@@ -738,7 +738,7 @@ public class PlanetView : MonoBehaviour {
             {
                 provinceGovernorInfo.Find("Province Governor Name").GetComponent<Text>().color = Color.white; // if great house, change color
             }
-            if (HelperFunctions.DataRetrivalFunctions.GetPlanet(pGov.PlanetLocationID) != null)
+            if (DataRetrivalFunctions.GetPlanet(pGov.PlanetLocationID) != null)
             {
                 provinceGovernorInfo.Find("Province Governor Location").GetComponent<Text>().text = "LOCATED ON " + HelperFunctions.DataRetrivalFunctions.GetPlanet(pGov.PlanetLocationID).Name.ToUpper();
             }
@@ -765,11 +765,11 @@ public class PlanetView : MonoBehaviour {
         }
 
         // set system governor image
-        if (HelperFunctions.DataRetrivalFunctions.GetSystemGovernorID(sData.ID) != "none")
+        if (DataRetrivalFunctions.GetSystemGovernorID(sData.ID) != "none")
         {
             systemGovernorInfo.gameObject.SetActive(true);
-            string sID = HelperFunctions.DataRetrivalFunctions.GetSystemGovernorID(sData.ID);
-            Character sGov = HelperFunctions.DataRetrivalFunctions.GetCharacter(sID);
+            string sID = DataRetrivalFunctions.GetSystemGovernorID(sData.ID);
+            Character sGov = DataRetrivalFunctions.GetCharacter(sID);
             systemGovernorInfo.GetComponent<CharacterTooltip>().InitializeTooltipData(sGov, -22f);
             systemGovernorInfo.GetComponent<CharacterScreenActivation>().InitializeData(sGov);
             systemGovernorInfo.GetComponent<Image>().sprite = graphicsDataRef.CharacterList.Find(p => p.name == sGov.PictureID);
