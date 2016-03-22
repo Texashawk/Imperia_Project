@@ -30,11 +30,11 @@ using ConversationAI;
         public static List<string> characterMaleFirstNameList = new List<string>();
         public static List<string> commonHouseNameList = new List<string>();
 
-        private GlobalGameData gameDataRef;
+        private GameData gameDataRef;
 
         public void Awake()
         {
-            gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
         }
 
         public static void InitializeData()
@@ -233,7 +233,7 @@ using ConversationAI;
         public static void ReadCharacterTraitXMLFiles()
         {
             string path = Application.dataPath;
-            GlobalGameData gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            GameData gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
 
             XmlDocument xmlDoc = new XmlDocument(); // creates the new document
             TextAsset traitData = null;
@@ -343,7 +343,7 @@ using ConversationAI;
         public static void ReadHouseXMLFiles()
         {
             string path = Application.dataPath;
-            GlobalGameData gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            GameData gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
 
             XmlDocument xmlDoc = new XmlDocument(); // creates the new document
             TextAsset houseData = null;
@@ -449,7 +449,7 @@ using ConversationAI;
         public static void ReadActionXMLFiles()
         {
             string path = Application.dataPath;
-            GlobalGameData gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            GameData gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
 
             XmlDocument xmlDoc = new XmlDocument(); // creates the new document
             TextAsset actionData = null;

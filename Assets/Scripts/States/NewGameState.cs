@@ -14,7 +14,7 @@ namespace Assets.Scripts.States
         private InputField AICountInputField;
         private InputField galaxySizeInputField;
         private InputField playerEmpireNameInputField;
-        private GlobalGameData gameDataRef;
+        private GameData gameDataRef;
         private bool valuesLoaded = false;
         private bool valuesEntered = false;
 
@@ -23,7 +23,7 @@ namespace Assets.Scripts.States
             manager = managerRef;
             valuesLoaded = false; // reset
             valuesEntered = false;
-            gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();     
+            gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();     
             Debug.Log("Constructing New Game Screen");
         }
 

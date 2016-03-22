@@ -10,13 +10,13 @@ public class VitalStatisticsZone : MonoBehaviour {
     private TextMeshProUGUI emperorBenevolentInfluence;
     private TextMeshProUGUI emperorTyrannicalInfluence;
     private TextMeshProUGUI emperorPower;
-    private GlobalGameData gameDataRef;
+    private GameData gameDataRef;
 
     // Use this for initialization
     void Awake ()
     {
         // initialize all empire bar stats
-        gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>(); // get global game data (date, location, version, etc)
+        gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>(); // get global game data (date, location, version, etc)
         gameDate = GameObject.Find("GameDate").GetComponent<TextMeshProUGUI>();
         emperorPoSup = GameObject.Find("Popular Support").GetComponent<TextMeshProUGUI>();       
         //emperorStatusText = GameObject.Find("Emperor Status").GetComponent<TextMeshProUGUI>();

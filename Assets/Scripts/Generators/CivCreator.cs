@@ -19,12 +19,12 @@ namespace CivCreator
     public class CivCreator : MonoBehaviour
     {
         private GalaxyData gData;
-        private GlobalGameData gameDataRef;
+        private GameData gameDataRef;
 
         void Start()
         {
             gData = GameObject.Find("GameManager").GetComponent<GalaxyData>();
-            gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
             // now generate civilizations
             GenerateHumanCiv();
             GenerateAICivs();
@@ -728,16 +728,16 @@ namespace CivCreator
         void GenerateHumanCiv()
         {
             Civilization newCiv = new Civilization();
-            newCiv.Name = gameDataRef.PlayerEmpireName;
-            newCiv.Color = Color.cyan; // the color of the empire's system and planet holdings
+            newCiv.Name = "Celestial Empire"; //gameDataRef.PlayerEmpireName;
+            newCiv.Color = new Color(0f, .68f, 1f); // the color of the empire's system and planet holdings
             newCiv.Type = Civilization.eCivType.PlayerEmpire;  // default empire
             newCiv.CivMaxProvinceSize = 5;
             newCiv.AdminRating = 18; // rating that determines maximum size of governable provinces
             newCiv.Treasury = Random.Range(1000000f, 5000000f);  // starting treasury
             newCiv.Size = Civilization.eCivSize.Major;
             newCiv.Range = (int)(gameDataRef.GalaxySizeWidth / 2.3f);
-            newCiv.PlanetMinTolerance = 45;
-            newCiv.AstronomyRating = Random.Range(6,11) * 1000;
+            newCiv.PlanetMinTolerance = 40;
+            newCiv.AstronomyRating = Random.Range(6,11) * 1000; // not used
             newCiv.ID = "CIV0"; // use this to reference the player's civ
             newCiv.HumanCiv = true;
 
@@ -831,8 +831,13 @@ namespace CivCreator
                     if (proposedCapital.Rank != PlanetData.ePlanetRank.ImperialCapital && proposedCapital.Rank != PlanetData.ePlanetRank.ProvinceCapital)
                     {
                         proposedCapital.Rank = PlanetData.ePlanetRank.SystemCapital;
+
+                        // coin flip for trade hub (move to another function after capital generation)
+                        if (Random.Range(0,100) > 50)
+                            proposedCapital.TradeHub = PlanetData.eTradeHubType.SecondaryTradeHub;
                     }
                     sData.SystemCapitalID = proposedCapital.ID; // set as system capital by default
+
                 }
             }
         }
@@ -848,7 +853,7 @@ namespace CivCreator
 
                     // get a size for each province and then create it with provinces in range
                     int provinceSize = Random.Range(2, civ.CivMaxProvinceSize); // vary each province size
-                    int maxDist = civ.AdminRating * 90; // max dist between systems
+                    int maxDist = civ.AdminRating * 100; // max dist between systems (legacy code!)
                     int count = 0;
                     bool provinceValid = false;
 
@@ -950,6 +955,8 @@ namespace CivCreator
                                 }
                             }
                             proposedCapital.Rank = PlanetData.ePlanetRank.ProvinceCapital;
+                            proposedCapital.TradeHub = PlanetData.eTradeHubType.ProvinceTradeHub; // set up a trade hub; will move this to its own function
+                            proposedCapital.TradeStatus = PlanetData.eTradeStatus.HasTradeHub; // sets up a trade hub status
                             HelperFunctions.DataRetrivalFunctions.GetProvince(sData.AssignedProvinceID).CapitalPlanetID = proposedCapital.ID; // set the capital world ID
                         }
                     }

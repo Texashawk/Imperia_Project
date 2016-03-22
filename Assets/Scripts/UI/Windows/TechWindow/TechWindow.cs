@@ -4,12 +4,12 @@ using UnityEngine.Events;
 
 public class TechWindow : MonoBehaviour {
 
-    private GlobalGameData gGameDataRef;
+    private GameData gGameDataRef;
     public UnityEvent eventIntelSelect = new UnityEvent();
 
     void Awake()
     {
-        gGameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>(); // tie the game camera script to the data
+        gGameDataRef = GameObject.Find("GameManager").GetComponent<GameData>(); // tie the game camera script to the data
     }
     // Use this for initialization
     void Start()
@@ -26,7 +26,7 @@ public class TechWindow : MonoBehaviour {
 
     void OnGUI()
     {
-        if (gGameDataRef.uiSubMode == GlobalGameData.eSubMode.Science)
+        if (gGameDataRef.uiSubMode == GameData.eSubMode.Science)
             DisplayScienceScreen();
     }
 
@@ -37,8 +37,8 @@ public class TechWindow : MonoBehaviour {
 
     public void ActivateScienceMode() // changes the global mode
     {
-        if (gGameDataRef.uiSubMode != GlobalGameData.eSubMode.Science)
-            gGameDataRef.uiSubMode = GlobalGameData.eSubMode.Science;
+        if (gGameDataRef.uiSubMode != GameData.eSubMode.Science)
+            gGameDataRef.uiSubMode = GameData.eSubMode.Science;
         Debug.Log("Science SubMode Selected");
 
     }

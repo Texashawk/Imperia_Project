@@ -2,6 +2,7 @@
 using HelperFunctions;
 using Constants;
 using System;
+using System.Collections.Generic;
 using CivObjects;
 
 namespace EconomicObjects
@@ -71,6 +72,13 @@ namespace EconomicObjects
             get { return _currentProfit; }
             set { } // write derived variable for determining profit of current trade proposal
         }
+    }
+
+    public class TradeGroup // this represents planets that are grouped together into a trade block, linked by trade hubs
+    {
+        public string Name { get; set; }
+        public List<string> PlanetIDList = new List<string>();
+        public List<string> SystemIDList = new List<string>();
     }
 
     public class TradeProposal // this represents what each viceroy has valued each resource at, how much they want, what type of resource, and how much they are willing to pay for each one

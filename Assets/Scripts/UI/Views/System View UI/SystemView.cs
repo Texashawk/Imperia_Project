@@ -13,7 +13,7 @@ public class SystemView : MonoBehaviour {
 
     private GalaxyCameraScript gScriptRef;
     private GraphicAssets graphicsDataRef;
-    private GlobalGameData gameDataRef;
+    private GameData gameDataRef;
     private GalaxyData galaxyDataRef;
     private UIManager uiManagerRef;
     private Canvas canvasRef;
@@ -39,7 +39,7 @@ public class SystemView : MonoBehaviour {
         gScriptRef = GameObject.Find("Main Camera").GetComponent<GalaxyCameraScript>(); // tie the game camera script to the data
         canvasRef = GameObject.Find("System UI Canvas").GetComponent<Canvas>();
         galaxyDataRef = GameObject.Find("GameManager").GetComponent<GalaxyData>();
-        gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+        gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
         graphicsDataRef = GameObject.Find("GameManager").GetComponent<GraphicAssets>();
         uiManagerRef = GameObject.Find("UI Engine").GetComponent<UIManager>();
         gScreenRef = GameObject.Find("GameEngine").GetComponent<GalaxyView>();
@@ -51,7 +51,7 @@ public class SystemView : MonoBehaviour {
 
     void OnGUI()
     {
-        if (uiManagerRef.ViewMode == ViewManager.eViewLevel.System)
+        if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.System)
         {
             ShowSystemView();
             if (DrawPanelSummary)
@@ -63,7 +63,7 @@ public class SystemView : MonoBehaviour {
 
     void Update()
     {
-        if (uiManagerRef.ViewMode == ViewManager.eViewLevel.System)
+        if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.System)
         {
             if (gameDataRef.RequestGraphicRefresh)
             {

@@ -10,13 +10,13 @@ public class RelationsScrollView : MonoBehaviour
 
     public GameObject Button_Template;
     private List<Character> RelationsList = new List<Character>();
-    private GlobalGameData gameDataRef;
+    private GameData gameDataRef;
     private List<GameObject> buttonList = new List<GameObject>();
     public bool listIsInitialized = false;
 
     void Awake()
     {
-        gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+        gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
     }
     
     public void InitializeList(Character cData)

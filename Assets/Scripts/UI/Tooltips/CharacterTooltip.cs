@@ -15,7 +15,7 @@ namespace Tooltips
         private bool toolTipCreated = false;
         public bool exitRequested = false;
         private GraphicAssets graphicDataRef;
-        private GlobalGameData gDataRef;
+        private GameData gDataRef;
         private Canvas uiCanvas;
         private Character cData; // the character information that is passed
         private float alphaValue = 0f;
@@ -26,7 +26,7 @@ namespace Tooltips
         {
             uiCanvas = GameObject.Find("Character Window Canvas").GetComponent<Canvas>();
             graphicDataRef = GameObject.Find("GameManager").GetComponent<GraphicAssets>();
-            gDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
         }
 
         void OnGUI()

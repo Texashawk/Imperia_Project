@@ -7,7 +7,7 @@ using EconomicObjects;
 using Tooltips;
 using Actions;
 
-public class GlobalGameData : MonoBehaviour
+public class GameData : MonoBehaviour
 {
 
     // ui mode enums
@@ -27,7 +27,7 @@ public class GlobalGameData : MonoBehaviour
     public bool CharacterWindowActive = false;
     public string CharacterTooltipIDActive;
     public GameObject activeTooltip = null;
-    public bool StarSelected = false;
+    public bool StarSelected = false; // checks to see whether there is a star selected
     public bool modalIsActive = false; // checks for modal window active
     public Character SelectedCharacter = null; // selected character ID
 

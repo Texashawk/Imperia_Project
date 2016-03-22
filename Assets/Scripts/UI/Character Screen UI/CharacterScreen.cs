@@ -8,7 +8,7 @@ using ConversationAI;
 
 public class CharacterScreen : MonoBehaviour, IPointerClickHandler
 {
-    GlobalGameData gDataRef;
+    GameData gDataRef;
     GraphicAssets graphicsDataRef;
     Character cData;
     GameObject characterWindow;
@@ -46,7 +46,7 @@ public class CharacterScreen : MonoBehaviour, IPointerClickHandler
 
     void Awake()
     {
-        gDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+        gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
         graphicsDataRef = GameObject.Find("GameManager").GetComponent<GraphicAssets>(); // get graphics
         characterWindow = GameObject.Find("Character Window Panel");
         blockingPanel = GameObject.Find("Blocking Panel");

@@ -12,7 +12,7 @@ public static class PlanetDevelopmentAI
 	
     public static void AdjustViceroyBuildPlan(PlanetData pData, bool forceBuildPlanChance)
     {
-        GlobalGameData gDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+        GameData gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
         Character vic = pData.Viceroy;
         bool targetRegionSelected = false;
 
@@ -190,7 +190,7 @@ public static class PlanetDevelopmentAI
 
     }
 
-    private static bool DoesBuildFocusChange(PlanetData pData, Character vic, GlobalGameData gDataRef)
+    private static bool DoesBuildFocusChange(PlanetData pData, Character vic, GameData gDataRef)
     {
         float timeSinceChange = vic.TimeSinceBuildFocusChange;
         float changeChance = 0;

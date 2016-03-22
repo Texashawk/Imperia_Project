@@ -9,14 +9,14 @@ namespace Assets.Scripts.States
     {
         private StateManager manager;
         private GalaxyData gData;
-        private GlobalGameData gameData;
+        private GameData gameData;
         public GameObject[] starObjects;
 
         public SetupState(StateManager managerRef)
         {
             manager = managerRef;
             gData = GameObject.Find("GameManager").GetComponent<GalaxyData>();
-            gameData = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            gameData = GameObject.Find("GameManager").GetComponent<GameData>();
             Debug.Log("In SetupState");        
         }
 

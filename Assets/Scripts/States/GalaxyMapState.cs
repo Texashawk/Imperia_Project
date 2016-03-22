@@ -8,11 +8,11 @@ namespace Assets.Scripts.States
     {
 
         private StateManager manager;
-        private GlobalGameData gGameData;
+        private GameData gGameData;
         public GalaxyMapState(StateManager managerRef)
         {
             manager = managerRef;
-            gGameData = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            gGameData = GameObject.Find("GameManager").GetComponent<GameData>();
             Debug.Log("Constructing GalaxyMapState");
 
                    

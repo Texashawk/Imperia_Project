@@ -4,12 +4,12 @@ using UnityEngine.Events;
 
 public class IntelView : MonoBehaviour {
 
-    private GlobalGameData gGameDataRef;
+    private GameData gGameDataRef;
     public UnityEvent eventIntelSelect = new UnityEvent();
 
     void Awake()
     {
-        gGameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>(); // tie the game camera script to the data
+        gGameDataRef = GameObject.Find("GameManager").GetComponent<GameData>(); // tie the game camera script to the data
     }
 	// Use this for initialization
 	void Start () {
@@ -24,7 +24,7 @@ public class IntelView : MonoBehaviour {
 
     void OnGUI()
     {
-        if (gGameDataRef.uiSubMode == GlobalGameData.eSubMode.Intel)
+        if (gGameDataRef.uiSubMode == GameData.eSubMode.Intel)
             DisplayIntelScreen();
     }
 
@@ -36,8 +36,8 @@ public class IntelView : MonoBehaviour {
 
     public void ActivateIntelMode() // changes the global mode
     {
-        if (gGameDataRef.uiSubMode != GlobalGameData.eSubMode.Intel)
-            gGameDataRef.uiSubMode = GlobalGameData.eSubMode.Intel;
+        if (gGameDataRef.uiSubMode != GameData.eSubMode.Intel)
+            gGameDataRef.uiSubMode = GameData.eSubMode.Intel;
         Debug.Log("Intel SubMode Selected");
 
     }

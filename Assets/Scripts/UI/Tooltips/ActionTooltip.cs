@@ -13,7 +13,7 @@ public class ActionTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     private bool toolTipCreated = false;
     public bool exitRequested = false;
     private GraphicAssets graphicDataRef;
-    private GlobalGameData gDataRef;
+    private GameData gDataRef;
     private Canvas uiCanvas;
     private float alphaValue = 0f;
     private Color fadeColor;
@@ -23,7 +23,7 @@ public class ActionTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         uiCanvas = GameObject.Find("Character Window Canvas").GetComponent<Canvas>();
         graphicDataRef = GameObject.Find("GameManager").GetComponent<GraphicAssets>();
-        gDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+        gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
     }
 
     void OnGUI()

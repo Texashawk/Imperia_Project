@@ -4,12 +4,12 @@ using UnityEngine.Events;
 
 public class FinanceWindow : MonoBehaviour {
 
-    private GlobalGameData gGameDataRef;
+    private GameData gGameDataRef;
     public UnityEvent eventIntelSelect = new UnityEvent();
 
     void Awake()
     {
-        gGameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>(); // tie the game camera script to the data
+        gGameDataRef = GameObject.Find("GameManager").GetComponent<GameData>(); // tie the game camera script to the data
     }
     // Use this for initialization
     void Start()
@@ -26,7 +26,7 @@ public class FinanceWindow : MonoBehaviour {
 
     void OnGUI()
     {
-        if (gGameDataRef.uiSubMode == GlobalGameData.eSubMode.Finance)
+        if (gGameDataRef.uiSubMode == GameData.eSubMode.Finance)
             DisplayFinanceScreen();
     }
 
@@ -37,8 +37,8 @@ public class FinanceWindow : MonoBehaviour {
 
     public void ActivateFinanceMode() // changes the global mode
     {
-        if (gGameDataRef.uiSubMode != GlobalGameData.eSubMode.Finance)
-            gGameDataRef.uiSubMode = GlobalGameData.eSubMode.Finance;
+        if (gGameDataRef.uiSubMode != GameData.eSubMode.Finance)
+            gGameDataRef.uiSubMode = GameData.eSubMode.Finance;
         Debug.Log("Finance SubMode Selected");
 
     }

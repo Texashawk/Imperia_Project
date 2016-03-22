@@ -34,7 +34,9 @@ namespace Managers
         public const int maxZoomLevel = 135;
         public const int minZoomLevel = 30;
 
-        public ViewManager.eViewLevel ViewMode;   // public accessor for current view mode in the game
+        public ViewManager.eViewLevel ViewLevel;   // public accessor for current view mode in the game
+        public ViewManager.eSecondaryView SecondaryViewMode; // primary 'main' view category
+        public ViewManager.ePrimaryView PrimaryViewMode; // sub mode
 
         // Use this for initialization
         void Awake()
@@ -45,13 +47,23 @@ namespace Managers
             selectedItemPanel = GameObject.Find("Selected Item Panel"); // selected item panel
         }
 
+        void Start()
+        {
+            // set the initial views when game starts
+            SetActiveViewLevel(ViewManager.eViewLevel.Galaxy);
+            SetActivePrimaryMode(ViewManager.ePrimaryView.Political);
+            SetActiveSecondaryMode(ViewManager.eSecondaryView.Sovereignity);
+        }
+
         // Update is called once per frame
         void Update()
         {
-            ViewMode = viewManagerRef.ViewLevel;
+            ViewLevel = viewManagerRef.ViewLevel;
+            SecondaryViewMode = viewManagerRef.SecondaryViewMode;
+            PrimaryViewMode = viewManagerRef.PrimaryViewMode;
 
             // Show the selected item panel (won't be here though, need to move to the actual script
-            if (ViewMode == ViewManager.eViewLevel.Galaxy|| ViewMode == ViewManager.eViewLevel.Province)
+            if (ViewLevel == ViewManager.eViewLevel.Galaxy|| ViewLevel == ViewManager.eViewLevel.Province)
             {
                 selectedItemPanel.SetActive(false);
             }
@@ -61,20 +73,38 @@ namespace Managers
             }
         }
 
+        // status change of primary mode for events from buttons
+        public void SetPrimaryModeToPolitical()
+        {
+            SetActivePrimaryMode(ViewManager.ePrimaryView.Political);
+            SetActiveSecondaryMode(ViewManager.eSecondaryView.Sovereignity); // for testing
+        }
+
+        public void SetPrimaryModeToEconomic()
+        {
+            SetActivePrimaryMode(ViewManager.ePrimaryView.Economic);
+            SetActiveSecondaryMode(ViewManager.eSecondaryView.Trade); // for testing
+        }
+
+        public void SetPrimaryModeToMilitary()
+        {
+            SetActivePrimaryMode(ViewManager.ePrimaryView.Military);
+        }
+
         public void SetActiveViewLevel(ViewManager.eViewLevel viewMode)
         {
             viewManagerRef.ViewLevel = viewMode;
-            ViewMode = viewManagerRef.ViewLevel;
+            ViewLevel = viewManagerRef.ViewLevel;
         }
 
-        public void SetActiveSubMode(ViewManager.eSubView subView)
+        public void SetActivePrimaryMode(ViewManager.ePrimaryView subView)
         {
-            viewManagerRef.SubModeView = subView;
+            viewManagerRef.PrimaryViewMode = subView;
         }
 
-        public void SetActiveView(ViewManager.ePrimaryView activeView)
+        public void SetActiveSecondaryMode(ViewManager.eSecondaryView activeView)
         {
-            viewManagerRef.PrimaryGalaxyViewMode = activeView;
+            viewManagerRef.SecondaryViewMode = activeView;
         }
 
         void LateUpdate()

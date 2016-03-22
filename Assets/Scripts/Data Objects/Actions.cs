@@ -95,7 +95,7 @@ namespace Actions
         // relationship/action helper functions (create challenges, etc)
         public static string CreateChallenge(string challengerCharID, string challengedCharID, int influenceStaked)
         {
-            GlobalGameData gDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            GameData gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
             Challenge newChallenge = new Challenge();
 
             // create a unique ID until it does not exist in any other challenge (highly unlikely, but still)
@@ -114,7 +114,7 @@ namespace Actions
 
         public static void ResolveChallenge(Challenge activeChallenge, string winningCharacterID, string losingCharacterID)
         {
-            GlobalGameData gDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            GameData gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
             activeChallenge.WinnerOfChallengeID = winningCharacterID;
             activeChallenge.LoserOfChallengeID = losingCharacterID;
 
@@ -149,7 +149,7 @@ namespace Actions
         }
         public static string GivePraisingSpeech(Character cData)
         {
-            GlobalGameData gDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>(); 
+            GameData gDataRef = GameObject.Find("GameManager").GetComponent<GameData>(); 
             Character eData = gDataRef.CivList[0].Leader; // you
             CharacterAction aData = gDataRef.CharacterActionList.Find(p => p.ID == "A1");
             
@@ -203,7 +203,7 @@ namespace Actions
 
         public static string GivePublicReprimand(Character reprimandingChar, Character reprimandedChar)
         {
-            GlobalGameData gDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            GameData gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
             CharacterAction aData = gDataRef.CharacterActionList.Find(p => p.ID == "A2");
             Relationship firstCharacterInitialState = reprimandingChar.Relationships[reprimandedChar.ID];
             Relationship secondCharacterInitialState = reprimandedChar.Relationships[reprimandingChar.ID];
@@ -258,7 +258,7 @@ namespace Actions
        
         public static string IssueInsultToCharacter(Character challengingChar, Character insultedChar)
         {
-            GlobalGameData gDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            GameData gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
             Character eData = gDataRef.CivList[0].Leader; // you
             CharacterAction aData = gDataRef.CharacterActionList.Find(p => p.ID == "A3");
             Relationship firstCharacterInitialState = insultedChar.Relationships[challengingChar.ID];

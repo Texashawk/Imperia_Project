@@ -9,7 +9,7 @@ public class ActionScrollView : MonoBehaviour
 
     public GameObject Button_Template;
     //private List<Character> ActionList = new List<Character>();
-    private GlobalGameData gameDataRef;
+    private GameData gameDataRef;
     private CharacterScreen characterScreen;
     private List<GameObject> buttonList = new List<GameObject>();
     public bool listIsInitialized = false;
@@ -17,7 +17,7 @@ public class ActionScrollView : MonoBehaviour
 
     void Awake()
     {
-        gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+        gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
         characterScreen = GameObject.Find("Character Window Canvas").GetComponent<CharacterScreen>();
     }
     

@@ -22,7 +22,7 @@ public class GenerateGameObject
 
     // accessor variables
     private static GalaxyData galaxyDataRef;
-    private static GlobalGameData gameDataRef;
+    private static GameData gameDataRef;
     private static GraphicAssets graphicsDataRef;
 
 
@@ -89,7 +89,7 @@ public class GenerateGameObject
         Civilization newCiv = new Civilization();
         int dieRoll = 0;
         galaxyDataRef = GameObject.Find("GameManager").GetComponent<GalaxyData>(); // access galaxy data
-        gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>(); // access galaxy data
+        gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>(); // access galaxy data
 
         // Step 1: Generate type of civ
         dieRoll = UnityEngine.Random.Range(1, 7);
@@ -277,7 +277,7 @@ public class GenerateGameObject
 
     public static void ClaimPlanetsForCiv(Civilization newCiv) // this 'flags' planets to seed with pops in the next step
     {
-        gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+        gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
         galaxyDataRef = GameObject.Find("GameManager").GetComponent<GalaxyData>();
 
         float civMaxDistance = newCiv.Range;
@@ -1626,7 +1626,7 @@ public class GenerateGameObject
     {
         NebulaData nData = new NebulaData();
         galaxyDataRef = GameObject.Find("GameManager").GetComponent<GalaxyData>();
-        gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+        gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
 
         // Step 1: Generate name
         if (DataManager.planetNameList.Count > 0)

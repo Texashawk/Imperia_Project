@@ -15,9 +15,9 @@ namespace CameraScripts
         [HideInInspector]public bool ScrollWheelIsValid { get; set; } // can the scrollwheel be used to manipulate the camera?
 	    private float zoomSpeed = 9.5f;
         private float zoomSensitivity = 50f;
-        public const float cameraTilt = 25f; // was 20f
+        public const float cameraTilt = 35f; // was 20f
         private Camera mainC; // camera reference
-        private GlobalGameData gDataRef;
+        private GameData gDataRef;
         private UIManager uiManagerRef;
 
         [HideInInspector]public ViewManager.eViewLevel ZoomLevel;
@@ -55,7 +55,7 @@ namespace CameraScripts
 	    // Use this for initialization
 	    void Start () {
             mainC = GameObject.Find("Main Camera").GetComponent<Camera>();
-            gDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
             uiManagerRef = GameObject.Find("UI Engine").GetComponent<UIManager>();
             mainC.fieldOfView = maxZoomLevel;
             zoom = mainC.fieldOfView;
@@ -63,7 +63,7 @@ namespace CameraScripts
             galaxyWidth = gDataRef.GalaxySizeWidth;
             ScrollWheelIsValid = true;
             uiManagerRef.SetActiveViewLevel(ViewManager.eViewLevel.Galaxy);
-            uiManagerRef.SetActiveView(ViewManager.ePrimaryView.Sovereignity);
+            uiManagerRef.SetActiveSecondaryMode(ViewManager.eSecondaryView.Sovereignity);
             float tangent = Mathf.Tan(cameraTilt * Mathf.Deg2Rad);
             tiltYOffset = galaxyZValue * tangent; // move the camera initially
             }
@@ -73,7 +73,7 @@ namespace CameraScripts
         {
             scaleRatio = (Screen.height / 1920f) * (Screen.width / 1080f);
        
-            if (gDataRef.uiSubMode == GlobalGameData.eSubMode.None && !gDataRef.modalIsActive)  // only work in no submode
+            if (gDataRef.uiSubMode == GameData.eSubMode.None && !gDataRef.modalIsActive)  // only work in no submode
             {
                 // run movement/zoom functions
                 CheckForMapPan();
@@ -120,11 +120,11 @@ namespace CameraScripts
                     if ((Input.GetAxis("Mouse ScrollWheel") > mouseWheelValue) || Input.GetButtonDown("Right Mouse Button"))
                     {
                         planetTarget.transform.localScale = new Vector3(planetTarget.GetComponent<Planet>().planetData.PlanetSystemScaleSize,planetTarget.GetComponent<Planet>().planetData.PlanetSystemScaleSize,1); // reset the scale
+                        planetTarget.Rotate(0, 0, 90);
                         planetTarget = null;
                         planetZoomActive = false;
                         planetZoomComplete = false;
                         provinceZoomActive = false;
-                        planetTarget = null;
                         provinceZoomComplete = false;
                         systemZoomActive = true;
                         zoom = systemMinZoomLevel;
@@ -132,7 +132,7 @@ namespace CameraScripts
                     }
 
                 // check each cycle for camera height lock
-                if (uiManagerRef.ViewMode == ViewManager.eViewLevel.Galaxy)
+                if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.Galaxy)
                 {
                     transform.position = new Vector3(transform.position.x, transform.position.y, galaxyZValue);
                 }
@@ -160,7 +160,7 @@ namespace CameraScripts
             
 
             // set normal angle of camera
-            if (uiManagerRef.ViewMode != ViewManager.eViewLevel.Galaxy && systemZoomActive)
+            if (uiManagerRef.ViewLevel != ViewManager.eViewLevel.Galaxy && systemZoomActive)
                 transform.eulerAngles = new Vector3(180, 0, 0); // was 30,0,0
             else
             {   
@@ -297,6 +297,7 @@ namespace CameraScripts
                 {
                     tgtPosition = new Vector3(target.position.x + (leftCameraMove * (Screen.width / 1920f)) + (target.localScale.x / 2), target.position.y + 75 * (Screen.height / 1080f), systemZValue);
                     transform.position = new Vector3 (cameraPlanetPosition.x,cameraPlanetPosition.y, systemZValue);
+                    
                     zoom = systemMinZoomLevel; // set system view zoom level
                     StartCoroutine(SystemZoom(tgtPosition));
                 }
@@ -315,6 +316,8 @@ namespace CameraScripts
                 planet.localScale = new Vector3(25 * scaleRatio, 25 * scaleRatio, 1); // then normalize the size of the planet to show close-up (number is the nominal scale)
                 zoom = planetMinZoomLevel; // set planet view zoom level
                 StartCoroutine(PlanetZoom(tgtPosition));
+                //transform.Rotate(90, 90, 0);
+                planet.Rotate(0, 0, -90);
                 cameraPlanetPosition = transform.position;
                 planetZoomComplete = true; // set views as true
                 planetToSystemZoom = true;
@@ -360,7 +363,7 @@ namespace CameraScripts
 
         void DetermineZoomLevel()
         {
-            ZoomLevel = uiManagerRef.ViewMode;
+            ZoomLevel = uiManagerRef.ViewLevel;
         }
     }
 }

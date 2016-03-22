@@ -8,7 +8,7 @@ public class StateManager : MonoBehaviour
     private IStateBase activeState;
     [HideInInspector] public GalaxyData galaxyDataRef; //reference (link) to all galaxy data
     private static StateManager instanceRef;
-    public GlobalGameData gameDataRef;
+    public GameData gameDataRef;
 
     void Awake()
     {
@@ -28,7 +28,7 @@ public class StateManager : MonoBehaviour
         // initialize state machine and managers
         activeState = new BeginState(this);
         galaxyDataRef = GetComponent<GalaxyData>();  // gets the galaxy data script containing the data structure
-        gameDataRef = GetComponent<GlobalGameData>();  // gets global game data (screens, etc) that are used universally
+        gameDataRef = GetComponent<GameData>();  // gets global game data (screens, etc) that are used universally
 
         Debug.Log("This object is of type: " + activeState);
     }

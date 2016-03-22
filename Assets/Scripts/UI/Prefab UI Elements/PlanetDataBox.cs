@@ -7,12 +7,12 @@ using Tooltips;
 public class PlanetDataBox : MonoBehaviour {
 
     PlanetData pData; // reference for planet data
-    GlobalGameData gameDataRef; // to determine mode
+    GameData gameDataRef; // to determine mode
     GraphicAssets graphicsDataRef; // for character pictures and other global pictures
 
     void Awake()
     {
-        gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+        gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
         graphicsDataRef = GameObject.Find("GameManager").GetComponent<GraphicAssets>();
     }
 

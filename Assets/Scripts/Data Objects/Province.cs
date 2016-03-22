@@ -27,7 +27,7 @@ public class Province
     {
         get
         {
-            GlobalGameData gData = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            GameData gData = GameObject.Find("GameManager").GetComponent<GameData>();
             if (gData.CharacterList.Exists(p => p.ProvinceAssignedID == ID))
             {
                 return gData.CharacterList.Find(p => p.ProvinceAssignedID == ID);

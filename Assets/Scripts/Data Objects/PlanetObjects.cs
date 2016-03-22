@@ -1227,7 +1227,7 @@ namespace PlanetObjects
             ImmigratedLastTurn = 0;
             EmigratedLastTurn = 0;
 
-            GlobalGameData gData = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            GameData gData = GameObject.Find("GameManager").GetComponent<GameData>();
             int month = gData.GameMonth;
 
             // check for deaths

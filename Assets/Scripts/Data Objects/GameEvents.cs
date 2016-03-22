@@ -61,7 +61,7 @@ namespace GameEvents
 
         public static void CreateNewStellarEvent(string civID, string locationName, string systemLocationID, string planetLocationID, eEventType eType, eEventLevel eLevel, eEventScope eScope, int Value1, string Label1)
         {
-            GlobalGameData gDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            GameData gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
             string origDesc = DataManager.Descriptions[eType];
             string newDesc = origDesc;
             GameEvent newEvent = new GameEvent();
@@ -101,7 +101,7 @@ namespace GameEvents
 
       public static void GeneratePlanetEvents(PlanetData pData, Civilization civ)
       {
-          GlobalGameData gDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+          GameData gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
 
           // population events
           if (pData.PopulationChangeLastTurn > 0)

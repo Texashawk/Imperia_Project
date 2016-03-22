@@ -6,7 +6,7 @@ using TMPro;
 
 public class DynamicResourcesZone : MonoBehaviour
 {
-    private GlobalGameData gameDataRef;
+    private GameData gameDataRef;
     private TextMeshProUGUI empireTreasuryRevenues;
     private TextMeshProUGUI empireTreasuryExpenses;
     private UIManager uiManagerRef;
@@ -16,7 +16,7 @@ public class DynamicResourcesZone : MonoBehaviour
     void Awake()
     {
         // initialize all empire bar stats
-        gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>(); // get global game data (date, location, version, etc)
+        gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>(); // get global game data (date, location, version, etc)
         uiManagerRef = GameObject.Find("UI Engine").GetComponent<UIManager>(); // get global game data (date, location, version, etc)
         empireTreasuryRevenues = GameObject.Find("EmpireTreasuryRevenues").GetComponent<TextMeshProUGUI>();
         empireTreasuryExpenses = GameObject.Find("EmpireTreasuryExpenses").GetComponent<TextMeshProUGUI>();

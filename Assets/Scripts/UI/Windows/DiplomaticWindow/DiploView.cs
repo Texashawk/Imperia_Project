@@ -4,12 +4,12 @@ using UnityEngine.Events;
 
 public class DiploView : MonoBehaviour {
 
-    private GlobalGameData gGameDataRef;
+    private GameData gGameDataRef;
     public UnityEvent eventDiploSelect = new UnityEvent();
 
     void Awake()
     {
-        gGameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>(); // tie the game camera script to the data
+        gGameDataRef = GameObject.Find("GameManager").GetComponent<GameData>(); // tie the game camera script to the data
     }
     // Use this for initialization
     void Start()
@@ -26,7 +26,7 @@ public class DiploView : MonoBehaviour {
 
     void OnGUI()
     {
-        if (gGameDataRef.uiSubMode == GlobalGameData.eSubMode.Diplomacy)
+        if (gGameDataRef.uiSubMode == GameData.eSubMode.Diplomacy)
             DisplayDiplomacyScreen();
     }
 
@@ -37,8 +37,8 @@ public class DiploView : MonoBehaviour {
 
     public void ActivateDiplomaticMode() // changes the global mode
     {
-        if (gGameDataRef.uiSubMode != GlobalGameData.eSubMode.Diplomacy)
-            gGameDataRef.uiSubMode = GlobalGameData.eSubMode.Diplomacy;
+        if (gGameDataRef.uiSubMode != GameData.eSubMode.Diplomacy)
+            gGameDataRef.uiSubMode = GameData.eSubMode.Diplomacy;
         Debug.Log("Diplomatic SubMode Selected");
 
     }

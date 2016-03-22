@@ -6,7 +6,7 @@ public class ShowGameCreationStats : MonoBehaviour
 {
 
     GalaxyData gData;
-    GlobalGameData gameData;
+    GameData gameData;
     Text planetsGenerated;
     Text housesGenerated;
     Text charactersGenerated;
@@ -15,7 +15,7 @@ public class ShowGameCreationStats : MonoBehaviour
     void Start()
     {
         gData = GameObject.Find("GameManager").GetComponent<GalaxyData>();
-        gameData = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+        gameData = GameObject.Find("GameManager").GetComponent<GameData>();
         planetsGenerated = GameObject.Find("Planets Generated").GetComponent<Text>();
         housesGenerated = GameObject.Find("Houses Generated").GetComponent<Text>();
         charactersGenerated = GameObject.Find("Characters Generated").GetComponent<Text>();

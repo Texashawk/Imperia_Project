@@ -11,7 +11,7 @@ public class ModalPanel : MonoBehaviour {
     public Button noButton;
     public Button cancelButton;
     public GameObject modalPanelObject;
-    private static GlobalGameData gGameData;
+    private static GameData gGameData;
 
     private static ModalPanel modalPanel;
 
@@ -19,7 +19,7 @@ public class ModalPanel : MonoBehaviour {
     {
         if (!modalPanel)
         {
-            gGameData = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            gGameData = GameObject.Find("GameManager").GetComponent<GameData>();
             //modalPanel = new ModalPanel();
             modalPanel = FindObjectOfType(typeof(ModalPanel)) as ModalPanel;
             if (!modalPanel)

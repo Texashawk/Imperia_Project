@@ -174,6 +174,35 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                     return eStellarIntelLevel.High;
             }
         }
+        // population for the player empire in this system
+        public int CivPopulation(Civilization civ)
+        {           
+            GameData gData;
+            gData = GameObject.Find("GameManager").GetComponent<GameData>();
+            int popCount = 0;
+            foreach (PlanetData pData in PlanetList)
+            {
+                if (pData.Owner == civ)
+                    popCount += pData.TotalPopulation;
+            }
+
+            return popCount;
+            
+        }
+
+        public PlanetData.eTradeHubType LargestTradeHub
+        {
+            get
+            {
+                PlanetData.eTradeHubType CurrentTradeHub = PlanetData.eTradeHubType.NotHub; // set initial
+                foreach (PlanetData pData in PlanetList)
+                {
+                    if (pData.TradeHub > CurrentTradeHub)
+                        CurrentTradeHub = pData.TradeHub;
+                }
+                return CurrentTradeHub;
+            }
+        }
 
         // array list
         public PlanetData[] PlanetSpots = new PlanetData[6];
@@ -195,7 +224,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         {
             get
             {
-                GlobalGameData gData = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+                GameData gData = GameObject.Find("GameManager").GetComponent<GameData>();
                 if (gData.CharacterList.Exists(p => p.SystemAssignedID == ID))
                 {
                     return gData.CharacterList.Find(p => p.SystemAssignedID == ID);
@@ -368,7 +397,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         const int maxMoons = 10;
         const float maxIndMultiplier = 1.5f;
 
-        public GlobalGameData gData;
+        public GameData gData;
 
         public enum ePlanetRank : int
         {
@@ -392,7 +421,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         public enum eTradeHubType : int
         {
             NotHub,
-            SystemTradeHub,
+            SecondaryTradeHub,
             ProvinceTradeHub,
             CivTradeHub
         }
@@ -426,21 +455,17 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         public string ID { get; set; } // unique ID of planet
         public string HouseIDHolding { get; set; } // which House owns this planet as a Holding
         public int IntelLevel { get; set; } // the intel level of the planet; will change to a table that each civ has (one civ doesn't have the same intel level as another)
-        public ePlanetType Type { get; set; } // type of planet (desert, ocean, etc)
-       
-        public string SupplyToPlanetID = "";
+        public ePlanetType Type { get; set; } // type of planet (desert, ocean, etc)             
 
         // planet budget parameters that are set
         public float PercentGPPForTax { get; set; } // tax that is paid out
         public float PercentGPPForTrade { get; set; } // budget set for interal trade?
-        public float PercentGPPForImports { get; set; } // budget set for importing goods
-        
+        public float PercentGPPForImports { get; set; } // budget set for importing goods       
         public float ExportRevenue { get; set; } // GPP that is derived from export sales
         public float YearlyImportExpenses { get; set; } // GPP that is subtracted throughout the year due to import purchases
 
-
-
         // trade variables
+        public string SupplyToPlanetID = "";
         private float _pYearlyImportBudget;
         public float YearlyImportBudget // this is set at the beginning of the year
         {
@@ -453,6 +478,17 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         public eTradeStatus TradeStatus { get; set; }
         public eTradeHubType TradeHub { get; set; }
         public List<TradeProposal> ActiveTradeProposalList = new List<TradeProposal>();
+        public int MerchantsAvailableForExport { get; set; }  
+        
+        public bool PlanetIsLinkedToTradeHub { get; set; } // may change this to 'real-time' variable
+        public List<string> PlanetsInTradeGroup { get; set; } // list of planets that this planet may trade with (in their 'trade group') - calculated externally
+        //{
+            //get
+            //{
+            //    GalaxyData galDataRef = GameObject.Find("GameEngine").GetComponent<GalaxyData>(); // get a static link to the galaxy data object
+            //    foreach 
+            //}
+        //}      
 
         // resource Importances on each planet
         private float _foodImportance;
@@ -486,7 +522,6 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
             set { _rareImportance = Mathf.Clamp(value, 0, 1000); }
         }
 
-
         public float FoodRetailPercentHold { get; set; }
         public float CommerceTax { get; set; }
         public int PlanetSpot { get; set; }
@@ -503,6 +538,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 return diam;
             }
         }
+
         public float AxialTilt { get; set; }
 
         // get the owner
@@ -510,7 +546,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         {
             get
             {
-                GlobalGameData gData = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+                GameData gData = GameObject.Find("GameManager").GetComponent<GameData>();
                 Civilization owningCiv = null;
 
                 foreach (Civilization civ in gData.CivList)
@@ -584,7 +620,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         {
             get
             {
-                GlobalGameData gData = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+                GameData gData = GameObject.Find("GameManager").GetComponent<GameData>();
                 if (gData.CharacterList.Exists(p => p.PlanetAssignedID == ID))
                 {
                     return gData.CharacterList.Find(p => p.PlanetAssignedID == ID);
@@ -662,7 +698,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                     merchantEfficiency = 1f;
                 }
 
-                foodRetailRevenue = (foodAvailable * merchantEfficiency) * ((float)AverageMerchantSkill / 100f) * Owner.CurrentFoodPrice * foodAvailable * CommerceTax;
+                foodRetailRevenue = (foodAvailable * merchantEfficiency) * (AverageMerchantSkill / 100f) * Owner.CurrentFoodPrice * foodAvailable * CommerceTax;
 
                 return foodRetailRevenue;
             }
@@ -851,7 +887,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
             get
             {
                 float baseCapacity = StarbaseCapacity;
-                GlobalGameData gData = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+                GameData gData = GameObject.Find("GameManager").GetComponent<GameData>();
 
                 foreach (TradeFleet tradeAg in gData.ActiveTradeFleets)
                 {
@@ -1164,7 +1200,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
             get
             {
                 List<TradeFleet> tradeFleets = new List<TradeFleet>();
-                GlobalGameData gData = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+                GameData gData = GameObject.Find("GameManager").GetComponent<GameData>();
 
                 foreach (TradeFleet tradeAg in gData.ActiveTradeFleets)
                 {
@@ -1576,91 +1612,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         }
 
         // trade functions
-        //public bool IsTradeAgreementValid(PlanetData proposedPlanet, string resource)
-        //{
-           
-        //    bool hasFood = false;
-        //    bool hasEnergy = false;
-        //    bool hasAlpha = false;
-        //    bool hasHeavy = false;
-        //    bool hasRare = false;
-           
-        //    bool validTradeAgreementPossible = false;
-
-        //    // first check that base is acceptable
-        //    if ((ProvGovSupport != eSupportLevel.None) || (SysGovSupport != eSupportLevel.None)) // province gov must be on board
-        //    {
-        //        //supportsTrade = true;                   // step 1     
-        //        if (IsTradeHub)
-        //        {
-        //            //hasExportCapability = true;         // step 2
-        //            if (StarbaseLevel > 0)
-        //            {
-        //                //hasStarBaseCapacity = true;     // and step 3
-        //                validTradeAgreementPossible = true; //  you've gotten this far with 3 checks, a trade is valid as long as there's capacity and materials available
-        //            }
-        //        }
-               
-        //    }
-
-        //    if (!validTradeAgreementPossible)
-        //        return false; // exits if not possible at this point
-
-        //    // now check on specific resources           
-        //    if (FoodExportAvailable > 0) // if greater than 0 available for trade
-        //    {
-        //        hasFood = true;
-        //    }
-
-        //    if (EnergyExportAvailable > 0) // if greater than 0 available for trade
-        //    {
-        //        hasEnergy = true;
-        //    }
-
-        //    if (AlphaExportAvailable > 0) // if greater than 0 available for trade
-        //    {
-        //        hasAlpha = true;
-        //    }
-
-        //    if (HeavyExportAvailable > 0) // if greater than 0 available for trade
-        //    {
-        //        hasHeavy = true;
-        //    }
-
-        //    if (RareExportAvailable > 0) // if greater than 0 available for trade
-        //    {
-        //        hasRare = true;
-        //    }
-          
-        //    // finally, if they have the resource asked for, return true
-        //    if (resource == "food" && hasFood)
-        //    {                           
-        //        return true;         
-        //    }
-
-        //    if (resource == "energy" && hasEnergy)
-        //    {
-        //        return true;
-        //    }
-
-        //    if (resource == "alpha" && hasAlpha)
-        //    {
-        //        return true;
-        //    }
-
-        //    if (resource == "heavy" && hasHeavy)
-        //    {
-        //        return true;
-        //    }
-
-        //    if (resource == "rare" && hasRare)
-        //    {
-        //        return true;
-        //    }
-
-        //    return false; // if no availability, return false
-        //}
-
+       
         // planet traits/rank
         public ePlanetRank Rank { get; set; }
         public List<PlanetTraits> PlanetTraits = new List<PlanetTraits>();
@@ -2826,7 +2778,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         {
             get
             {
-                GlobalGameData gData = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+                GameData gData = GameObject.Find("GameManager").GetComponent<GameData>();
                 float totalAlpha = 0f;
 
                 if (gData.ActiveTradeFleets.Exists(p => p.ImportPlanetID == this.ID))
@@ -2846,7 +2798,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         {
             get
             {
-                GlobalGameData gData = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+                GameData gData = GameObject.Find("GameManager").GetComponent<GameData>();
                 float totalAlpha = 0f;
 
                 if (gData.ActiveTradeFleets.Exists(p => p.ExportPlanetID == this.ID))
@@ -2866,7 +2818,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         {
             get
             {
-                GlobalGameData gData = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+                GameData gData = GameObject.Find("GameManager").GetComponent<GameData>();
                 float totalHeavy = 0f;
 
                 if (gData.ActiveTradeFleets.Exists(p => p.ImportPlanetID == this.ID))
@@ -2886,7 +2838,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         {
             get
             {
-                GlobalGameData gData = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+                GameData gData = GameObject.Find("GameManager").GetComponent<GameData>();
                 float totalHeavy = 0f;
 
                 if (gData.ActiveTradeFleets.Exists(p => p.ExportPlanetID == this.ID))
@@ -2906,7 +2858,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         {
             get
             {
-                GlobalGameData gData = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+                GameData gData = GameObject.Find("GameManager").GetComponent<GameData>();
                 float totalRare = 0f;
 
                 if (gData.ActiveTradeFleets.Exists(p => p.ImportPlanetID == this.ID))
@@ -2926,7 +2878,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         {
             get
             {
-                GlobalGameData gData = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+                GameData gData = GameObject.Find("GameManager").GetComponent<GameData>();
                 float totalRare = 0f;
 
                 if (gData.ActiveTradeFleets.Exists(p => p.ExportPlanetID == this.ID))

@@ -14,14 +14,14 @@ using Assets.Scripts.Managers;
 
 public class TurnEngine : MonoBehaviour {
 
-    private GlobalGameData gDataRef; // global game data
+    private GameData gDataRef; // global game data
     private GalaxyData galDataRef; // galaxy data
 
 	// Use this for initialization
 	void Start () 
     {
         galDataRef = GameObject.Find("GameManager").GetComponent<GalaxyData>();
-        gDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+        gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
 
         // run 2 times before first turn to maximize 
         for (int x = 0; x < 2; x++)
@@ -29,8 +29,8 @@ public class TurnEngine : MonoBehaviour {
             foreach (Civilization civ in gDataRef.CivList)
             {
                 UpdatePlanets(civ);
-                CheckForMigration(civ); // check for intraplanet migration
-                MigratePopsBetweenPlanets(civ); // and if there are any pops who want to leave, check for where
+                //CheckForMigration(civ); // check for intraplanet migration
+                //MigratePopsBetweenPlanets(civ); // and if there are any pops who want to leave, check for where
                 UpdateTrades(civ);
             }
         }    
@@ -59,8 +59,8 @@ public class TurnEngine : MonoBehaviour {
             UpdateTrades(civ);
             UpdatePopularSupport(civ); // advance popular support
             UpdatePlanets(civ); // advance economy, move pops to same planet, update unrest/popular support levels, etc
-            CheckForMigration(civ); // check for intraplanet migration                     
-            MigratePopsBetweenPlanets(civ); // and if there are any pops who want to leave, check for where          
+            //CheckForMigration(civ); // check for intraplanet migration                     
+            //MigratePopsBetweenPlanets(civ); // and if there are any pops who want to leave, check for where          
             UpdateEvents(civ);           
         }
     }
@@ -105,7 +105,7 @@ public class TurnEngine : MonoBehaviour {
 
     private void UpdateTrades(Civilization civ)
     {
-        TradeManager.CreateTradeAgreements(civ); // this will analyze each planet's needs and generate proposals for trade
+        TradeManager.CreateTradeAgreements(); // this will analyze each planet's needs and generate proposals for trade
         TradeManager.UpdateActiveTradeFleets(); // this will update the location and status of all active trade fleets
         TradeManager.GenerateNewTradeFleets(); // this will create new trade fleets that will begin to move next month towards their destination
         TradeManager.DeactivateTradeFleets(); // this will deactivate any trade fleets that have completed their journey and do not have any runs left

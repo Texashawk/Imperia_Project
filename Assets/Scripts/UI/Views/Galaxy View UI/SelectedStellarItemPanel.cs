@@ -15,7 +15,7 @@ namespace Assets.Scripts.UI
         private TextMeshProUGUI selectedItemName;
         private TextMeshProUGUI selectedItemSecondaryInfo;
         private UIManager uiManagerRef;
-        private GlobalGameData gDataRef;
+        private GameData gDataRef;
         private GameObject selectedItemPanel;
 
         void Awake()
@@ -23,7 +23,7 @@ namespace Assets.Scripts.UI
             selectedItemName = GameObject.Find("Selected Item Line").GetComponent<TextMeshProUGUI>();
             selectedItemSecondaryInfo = GameObject.Find("Secondary Header Line").GetComponent<TextMeshProUGUI>();
             uiManagerRef = GameObject.Find("UI Engine").GetComponent<UIManager>();
-            gDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
             selectedItemPanel = GameObject.Find("Selected Item Panel");
         }
 
@@ -36,7 +36,7 @@ namespace Assets.Scripts.UI
 
         void UpdatePanel() // check for selected objects
         {
-            if (uiManagerRef.ViewMode == ViewManager.eViewLevel.System && uiManagerRef.selectedSystem != null)
+            if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.System && uiManagerRef.selectedSystem != null)
             {
                 StarData starDat = uiManagerRef.selectedSystem;
                 selectedItemName.text = uiManagerRef.selectedSystem.Name.ToUpper();  //show text
@@ -61,7 +61,7 @@ namespace Assets.Scripts.UI
                 }
             }
 
-            else if (uiManagerRef.ViewMode == ViewManager.eViewLevel.Planet && uiManagerRef.selectedPlanet != null)
+            else if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.Planet && uiManagerRef.selectedPlanet != null)
             {
                 selectedItemName.text = uiManagerRef.selectedPlanet.Name.ToUpper();  //show text
                 selectedItemSecondaryInfo.text = "CLASS " + StringConversions.ConvertToRomanNumeral((int)(uiManagerRef.selectedPlanet.Size / 10)) + " " + HelperFunctions.StringConversions.ConvertPlanetEnum(uiManagerRef.selectedPlanet.Type).ToUpper();

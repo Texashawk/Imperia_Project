@@ -36,7 +36,7 @@ public class DisplayGalaxyMapElements : MonoBehaviour
 
     void RemoveUIObjects()
     {
-        if (uiManagerRef.ViewMode != ViewManager.eViewLevel.Galaxy)  // take away things that don't belong in the system view
+        if (uiManagerRef.ViewLevel != ViewManager.eViewLevel.Galaxy)  // take away things that don't belong in the system view
         {
             rosette.SetActive(false);
             zoomValueText.SetActive(false);

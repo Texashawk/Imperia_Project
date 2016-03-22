@@ -4,12 +4,12 @@ using UnityEngine.Events;
 
 public class WarWindow : MonoBehaviour {
 
-    private GlobalGameData gGameDataRef;
+    private GameData gGameDataRef;
     public UnityEvent eventIntelSelect = new UnityEvent();
 
     void Awake()
     {
-        gGameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>(); // tie the game camera script to the data
+        gGameDataRef = GameObject.Find("GameManager").GetComponent<GameData>(); // tie the game camera script to the data
     }
     // Use this for initialization
     void Start()
@@ -26,7 +26,7 @@ public class WarWindow : MonoBehaviour {
 
     void OnGUI()
     {
-        if (gGameDataRef.uiSubMode == GlobalGameData.eSubMode.War)
+        if (gGameDataRef.uiSubMode == GameData.eSubMode.War)
             DisplayWarScreen();
     }
 
@@ -38,8 +38,8 @@ public class WarWindow : MonoBehaviour {
 
     public void ActivateWarMode() // changes the global mode
     {
-        if (gGameDataRef.uiSubMode != GlobalGameData.eSubMode.War)
-            gGameDataRef.uiSubMode = GlobalGameData.eSubMode.War;
+        if (gGameDataRef.uiSubMode != GameData.eSubMode.War)
+            gGameDataRef.uiSubMode = GameData.eSubMode.War;
         Debug.Log("War SubMode Selected");
 
     }

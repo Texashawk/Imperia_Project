@@ -8,7 +8,7 @@ public class EventScrollView : MonoBehaviour, IPointerEnterHandler, IPointerExit
 {
 
     public GameObject Button_Template;
-    private GlobalGameData gameDataRef;
+    private GameData gameDataRef;
     private List<GameObject> buttonList = new List<GameObject>();
     public bool listIsInitialized = false;
     private Camera mainCamera;
@@ -16,7 +16,7 @@ public class EventScrollView : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     void Awake()
     {
-        gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+        gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
         mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
     }
 

@@ -69,7 +69,7 @@ namespace Screens.Galaxy
         private GUIStyle gStyle;
         private float zoomValue = 0.0f;
         private float maxZoomLevel = 0.0f;
-        private GlobalGameData gameDataRef;
+        private GameData gameDataRef;
         private UIManager uiManagerRef;
         private GameObject starmapSprite;
         private GameObject backingSphere;
@@ -90,7 +90,6 @@ namespace Screens.Galaxy
         private bool systemGridCreated = false; // is system grid created?
         private bool provinceLinesDrawn = false; // are province lines drawn?
         private bool systemTrailCreated = false; // is background trail created?
-        private bool rangeCirclesGenerated = false; // have range circles been drawn?
         private bool mapInOverviewMode = false; // is the map in province or galaxy mode?
         public bool EventPanelActive = true; // set visibilty
         private GameObject smallSystemGrid;
@@ -103,7 +102,6 @@ namespace Screens.Galaxy
 
         void Awake()
         {
-
             // modal stuff
             modalPanel = ModalPanel.Instance();  // sets up a static instance of the window
             myYesAction = new UnityAction(TestYesFunction); // assign functions to actions
@@ -129,7 +127,7 @@ namespace Screens.Galaxy
             galaxyPlanetInfoCanvas = GameObject.Find("Galaxy Planet Info Canvas").GetComponent<Canvas>();
 
             // data objects
-            gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>(); // get global game data (date, location, version, etc)
+            gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>(); // get global game data (date, location, version, etc)
             gCameraRef = GameObject.Find("Main Camera").GetComponent<GalaxyCameraScript>(); // get global camera script
             uiManagerRef = GameObject.Find("UI Engine").GetComponent<UIManager>();
 
@@ -172,28 +170,20 @@ namespace Screens.Galaxy
         }
 
         void OnGUI()
-        {
-            
-            GUI.depth = -2; // set behind all other objects?
-            GUI.skin.font = labelFont; // set the font for all labels in this scene
-
+        {        
             DisplayVersionInfo();
-            DisplayMapMode();
-
-            if ((uiManagerRef.ViewMode == ViewManager.eViewLevel.Galaxy || zoomLevel == ViewManager.eViewLevel.Province))
+            if ((uiManagerRef.ViewLevel == ViewManager.eViewLevel.Galaxy || zoomLevel == ViewManager.eViewLevel.Province))
             {
                 DrawGalaxyMapUI();
                 // hide all other stars
-                if (uiManagerRef.ViewMode == ViewManager.eViewLevel.Province)
+                if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.Province)
                 {
-                    HideStellarObjectsNotInSelectedProvince();
-                    HideCivilizationRangeCircles();
+                    HideStellarObjectsNotInSelectedProvince();                  
                     DisplayProvinceData();
                 }
                 else
                 {
-                    ShowStellarObjects();
-                    ShowCivilizationRangeCircles();
+                    ShowStellarObjects();               
                     ShowProvinceLines();
                     ShowStellarDataBlocks();
                     selectedUnitInfoCanvas.SetActive(false);                   
@@ -204,7 +194,7 @@ namespace Screens.Galaxy
                 HideGalaxyMapUI();
             }
 
-            if ((uiManagerRef.ViewMode == ViewManager.eViewLevel.System) && (GetSelectedStar() != null))
+            if ((uiManagerRef.ViewLevel == ViewManager.eViewLevel.System) && (GetSelectedStar() != null))
             {
                 planetSelected = false;
                 DisplaySystemData();
@@ -215,17 +205,11 @@ namespace Screens.Galaxy
                     GetSelectedStar().GetComponent<LineRenderer>().enabled = false;
                 }
             }
-            else if ((uiManagerRef.ViewMode == ViewManager.eViewLevel.Planet) && (GetSelectedPlanet() != null))
+            else if ((uiManagerRef.ViewLevel == ViewManager.eViewLevel.Planet) && (GetSelectedPlanet() != null))
             {
                 DisplayPlanetData();
             }
-            else
-            {            
-                if (galaxyNameFilter == eGalaxyNameFilter.OWNERSHIP) // hide range circles if not in mode (should probably move to a separate function)
-                    ShowCivilizationRangeCircles();
-                else
-                    HideCivilizationRangeCircles();
-            }        
+                 
   
             if (!provinceLinesDrawn)
             {
@@ -329,8 +313,7 @@ namespace Screens.Galaxy
                 UpdateStellarDataBlocks();
             }
 
-            if (!rangeCirclesGenerated)
-                GenerateCivilizationRangeCircles();
+           
         }
 
         // Update is called once per frame
@@ -357,8 +340,7 @@ namespace Screens.Galaxy
                 {
                     GameObject.Destroy(uiObject);
                 }
-                listGalaxyUIObjectsCreated.Clear(); // clear out any range circles, lines, system pips, etc
-                GenerateCivilizationRangeCircles();
+                listGalaxyUIObjectsCreated.Clear(); // clear out any range circles, lines, system pips, etc            
                 DrawGalaxyMapUI(); // refresh UI
                 gameDataRef.RequestGraphicRefresh = false;
             }
@@ -384,9 +366,9 @@ namespace Screens.Galaxy
             
             fov = mainCamera.GetComponent<Camera>().fieldOfView;
 
-            if (zoomLevel < ViewManager.eViewLevel.System && gameDataRef.uiSubMode == GlobalGameData.eSubMode.None && !gameDataRef.modalIsActive) // must be in no submode (astrographic)
+            if (zoomLevel < ViewManager.eViewLevel.System && gameDataRef.uiSubMode == GameData.eSubMode.None && !gameDataRef.modalIsActive) // must be in no submode (astrographic)
                 CheckForStarSelection();
-            if (zoomLevel == ViewManager.eViewLevel.System && gameDataRef.uiSubMode == GlobalGameData.eSubMode.None && !gameDataRef.modalIsActive)
+            if (zoomLevel == ViewManager.eViewLevel.System && gameDataRef.uiSubMode == GameData.eSubMode.None && !gameDataRef.modalIsActive)
             {
                 GetSelectedStar().GetComponent<SpriteRenderer>().enabled = true; // show the stars
                 GetSelectedStar().GetComponent<Light>().enabled = true; // show the lights
@@ -418,6 +400,7 @@ namespace Screens.Galaxy
                         child.localScale = new Vector2(.5f * scaleFactor, .5f * scaleFactor);
                         child.GetComponent<Light>().range = 1.05f * child.GetComponent<SpriteRenderer>().bounds.size.x;
                     }
+                    star.transform.eulerAngles = new Vector3(0, 0, 0); // flatten out the tilt
                 }
                 else
                 {
@@ -434,12 +417,10 @@ namespace Screens.Galaxy
                         child.localScale = new Vector2(.5f * scaleFactor, .5f * scaleFactor);
                         child.GetComponent<Light>().range = 1.5f * child.GetComponent<SpriteRenderer>().bounds.size.x;
                     }
-                    star.transform.eulerAngles = new Vector3(0, 0, 0);
+                    star.transform.eulerAngles = new Vector3(-GalaxyCameraScript.cameraTilt, 0, 0); // tilt the star
                     star.GetComponent<Light>().range = 1.2f * star.GetComponent<SpriteRenderer>().bounds.size.x;
                 }
             }
-
-           
 
             // if camera zooms out too far, camera is considered in galaxy mode (use this in base camera script)
             if (zoomLevel != ViewManager.eViewLevel.System && gameDataRef.StarSelected == true && mainCamera.GetComponent<GalaxyCameraScript>().systemZoomActive == false && mainCamera.GetComponent<GalaxyCameraScript>().provinceZoomActive == false)
@@ -447,16 +428,11 @@ namespace Screens.Galaxy
                 ResetGalaxyView();
             }
 
-            if (zoomLevel == ViewManager.eViewLevel.Province && !mainCamera.GetComponent<GalaxyCameraScript>().provinceZoomActive)
+            if (zoomLevel == ViewManager.eViewLevel.Galaxy)
             {
                 ShowProvinceLines();
             }
-            else
-            {
-                //if (!mainCamera.GetComponent<GalaxyCameraScript>().provinceZoomActive)
-                //    HideProvinceLines();
-            }
-
+            
             if (!systemNameDrawn)
             {
                 GenerateStellarDataBlocks();
@@ -472,8 +448,7 @@ namespace Screens.Galaxy
             RemoveSystemPlanets();
             GetSelectedStar().transform.position = GetSelectedStar().GetComponent<Star>().starData.WorldLocation; // set star back to its correct position
             ClearSelectedStar();
-            ShowStellarObjects();
-            ShowCivilizationRangeCircles();
+            ShowStellarObjects();        
             backingSphere.SetActive(false); // turn off the sphere
             GameObject.DestroyObject(smallSystemGrid);
             GameObject.DestroyObject(sysTrail);
@@ -517,7 +492,7 @@ namespace Screens.Galaxy
             if (Input.GetMouseButtonDown(0) && gameDataRef.StarSelected != true)
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit2D hit = Physics2D.GetRayIntersection(ray, 6000);
+                RaycastHit2D hit = Physics2D.GetRayIntersection(ray, 15000); // test
 
                 if ((hit.collider != null))
                 {
@@ -613,115 +588,14 @@ namespace Screens.Galaxy
             if (fov <= GalaxyCameraScript.maxZoomLevel && fov > GalaxyCameraScript.minZoomLevel)
             {
                 float alphaValue = ((255 - ((GalaxyCameraScript.maxZoomLevel - fov) * fadeIntensity)) / 255) * 1f;
-                if (alphaValue > .90f) // normalize alpha
-                    alphaValue = .90f;
+                if (alphaValue > .6f) // normalize alpha
+                    alphaValue = .6f;
                 if (alphaValue < 0)
                     alphaValue = 0;
 
                 starmapSprite.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, alphaValue);
             }
-        }
-
-        void DisplayMapMode() // will need to flesh out
-        {
-            // only show info if not zoomed into system level
-            if (zoomLevel < ViewManager.eViewLevel.System && !gCameraRef.provinceZoomActive)
-            {
-                galaxyMapModeInfo.enabled = true;
-                galaxyMapSubModeInfo.enabled = true;
-                galaxyMapModeInfo.text = "ASTROGRAPHIC MODE";
-            }
-            else
-            {
-                galaxyMapModeInfo.enabled = false;
-                galaxyMapSubModeInfo.enabled = false;
-            }
-
-            switch (galaxyNameFilter)
-            {
-                case eGalaxyNameFilter.BIO:
-                    galaxyMapSubModeInfo.text = "BIO SUBMODE";
-                    break;
-                case eGalaxyNameFilter.NONE:
-                    galaxyMapSubModeInfo.text = "NO SUBMODE";
-                    break;
-                case eGalaxyNameFilter.OWNERSHIP:
-                    galaxyMapSubModeInfo.text = "SOVEREIGNITY SUBMODE";
-                    break;
-                case eGalaxyNameFilter.UNREST:
-                    galaxyMapSubModeInfo.text = "UNREST SUBMODE";
-                    break;
-                default:
-                    galaxyMapSubModeInfo.text = "NO SUBMODE";
-                    break;
-            }
-        }
-
-        void HideCivilizationRangeCircles()
-        {
-            if (listGalaxyUIObjectsCreated.Count > 0)
-            {
-                foreach (GameObject rCircle in listGalaxyUIObjectsCreated)
-                {
-                    rCircle.SetActive(false);
-                }
-            }
-        }
-
-        void ShowCivilizationRangeCircles()
-        {
-            if (listGalaxyUIObjectsCreated.Count > 0)
-            {
-                foreach (GameObject rCircle in listGalaxyUIObjectsCreated)
-                {
-                    rCircle.SetActive(true);
-                    if (zoomLevel == ViewManager.eViewLevel.Galaxy)
-                    {
-                        // Color circColor = rCircle.GetComponent<MeshRenderer>().material.color;
-                        // rCircle.GetComponent<MeshRenderer>().material.color = new Color(circColor.r, circColor.g, circColor.b, .04f - (GetAlphaProvinceFadeValue() / 3f));
-                    }
-                }
-            }
-        }
-
-        void GenerateCivilizationRangeCircles()
-        {
-            
-            foreach (Civilization civ in gameDataRef.CivList)
-            {
-                if (HelperFunctions.DataRetrivalFunctions.GetCivHomeSystem(civ).IntelValue > 6 || gameDataRef.DebugMode)
-                {
-                    // first get each system that has a holding of a Empire
-                    foreach (StarData sData in civ.SystemList)
-                    {
-                        Vector3 cirLocation = sData.WorldLocation; // pull the star location of the capital system
-                        float civRange = 0;
-
-                        // determine scale of circle
-                        civRange = sData.BaseSystemValue * 3; // using the system value for now
-                        civRange *= 2; // double the range since scaling is for a whole side
-
-                        GameObject rangeCircle = Instantiate(Resources.Load("Galaxy View Assets/Empire Range Circle", typeof(GameObject)), cirLocation, Quaternion.Euler(new Vector3(90, 0, 0))) as GameObject;
-                        rangeCircle.transform.localScale = new Vector3(civRange, 1, civRange); // expand the circle
-                        listGalaxyUIObjectsCreated.Add(rangeCircle);
-                        rangeCircle.GetComponent<MeshRenderer>().material.color = new Color(civ.Color.r, civ.Color.g, civ.Color.b, .25f); // set range circle to show civ color
-                    }
-                    //Vector3 civCapitalLocation = HelperFunctions.DataRetrivalFunctions.GetCivHomeSystem(civ).WorldLocation; // pull the star location of the capital system
-                    //float civRange = 0;
-
-                    //// determine scale of circle
-                    //civRange = civ.Range;
-                    //civRange *= 2; // double the range since scaling is for a whole side
-
-                    //GameObject rangeCircle = Instantiate(Resources.Load("Galaxy View Assets/Empire Range Circle",typeof(GameObject)), civCapitalLocation, Quaternion.Euler(new Vector3(90,0,0))) as GameObject;
-                    //rangeCircle.transform.localScale = new Vector3(civRange, 1, civRange); // expand the circle
-                    //listGalaxyUIObjectsCreated.Add(rangeCircle);
-                    //rangeCircle.GetComponent<MeshRenderer>().material.color = new Color(civ.Color.r, civ.Color.g, civ.Color.b, .06f); // set range circle to show civ color
-                }
-            }
-
-            rangeCirclesGenerated = true;
-        }
+        }      
 
         void DisplayCameraZoomLevel()
         {
@@ -835,7 +709,7 @@ namespace Screens.Galaxy
                             StarData starData = text.stellarObject.GetComponent<Star>().starData;
                             Color scanColor = new Color();
 
-                            if (uiManagerRef.ViewMode == ViewManager.eViewLevel.Galaxy)
+                            if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.Galaxy)
                             {
                                 if (starData.IntelLevel == eStellarIntelLevel.None)
                                     scanColor = Color.grey;
@@ -853,7 +727,7 @@ namespace Screens.Galaxy
 
                                 textColor = new Color(scanColor.r, scanColor.g, scanColor.b, alphaLevel);
                             }
-                            if (uiManagerRef.ViewMode == ViewManager.eViewLevel.Province)
+                            if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.Province)
                             {
 
 
@@ -989,7 +863,7 @@ namespace Screens.Galaxy
             if (alphaLevel > .8)
                 alphaLevel = 1;
 
-            if (uiManagerRef.ViewMode == ViewManager.eViewLevel.Province)
+            if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.Province)
                 alphaLevel = 1;
 
             return alphaLevel;
@@ -1369,14 +1243,9 @@ namespace Screens.Galaxy
 
         void DisplayPlanetData() // This and the display system data functions will need to move to their respective view classes for continuity purposes.
         {
-            //PlanetData planetDat = GetSelectedPlanet().GetComponent<Planet>().planetData; // reference
-            //StarData starDat = GetSelectedStar().GetComponent<Star>().starData; // reference
-            // string owner = "NO";
             HideUnselectedPlanets();
             smallSystemGrid.SetActive(false); // hides the grid
-            sysTrail.SetActive(false); // hides the trail
-
-            // will need to move to a new class eventually to make it cleaner          
+            sysTrail.SetActive(false); // hides the trail        
         }
 
         void DisplaySystemData()
@@ -1392,8 +1261,7 @@ namespace Screens.Galaxy
 
                 if (fov < 60)
                 {
-                    HideStellarObjects(); // hide stars around the star when in close
-                    HideCivilizationRangeCircles(); // hide range circles
+                    HideStellarObjects(); // hide stars around the star when in close         
                     starmapSprite.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0); // fade it to 0
                 }
 

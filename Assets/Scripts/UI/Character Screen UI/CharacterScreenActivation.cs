@@ -7,14 +7,14 @@ using CharacterObjects;
 
 public class CharacterScreenActivation : MonoBehaviour, IPointerClickHandler
 {
-    GlobalGameData gDataRef;
+    GameData gDataRef;
     CharacterScreen cScreen;
     Character cData;
    
 
     void Awake()
     {    
-        gDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+        gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
         cScreen = GameObject.Find("Character Window Canvas").GetComponent<CharacterScreen>();
     }
 

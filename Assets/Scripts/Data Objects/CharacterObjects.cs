@@ -277,7 +277,7 @@ namespace CharacterObjects
             get
             {
               
-                GlobalGameData gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+                GameData gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
                 if (gameDataRef.HouseList.Exists(p => p.ID == HouseID))
                 {
                     return gameDataRef.HouseList.Find(p => p.ID == HouseID);

@@ -14,7 +14,7 @@ using Managers;
 public class PlanetView : MonoBehaviour {
 
     private GalaxyCameraScript gScriptRef;
-    private GlobalGameData gameDataRef;
+    private GameData gameDataRef;
     private GraphicAssets graphicsDataRef;
     private UIManager uiManagerRef;
     private GalaxyView gScreen; 
@@ -98,7 +98,7 @@ public class PlanetView : MonoBehaviour {
         edictPanel = GameObject.Find("Edict Panel");
         wireFrameOverlay = GameObject.Find("Wireframe Planet Overlay");
         planetButtonBarBackground = GameObject.Find("Planet Button Bar Background");
-        gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+        gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
         planetCanvas = GameObject.Find("Planet UI Canvas").GetComponent<Canvas>();
         //viceroyImageTop = GameObject.Find("Character Image").GetComponent<Image>();
     }
@@ -123,7 +123,7 @@ public class PlanetView : MonoBehaviour {
         screenWidthRatio = ((float)Screen.width / 1920f);
         screenHeightRatio = ((float)Screen.height / 1080f);
 
-        if (uiManagerRef.ViewMode == ViewManager.eViewLevel.Planet)
+        if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.Planet)
         {
             if (!planetDataLoaded) // load selected planet data into pData ref if needed or changed
             {

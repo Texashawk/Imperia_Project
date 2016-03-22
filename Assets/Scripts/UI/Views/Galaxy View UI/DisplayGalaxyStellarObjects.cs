@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using StellarObjects;
+using CameraScripts;
 
 public class DisplayGalaxyStellarObjects : MonoBehaviour {
 
@@ -12,7 +13,7 @@ public class DisplayGalaxyStellarObjects : MonoBehaviour {
 	void Start () 
     {
         gData = GameObject.Find("GameManager").GetComponent<GalaxyData>();
-        Debug.Log("Drawing stars...");
+        Debug.Log("Drawing stars...");    
         DrawStars(); // draw the star map
         DrawNebulas();
 	}
@@ -28,7 +29,7 @@ public class DisplayGalaxyStellarObjects : MonoBehaviour {
 
             GameObject writtenStar;
             writtenStar = Instantiate(starList[x], star.WorldLocation, Quaternion.identity) as GameObject;
-
+            
             // draw secondary star if duplex star
             if (star.starMultipleType == StarData.eStarMultiple.Binary)
             {
@@ -36,6 +37,7 @@ public class DisplayGalaxyStellarObjects : MonoBehaviour {
                 Vector3 secondLoc = new Vector3(star.WorldLocation.x - 20, star.WorldLocation.y - 20, star.WorldLocation.z);
                 y = (int)star.compSpectralClass - 1; // convert spectral class to list
                 GameObject secondaryStar = Instantiate(starList[y], secondLoc, Quaternion.identity) as GameObject;
+                //secondaryStar.transform.Rotate(0f, GalaxyCameraScript.cameraTilt, 0f); // tilt each star to compensate for the camera tilt
                 secondaryStar.AddComponent<Star>();
                 secondaryStar.GetComponent<Star>().starData.compSecondarySpectralClass = star.SecondarySpectralClass;
                 secondaryStar.GetComponent<Star>().starData.compSpectralClass = star.compSpectralClass;
@@ -49,6 +51,7 @@ public class DisplayGalaxyStellarObjects : MonoBehaviour {
                 gData.AddStarObjectToList(secondaryStar);
             }
 
+            //writtenStar.transform.Rotate(-GalaxyCameraScript.cameraTilt, 0f, 0f); // tilt each star to compensate for the camera tilt
             writtenStar.AddComponent<Star>();
             writtenStar.GetComponent<Star>().starData = star; // assign the star data
             writtenStar.name = writtenStar.GetComponent<Star>().starData.Name;

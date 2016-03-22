@@ -6,12 +6,12 @@ using UnityEngine.Events;
 public class EmperorWindow : MonoBehaviour
 {
 
-    private GlobalGameData gGameDataRef;
+    private GameData gGameDataRef;
     public UnityEvent eventIntelSelect = new UnityEvent();
 
     void Awake()
     {
-        gGameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>(); // tie the game camera script to the data
+        gGameDataRef = GameObject.Find("GameManager").GetComponent<GameData>(); // tie the game camera script to the data
     }
     // Use this for initialization
     void Start()
@@ -28,7 +28,7 @@ public class EmperorWindow : MonoBehaviour
 
     void OnGUI()
     {
-        if (gGameDataRef.uiSubMode == GlobalGameData.eSubMode.Emperor)
+        if (gGameDataRef.uiSubMode == GameData.eSubMode.Emperor)
             DisplayEmperorScreen();
     }
 
@@ -39,8 +39,8 @@ public class EmperorWindow : MonoBehaviour
 
     public void ActivateEmperorMode() // changes the global mode
     {
-        if (gGameDataRef.uiSubMode != GlobalGameData.eSubMode.Emperor)
-            gGameDataRef.uiSubMode = GlobalGameData.eSubMode.Emperor;
+        if (gGameDataRef.uiSubMode != GameData.eSubMode.Emperor)
+            gGameDataRef.uiSubMode = GameData.eSubMode.Emperor;
         Debug.Log("Emperor SubMode Selected");
 
     }

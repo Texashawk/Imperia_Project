@@ -1,24 +1,15 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 // object namespaces
 using StellarObjects;
-using PlanetObjects;
-using CivObjects;
-
-// classes
-using CameraScripts;
-using Assets.Scripts.States;
 
 namespace GalaxyCreator
 {
     public class GalaxyCreator : MonoBehaviour
     {      
         private GalaxyData gData;
-        private GlobalGameData gameDataRef;       
+        private GameData gameDataRef;       
         private int galaxySizeWidth;
         private int galaxySizeHeight;
         private const int SpaceBetweenStars = 80; // the minimum space between star objects
@@ -33,8 +24,7 @@ namespace GalaxyCreator
         {
             // data structure references
             gData = GameObject.Find("GameManager").GetComponent<GalaxyData>();
-            gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
-            //DataManager.PopulateObjectNameLists(); // populate the name lists once!
+            gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
             galaxySizeWidth = gameDataRef.GalaxySizeWidth; // these will be selected in new game screen
             galaxySizeHeight = gameDataRef.GalaxySizeHeight;
             GenerateNebulas();
@@ -66,15 +56,13 @@ namespace GalaxyCreator
                 gData.AddStarDataToList(newStar);
             }
 
-            
-
             gData.galaxyIsGenerated = true; // add more checks here
         }
 
         Vector3 DetermineStarLocation()
         {
             bool locIsValid = true; // flag to show whether location is valid
-            int placementTries = 0; // after 5 tries, place and move on
+            int placementTries = 0; // after 20 tries, place and move on
             Vector3 proposedLocation = new Vector3();
 
             if (gData.GalaxyStarDataList.Count == 0) // if nothing in the list, obviously any location will work! 
@@ -142,12 +130,6 @@ namespace GalaxyCreator
             gData.AddStarDataToList(newStar);
         }
 
-        void GenerateHouses()
-        {
-            // load the house data
-            //DataManager.ReadHouseXMLFiles();
-        }
-
         void GeneratePlanets()
         {
             // populate the planet tables
@@ -162,8 +144,6 @@ namespace GalaxyCreator
             foreach (StarData star in gData.GalaxyStarDataList)
             {
                 GenerateGameObject.CreateSystemPlanets(star);
-                //foreach (PlanetData planet in star.PlanetList)
-                //    gData.AddPlanetDataToList(planet);
             }
         }
 

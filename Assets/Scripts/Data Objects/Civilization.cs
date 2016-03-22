@@ -147,6 +147,23 @@ namespace CivObjects
             }
         }
 
+        public List<Province> ProvinceList
+        {
+            get
+            {
+                List<Province> pList = new List<Province>();
+                foreach (StarData sData in SystemList)
+                {
+                    if (sData.OwningCiv == this)
+                    {
+                        if (!pList.Exists(p => p.ID == sData.AssignedProvinceID))
+                            pList.Add(sData.Province);
+                    }
+                }
+
+                return pList;
+            }
+        }
         
         public List<StarData> SystemList
         {

@@ -286,7 +286,7 @@ namespace HelperFunctions
     {
         public static Color FindPlanetOwnerColor(PlanetData pData)
         {
-            GlobalGameData gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            GameData gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
             Color pColor = Color.white; // base unowned color
 
             foreach (Civilization civ in gameDataRef.CivList)
@@ -306,7 +306,7 @@ namespace HelperFunctions
 
         public static Color FindProvinceOwnerColor(Province pData)
         {
-            GlobalGameData gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            GameData gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
             GalaxyData galDataRef = GameObject.Find("GameManager").GetComponent<GalaxyData>();
             Color pColor = Color.white; // base unowned color
 
@@ -324,7 +324,7 @@ namespace HelperFunctions
 
         public static Character GetCharacter(string cID)
         {
-            GlobalGameData gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            GameData gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
             Character cData = new Character();
 
             cData = gameDataRef.CharacterList.Find(p => p.ID == cID);
@@ -333,7 +333,7 @@ namespace HelperFunctions
 
         public static string GetPrime(Character.eRole charRole)
         {
-            GlobalGameData gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            GameData gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
 
             foreach (Character charData in gameDataRef.CharacterList)
             {
@@ -348,20 +348,20 @@ namespace HelperFunctions
 
         public static List<House> GetHouseList()
         {
-            GlobalGameData gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            GameData gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
             return gameDataRef.HouseList;
         }
 
         public static House GetHouse(string hID)
         {
-            GlobalGameData gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            GameData gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
 
             return gameDataRef.HouseList.Find(p => p.ID == hID);
         }
 
         public static string GetProvinceGovernorID(string sID)
         {
-            GlobalGameData gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            GameData gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
 
             foreach (Character charData in gameDataRef.CharacterList)
             {
@@ -376,7 +376,7 @@ namespace HelperFunctions
 
         public static Character GetCivLeader(string cID)
         {
-            GlobalGameData gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            GameData gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
 
             foreach (Character charData in gameDataRef.CharacterList)
             {
@@ -391,14 +391,14 @@ namespace HelperFunctions
 
         public static List<Pops> GetCivPopList(string cID)
         {          
-            GlobalGameData gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            GameData gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
             Civilization civ = gameDataRef.CivList.Find(p => p.ID == cID);
             return civ.PopList;           
         }
 
         public static string GetSystemGovernorID(string sID)
         {
-            GlobalGameData gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            GameData gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
          
             foreach (Character charData in gameDataRef.CharacterList)
             {
@@ -413,7 +413,7 @@ namespace HelperFunctions
 
         public static string GetPlanetViceroyID(string pID)
         {
-            GlobalGameData gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            GameData gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
 
             foreach (Character charData in gameDataRef.CharacterList)
             {
@@ -429,7 +429,7 @@ namespace HelperFunctions
         public static String FindOwnerName(PlanetData pData)
         {
             string oName; // base unowned name
-            GlobalGameData gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            GameData gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
 
             foreach (Civilization civ in gameDataRef.CivList)
             {
@@ -448,7 +448,7 @@ namespace HelperFunctions
 
         public static List<StarData> GetCivSystemList(Civilization civ)
         {
-            GlobalGameData gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            GameData gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
             GalaxyData galaxyDataRef = GameObject.Find("GameManager").GetComponent<GalaxyData>();
             List<StarData> civStarList = new List<StarData>();
 
@@ -466,15 +466,15 @@ namespace HelperFunctions
             return civStarList;
         }
 
-        public static GlobalGameData GetGameDataObject()
+        public static GameData GetGameDataObject()
         {
-            GlobalGameData gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            GameData gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
             return gameDataRef;
         }
 
         public static Civilization GetCivilization(string ID)
         {
-            GlobalGameData gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            GameData gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
             if (gameDataRef.CivList.Exists(p => p.ID == ID))
                 return gameDataRef.CivList.Find(p => p.ID == ID);
             else
@@ -483,7 +483,7 @@ namespace HelperFunctions
 
         public static List<PlanetData> GetCivPlanetList(Civilization civ)
         {
-            GlobalGameData gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            GameData gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
             GalaxyData galaxyDataRef = GameObject.Find("GameManager").GetComponent<GalaxyData>();
             List<PlanetData> civPlanetList = new List<PlanetData>();
 
@@ -500,7 +500,7 @@ namespace HelperFunctions
 
         public static List<Province> GetCivProvinceList(Civilization civ)
         {
-            GlobalGameData gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            GameData gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
             GalaxyData galaxyDataRef = GameObject.Find("GameManager").GetComponent<GalaxyData>();
             List<Province> civProvinceList = new List<Province>();
 
@@ -517,7 +517,7 @@ namespace HelperFunctions
 
         public static StarData GetCivHomeSystem(Civilization civ)
         {
-            GlobalGameData gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            GameData gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
             GalaxyData galaxyDataRef = GameObject.Find("GameManager").GetComponent<GalaxyData>();
             PlanetData pData = new PlanetData();
             StarData sData = new StarData();
@@ -566,7 +566,7 @@ namespace HelperFunctions
 
         public static Challenge GetChallenge(string ID)
         {
-            GlobalGameData gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+            GameData gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
             Challenge cData = new Challenge();
 
             cData = gameDataRef.ChallengeList.Find(p => p.ChallengeID == ID);

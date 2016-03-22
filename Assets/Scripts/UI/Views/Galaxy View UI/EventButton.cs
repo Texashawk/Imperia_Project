@@ -76,7 +76,7 @@ public class EventButton : MonoBehaviour
     public void Button_Click()
     {
         GalaxyData galData = GameObject.Find("GameManager").GetComponent<GalaxyData>();
-        GlobalGameData gData = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
+        GameData gData = GameObject.Find("GameManager").GetComponent<GameData>();
 
         //invoke zoom sequence
         if (systemLocationID != null)
