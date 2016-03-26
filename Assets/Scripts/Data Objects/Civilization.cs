@@ -33,6 +33,7 @@ namespace CivObjects
         }
 
         public bool HumanCiv = false; // is this the human player civilization?
+        public string CrestFile; // the name of the crest that the civilization uses
         public string Name { get; set; }
         public Color Color { get; set; }
         public float Treasury { get; set; }

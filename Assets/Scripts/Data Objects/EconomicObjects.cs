@@ -3,7 +3,7 @@ using HelperFunctions;
 using Constants;
 using System;
 using System.Collections.Generic;
-using CivObjects;
+using UnityEngine;
 
 namespace EconomicObjects
 {
@@ -79,6 +79,7 @@ namespace EconomicObjects
         public string Name { get; set; }
         public List<string> PlanetIDList = new List<string>();
         public List<string> SystemIDList = new List<string>();
+        public Color GroupColor = new Color(); // color of the trade group
     }
 
     public class TradeProposal // this represents what each viceroy has valued each resource at, how much they want, what type of resource, and how much they are willing to pay for each one

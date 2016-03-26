@@ -19,7 +19,7 @@ public class DisplayGalaxyMapElements : MonoBehaviour
         rosette = GameObject.Find("CompassRose");
         UICamera = GameObject.Find("UI Camera");
         mainCamera = GameObject.Find("Main Camera");
-        zoomValueText = GameObject.Find("CameraZoomValue");
+        
         uiManagerRef = GameObject.Find("UI Engine").GetComponent<UIManager>();
     }
 
@@ -39,13 +39,13 @@ public class DisplayGalaxyMapElements : MonoBehaviour
         if (uiManagerRef.ViewLevel != ViewManager.eViewLevel.Galaxy)  // take away things that don't belong in the system view
         {
             rosette.SetActive(false);
-            zoomValueText.SetActive(false);
+           
         }
 
         else
         {
             rosette.SetActive(true);
-            zoomValueText.SetActive(true);
+           
         }
     }
 }

@@ -20,13 +20,13 @@ public class ProvinceSelect : MonoBehaviour, IPointerClickHandler, IPointerEnter
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        originalColor = GetComponent<TextMeshProUGUI>().color;
-        GetComponent<TextMeshProUGUI>().color = Color.yellow;
+        originalColor = GetComponentInChildren<TextMeshProUGUI>().color;
+        GetComponentInChildren<TextMeshProUGUI>().color = Color.yellow;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {        
-        GetComponent<TextMeshProUGUI>().color = originalColor;
+        GetComponentInChildren<TextMeshProUGUI>().color = originalColor;
     }
 
     public void OnPointerClick(PointerEventData eventData)

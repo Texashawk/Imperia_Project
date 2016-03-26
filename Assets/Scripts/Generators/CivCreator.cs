@@ -732,11 +732,11 @@ namespace CivCreator
             newCiv.Color = new Color(0f, .68f, 1f); // the color of the empire's system and planet holdings
             newCiv.Type = Civilization.eCivType.PlayerEmpire;  // default empire
             newCiv.CivMaxProvinceSize = 5;
-            newCiv.AdminRating = 18; // rating that determines maximum size of governable provinces
+            newCiv.AdminRating = 15; // rating that determines maximum size of governable provinces
             newCiv.Treasury = Random.Range(1000000f, 5000000f);  // starting treasury
             newCiv.Size = Civilization.eCivSize.Major;
-            newCiv.Range = (int)(gameDataRef.GalaxySizeWidth / 2.3f);
-            newCiv.PlanetMinTolerance = 40;
+            newCiv.Range = (int)(gameDataRef.GalaxySizeWidth / 1.8f);
+            newCiv.PlanetMinTolerance = 30; // lower since older world
             newCiv.AstronomyRating = Random.Range(6,11) * 1000; // not used
             newCiv.ID = "CIV0"; // use this to reference the player's civ
             newCiv.HumanCiv = true;
@@ -853,7 +853,7 @@ namespace CivCreator
 
                     // get a size for each province and then create it with provinces in range
                     int provinceSize = Random.Range(2, civ.CivMaxProvinceSize); // vary each province size
-                    int maxDist = civ.AdminRating * 100; // max dist between systems (legacy code!)
+                    int maxDist = civ.AdminRating * 200; // max dist between systems (legacy code!)
                     int count = 0;
                     bool provinceValid = false;
 
@@ -902,37 +902,42 @@ namespace CivCreator
                                     }
                                 }                               
                             }
-
-                            if (sData.AssignedProvinceID == "") // if the system is not assigned to a province, create a one-shot province
-                            {
-                                Province nProv = new Province();
-
-                                // generate province name
-                                if (DataManager.systemNameList.Count > 0)
-                                {
-                                    var nameIndex = Random.Range(0, DataManager.systemNameList.Count);
-                                    nProv.Name = DataManager.systemNameList[nameIndex];
-                                    DataManager.systemNameList.RemoveAt(nameIndex);
-                                    DataManager.systemNameList.TrimExcess();
-                                }
-                                else
-                                    nProv.Name = "Generic Province";
-
-                                nProv.ID = "PRO" + Random.Range(0, 10000);
-                                nProv.OwningCivID = civ.ID;
-                                sData.AssignedProvinceID = nProv.ID;
-                                sData.IsProvinceHub = true;
-                                gData.AddProvinceToList(nProv);
-                            }
-                            
+                         
                             if (provinceValid)
                                 gData.AddProvinceToList(newProvince);
 
                             allSystemsChecked = true; // all systems have been checked; go to next star
-                        }
+                            count += 1; // put after the while statement earlier
+                        }                        
                         while (x < provinceSize && !allSystemsChecked);
-                        count += 1;
+                        
                     }
+
+                    foreach (StarData sData in sDataList) // if there are any singletons, assign a 'one shot' province AFTER generation has occured
+                    {
+                        if (sData.AssignedProvinceID == "")
+                        {
+                            Province nProv = new Province();
+
+                            // generate province name
+                            if (DataManager.systemNameList.Count > 0)
+                            {
+                                var nameIndex = Random.Range(0, DataManager.systemNameList.Count);
+                                nProv.Name = DataManager.systemNameList[nameIndex];
+                                DataManager.systemNameList.RemoveAt(nameIndex);
+                                DataManager.systemNameList.TrimExcess();
+                            }
+                            else
+                                nProv.Name = "Generic Province";
+
+                            nProv.ID = "PRO" + Random.Range(0, 10000);
+                            nProv.OwningCivID = civ.ID;
+                            sData.AssignedProvinceID = nProv.ID;
+                            sData.IsProvinceHub = true;
+                            gData.AddProvinceToList(nProv);
+                        }
+                    }
+
                     // now that provinces are created, designate the province capital
                     foreach (StarData sData in sDataList)
                     {

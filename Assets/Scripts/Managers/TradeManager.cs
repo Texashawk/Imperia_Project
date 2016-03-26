@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using PlanetObjects;
 using StellarObjects;
 using CivObjects;
 using EconomicObjects;
@@ -9,7 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-namespace Assets.Scripts.Managers
+namespace Managers
 {
     class TradeManager
     {
@@ -221,28 +220,24 @@ namespace Assets.Scripts.Managers
             List<StarData> starsInProvince = provData.SystemList;
             List<StarData> starsWithHubs = new List<StarData>(); // list of systems with hubs
 
-            bool provinceTradeHubPresent = false;
-            
-
             // first, find each star in the province that has a hub and put them in the hub list
             foreach (StarData sData in starsInProvince)
             {
+                sData.SystemIsTradeHub = false; // reset
                 foreach (PlanetData pData in sData.PlanetList)
                 {
                     pData.PlanetIsLinkedToTradeHub = false;
                     if (pData.TradeHub == PlanetData.eTradeHubType.CivTradeHub)
                     {
                         pData.PlanetIsLinkedToTradeHub = true; // flag as true (it's the empire!)
-                        starsWithHubs.Add(sData);
-                        provinceTradeHubPresent = true; // for now, a civ-level trade hub is treated the same as any other province
+                        starsWithHubs.Add(sData);                       
                         break; // get out; hub found
                     }
 
                     if (pData.TradeHub == PlanetData.eTradeHubType.ProvinceTradeHub)
                     {
-                        pData.PlanetIsLinkedToTradeHub = true; // flag as true (it's the core!)
-                        starsWithHubs.Add(sData);
-                        provinceTradeHubPresent = true;
+                        pData.PlanetIsLinkedToTradeHub = true; // flag as true (it's the core!)                        
+                        starsWithHubs.Add(sData);                       
                         break; // get out; hub found
                     }
 
@@ -260,7 +255,8 @@ namespace Assets.Scripts.Managers
             {
                 List<PlanetData> planetsInSystemOwned = new List<PlanetData>();
 
-                if (sData.PlanetList.Exists(p => p.TradeHub == PlanetData.eTradeHubType.ProvinceTradeHub) || (sData.PlanetList.Exists(p => p.TradeHub == PlanetData.eTradeHubType.CivTradeHub)))
+                if (sData.PlanetList.Exists(p => p.TradeHub == PlanetData.eTradeHubType.ProvinceTradeHub) || (sData.PlanetList.Exists(p => p.TradeHub == PlanetData.eTradeHubType.CivTradeHub)) || 
+                        (sData.PlanetList.Exists(p => p.TradeHub == PlanetData.eTradeHubType.SecondaryTradeHub)))
                 {
                     TradeGroup newTG = new TradeGroup();
                     PlanetData hubPlanet = new PlanetData();
@@ -269,8 +265,9 @@ namespace Assets.Scripts.Managers
                     {
                         hubPlanet = sData.PlanetList.Find(p => p.TradeHub == PlanetData.eTradeHubType.CivTradeHub);
                         //TradeGroup newTG = new TradeGroup();
-                        newTG.Name = sData.Name.ToUpper() + " TRADE GROUP : " + hubPlanet.Name.ToUpper() + " IMPERIAL TRADE HUB.";
+                        newTG.Name = sData.Name.ToUpper() + " TRADE GROUP";
                         newTG.SystemIDList.Add(sData.ID);
+                        sData.SystemIsTradeHub = true;
                         planetsInSystemOwned = sData.PlanetList.FindAll(p => p.Owner == hubPlanet.Owner);
                         // add each planet that belongs to the province hub owner
                         foreach (PlanetData pData in planetsInSystemOwned)
@@ -285,7 +282,8 @@ namespace Assets.Scripts.Managers
                     {
                         hubPlanet = sData.PlanetList.Find(p => p.TradeHub == PlanetData.eTradeHubType.ProvinceTradeHub);
                         //TradeGroup newTG = new TradeGroup();
-                        newTG.Name = sData.Name.ToUpper() + " TRADE GROUP : " + hubPlanet.Name.ToUpper() + " PROVINCE TRADE HUB.";
+                        newTG.Name = sData.Name.ToUpper() + " TRADE GROUP";
+                        sData.SystemIsTradeHub = true;
                         newTG.SystemIDList.Add(sData.ID);
                         planetsInSystemOwned = sData.PlanetList.FindAll(p => p.Owner == hubPlanet.Owner);
                         // add each planet that belongs to the province hub owner
@@ -295,7 +293,25 @@ namespace Assets.Scripts.Managers
                             newTG.PlanetIDList.Add(pData.ID);
                         }                    
                     }
+                    
+                    // test code, remove if not work
+                    else if (sData.PlanetList.Exists(p => p.TradeHub == PlanetData.eTradeHubType.SecondaryTradeHub))
+                    {
+                        hubPlanet = sData.PlanetList.Find(p => p.TradeHub == PlanetData.eTradeHubType.SecondaryTradeHub);
+                        //TradeGroup newTG = new TradeGroup();
+                        newTG.Name = sData.Name.ToUpper() + " TRADE GROUP";
+                        newTG.SystemIDList.Add(sData.ID);
+                        sData.SystemIsTradeHub = true;
+                        planetsInSystemOwned = sData.PlanetList.FindAll(p => p.Owner == hubPlanet.Owner);
+                        // add each planet that belongs to the province hub owner
+                        foreach (PlanetData pData in planetsInSystemOwned)
+                        {
+                            pData.PlanetIsLinkedToTradeHub = true;
+                            newTG.PlanetIDList.Add(pData.ID);
+                        }
+                    }
 
+                    // now check that system and check for how far a trade chain stretches, then create the trade group
                     CheckPlanetsAttachedToHub(newTG, sData, starsInProvince, planetsInSystemOwned, hubPlanet, starsWithHubs);
                 }
             }
@@ -305,33 +321,14 @@ namespace Assets.Scripts.Managers
         {
             bool ChainIsActive = true; // recursive function looking for a chained trade group
 
-            // now look for all stars in range of the province trade hub                   
+            // now look for all stars in range of the system's trade hub                
             foreach (StarData sData2 in starsInProvince)
-            {
-                float sData2HubRange = 0;
+            {              
                 planetsInSystemOwned.Clear(); // clear the planet list
-                switch (sData2.LargestTradeHub)
+    
+                if (HelperFunctions.Formulas.MeasureDistanceBetweenSystems(sData, sData2) <= (sData.GetRangeOfHub + sData2.GetRangeOfHub))
                 {
-                    case PlanetData.eTradeHubType.NotHub:
-                        sData2HubRange = 0;
-                        break;
-                    case PlanetData.eTradeHubType.SecondaryTradeHub:
-                        sData2HubRange = Constant.SecondaryHubRange;
-                        break;
-                    case PlanetData.eTradeHubType.ProvinceTradeHub:
-                        sData2HubRange = Constant.ProvinceHubRange;
-                        break;
-                    case PlanetData.eTradeHubType.CivTradeHub:
-                        sData2HubRange = Constant.ImperialHubRange;
-                        break;
-                    default:
-                        sData2HubRange = 0;
-                        break;
-                }
-
-                if (HelperFunctions.Formulas.MeasureDistanceBetweenSystems(sData, sData2) <= (Constant.ProvinceHubRange + sData2HubRange))
-                {
-                    if (sData != sData2) // not the same star!
+                    if (sData != sData2 && !sData.SystemIsTradeHub) // not the same star, and the system is not already its own trade hub
                     {
                         planetsInSystemOwned = sData2.PlanetList.FindAll(p => p.Owner == hubPlanet.Owner); // add all the planets that belong to the province hub owner
                         newTG.SystemIDList.Add(sData2.ID);
@@ -379,62 +376,56 @@ namespace Assets.Scripts.Managers
                 }
 
                 // chain is broken, so add the new group and start again
-
                 if (!ActiveTradeGroups.Exists(p => p.Name == newTG.Name)) // only take the largest group
                 {
-                    //TradeGroup oldTG = ActiveTradeGroups.Find(p => p.Name == newTG.Name);
-                    //ActiveTradeGroups.Remove(oldTG);
-                    ActiveTradeGroups.Add(newTG); // replace with the more iterated one
-                    Debug.Log("New Trade Group Created! Name: " + newTG.Name + " containing " + newTG.PlanetIDList.Count.ToString("N0") + " planets.");
+                    if (!ActiveTradeGroups.Exists(p => p.SystemIDList.Exists(x => x == sData.ID))) // if the star doesn't already belong to a trade group
+                    {
+                        newTG.GroupColor = new Color(UnityEngine.Random.Range(.5f, 1f), UnityEngine.Random.Range(.5f, 1f), UnityEngine.Random.Range(.5f, 1f));
+                        ActiveTradeGroups.Add(newTG); // replace with the more iterated one
+                        Debug.Log("New Trade Group Created! Name: " + newTG.Name + " containing " + newTG.PlanetIDList.Count.ToString("N0") + " planets.");
+                    }
                 }
-                else
-                {
-                    //ActiveTradeGroups.Add(newTG); // replace with the more iterated one
-                }
-
-                
-               
             }
         }
 
         private static bool CheckForTradeHubLink(StarData originStar, StarData checkedStar, PlanetData.eTradeHubType star1TradeHubType, PlanetData.eTradeHubType star2tradeHubType)
         {
             float distanceBetweenStars = HelperFunctions.Formulas.MeasureDistanceBetweenSystems(originStar, checkedStar);
-            int star1HubRadius = 0;
-            int star2HubRadius = 0;
-            switch (star1TradeHubType)
-            {
-                case PlanetData.eTradeHubType.SecondaryTradeHub:
-                    star1HubRadius = Constant.SecondaryHubRange;
-                    break;
-                case PlanetData.eTradeHubType.ProvinceTradeHub:
-                    star1HubRadius = Constant.ProvinceHubRange;
-                    break;
-                case PlanetData.eTradeHubType.CivTradeHub:
-                    star1HubRadius = Constant.ImperialHubRange;
-                    break;
-                default:
-                    star1HubRadius = 0;
-                    break;
-            }
+            //int star1HubRadius = 0;
+            //int star2HubRadius = 0;
+            //switch (star1TradeHubType)
+            //{
+            //    case PlanetData.eTradeHubType.SecondaryTradeHub:
+            //        star1HubRadius = Constant.SecondaryHubBaseRange;
+            //        break;
+            //    case PlanetData.eTradeHubType.ProvinceTradeHub:
+            //        star1HubRadius = Constant.ProvinceHubBaseRange;
+            //        break;
+            //    case PlanetData.eTradeHubType.CivTradeHub:
+            //        star1HubRadius = Constant.ImperialHubBaseRange;
+            //        break;
+            //    default:
+            //        star1HubRadius = 0;
+            //        break;
+            //}
 
-            switch (star2tradeHubType)
-            {
-                case PlanetData.eTradeHubType.SecondaryTradeHub:
-                    star2HubRadius = Constant.SecondaryHubRange;
-                    break;
-                case PlanetData.eTradeHubType.ProvinceTradeHub:
-                    star2HubRadius = Constant.ProvinceHubRange;
-                    break;
-                case PlanetData.eTradeHubType.CivTradeHub:
-                    star2HubRadius = Constant.ImperialHubRange;
-                    break;
-                default:
-                    star2HubRadius = 0;
-                    break;
-            }
+            //switch (star2tradeHubType)
+            //{
+            //    case PlanetData.eTradeHubType.SecondaryTradeHub:
+            //        star2HubRadius = Constant.SecondaryHubBaseRange;
+            //        break;
+            //    case PlanetData.eTradeHubType.ProvinceTradeHub:
+            //        star2HubRadius = Constant.ProvinceHubBaseRange;
+            //        break;
+            //    case PlanetData.eTradeHubType.CivTradeHub:
+            //        star2HubRadius = Constant.ImperialHubBaseRange;
+            //        break;
+            //    default:
+            //        star2HubRadius = 0;
+            //        break;
+            //}
 
-            if (distanceBetweenStars <= (star1HubRadius + star2HubRadius))
+            if (distanceBetweenStars <= (originStar.GetRangeOfHub + checkedStar.GetRangeOfHub))
                 return true;
             else
                 return false;

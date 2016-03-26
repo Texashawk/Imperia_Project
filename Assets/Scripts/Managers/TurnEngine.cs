@@ -10,7 +10,7 @@ using HelperFunctions;
 using EconomicObjects;
 using GameEvents;
 using Constants;
-using Assets.Scripts.Managers;
+using Managers;
 
 public class TurnEngine : MonoBehaviour {
 

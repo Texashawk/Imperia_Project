@@ -13,15 +13,15 @@ namespace CameraScripts
 	    private bool moveMapRight = false;
 	    private bool moveMapLeft = false;
         [HideInInspector]public bool ScrollWheelIsValid { get; set; } // can the scrollwheel be used to manipulate the camera?
-	    private float zoomSpeed = 9.5f;
-        private float zoomSensitivity = 50f;
+	    private float zoomSpeed = 11f;
+        private float zoomSensitivity = 60f;
         public const float cameraTilt = 35f; // was 20f
         private Camera mainC; // camera reference
         private GameData gDataRef;
         private UIManager uiManagerRef;
 
         [HideInInspector]public ViewManager.eViewLevel ZoomLevel;
-	    private const int scrollSpeedVariable = 1200;
+	    private const int scrollSpeedVariable = 2000;
 	    [HideInInspector]public bool systemZoomActive = false;
         [HideInInspector]public bool planetZoomActive = false;
         [HideInInspector]public bool provinceZoomActive = false;
@@ -40,18 +40,17 @@ namespace CameraScripts
         private float tiltYOffset = 0f; // this is the offsetY that is used to counteract the tilt of the camera
         public int galaxyHeight;
         public int galaxyWidth;
-        public const int galaxyZValue = 4000; // how far away the camera is from the galaxy map on a Z axis
+        public const int galaxyZValue = 8000; // how far away the camera is from the galaxy map on a Z axis
         private const int systemZValue = 2000; // how far the camera is away from the system planet views
 
         public const int galaxyMinZoomLevel = 30;
-        public const int provinceMinZoomLevel = 30; // was 40
         public const int systemMinZoomLevel = 12;
         public const int planetMinZoomLevel = 2;
-        public const int maxZoomLevel = 60;
-        public const int minZoomLevel = 30;
+        public const int maxZoomLevel = 40;
+        public const int minZoomLevel = 10;
 
         public float zoom;
-
+       
 	    // Use this for initialization
 	    void Start () {
             mainC = GameObject.Find("Main Camera").GetComponent<Camera>();
@@ -59,8 +58,8 @@ namespace CameraScripts
             uiManagerRef = GameObject.Find("UI Engine").GetComponent<UIManager>();
             mainC.fieldOfView = maxZoomLevel;
             zoom = mainC.fieldOfView;
-            galaxyHeight = gDataRef.GalaxySizeHeight;
-            galaxyWidth = gDataRef.GalaxySizeWidth;
+            galaxyHeight = gDataRef.GalaxySizeHeight - 2500;
+            galaxyWidth = gDataRef.GalaxySizeWidth - 4000;
             ScrollWheelIsValid = true;
             uiManagerRef.SetActiveViewLevel(ViewManager.eViewLevel.Galaxy);
             uiManagerRef.SetActiveSecondaryMode(ViewManager.eSecondaryView.Sovereignity);
@@ -79,15 +78,28 @@ namespace CameraScripts
                 CheckForMapPan();
                 StartCoroutine(PanMap());
                 CheckForMapZoom();
-                DetermineZoomLevel(); // update zoom level of camera      
+                DetermineZoomLevel(); // update zoom level of camera
+
+                // check for RMB pan of map
+                if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.Galaxy && Input.GetMouseButton(1))
+                {
+                    Vector2 mousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+                    Vector3 newCameraPosition = mainC.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y -200f, transform.position.z + 4000)); // adjust y pos 200f with normal z position
+                    //Vector3 centerScreenPosition = mainC.WorldToScreenPoint(new Vector3(Screen.width / 2, Screen.height / 2, transform.position.z));
+                    transform.position = new Vector3(newCameraPosition.x, newCameraPosition.y + tiltYOffset, transform.position.z);
+                    //transform.position = new Vector3(centerScreenPosition.x, centerScreenPosition.y, transform.position.z);
+                }
 
                 if (provinceZoomActive && !systemZoomActive && provinceTarget != null)
                 {
                     ZoomToProvince(provinceTarget);
                 }
-            
+
                 if (systemZoomActive && !planetZoomActive && starTarget != null)
+                {
                     ZoomToSystem(starTarget);
+                }
+
 
                 if (systemZoomActive && planetZoomActive && planetTarget != null)
                     ZoomToPlanet(planetTarget);
@@ -274,7 +286,7 @@ namespace CameraScripts
 	    void ZoomToSystem(Transform target)
 	    {
             Vector3 tgtPosition;
-
+           
             int leftCameraMove = 0;
 
             if (Screen.width >= 1600)

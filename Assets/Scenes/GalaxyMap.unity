@@ -3654,8 +3654,8 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: .5, y: .5}
   m_AnchorMax: {x: .5, y: .5}
-  m_AnchoredPosition: {x: -3.43322754e-05, y: 267}
-  m_SizeDelta: {x: 32, y: 53.4000015}
+  m_AnchoredPosition: {x: .0750102997, y: 275.350006}
+  m_SizeDelta: {x: 29.8500004, y: 550.700012}
   m_Pivot: {x: .5, y: 1}
 --- !u!114 &555819446
 MonoBehaviour:
@@ -3676,7 +3676,7 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 26, y: 35}
+  m_CellSize: {x: 25, y: 35}
   m_Spacing: {x: 0, y: 5}
   m_Constraint: 0
   m_ConstraintCount: 2
@@ -3905,8 +3905,8 @@ RectTransform:
   m_RootOrder: 7
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 2.20001221, y: -44.0999451}
-  m_SizeDelta: {x: 32, y: 534}
+  m_AnchoredPosition: {x: 2.20001221, y: -27.3999939}
+  m_SizeDelta: {x: 29.7000008, y: 550.700012}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &598906831
 MonoBehaviour:
@@ -9869,7 +9869,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1278172480
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9956,8 +9956,8 @@ MonoBehaviour:
   m_verticalMapping: 0
   m_pageToDisplay: 1
   m_margin: {x: 0, y: .150654227, z: 3.36970568, w: -.177650452}
-  m_havePropertiesChanged: 0
-  m_isInputParsingRequired: 0
+  m_havePropertiesChanged: 1
+  m_isInputParsingRequired: 1
   m_inputSource: 0
   m_isNewTextObject: 0
   m_uvOffset: {x: 0, y: 0}
@@ -9998,7 +9998,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13b2602bcd67e45409bfe8165e6cc4b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  labelFont: {fileID: 12800000, guid: 7d784a79791c95d47876b7b4581f9208, type: 3}
   systemGrid: {fileID: 115838, guid: 663f0def84d92d24e86d6dccd9ff21e1, type: 2}
   systemTrail: {fileID: 183278, guid: ffcc00e88ee51ab4ba78da8051c7f090, type: 2}
   starNameObject: {fileID: 118252, guid: ef53d622ab1f68b478ba823c9e5f2b0a, type: 2}
@@ -12394,7 +12393,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1643352187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12464,8 +12463,8 @@ MonoBehaviour:
   m_verticalMapping: 0
   m_pageToDisplay: 1
   m_margin: {x: 2.3789084, y: -.000239015615, z: -9.20659513e-05, w: -.00710758567}
-  m_havePropertiesChanged: 0
-  m_isInputParsingRequired: 0
+  m_havePropertiesChanged: 1
+  m_isInputParsingRequired: 1
   m_inputSource: 0
   m_isNewTextObject: 0
   m_uvOffset: {x: 0, y: 0}
@@ -13491,6 +13490,14 @@ Prefab:
     - target: {fileID: 442282, guid: 46d70302b3d2de84aaf589ca53c69341, type: 2}
       propertyPath: m_RootOrder
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 442282, guid: 46d70302b3d2de84aaf589ca53c69341, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 1700
+      objectReference: {fileID: 0}
+    - target: {fileID: 442282, guid: 46d70302b3d2de84aaf589ca53c69341, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 1700
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 46d70302b3d2de84aaf589ca53c69341, type: 2}

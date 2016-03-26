@@ -190,6 +190,8 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
             
         }
 
+        public bool SystemIsTradeHub { get; set; }
+
         public PlanetData.eTradeHubType LargestTradeHub
         {
             get
@@ -201,6 +203,55 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                         CurrentTradeHub = pData.TradeHub;
                 }
                 return CurrentTradeHub;
+            }
+        }
+
+        // to get the effective hub range
+        public float GetRangeOfHub
+        {
+            get
+            {
+                int TotalMerchantPower = 0;
+                float hubRange = 0;
+
+                PlanetData.eTradeHubType CurrentTradeHub = PlanetData.eTradeHubType.NotHub; // set initial
+                PlanetData pDataHub = new PlanetData();
+
+                // first get the largest hub
+                foreach (PlanetData pData in PlanetList)
+                {
+                    if (pData.TradeHub > CurrentTradeHub)
+                    {
+                        CurrentTradeHub = pData.TradeHub;
+                        pDataHub = pData;
+                    }
+                }
+
+                TotalMerchantPower = pDataHub.TotalMerchants * pDataHub.AverageMerchantSkill;
+                
+                // now calculate the effective range
+                switch (pDataHub.TradeHub)
+                {
+                    case PlanetData.eTradeHubType.NotHub:
+                        hubRange = 0;
+                        break;
+                    case PlanetData.eTradeHubType.SecondaryTradeHub:
+                        hubRange = Constant.SecondaryHubBaseRange;
+                        hubRange += TotalMerchantPower / 8f; // base modifier
+                        break;
+                    case PlanetData.eTradeHubType.ProvinceTradeHub:
+                        hubRange = Constant.ProvinceHubBaseRange;
+                        hubRange += TotalMerchantPower / 10f; // base modifier
+                        break;
+                    case PlanetData.eTradeHubType.CivTradeHub:
+                        hubRange = Constant.ImperialHubBaseRange;
+                        hubRange += TotalMerchantPower / 12f; // base modifier
+                        break;
+                    default:
+                        break;
+                }
+
+                return hubRange;
             }
         }
 
