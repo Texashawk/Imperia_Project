@@ -16,6 +16,8 @@ public class TurnEngine : MonoBehaviour {
 
     private GameData gDataRef; // global game data
     private GalaxyData galDataRef; // galaxy data
+    public bool newTurnRequest = false;
+    private bool civUpdateInProgress = false;
 
 	// Use this for initialization
 	void Start () 
@@ -39,17 +41,42 @@ public class TurnEngine : MonoBehaviour {
         gDataRef.RequestGraphicRefresh = true;
 	}
 
-    public void ExecuteNewTurn() // this is the master turn execution function
-    {   
-        
+    public void Update()
+    {
+        if (newTurnRequest)
+        {
+            IEnumerator e = ExecuteNewTurn(); // sets up the coroutine to work as long as the game is running and it's not to the end of the loop
+            while (e.MoveNext())
+            {
+                // do something here
+            }
+        }
+    }
+
+    public void NewTurnRequest()
+    {
+        if (!newTurnRequest)
+            newTurnRequest = true;
+        else
+            newTurnRequest = false;
+    }
+
+    IEnumerator ExecuteNewTurn() // this is the master turn execution function
+    {        
         UpdateAllCivs();
+        while (civUpdateInProgress)
+            yield return null;
+
         UpdateEmperor();
         gDataRef.UpdateGameDate(); // advance the year
         gDataRef.RequestGraphicRefresh = true;
+        newTurnRequest = false; // reset the turn request
+        yield return null;
     }
 
     private void UpdateAllCivs()
     {
+        civUpdateInProgress = true; // start the update sequence
         foreach (Civilization civ in gDataRef.CivList)
         {
             if (gDataRef.GameMonth == 0)
@@ -61,7 +88,8 @@ public class TurnEngine : MonoBehaviour {
             UpdatePlanets(civ); // advance economy, move pops to same planet, update unrest/popular support levels, etc
             //CheckForMigration(civ); // check for intraplanet migration                     
             //MigratePopsBetweenPlanets(civ); // and if there are any pops who want to leave, check for where          
-            UpdateEvents(civ);           
+            UpdateEvents(civ);
+            civUpdateInProgress = false; // end the update sequence       
         }
     }
 

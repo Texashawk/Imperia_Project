@@ -81,14 +81,13 @@ namespace CameraScripts
                 DetermineZoomLevel(); // update zoom level of camera
 
                 // check for RMB pan of map
-                if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.Galaxy && Input.GetMouseButton(1))
-                {
-                    Vector2 mousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-                    Vector3 newCameraPosition = mainC.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y -200f, transform.position.z + 4000)); // adjust y pos 200f with normal z position
-                    //Vector3 centerScreenPosition = mainC.WorldToScreenPoint(new Vector3(Screen.width / 2, Screen.height / 2, transform.position.z));
-                    transform.position = new Vector3(newCameraPosition.x, newCameraPosition.y + tiltYOffset, transform.position.z);
-                    //transform.position = new Vector3(centerScreenPosition.x, centerScreenPosition.y, transform.position.z);
-                }
+                //if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.Galaxy && Input.GetMouseButton(1) && !systemZoomActive)
+                //{
+                //    Vector2 mousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+                //    Vector3 newCameraPosition = mainC.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y -200f, transform.position.z + 4000)); // adjust y pos 200f with normal z position
+                   
+                //    transform.position = new Vector3(newCameraPosition.x, newCameraPosition.y + tiltYOffset, transform.position.z);                 
+                //}
 
                 if (provinceZoomActive && !systemZoomActive && provinceTarget != null)
                 {

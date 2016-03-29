@@ -736,7 +736,7 @@ namespace CivCreator
             newCiv.Treasury = Random.Range(1000000f, 5000000f);  // starting treasury
             newCiv.Size = Civilization.eCivSize.Major;
             newCiv.Range = (int)(gameDataRef.GalaxySizeWidth / 1.8f);
-            newCiv.PlanetMinTolerance = 30; // lower since older world
+            newCiv.PlanetMinTolerance = 35; // lower since older world
             newCiv.AstronomyRating = Random.Range(6,11) * 1000; // not used
             newCiv.ID = "CIV0"; // use this to reference the player's civ
             newCiv.HumanCiv = true;
@@ -853,7 +853,7 @@ namespace CivCreator
 
                     // get a size for each province and then create it with provinces in range
                     int provinceSize = Random.Range(2, civ.CivMaxProvinceSize); // vary each province size
-                    int maxDist = civ.AdminRating * 200; // max dist between systems (legacy code!)
+                    int maxDist = civ.AdminRating * 150; // max dist between systems (legacy code!)
                     int count = 0;
                     bool provinceValid = false;
 
@@ -889,17 +889,17 @@ namespace CivCreator
                                     {
                                         sData.AssignedProvinceID = newProvince.ID;
                                         x += 1;
-                                        provinceValid = true;
                                         sData.IsProvinceHub = true; // is the central system, will have the province capital installed
                                     }
+
                                     if (sDataList[y].AssignedProvinceID == "")
                                     {
                                         sDataList[y].AssignedProvinceID = newProvince.ID;
                                         x += 1;
                                         if (x == 1)
-                                            sDataList[y].IsProvinceHub = true;
-                                        provinceValid = true;
+                                            sDataList[y].IsProvinceHub = true;               
                                     }
+                                    provinceValid = true;
                                 }                               
                             }
                          

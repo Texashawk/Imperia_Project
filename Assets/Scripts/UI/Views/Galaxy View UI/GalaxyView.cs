@@ -177,7 +177,7 @@ namespace Screens.Galaxy
                 {
                     ShowStellarObjects();               
                     ShowProvinceLines();
-                    ShowStellarDataBlocks();
+                    //ShowStellarDataBlocks();
                     selectedUnitInfoCanvas.SetActive(false);                   
                 }
             }
@@ -190,7 +190,7 @@ namespace Screens.Galaxy
             {
                 planetSelected = false;
                 DisplaySystemData();
-                HideStellarDataBlocks();
+                //HideStellarDataBlocks();
                 HideProvinceLines();
                 if (GetSelectedStar().GetComponent<LineRenderer>() != null)
                 {
@@ -246,11 +246,8 @@ namespace Screens.Galaxy
                     if (star.GetComponent<LineRenderer>() != null)
                     {
                         if (star.GetComponent<Star>().starData.Province != null)
-                        {
-                            //Color lineColor = star.GetComponent<Star>().starData.Province.OwningCiv.Color;
-                            //lineColor = new Color(lineColor.r, lineColor.g, lineColor.b, .7f);
+                        {                           
                             star.GetComponent<LineRenderer>().enabled = true;
-                            //star.GetComponent<LineRenderer>().SetColors(lineColor, lineColor);
                         }                      
                     }
                 }
@@ -294,7 +291,7 @@ namespace Screens.Galaxy
 
                     // set the line renderer constants for the province line
                     lr.SetVertexCount(pData.SystemList.Count + 1);
-                    lr.SetPosition(0, new Vector3(sData.WorldLocation.x, sData.WorldLocation.y, -60));
+                    lr.SetPosition(0, new Vector3(sData.WorldLocation.x, sData.WorldLocation.y, 0));
                     lr.material = provinceLineTexture;
                     lr.SetColors(gameDataRef.CivList[0].Color, gameDataRef.CivList[0].Color);
                     lr.SetWidth(15f, 15f);
@@ -302,17 +299,17 @@ namespace Screens.Galaxy
                     // loop through each sorted list and draw the vertexes
                     for (int y = 1; y < sortedTopQuadrantList.Count; y++)
                     {
-                        lr.SetPosition(y, new Vector3(sortedTopQuadrantList[y].x, sortedTopQuadrantList[y].y, -60));
+                        lr.SetPosition(y, new Vector3(sortedTopQuadrantList[y].x, sortedTopQuadrantList[y].y, 0));
                         lr.SetWidth(15f, 15f);
                     }
 
                     for (int y = sortedTopQuadrantList.Count; y < pData.SystemList.Count; y++)
                     {
-                        lr.SetPosition(y, new Vector3(sortedBottomQuadrantList[y-sortedTopQuadrantList.Count].x, sortedBottomQuadrantList[y-sortedTopQuadrantList.Count].y, -60));
+                        lr.SetPosition(y, new Vector3(sortedBottomQuadrantList[y-sortedTopQuadrantList.Count].x, sortedBottomQuadrantList[y-sortedTopQuadrantList.Count].y, 0));
                         lr.SetWidth(15f, 15f);
                     }
 
-                    lr.SetPosition(pData.SystemList.Count, new Vector3(sortedTopQuadrantList[0].x, sortedTopQuadrantList[0].y, -60)); // the final position
+                    lr.SetPosition(pData.SystemList.Count, new Vector3(sortedTopQuadrantList[0].x, sortedTopQuadrantList[0].y, 0)); // the final position
                     lr.SetWidth(15f, 15f);
                 }
             }
@@ -438,7 +435,7 @@ namespace Screens.Galaxy
             
             if (!systemNameDrawn)
             {
-                GenerateStellarDataBlocks();
+                //GenerateStellarDataBlocks();
                 //GenerateProvinceNames();
             }
         }
@@ -806,33 +803,9 @@ namespace Screens.Galaxy
 
                     // reset location of data line blocks
                     Vector3 nameVector;
-                    //if (text.blockType != StellarObjectDataBlock.eBlockType.Province)
-                    //{
-                        nameVector = Camera.main.WorldToScreenPoint(text.stellarObject.transform.position); // gets the screen point of the star's transform position
-                    //}
-                    //else
-                    //{
-                    //    nameVector = Camera.main.WorldToScreenPoint(text.provinceObjectLocation); // gets the screen point of the star's transform position
-                    //}
-                    //if (text.blockType == StellarObjectDataBlock.eBlockType.Star) // if a system data block
-                    textLocation = nameVector;
-                
-                    //else if (text.blockType == StellarObjectDataBlock.eBlockType.Province) // if a province name
-                    //{
-                    //    textLocation = nameVector;
-                    //    text.textObject.GetComponentInChildren<Image>().enabled = false; // turn off line
-                    //    text.textObject.GetComponent<TextMeshProUGUI>().fontSizeMin = 15; // big province names!
-                    //    text.textObject.GetComponent<TextMeshProUGUI>().enableAutoSizing = false; // big province names!
-                    //}
-
-                    //else // if lower system data block
-                    //{                    
-                    //    //textLocation = nameVector;
-                    //    textLocation = new Vector3(nameVector.x, nameVector.y -13, 0); // where the text box is located
-                    //    text.textObject.GetComponentInChildren<Image>().enabled = false; // turn off line
-                    //    text.textObject.GetComponent<TextMeshProUGUI>().characterSpacing = 3; // shorten spacing of characters
-                    //    text.textObject.GetComponent<TextMeshProUGUI>().fontSizeMax = 11; // shorten spacing of characters
-                    //}
+                   
+                    nameVector = Camera.main.WorldToScreenPoint(text.stellarObject.transform.position); // gets the screen point of the star's transform position                  
+                    textLocation = nameVector;               
                     text.textObject.transform.localPosition = new Vector3(textLocation.x - (Screen.width / 2), textLocation.y - (Screen.height / 2), 0); // reset after making a parent to canvas relative coordinates (pivot in center)
 
                 }

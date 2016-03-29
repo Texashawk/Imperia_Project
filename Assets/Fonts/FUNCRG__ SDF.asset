@@ -7,10 +7,10 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: FUNCRG__ SDF Material
-  m_Shader: {fileID: 4800000, guid: edfcf888cd11d9245b91d2883049a57e, type: 3}
-  m_ShaderKeywords: 
+  m_Shader: {fileID: 4800000, guid: 4a7755d6b5b67874f89c85f56f95fe97, type: 3}
+  m_ShaderKeywords: UNDERLAY_ON
   m_LightmapFlags: 5
-  m_CustomRenderQueue: 3000
+  m_CustomRenderQueue: 4000
   stringTagMap: {}
   m_SavedProperties:
     serializedVersion: 2
@@ -33,7 +33,7 @@ Material:
         first:
           name: _FaceTex
         second:
-          m_Texture: {fileID: 0}
+          m_Texture: {fileID: 2800000, guid: 40d7f27f614cc1043a1f7e19074f461c, type: 3}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
       data:
@@ -74,7 +74,7 @@ Material:
       data:
         first:
           name: _FaceDilate
-        second: -.270000011
+        second: 0
       data:
         first:
           name: _OutlineWidth
@@ -118,11 +118,11 @@ Material:
       data:
         first:
           name: _ScaleRatioB
-        second: 1.05833328
+        second: .833333313
       data:
         first:
           name: _ScaleRatioC
-        second: 1.05833328
+        second: .416666657
       data:
         first:
           name: _TextureWidth
@@ -222,15 +222,15 @@ Material:
       data:
         first:
           name: _UnderlayOffsetX
-        second: 0
+        second: 1
       data:
         first:
           name: _UnderlayOffsetY
-        second: 0
+        second: -1
       data:
         first:
           name: _UnderlayDilate
-        second: 0
+        second: 1
       data:
         first:
           name: _UnderlaySoftness
@@ -295,7 +295,7 @@ Material:
       data:
         first:
           name: _UnderlayColor
-        second: {r: 0, g: 0, b: 0, a: .5}
+        second: {r: 0, g: 0, b: 0, a: .660000026}
       data:
         first:
           name: _MaskCoord

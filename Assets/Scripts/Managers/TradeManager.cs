@@ -391,40 +391,7 @@ namespace Managers
         private static bool CheckForTradeHubLink(StarData originStar, StarData checkedStar, PlanetData.eTradeHubType star1TradeHubType, PlanetData.eTradeHubType star2tradeHubType)
         {
             float distanceBetweenStars = HelperFunctions.Formulas.MeasureDistanceBetweenSystems(originStar, checkedStar);
-            //int star1HubRadius = 0;
-            //int star2HubRadius = 0;
-            //switch (star1TradeHubType)
-            //{
-            //    case PlanetData.eTradeHubType.SecondaryTradeHub:
-            //        star1HubRadius = Constant.SecondaryHubBaseRange;
-            //        break;
-            //    case PlanetData.eTradeHubType.ProvinceTradeHub:
-            //        star1HubRadius = Constant.ProvinceHubBaseRange;
-            //        break;
-            //    case PlanetData.eTradeHubType.CivTradeHub:
-            //        star1HubRadius = Constant.ImperialHubBaseRange;
-            //        break;
-            //    default:
-            //        star1HubRadius = 0;
-            //        break;
-            //}
-
-            //switch (star2tradeHubType)
-            //{
-            //    case PlanetData.eTradeHubType.SecondaryTradeHub:
-            //        star2HubRadius = Constant.SecondaryHubBaseRange;
-            //        break;
-            //    case PlanetData.eTradeHubType.ProvinceTradeHub:
-            //        star2HubRadius = Constant.ProvinceHubBaseRange;
-            //        break;
-            //    case PlanetData.eTradeHubType.CivTradeHub:
-            //        star2HubRadius = Constant.ImperialHubBaseRange;
-            //        break;
-            //    default:
-            //        star2HubRadius = 0;
-            //        break;
-            //}
-
+        
             if (distanceBetweenStars <= (originStar.GetRangeOfHub + checkedStar.GetRangeOfHub))
                 return true;
             else

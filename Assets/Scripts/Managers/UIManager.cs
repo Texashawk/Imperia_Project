@@ -89,6 +89,13 @@ namespace Managers
         public void SetPrimaryModeToMilitary()
         {
             SetActivePrimaryMode(ViewManager.ePrimaryView.Military);
+            SetActiveSecondaryMode(ViewManager.eSecondaryView.Military); // for testing
+        }
+
+        public void SetPrimaryModeToPops()
+        {
+            SetActivePrimaryMode(ViewManager.ePrimaryView.Pops);
+            SetActiveSecondaryMode(ViewManager.eSecondaryView.Morale); // for testing
         }
 
         public void SetActiveViewLevel(ViewManager.eViewLevel viewMode)
@@ -111,6 +118,41 @@ namespace Managers
         {
             cameraFOV = mainCamera.fieldOfView;
             //viewMode = gCameraRef.ZoomLevel; // converts the camera FOV to current view mode
+        }
+
+        public class StellarObjectDataBlock // block object used to show data in the galaxy view
+        {
+            public enum eBlockType : int
+            {
+                Star,
+                Nebula,
+                Province,
+                Lower
+            }
+
+            [HideInInspector]
+            public eBlockType blockType = eBlockType.Star;
+            [HideInInspector]
+            public GameObject stellarObject; // object that the block is tied to
+            [HideInInspector]
+            public GameObject textObject; // text object that the block is named
+            [HideInInspector]
+            public string starID = "";
+            public Vector2 provinceObjectLocation; // where the province information is located
+            [HideInInspector]
+            public Rect provinceBounds; // where the province information is located
+            [HideInInspector]
+            public GameObject planetCountObject; // future UI object for additional information
+            [HideInInspector]
+            public Vector3 objectLocation; // where the block is
+            public Color ownerColor; // civ ownership color
+            [HideInInspector]
+            public string ownerName; // civ name
+            [HideInInspector]
+            public string ownerTolerance; // civ planet tolerance
+            [HideInInspector]
+            public float objectRotation; // rotation of the block (for constellations and nebulas)
+
         }
     }
 }

@@ -7,10 +7,10 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: FUNCRG__TMP Material
-  m_Shader: {fileID: 4800000, guid: edfcf888cd11d9245b91d2883049a57e, type: 3}
-  m_ShaderKeywords: 
+  m_Shader: {fileID: 4800000, guid: 4a7755d6b5b67874f89c85f56f95fe97, type: 3}
+  m_ShaderKeywords: UNDERLAY_ON
   m_LightmapFlags: 5
-  m_CustomRenderQueue: 3000
+  m_CustomRenderQueue: 4000
   stringTagMap: {}
   m_SavedProperties:
     serializedVersion: 2
@@ -82,7 +82,7 @@ Material:
         first:
           name: _FaceTex
         second:
-          m_Texture: {fileID: 0}
+          m_Texture: {fileID: 2800000, guid: c30270e41dccf9441ab56d94261bdcfa, type: 3}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
       data:
@@ -112,6 +112,26 @@ Material:
         first:
           name: _Cutoff
         second: .5
+      data:
+        first:
+          name: _Stencil
+        second: 0
+      data:
+        first:
+          name: _StencilComp
+        second: 0
+      data:
+        first:
+          name: _StencilOp
+        second: 0
+      data:
+        first:
+          name: _StencilReadMask
+        second: 255
+      data:
+        first:
+          name: _StencilWriteMask
+        second: 255
       data:
         first:
           name: _Parallax
@@ -150,28 +170,8 @@ Material:
         second: 0
       data:
         first:
-          name: _Stencil
-        second: 0
-      data:
-        first:
-          name: _StencilComp
-        second: 8
-      data:
-        first:
-          name: _StencilOp
-        second: 0
-      data:
-        first:
-          name: _StencilReadMask
-        second: 255
-      data:
-        first:
-          name: _StencilWriteMask
-        second: 255
-      data:
-        first:
           name: _FaceDilate
-        second: 0
+        second: .109999999
       data:
         first:
           name: _OutlineWidth
@@ -179,7 +179,7 @@ Material:
       data:
         first:
           name: _OutlineSoftness
-        second: 0
+        second: .134000003
       data:
         first:
           name: _GlowOffset
@@ -211,15 +211,15 @@ Material:
       data:
         first:
           name: _ScaleRatioA
-        second: 1
+        second: .800000012
       data:
         first:
           name: _ScaleRatioB
-        second: 1
+        second: .712000012
       data:
         first:
           name: _ScaleRatioC
-        second: 1
+        second: .712000012
       data:
         first:
           name: _TextureWidth
@@ -243,7 +243,7 @@ Material:
       data:
         first:
           name: _PerspectiveFilter
-        second: .875
+        second: .83099997
       data:
         first:
           name: _VertexOffsetX
@@ -319,19 +319,19 @@ Material:
       data:
         first:
           name: _UnderlayOffsetX
-        second: 0
+        second: 1
       data:
         first:
           name: _UnderlayOffsetY
-        second: 0
+        second: -1
       data:
         first:
           name: _UnderlayDilate
-        second: 0
+        second: -.75
       data:
         first:
           name: _UnderlaySoftness
-        second: 0
+        second: .412999988
       data:
         first:
           name: _MaskSoftnessX
@@ -339,6 +339,14 @@ Material:
       data:
         first:
           name: _MaskSoftnessY
+        second: 0
+      data:
+        first:
+          name: _FaceShininess
+        second: 0
+      data:
+        first:
+          name: _OutlineShininess
         second: 0
     m_Colors:
       data:
@@ -349,6 +357,10 @@ Material:
         first:
           name: _Color
         second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _SpecColor
+        second: {r: 0, g: 0, b: 0, a: 1}
       data:
         first:
           name: _FaceColor
@@ -372,7 +384,7 @@ Material:
       data:
         first:
           name: _ReflectOutlineColor
-        second: {r: 0, g: 0, b: 0, a: 1}
+        second: {r: .345588207, g: .0406574346, b: .0406574346, a: 1}
       data:
         first:
           name: _EnvMatrixRotation
@@ -380,7 +392,7 @@ Material:
       data:
         first:
           name: _UnderlayColor
-        second: {r: 0, g: 0, b: 0, a: .5}
+        second: {r: 0, g: 0, b: 0, a: 1}
       data:
         first:
           name: _MaskCoord
