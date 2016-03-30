@@ -554,7 +554,6 @@ namespace Managers
                                 tP.AmountDesired += .1f;
                                 rareBudgetCheck = tP.AmountDesired * tP.MaxCrownsToPay;
                             }
-
                             break;
 
                         default:
@@ -564,7 +563,6 @@ namespace Managers
                     // add to trade list if amount requested is not zero
                     if ((tP.AmountDesired > 0f) && ((tP.AmountDesired * tP.MaxCrownsToPay) <= maxTotalImportBudget))
                     {
-
                         pData.ActiveTradeProposalList.Add(tP); // add the new trade proposal
                         Debug.Log("New Trade Request generated! Taking export budget into account, " + pData.Name + " requests " + tP.AmountDesired.ToString("N1") + " units of " + tP.TradeResource.ToString() + " at a max price per unit of " + tP.MaxCrownsToPay.ToString("N1") + ".");
                     }

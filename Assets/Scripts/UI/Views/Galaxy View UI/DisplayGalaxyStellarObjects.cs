@@ -29,7 +29,8 @@ public class DisplayGalaxyStellarObjects : MonoBehaviour {
 
             GameObject writtenStar;
             writtenStar = Instantiate(starList[x], star.WorldLocation, Quaternion.identity) as GameObject;
-            
+            writtenStar.transform.localScale = new Vector2(8f, 8f);
+
             // draw secondary star if duplex star
             if (star.starMultipleType == StarData.eStarMultiple.Binary)
             {
@@ -47,7 +48,7 @@ public class DisplayGalaxyStellarObjects : MonoBehaviour {
                 secondaryStar.tag = "Companion Star";
                 secondaryStar.transform.SetParent(writtenStar.transform); // set as parent of star
                 secondaryStar.transform.localPosition = new Vector3(5, -5, 0); // offset by parent
-                secondaryStar.transform.localScale = new Vector2(.5f, .5f);
+                secondaryStar.transform.localScale = new Vector2(3f, 3f);
                 gData.AddStarObjectToList(secondaryStar);
             }
 

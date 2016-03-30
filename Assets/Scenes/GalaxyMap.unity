@@ -13611,6 +13611,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   listAstrographicViewObjectsCreated: []
+  sovDataBlock: {fileID: 140450, guid: c8901d350c17223448d3fe29563013cb, type: 2}
 --- !u!114 &1827983066
 MonoBehaviour:
   m_ObjectHideFlags: 0

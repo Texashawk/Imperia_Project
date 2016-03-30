@@ -121,7 +121,7 @@ namespace GalaxyCreator
             newStar.SpectralClass = StarData.eSpectralClass.G;
             newStar.Age = 7;
             newStar.starMultipleType = StarData.eStarMultiple.Single;
-            newStar.Size = 8;
+            newStar.Size = 50;
             newStar.Metallicity = 8.0;
             newStar.Name = "Neo-Sirius";
             newStar.ID = "STANEOS001";
