@@ -174,7 +174,7 @@ namespace Tooltips
 
             if (!toolTipCreated)
             {
-                Vector3 tooltipLocation = new Vector3(transform.position.x + offsetAmount, transform.position.y, transform.position.z - 5);
+                Vector3 tooltipLocation = new Vector3(transform.position.x + offsetAmount, transform.position.y, transform.position.z);
                 
                 tooltipObject = Instantiate(tooltipPrefab, tooltipLocation, Quaternion.identity) as GameObject;             
                 tooltipObject.transform.SetParent(uiCanvas.transform, true); // assign to canvas

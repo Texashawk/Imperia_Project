@@ -41,7 +41,7 @@ public class SystemView : MonoBehaviour {
         galaxyDataRef = GameObject.Find("GameManager").GetComponent<GalaxyData>();
         gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
         graphicsDataRef = GameObject.Find("GameManager").GetComponent<GraphicAssets>();
-        uiManagerRef = GameObject.Find("UI Engine").GetComponent<UIManager>();
+        uiManagerRef = GameObject.Find("GameManager").GetComponent<UIManager>();
         gScreenRef = GameObject.Find("GameEngine").GetComponent<GalaxyView>();
         lowIntelLevelPlanetData = GameObject.Find("Low Intel Level Text").GetComponent<Text>();
         noIntelLevelPlanetData = GameObject.Find("No Intel Level Text").GetComponent<Text>();
@@ -51,26 +51,30 @@ public class SystemView : MonoBehaviour {
 
     void OnGUI()
     {
+                    
+    }
+
+    void Update()
+    {
+        //if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.System)
+        //{
+            
+        //}
+
         if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.System)
         {
             ShowSystemView();
             if (DrawPanelSummary)
                 FadePlanetSummaryPanels();
-        }
-        else
-            ResetDrawStates();             
-    }
 
-    void Update()
-    {
-        if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.System)
-        {
             if (gameDataRef.RequestGraphicRefresh)
             {
                 ResetDrawStates();
                 gameDataRef.RequestGraphicRefresh = false;
             }
         }
+        else
+            ResetDrawStates();
     }
 
     void ShowSystemView()

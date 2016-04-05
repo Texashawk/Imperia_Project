@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System;
 using StellarObjects;
 using PlanetObjects;
+using System.Threading;
 using CharacterObjects;
 using CivObjects;
+using Random = UnityEngine.Random;
 
 namespace HelperFunctions
 {
@@ -261,7 +263,8 @@ namespace HelperFunctions
             else
                 return Color.white;
         }       
-    }
+    
+}
 
     public static class Formulas
     {

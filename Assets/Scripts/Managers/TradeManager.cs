@@ -10,47 +10,46 @@ using System.Collections.Generic;
 
 namespace Managers
 {
-    class TradeManager
+    public class TradeManager : MonoBehaviour
     {
         // static data references
-        private static GalaxyData galaxyDataRef;
-        private static GameData gameDataRef;
-        public static List<Trade> ActiveTradesInGame = new List<Trade>();
-        public static List<TradeFleet> ActiveTradeFleetsInGame = new List<TradeFleet>();
-        public static List<TradeGroup> ActiveTradeGroups = new List<TradeGroup>();
+        private GameData gameDataRef;
+        public List<Trade> ActiveTradesInGame = new List<Trade>();
+        public List<TradeFleet> ActiveTradeFleetsInGame = new List<TradeFleet>();
+        public List<TradeGroup> ActiveTradeGroups = new List<TradeGroup>();
+
+        public void Awake()
+        {
+            gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
+        }
 
         // this will update trade fleets that are actively moving to their destinations (update positions, etc)
-        public static void UpdateActiveTradeFleets()
+        public void UpdateActiveTradeFleets()
         {
 
         }
 
         // once trade fleets have been determined, this function will create and load them, and assign a merchant pop
-        public static void GenerateNewTradeFleets()
+        public void GenerateNewTradeFleets()
         {
 
         }
 
         // once a trade fleet has completed its mission, this function will deactivate them and release the merchant assigned
-        public static void DeactivateTradeFleets()
+        public void DeactivateTradeFleets()
         {
 
         }
 
-        public static void CreateTradeAgreements()
-        {
-            gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
-
-            ActiveTradeGroups.Clear(); // clear out the trade groups
-            foreach (Civilization civ in gameDataRef.CivList)
-            {
-                UpdateResourceBasePrices(civ);
-                CheckForTrades(civ);
-            }
+        public IEnumerator CreateTradeAgreements(Civilization civ)
+        {          
+            //ActiveTradeGroups.Clear(); // clear out the trade groups
+            UpdateResourceBasePrices(civ);
+            yield return StartCoroutine(CheckForTrades(civ));
         }
 
         // Step 1: Determine base prices of each good in the civ
-        public static void UpdateResourceBasePrices(Civilization civ)
+        public void UpdateResourceBasePrices(Civilization civ)
         {
             float foodPriceTotal = 0f;
             float energyPriceTotal = 0f;
@@ -74,7 +73,7 @@ namespace Managers
             civ.CurrentRarePrice = rarePriceTotal / civ.Last6MonthsRarePrices.Length;
         }
 
-        public static void CheckForTrades(Civilization civ)
+        private IEnumerator CheckForTrades(Civilization civ)
         {
             foreach (PlanetData pData in civ.PlanetList)
             {
@@ -86,20 +85,26 @@ namespace Managers
                 pData.RareImportance = (((50f - (pData.RareStored / pData.TotalRareMaterialsConsumed)) / 5f) - pData.RareTotalDifference) * Constant.RarePriority;
 
                 // now generate the trade proposals for each viceroy
-                GenerateTradeProposals(pData);
+
+                yield return StartCoroutine(GenerateTradeProposals(pData));        
             }
 
-
-            foreach (Province provData in civ.ProvinceList)
+            if (civ.ProvinceList.Count > 0)
             {
-                // now determine whether each planet is in the trade network
-                if (provData != null)
-                    CalculateTradeGroups(provData);
+                foreach (Province provData in civ.ProvinceList)
+                {
+                    // now determine whether each planet is in the trade network
+                    if (provData != null)
+                        yield return StartCoroutine(CalculateTradeGroups(provData));
+                }
             }
+
+            UpdateResourceStockBalances(civ);
+            //yield return 0;
         }
 
         // Step 2b: create Trade Proposals based on each resource's Importance to that Viceroy
-        public static void GenerateTradeProposals(PlanetData pData)
+        private IEnumerator GenerateTradeProposals(PlanetData pData)
         {
             float maxTotalImportBudget = 0f;
             float unallocatedImportBudget = 0f;
@@ -114,7 +119,7 @@ namespace Managers
             float heavyUnitsDesired = 0f;
             float rareUnitsDesired = 0f;
 
-            GameData gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
+            
             SortedList ResourcePriority = new SortedList(); // sorts in ascending order
 
             // prior to process, clear out the trade proposal list if needed
@@ -134,7 +139,7 @@ namespace Managers
             Debug.Log("Rare Importance: " + pData.RareImportance.ToString("N1"));
 
             // first, determine the budget that can be allocated for these trades by taking the yearly import budget, subtracting the expenses, and dividing by the months left in the year
-            maxTotalImportBudget = ((pData.YearlyImportBudget - pData.YearlyImportExpenses) / 10) * (11 - gDataRef.GameMonth); // max allowed total for this month
+            maxTotalImportBudget = ((pData.YearlyImportBudget - pData.YearlyImportExpenses) / 10) * (11 - gameDataRef.GameMonth); // max allowed total for this month
             Debug.Log("Total Import Budget for this month is " + maxTotalImportBudget.ToString("N1"));
 
             // now determine the base budget for each item based on weighted importance
@@ -145,7 +150,7 @@ namespace Managers
                 Debug.Log("No resources are determined to be needed by the viceroy this month, therefore no proposals will be considered.");
                 Debug.Log("Trade Request analysis completed. Exiting for " + pData.Name + "...");
                 Debug.Log("_________________________________________________________________________");
-                return;
+                yield return 0;
             }
 
             maxFoodImportBudget = (maxTotalImportBudget * (pData.FoodImportance / totalImportance));
@@ -201,10 +206,11 @@ namespace Managers
 
             Debug.Log("Trade Request analysis completed. Exiting for " + pData.Name + "...");
             Debug.Log("_________________________________________________________________________");
+            yield return 0;
         }
 
         // Step 4: Each planet with an active TradeProposal in their queue looks at each trade hub in range that could potentially fill that proposal.
-        public static void DetermineEligibleTradePartners(PlanetData currentPData)
+        public void DetermineEligibleTradePartners(PlanetData currentPData)
         {
             List<string> EligiblePlanetIDsInRange = new List<string>(); // holding list for planets that are potential trade candidates
             List<string> EligiblePlanetIDsWithExports = new List<string>(); // holding list for planets that are in range AND have the export that is being sought
@@ -212,10 +218,10 @@ namespace Managers
         }
 
         // Step 4a: Determine Trade Groups that currently exist this turn
-        private static void CalculateTradeGroups(Province provData)
+        private IEnumerator CalculateTradeGroups(Province provData)
         {
             if (provData.SystemList == null)
-                return;
+                yield return null;
 
             List<StarData> starsInProvince = provData.SystemList;
             List<StarData> starsWithHubs = new List<StarData>(); // list of systems with hubs
@@ -315,9 +321,10 @@ namespace Managers
                     CheckPlanetsAttachedToHub(newTG, sData, starsInProvince, planetsInSystemOwned, hubPlanet, starsWithHubs);
                 }
             }
+            yield return null;
         }
         
-        private static void CheckPlanetsAttachedToHub(TradeGroup newTG, StarData sData, List<StarData> starsInProvince, List<PlanetData> planetsInSystemOwned, PlanetData hubPlanet, List<StarData>starsWithHubs)
+        private void CheckPlanetsAttachedToHub(TradeGroup newTG, StarData sData, List<StarData> starsInProvince, List<PlanetData> planetsInSystemOwned, PlanetData hubPlanet, List<StarData>starsWithHubs)
         {
             bool ChainIsActive = true; // recursive function looking for a chained trade group
 
@@ -388,7 +395,7 @@ namespace Managers
             }
         }
 
-        private static bool CheckForTradeHubLink(StarData originStar, StarData checkedStar, PlanetData.eTradeHubType star1TradeHubType, PlanetData.eTradeHubType star2tradeHubType)
+        private bool CheckForTradeHubLink(StarData originStar, StarData checkedStar, PlanetData.eTradeHubType star1TradeHubType, PlanetData.eTradeHubType star2tradeHubType)
         {
             float distanceBetweenStars = HelperFunctions.Formulas.MeasureDistanceBetweenSystems(originStar, checkedStar);
         
@@ -398,7 +405,7 @@ namespace Managers
                 return false;
         }
         
-        public static int DetermineTradeFleetsAvailable(PlanetData pData)
+        public int DetermineTradeFleetsAvailable(PlanetData pData)
         {
             int totalMerchants = 0;
             int merchantsAllocatedToFleets = 0;
@@ -572,10 +579,9 @@ namespace Managers
             }
         }
 
-        public static void UpdateResourceStockBalances()
+        public void UpdateResourceStockBalances(Civilization civ)
         {
-            galaxyDataRef = GameObject.Find("GameManager").GetComponent<GalaxyData>();
-            foreach (PlanetData pData in galaxyDataRef.GalaxyPlanetDataList)
+            foreach (PlanetData pData in civ.PlanetList)
             {
                 pData.FoodStored += pData.FoodDifference;
                 pData.EnergyStored += pData.EnergyDifference;

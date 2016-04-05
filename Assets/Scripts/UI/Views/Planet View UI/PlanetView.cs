@@ -88,7 +88,7 @@ public class PlanetView : MonoBehaviour {
         industryDisplayButton = GameObject.Find("Industry Display Button");
         economicDisplayButton = GameObject.Find("Economic Display Button");
         graphicsDataRef = GameObject.Find("GameManager").GetComponent<GraphicAssets>();
-        uiManagerRef = GameObject.Find("UI Engine").GetComponent<UIManager>();
+        uiManagerRef = GameObject.Find("GameManager").GetComponent<UIManager>();
         starbaseText = GameObject.Find("Starbase Level Label").GetComponent<Text>();
         starbaseValue = GameObject.Find("Starbase Level").GetComponent<Text>();
         starbaseDataPanel = GameObject.Find("Starbase Data Panel").GetComponent<Image>();

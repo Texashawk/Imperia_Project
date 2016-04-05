@@ -2363,7 +2363,7 @@ RectTransform:
   - {fileID: 134739152}
   - {fileID: 1273480823}
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 14
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -4218,46 +4218,6 @@ MonoBehaviour:
   m_EffectColor: {r: 1, g: 1, b: 1, a: .5}
   m_EffectDistance: {x: -1, y: -1}
   m_UseGraphicAlpha: 1
---- !u!1 &623094671
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 623094673}
-  - 114: {fileID: 623094672}
-  m_Layer: 0
-  m_Name: Turn Engine
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &623094672
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 623094671}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bcb0bf5c6e49cd84b8abbe25213a3e9f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  newTurnRequest: 0
---- !u!4 &623094673
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 623094671}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 10
 --- !u!1 &629420500
 GameObject:
   m_ObjectHideFlags: 0
@@ -4754,7 +4714,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 623094672}
+      - m_Target: {fileID: 1839190563}
         m_MethodName: NewTurnRequest
         m_Mode: 1
         m_Arguments:
@@ -6089,7 +6049,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 12
 --- !u!1 &868830030
 GameObject:
   m_ObjectHideFlags: 0
@@ -8524,7 +8484,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 16
+  m_RootOrder: 15
 --- !u!1 &1155986252
 GameObject:
   m_ObjectHideFlags: 0
@@ -8882,7 +8842,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 13
 --- !u!1 &1190022824
 GameObject:
   m_ObjectHideFlags: 0
@@ -11749,6 +11709,7 @@ GameObject:
   - 223: {fileID: 1545526014}
   - 114: {fileID: 1545526013}
   - 114: {fileID: 1545526012}
+  - 114: {fileID: 1545526016}
   m_Layer: 5
   m_Name: Main UI Overlay
   m_TagString: Untagged
@@ -11837,6 +11798,17 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1545526016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1545526011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 612ef917ac4a9f047b7a5435c3718a7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1553549858
 GameObject:
   m_ObjectHideFlags: 0
@@ -12126,7 +12098,7 @@ Transform:
   m_LocalScale: {x: 25000, y: 25000, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 11
 --- !u!1 &1615783367
 GameObject:
   m_ObjectHideFlags: 0
@@ -13593,7 +13565,7 @@ RectTransform:
   m_Children:
   - {fileID: 2087970127}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -13625,6 +13597,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tradeModeDataObject: {fileID: 118252, guid: ef53d622ab1f68b478ba823c9e5f2b0a, type: 2}
   listTradeViewObjectsCreated: []
+  RefreshTradeView: 0
   TradeHubCircle: {fileID: 184092, guid: abd4591574db5ad478676df942216dd7, type: 2}
 --- !u!1 &1830965536
 GameObject:
@@ -13788,6 +13761,47 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tooltipPrefab: {fileID: 109514, guid: ca2573c0a7abbec458a92061da6296c9, type: 2}
   exitRequested: 0
+--- !u!1 &1839190562
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1839190564}
+  - 114: {fileID: 1839190563}
+  m_Layer: 0
+  m_Name: Turn Engine
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1839190563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1839190562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcb0bf5c6e49cd84b8abbe25213a3e9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  newTurnRequest: 0
+  GameGenerationComplete: 0
+--- !u!4 &1839190564
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1839190562}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 602.688599, y: 39.5150146, z: 129.749451}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 16
 --- !u!1 &1877137094
 GameObject:
   m_ObjectHideFlags: 0
@@ -14096,7 +14110,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 1898477550}
   - 114: {fileID: 1898477549}
-  - 114: {fileID: 1898477556}
   - 114: {fileID: 1898477555}
   - 114: {fileID: 1898477554}
   - 114: {fileID: 1898477553}
@@ -14107,6 +14120,7 @@ GameObject:
   - 114: {fileID: 1898477559}
   - 114: {fileID: 1898477560}
   - 114: {fileID: 1898477561}
+  - 114: {fileID: 1898477556}
   m_Layer: 2
   m_Name: UI Engine
   m_TagString: Untagged
@@ -14230,9 +14244,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1898477548}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 192834d98c333494da4f4b4e4c714d60, type: 3}
+  m_Script: {fileID: 11500000, guid: 8994040d85566194988b5e0a0cf10e12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ExplorationCallout: {fileID: 159014, guid: 5efd1ad62b45e404ebaf9872302d3050, type: 2}
+  MilitaryCallout: {fileID: 0}
+  PoliticalCallout: {fileID: 0}
 --- !u!114 &1898477557
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14287,11 +14304,13 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1898477548}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d18cde44dbf0d64abf8a83d87dd0582, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RequestTradeViewGraphicRefresh: 0
+  RequestPoliticalViewGraphicRefresh: 0
   SelectedStellarObject: {fileID: 0}
   viewManagerRef: {fileID: 0}
   ViewLevel: 0

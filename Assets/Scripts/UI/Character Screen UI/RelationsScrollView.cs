@@ -44,7 +44,7 @@ public class RelationsScrollView : MonoBehaviour
                     TB.SetID(cha.ID);
                     TB.SetName(cha.Name);
                     TB.SetPicture(cha.PictureID);
-                    go.GetComponent<CharacterTooltip>().InitializeTooltipData(cha, (-TB.GetComponent<RectTransform>().sizeDelta.x / 4f)); // initialize character tooltip
+                    go.GetComponent<CharacterTooltip>().InitializeTooltipData(cha, -TB.GetComponent<RectTransform>().rect.width / 5f); // initialize character tooltip
                     go.transform.SetParent(Button_Template.transform.parent);
                     go.transform.localScale = new Vector3(1, 1, 1); // to offset canvas scaling
                     go.transform.localPosition = new Vector3(go.transform.localPosition.x, go.transform.localPosition.y, 0);

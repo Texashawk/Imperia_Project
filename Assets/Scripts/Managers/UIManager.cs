@@ -16,10 +16,13 @@ namespace Managers
             Planet
         }
 
-        private Camera mainCamera; // accessor for the camera
-        private GalaxyCameraScript gCameraRef; // accessor for the camera script
-        private GameObject selectedItemPanel; // reference for the selected item panel
-        private float cameraFOV; // current FOV of the camera
+        //private Camera mainCamera; // accessor for the camera
+        //private GalaxyCameraScript gCameraRef; // accessor for the camera script
+        
+        //private float cameraFOV; // current FOV of the camera
+
+        public bool RequestTradeViewGraphicRefresh = false; // the game is asking for a graphic request throughout the UI
+        public bool RequestPoliticalViewGraphicRefresh = false;
 
         public Transform SelectedStellarObject; // what current stellar object is active
         public PlanetData selectedPlanet; // if a planet is selected, what kind
@@ -38,13 +41,16 @@ namespace Managers
         public ViewManager.eSecondaryView SecondaryViewMode; // primary 'main' view category
         public ViewManager.ePrimaryView PrimaryViewMode; // sub mode
 
+        // view references
+
+
         // Use this for initialization
         void Awake()
         {
-            viewManagerRef = GameObject.Find("UI Engine").GetComponent<ViewManager>();
-            mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>(); // get global game data (date, location, version, etc)
-            gCameraRef = mainCamera.GetComponent<GalaxyCameraScript>(); // get camera ref
-            selectedItemPanel = GameObject.Find("Selected Item Panel"); // selected item panel
+            viewManagerRef = GameObject.Find("GameManager").GetComponent<ViewManager>();
+            //mainCamera = Camera.main; // GameObject.Find("Main Camera").GetComponent<Camera>(); // get global game data (date, location, version, etc)
+            //gCameraRef = mainCamera.GetComponent<GalaxyCameraScript>(); // get camera ref
+           
         }
 
         void Start()
@@ -61,16 +67,6 @@ namespace Managers
             ViewLevel = viewManagerRef.ViewLevel;
             SecondaryViewMode = viewManagerRef.SecondaryViewMode;
             PrimaryViewMode = viewManagerRef.PrimaryViewMode;
-
-            // Show the selected item panel (won't be here though, need to move to the actual script
-            if (ViewLevel == ViewManager.eViewLevel.Galaxy|| ViewLevel == ViewManager.eViewLevel.Province)
-            {
-                selectedItemPanel.SetActive(false);
-            }
-            else
-            {
-                selectedItemPanel.SetActive(true);
-            }
         }
 
         // status change of primary mode for events from buttons
@@ -78,12 +74,15 @@ namespace Managers
         {
             SetActivePrimaryMode(ViewManager.ePrimaryView.Political);
             SetActiveSecondaryMode(ViewManager.eSecondaryView.Sovereignity); // for testing
+            RequestPoliticalViewGraphicRefresh = true;
         }
 
         public void SetPrimaryModeToEconomic()
         {
             SetActivePrimaryMode(ViewManager.ePrimaryView.Economic);
             SetActiveSecondaryMode(ViewManager.eSecondaryView.Trade); // for testing
+            RequestTradeViewGraphicRefresh = true;
+            
         }
 
         public void SetPrimaryModeToMilitary()
@@ -114,9 +113,15 @@ namespace Managers
             viewManagerRef.SecondaryViewMode = activeView;
         }
 
+        public void RequestGraphicRefresh()
+        {
+            RequestPoliticalViewGraphicRefresh = true;
+            RequestTradeViewGraphicRefresh = true;
+        }
+
         void LateUpdate()
         {
-            cameraFOV = mainCamera.fieldOfView;
+            //cameraFOV = mainCamera.fieldOfView;
             //viewMode = gCameraRef.ZoomLevel; // converts the camera FOV to current view mode
         }
 

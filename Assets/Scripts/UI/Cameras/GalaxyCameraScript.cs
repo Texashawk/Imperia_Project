@@ -55,7 +55,7 @@ namespace CameraScripts
 	    void Start () {
             mainC = GameObject.Find("Main Camera").GetComponent<Camera>();
             gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
-            uiManagerRef = GameObject.Find("UI Engine").GetComponent<UIManager>();
+            uiManagerRef = GameObject.Find("GameManager").GetComponent<UIManager>();
             mainC.fieldOfView = maxZoomLevel;
             zoom = mainC.fieldOfView;
             galaxyHeight = gDataRef.GalaxySizeHeight - 2500;
@@ -84,9 +84,8 @@ namespace CameraScripts
                 //if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.Galaxy && Input.GetMouseButton(1) && !systemZoomActive)
                 //{
                 //    Vector2 mousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-                //    Vector3 newCameraPosition = mainC.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y -200f, transform.position.z + 4000)); // adjust y pos 200f with normal z position
-                   
-                //    transform.position = new Vector3(newCameraPosition.x, newCameraPosition.y + tiltYOffset, transform.position.z);                 
+                //    Vector3 newCameraPosition = mainC.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y - 200f, transform.position.z + 4000)); // adjust y pos 200f with normal z position
+                //    transform.position = new Vector3(newCameraPosition.x, newCameraPosition.y + tiltYOffset, transform.position.z);
                 //}
 
                 if (provinceZoomActive && !systemZoomActive && provinceTarget != null)
@@ -96,9 +95,16 @@ namespace CameraScripts
 
                 if (systemZoomActive && !planetZoomActive && starTarget != null)
                 {
+                    //transform.position = new Vector2(starTarget.position.x, starTarget.position.y);
                     ZoomToSystem(starTarget);
                 }
 
+                //if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.Galaxy)  // normalize camera height in galaxy mode
+                //{
+                //    transform.position = new Vector3(transform.position.x, transform.position.y, galaxyZValue); // now set the height of the camera in a separate step
+                //    systemZoomActive = false;
+                //    planetZoomActive = false;
+                //}
 
                 if (systemZoomActive && planetZoomActive && planetTarget != null)
                     ZoomToPlanet(planetTarget);
@@ -117,14 +123,16 @@ namespace CameraScripts
                 if (systemZoomActive)
                     if ((Input.GetAxis("Mouse ScrollWheel") > mouseWheelValue) || Input.GetButtonDown("Right Mouse Button"))
                     {
+                        //transform.position = new Vector3(starTarget.transform.position.x, starTarget.transform.position.y + tiltYOffset, transform.position.z); // first set the x/y position of the camera   
                         transform.position = new Vector3(transform.position.x - 38 - (Screen.width / 10), transform.position.y + tiltYOffset, transform.position.z); // first set the x/y position of the camera
                         systemZoomActive = false;
                         provinceZoomActive = false;
                         provinceZoomComplete = false;
-                        systemZoomComplete = false;
-                        zoom = maxZoomLevel;
-                        transform.position = new Vector3(transform.position.x,transform.position.y, galaxyZValue); // now set the height of the camera in a separate step
+                        systemZoomComplete = true; // was false
+                        zoom = maxZoomLevel;                                            
+                        transform.position = new Vector3(transform.position.x, transform.position.y, galaxyZValue); // now set the height of the camera in a separate step
                         uiManagerRef.SetActiveViewLevel(ViewManager.eViewLevel.Galaxy); // resets view level to the galaxy
+                        //starTarget = null;  
                     }
 
                 if (planetZoomActive)
@@ -138,6 +146,7 @@ namespace CameraScripts
                         provinceZoomActive = false;
                         provinceZoomComplete = false;
                         systemZoomActive = true;
+                        systemZoomComplete = false;
                         zoom = systemMinZoomLevel;
                         uiManagerRef.SetActiveViewLevel(ViewManager.eViewLevel.System);
                     }
@@ -146,6 +155,7 @@ namespace CameraScripts
                 if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.Galaxy)
                 {
                     transform.position = new Vector3(transform.position.x, transform.position.y, galaxyZValue);
+                    systemZoomComplete = false;
                 }
             }
         }
@@ -168,13 +178,11 @@ namespace CameraScripts
                 }
             }
 
-            
-
             // set normal angle of camera
             if (uiManagerRef.ViewLevel != ViewManager.eViewLevel.Galaxy && systemZoomActive)
                 transform.eulerAngles = new Vector3(180, 0, 0); // was 30,0,0
             else
-            {   
+            {
                 transform.eulerAngles = new Vector3(180 - cameraTilt, 0, 0); // was 30,0,0
             }
         }
@@ -205,8 +213,7 @@ namespace CameraScripts
 
         IEnumerator PanMap()
         {
-            // scroll map (need to add bounds checks)  
-        
+            // scroll map (need to add bounds checks)          
             float yLocation = transform.position.y;
             float xLocation = transform.position.x;
 
@@ -256,6 +263,8 @@ namespace CameraScripts
         {
             mouseWheelValue = Input.GetAxis("Mouse ScrollWheel");
             mainC.fieldOfView = Mathf.Lerp(mainC.fieldOfView, zoom, Time.deltaTime * zoomSpeed);
+
+           
         }
 
         void ZoomToProvince(Province target)
@@ -284,8 +293,9 @@ namespace CameraScripts
 
 	    void ZoomToSystem(Transform target)
 	    {
+            
             Vector3 tgtPosition;
-           
+            
             int leftCameraMove = 0;
 
             if (Screen.width >= 1600)
@@ -302,8 +312,7 @@ namespace CameraScripts
                     tgtPosition = new Vector3(target.position.x + (leftCameraMove * (Screen.width / 1920f)) + (target.localScale.x / 2), target.position.y + 75 * (Screen.height / 1080f), systemZValue);
                     zoom = systemMinZoomLevel; // set system view zoom level
                     StartCoroutine(SystemZoom(tgtPosition));
-                }
-            
+                }            
                 else
                 {
                     tgtPosition = new Vector3(target.position.x + (leftCameraMove * (Screen.width / 1920f)) + (target.localScale.x / 2), target.position.y + 75 * (Screen.height / 1080f), systemZValue);
@@ -327,7 +336,6 @@ namespace CameraScripts
                 planet.localScale = new Vector3(25 * scaleRatio, 25 * scaleRatio, 1); // then normalize the size of the planet to show close-up (number is the nominal scale)
                 zoom = planetMinZoomLevel; // set planet view zoom level
                 StartCoroutine(PlanetZoom(tgtPosition));
-                //transform.Rotate(90, 90, 0);
                 planet.Rotate(0, 0, -90);
                 cameraPlanetPosition = transform.position;
                 planetZoomComplete = true; // set views as true

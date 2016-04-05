@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using CharacterObjects;
+using EconomicObjects;
 using Actions;
 
 public class ActionScrollView : MonoBehaviour
@@ -101,6 +102,9 @@ public class ActionScrollView : MonoBehaviour
                 break;
             case "A3":
                 response = ActionFunctions.IssueInsultToCharacter(activeChar.Civ.Leader, cData);
+                break;
+            case "A6":
+                response = ActionFunctions.OrderToChangeExport(activeChar, activeChar.Civ.Leader, Trade.eTradeGoodRequested.Basic, Trade.eTradeGoodRequested.Energy); // will need to rewrite to add 'sub action panel'
                 break;
             default:
                 break;

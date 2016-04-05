@@ -20,7 +20,7 @@ public class DisplayGalaxyMapElements : MonoBehaviour
         UICamera = GameObject.Find("UI Camera");
         mainCamera = GameObject.Find("Main Camera");
         
-        uiManagerRef = GameObject.Find("UI Engine").GetComponent<UIManager>();
+        uiManagerRef = GameObject.Find("GameManager").GetComponent<UIManager>();
     }
 
     // Update is called once per frame

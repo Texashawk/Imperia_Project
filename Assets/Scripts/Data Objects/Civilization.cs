@@ -153,15 +153,17 @@ namespace CivObjects
             get
             {
                 List<Province> pList = new List<Province>();
-                foreach (StarData sData in SystemList)
+                if (SystemList.Count > 0)
                 {
-                    if (sData.OwningCiv == this)
+                    foreach (StarData sData in SystemList)
                     {
-                        if (!pList.Exists(p => p.ID == sData.AssignedProvinceID))
-                            pList.Add(sData.Province);
+                        if (sData.OwningCiv == this)
+                        {
+                            if (!pList.Exists(p => p.ID == sData.AssignedProvinceID))
+                                pList.Add(sData.Province);
+                        }
                     }
                 }
-
                 return pList;
             }
         }

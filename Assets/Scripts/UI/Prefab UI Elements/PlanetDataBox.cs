@@ -28,7 +28,7 @@ public class PlanetDataBox : MonoBehaviour {
             vPanel.gameObject.SetActive(true);
             string vID = DataRetrivalFunctions.GetCharacter(cID).PictureID;
             vPanel.GetComponent<Image>().sprite = graphicsDataRef.CharacterList.Find(p => p.name == vID);
-            vPanel.GetComponent<CharacterTooltip>().InitializeTooltipData(DataRetrivalFunctions.GetCharacter(cID), -20f);
+            vPanel.GetComponent<CharacterTooltip>().InitializeTooltipData(DataRetrivalFunctions.GetCharacter(cID), -16f * (Screen.width / 1920));
             vPanel.GetComponent<CharacterScreenActivation>().InitializeData(DataRetrivalFunctions.GetCharacter(cID));
         }
         else

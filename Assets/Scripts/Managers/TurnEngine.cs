@@ -1,90 +1,126 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System;
 using System.Collections.Generic;
 using PlanetObjects;
 using StellarObjects;
-using CharacterObjects;
 using CivObjects;
-using HelperFunctions;
 using EconomicObjects;
 using GameEvents;
-using Constants;
 using Managers;
 
 public class TurnEngine : MonoBehaviour {
 
     private GameData gDataRef; // global game data
     private GalaxyData galDataRef; // galaxy data
+    private UIManager uiManagerRef; // UI Manager reference
+    private TradeManager tManagerRef; // Trade Manager reference
+    //private TradeGalaxyView tradeViewDataRef; // there has to be a better way to send a refresh event
     public bool newTurnRequest = false;
-    private bool civUpdateInProgress = false;
+    public bool GameGenerationComplete = false;
+    private bool updatePlanetsComplete = false;
+    private bool updateTradesComplete = false;
+
+    void Awake()
+    {
+        
+    }
 
 	// Use this for initialization
 	void Start () 
     {
         galDataRef = GameObject.Find("GameManager").GetComponent<GalaxyData>();
         gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
+        uiManagerRef = GameObject.Find("GameManager").GetComponent<UIManager>();
+        tManagerRef = GameObject.Find("GameManager").GetComponent<TradeManager>();
+    }
 
-        // run 2 times before first turn to maximize 
-        for (int x = 0; x < 2; x++)
-        {
-            foreach (Civilization civ in gDataRef.CivList)
-            {
-                UpdatePlanets(civ);
-                //CheckForMigration(civ); // check for intraplanet migration
-                //MigratePopsBetweenPlanets(civ); // and if there are any pops who want to leave, check for where
-                UpdateTrades(civ);
-            }
-        }    
+    public void GenerateInitialTurn()
+    {
+        // run 2 times before first turn to maximize
+        // run a turn 
+        //for (int x = 0; x < 1; x++)
+        //{
+        //    foreach (Civilization civ in gDataRef.CivList)
+        //    {
+        //        StartCoroutine(UpdatePlanets(civ));
+        //        CheckForMigration(civ); // check for intraplanet migration
+        //        MigratePopsBetweenPlanets(civ); // and if there are any pops who want to leave, check for where
+        //        UpdateTrades(civ);
+        //    }
+        //}
+
+        StartCoroutine(ExecuteNewTurn());
         UpdateEmperor();
-        gDataRef.UpdateGameDate();
         gDataRef.RequestGraphicRefresh = true;
-	}
+        uiManagerRef.RequestGraphicRefresh(); // update the modes
+        //if (IsGameGenerationComplete())
+        GameGenerationComplete = true;
+    }
 
     public void Update()
     {
-        if (newTurnRequest)
-        {
-            StartCoroutine(ExecuteNewTurn());
-            newTurnRequest = false;   
-        }
-        Debug.Log("Update() accessed...");
+        //if (newTurnRequest)
+        //{
+            //StartCoroutine(ExecuteNewTurn());
+            //newTurnRequest = false;
+            //gDataRef.RequestGraphicRefresh = true;
+        //}
+        //Debug.Log("Update() accessed...");
     }
 
     public void NewTurnRequest()
-    {
-        if (!newTurnRequest)
-            newTurnRequest = true;
-        else
-            newTurnRequest = false;
+    {       
+        tManagerRef.ActiveTradeGroups.Clear(); // clear out the trade groups globally at once
+        StartCoroutine(ExecuteNewTurn());           
+        gDataRef.RequestGraphicRefresh = true;     
     }
 
     IEnumerator ExecuteNewTurn() // this is the master turn execution function
     {        
-        yield return StartCoroutine(UpdateAllCivs());
-        UpdateEmperor();
-        gDataRef.UpdateGameDate(); // advance the year
-        gDataRef.RequestGraphicRefresh = true;
-        newTurnRequest = false; // reset the turn request
-    }
-
-    private IEnumerator UpdateAllCivs()
-    {
-        //civUpdateInProgress = true; // start the update sequence
         foreach (Civilization civ in gDataRef.CivList)
         {
             if (gDataRef.GameMonth == 0)
             {
                 ResetCivBudgets(civ);
             }
-            UpdateTrades(civ);
-            UpdatePopularSupport(civ); // advance popular support
-            UpdatePlanets(civ); // advance economy, move pops to same planet, update unrest/popular support levels, etc
-            //CheckForMigration(civ); // check for intraplanet migration                     
-            //MigratePopsBetweenPlanets(civ); // and if there are any pops who want to leave, check for where          
-            UpdateEvents(civ);
-            yield return 0;  
         }
+
+        yield return StartCoroutine(UpdateAllCivs());
+        UpdateEmperor();
+        gDataRef.UpdateGameDate(); // advance the year
+        gDataRef.RequestGraphicRefresh = true;
+        uiManagerRef.RequestPoliticalViewGraphicRefresh = true;
+        uiManagerRef.RequestTradeViewGraphicRefresh = true;
+        newTurnRequest = false; // reset the turn request
+        yield return 0;
+    }
+
+    private IEnumerator UpdateAllCivs()
+    {
+       
+
+        foreach (Civilization civ in gDataRef.CivList)
+        {
+            yield return StartCoroutine(UpdatePopularSupport(civ)); // advance popular support
+            yield return StartCoroutine(UpdatePlanets(civ)); // advance economy, move pops to same planet, update unrest/popular support levels, etc
+            yield return StartCoroutine(UpdateEvents(civ));
+            yield return new WaitForSeconds(2.0f);
+            yield return StartCoroutine(UpdateTrades(civ));
+            //CheckForMigration(civ); // check for intraplanet migration                     
+            //MigratePopsBetweenPlanets(civ); // and if there are any pops who want to leave, check for where                     
+        }
+        yield return 0;
+    }
+
+    private bool IsGameGenerationComplete() // determines if all routines have completed prior to starting the game
+    {
+        if (updatePlanetsComplete)
+        {
+            updatePlanetsComplete = false;
+            return true;
+        }
+        else
+            return false;
     }
 
     private void UpdateEmperor()
@@ -103,15 +139,15 @@ public class TurnEngine : MonoBehaviour {
         civ.Expenses = 0; // reset the budgets at the start of the year
     }
 
-    private void UpdateEvents(Civilization civ)
+    private IEnumerator UpdateEvents(Civilization civ)
     {
 
         foreach (PlanetData pData in civ.PlanetList)
         {
-            GameEvents.PlanetEventCreator.GeneratePlanetEvents(pData, civ); // generate the events for each planet
+            PlanetEventCreator.GeneratePlanetEvents(pData, civ); // generate the events for each planet
         }
 
-        foreach (GameEvents.GameEvent gEvent in civ.LastTurnEvents.ToArray())
+        foreach (GameEvent gEvent in civ.LastTurnEvents.ToArray())
         {
             if (!gEvent.EventIsNew) // delete the event if it's already been seen
             {
@@ -123,18 +159,21 @@ public class TurnEngine : MonoBehaviour {
                 gEvent.EventIsNew = false;
             }
         }
-    }
 
-    private void UpdateTrades(Civilization civ)
+        yield return 0;
+    }
+    
+    private IEnumerator UpdateTrades(Civilization civ)
     {
-        TradeManager.CreateTradeAgreements(); // this will analyze each planet's needs and generate proposals for trade
-        TradeManager.UpdateActiveTradeFleets(); // this will update the location and status of all active trade fleets
-        TradeManager.GenerateNewTradeFleets(); // this will create new trade fleets that will begin to move next month towards their destination
-        TradeManager.DeactivateTradeFleets(); // this will deactivate any trade fleets that have completed their journey and do not have any runs left
-        TradeManager.UpdateResourceStockBalances();
+        StartCoroutine(tManagerRef.CreateTradeAgreements(civ)); // this will analyze each planet's needs and generate proposals for trade     
+        //TradeManager.UpdateActiveTradeFleets(); // this will update the location and status of all active trade fleets      
+        //TradeManager.GenerateNewTradeFleets(); // this will create new trade fleets that will begin to move next month towards their destination
+        //TradeManager.DeactivateTradeFleets(); // this will deactivate any trade fleets that have completed their journey and do not have any runs left      
+        tManagerRef.UpdateResourceStockBalances(civ);
+        yield return 0; 
     }
 
-    private void UpdatePlanets(Civilization civ) // this is where all planet-update functions go to save time
+    private IEnumerator UpdatePlanets(Civilization civ) // this is where all planet-update functions go to save time
     {
         foreach (PlanetData pData in civ.PlanetList)
         {
@@ -143,7 +182,7 @@ public class TurnEngine : MonoBehaviour {
             pData.UpdateEmployment(); // once pops have moved, check employment status
             pData.UpdateShortfallConditions(); // update shortfall results (food, power, etc)
                       
-            if (gDataRef.GameMonth == 1) // on the first month of every year, do this
+            if (gDataRef.GameMonth == 0) // on the first month of every year, do this
             {
                 pData.SendTaxUpward(); // determine taxes and send up the chute
                 PlanetDevelopmentAI.AdjustViceroyBuildPlan(pData, true); // look at adjusting the build plan for each planet, force every year or when game starts
@@ -152,17 +191,20 @@ public class TurnEngine : MonoBehaviour {
             {
                 PlanetDevelopmentAI.AdjustViceroyBuildPlan(pData, false); // look at adjusting the build plan for each planet
             }
-
             pData.ExecuteProductionPlan(); // update production of new infrastructure on the planet
             //GameEvents.PlanetEventCreator.GeneratePlanetEvents(pData, civ); // generate the events for each planet
+            yield return 0; // do work
         }
+        updatePlanetsComplete = true;
+        yield return 0;
     }
 
-    private void UpdatePopularSupport(Civilization civ)
+    private IEnumerator UpdatePopularSupport(Civilization civ)
     {
         foreach (PlanetData pData in civ.PlanetList)
         {
             pData.UpdatePopularSupport(); // update popular support and unrest levels
+            yield return 0;
         }
     }
 

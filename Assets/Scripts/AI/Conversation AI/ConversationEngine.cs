@@ -268,7 +268,7 @@ namespace ConversationAI
             activeString = aData.Name + " sounds great, Your Excellence."; // generic response
 
             completeString += activeString + " ";
-            completeString = ParseResponseFlags(activeString, completeString, flags, cData);
+            completeString = ParseResponseFlags(activeString, completeString, flags, cData, true);
 
             return completeString; // stub to test reader
 
@@ -282,7 +282,7 @@ namespace ConversationAI
             activeString = "I guess " + aData.Name + " sounds OK, Your Excellence.";
 
             completeString += activeString + " ";
-            completeString = ParseResponseFlags(activeString, completeString, flags, cData);
+            completeString = ParseResponseFlags(activeString, completeString, flags, cData, true);
 
             return completeString; // stub to test reader
 
@@ -299,12 +299,12 @@ namespace ConversationAI
             activeString = "You dare attempt to " + aData.Name + "?";
             completeString += activeString + " ";
 
-            completeString = ParseResponseFlags(activeString, completeString, flags, cData);                    
+            completeString = ParseResponseFlags(activeString, completeString, flags, cData, false);                    
             return completeString;
 
         }
 
-        private static string ParseResponseFlags(string activeString, string completeString, string flags, Character cData)
+        private static string ParseResponseFlags(string activeString, string completeString, string flags, Character cData, bool actionSuccess)
         {
             int choices = 0;
             int choice = 0;
@@ -319,6 +319,8 @@ namespace ConversationAI
                 if (cData.Passion > 30 && HateResponses[choice].Contains("[-PASSION]"))
                     goto chooseSentence;
                 if (cData.Lifeform == Character.eLifeformType.AI && !HateResponses[choice].Contains("[AI]")) // AI lifeforms mush always choose an AI flag
+                    goto chooseSentence;
+                if (!actionSuccess && !HateResponses[choice].Contains("[ACTIONFAIL]"))
                     goto chooseSentence;
 
                 activeString = HateResponses[choice];
@@ -372,10 +374,15 @@ namespace ConversationAI
             {
                 activeString = activeString.Remove(0, 10);
             }
+            if (activeString.Contains("ACTIONFAIL"))
+            {
+                activeString = activeString.Remove(0, 12);
+            }
             if (activeString.Contains("AI"))
             {
                 activeString = activeString.Remove(0, 4);
             }
+            
 
             return activeString;
         }

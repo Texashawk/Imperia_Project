@@ -75,7 +75,7 @@ public class GameData : MonoBehaviour
     {
         CivList = new List<Civilization>(); // initialize lists
         GameDate = 3050.0f;
-        GameMonth = 1;
+        GameMonth = 0;
         GalaxySizeHeight = 6500;
         GalaxySizeWidth = 6500;
         MinSystems = 90;

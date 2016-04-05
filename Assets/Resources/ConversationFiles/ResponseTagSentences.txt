@@ -10,6 +10,9 @@
 [HATE][-PASSION]I may be quiet, but my hatred for you crackles within me like lightning.
 [HATE]This is not the end for you and me. Not by a long mile.
 [HATE]We will not end this today.
+[HATE]It is interesting that you have chosen this course of action. My House and I will remember.
+[HATE][ACTIONFAIL]Your Excellence, I am very disappointed that you tried to do this. Very disappointed. And angry!
+[HATE][ACTIONFAIL]Are you kidding? You seriously think I would do that? Don't make me laugh.
 [HATE]I have no end of malice for you and yours.
 [HATE][+PASSION]Only death will be justice for what you have done today. Never forget that.
 [HATE]Cruelty such as you have shown me today has only one response.

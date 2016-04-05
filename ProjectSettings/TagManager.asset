@@ -11,6 +11,7 @@ TagManager:
   - Planet
   - StellarObject
   - Region Tile
+  - Exploration Callout
   layers:
   - Default
   - TransparentFX

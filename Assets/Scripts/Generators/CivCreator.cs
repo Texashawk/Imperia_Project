@@ -735,8 +735,8 @@ namespace CivCreator
             newCiv.AdminRating = 15; // rating that determines maximum size of governable provinces
             newCiv.Treasury = Random.Range(1000000f, 5000000f);  // starting treasury
             newCiv.Size = Civilization.eCivSize.Major;
-            newCiv.Range = (int)(gameDataRef.GalaxySizeWidth / 1.8f);
-            newCiv.PlanetMinTolerance = 35; // lower since older world
+            newCiv.Range = (int)(gameDataRef.GalaxySizeWidth / 1.5f);
+            newCiv.PlanetMinTolerance = 32; // lower since older world
             newCiv.AstronomyRating = Random.Range(6,11) * 1000; // not used
             newCiv.ID = "CIV0"; // use this to reference the player's civ
             newCiv.HumanCiv = true;

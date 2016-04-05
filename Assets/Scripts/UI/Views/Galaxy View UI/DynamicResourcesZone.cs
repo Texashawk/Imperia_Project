@@ -17,7 +17,7 @@ public class DynamicResourcesZone : MonoBehaviour
     {
         // initialize all empire bar stats
         gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>(); // get global game data (date, location, version, etc)
-        uiManagerRef = GameObject.Find("UI Engine").GetComponent<UIManager>(); // get global game data (date, location, version, etc)
+        uiManagerRef = GameObject.Find("GameEngine").GetComponent<UIManager>(); // get global game data (date, location, version, etc)
         empireTreasuryRevenues = GameObject.Find("EmpireTreasuryRevenues").GetComponent<TextMeshProUGUI>();
         empireTreasuryExpenses = GameObject.Find("EmpireTreasuryExpenses").GetComponent<TextMeshProUGUI>();
         emperorAP = GameObject.Find("Action Points").GetComponent<TextMeshProUGUI>();

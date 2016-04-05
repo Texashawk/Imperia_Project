@@ -22,16 +22,15 @@ namespace Assets.Scripts.UI
         {
             selectedItemName = GameObject.Find("Selected Item Line").GetComponent<TextMeshProUGUI>();
             selectedItemSecondaryInfo = GameObject.Find("Secondary Header Line").GetComponent<TextMeshProUGUI>();
-            uiManagerRef = GameObject.Find("UI Engine").GetComponent<UIManager>();
+            uiManagerRef = GameObject.Find("GameManager").GetComponent<UIManager>();
             gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
-            selectedItemPanel = GameObject.Find("Selected Item Panel");
+            selectedItemPanel = gameObject;
         }
 
         void Update()
         {
-            // update the panel information based on activation
-            UpdatePanel();
-                     
+            // update the panel information based on activation         
+            UpdatePanel();                 
         }
 
         void UpdatePanel() // check for selected objects

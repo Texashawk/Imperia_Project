@@ -2,6 +2,9 @@
 using CharacterObjects;
 using CivObjects;
 using ConversationAI;
+using EconomicObjects;
+using StellarObjects;
+using HelperFunctions;
 using System.Collections.Generic;
 
 namespace Actions
@@ -255,7 +258,94 @@ namespace Actions
             return response;
         }
 
-       
+        public static string OrderToChangeExport(Character target, Character initiator, Trade.eTradeGoodRequested currentExport, Trade.eTradeGoodRequested desiredExport)
+        {
+            GameData gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
+            Character eData = gDataRef.CivList[0].Leader; // you
+            CharacterAction aData = gDataRef.CharacterActionList.Find(p => p.ID == "A6"); // pull the action data from the data list
+            string actionResult = "";
+            string conversationFlags = ""; // flags to send along for the 
+            string response = ""; // the response.
+            float currentExportProfit = 0f;
+            float newExportProfit = 0f;           
+
+            // inputs
+            List<Trade.eTradeGoodRequested> tradeGoodsExported = new List<Trade.eTradeGoodRequested>();
+            List<Trade.eTradeGoodRequested> tradeGoodsImported = new List<Trade.eTradeGoodRequested>();
+            PlanetData targetPlanet = DataRetrivalFunctions.GetPlanet(target.PlanetAssignedID);
+
+            // build the list of exports from a certain planet (may actually create a function for this within PlanetData)
+            switch (currentExport)
+            {
+                case Trade.eTradeGoodRequested.Food:
+                    currentExportProfit = targetPlanet.FoodExported * targetPlanet.Owner.CurrentFoodPrice;
+                    break;
+                case Trade.eTradeGoodRequested.Energy:
+                    currentExportProfit = targetPlanet.EnergyExported * targetPlanet.Owner.CurrentEnergyPrice;
+                    break;
+                case Trade.eTradeGoodRequested.Basic:
+                    currentExportProfit = targetPlanet.AlphaExported * targetPlanet.Owner.CurrentBasicPrice;
+                    break;
+                case Trade.eTradeGoodRequested.Heavy:
+                    currentExportProfit = targetPlanet.HeavyExported * targetPlanet.Owner.CurrentHeavyPrice;
+                    break;
+                case Trade.eTradeGoodRequested.Rare:
+                    currentExportProfit = targetPlanet.RareExported * targetPlanet.Owner.CurrentRarePrice;
+                    break;
+                default:
+                    break;
+            }
+
+            switch (desiredExport)
+            {
+                case Trade.eTradeGoodRequested.Food:
+                    newExportProfit = targetPlanet.FoodExported * targetPlanet.Owner.CurrentFoodPrice;
+                    break;
+                case Trade.eTradeGoodRequested.Energy:
+                    newExportProfit = targetPlanet.EnergyExported * targetPlanet.Owner.CurrentEnergyPrice;
+                    break;
+                case Trade.eTradeGoodRequested.Basic:
+                    newExportProfit = targetPlanet.AlphaExported * targetPlanet.Owner.CurrentBasicPrice;
+                    break;
+                case Trade.eTradeGoodRequested.Heavy:
+                    newExportProfit = targetPlanet.HeavyExported * targetPlanet.Owner.CurrentHeavyPrice;
+                    break;
+                case Trade.eTradeGoodRequested.Rare:
+                    newExportProfit = targetPlanet.RareExported * targetPlanet.Owner.CurrentRarePrice;
+                    break;
+                default:
+                    break;
+            }
+
+            // build the list of imports - is this needed?
+
+            // decide whether to change or not
+            float obeyDecisionWeight = 0f;
+            float defyDecisionWeight = 0f;
+            float profitChange = newExportProfit/currentExportProfit;
+
+            obeyDecisionWeight += 100 + (profitChange * 100);
+            defyDecisionWeight += 20; // need some answers with this one
+
+            if (obeyDecisionWeight > defyDecisionWeight)
+            {
+                actionResult = "ORDER OBEYED. CHANGING EXPORT TO " + desiredExport.ToString() + " ";
+                conversationFlags += "[PLEASED]";
+                response += actionResult + ConversationEngine.GenerateResponse(target, aData, 100, false, conversationFlags);
+                TradeProposal tP = new TradeProposal();
+                tP.TradeResource = TradeProposal.eTradeResource.Energy;
+                target.PlanetAssigned.ActiveTradeProposalList.Add(tP);
+            }
+            else
+            {
+                actionResult = "ORDER DISOBEYED ";
+                conversationFlags += "[HATE]";
+                response += actionResult + ConversationEngine.GenerateResponse(target, aData, 0, false, conversationFlags);
+            }
+
+            return response;
+        }
+  
         public static string IssueInsultToCharacter(Character challengingChar, Character insultedChar)
         {
             GameData gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
