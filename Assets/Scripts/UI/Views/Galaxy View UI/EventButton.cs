@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using GameEvents;
 using CameraScripts;
 using StellarObjects;
+using Managers;
 
 
 public class EventButton : MonoBehaviour
@@ -84,14 +85,31 @@ public class EventButton : MonoBehaviour
             Transform star = galData.GalaxyStarList.Find(p => p.name == HelperFunctions.DataRetrivalFunctions.GetSystem(systemLocationID).Name).transform;
             if (star != null)
             {
-                Camera.main.GetComponent<GalaxyCameraScript>().starTarget = star;
-                star.GetComponent<Star>().tag = "Selected";
-                Camera.main.GetComponent<GalaxyCameraScript>().systemZoomActive = true;
-                Camera.main.GetComponent<GalaxyCameraScript>().planetZoomActive = false;
-                Camera.main.GetComponent<GalaxyCameraScript>().ScrollWheelIsValid = true; // allow scrolling once again
-                gData.StarSelected = true;
+                star.GetComponent<Star>().tag = "Selected"; // to allow system screen generation
+                StartSystemZoom(star);
+                //Camera.main.GetComponent<GalaxyCameraScript>().starTarget = star;
+                //star.GetComponent<Star>().tag = "Selected";
+                //Camera.main.GetComponent<GalaxyCameraScript>().systemZoomActive = true;
+                //Camera.main.GetComponent<GalaxyCameraScript>().planetZoomActive = false;
+                //Camera.main.GetComponent<GalaxyCameraScript>().ScrollWheelIsValid = true; // allow scrolling once again
+                //gData.StarSelected = true;
             }
         
         }
+    }
+
+    private void StartSystemZoom(Transform target)
+    {
+        GalaxyData galData = GameObject.Find("GameManager").GetComponent<GalaxyData>();
+        GameData gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
+        UIManager uiManagerRef = GameObject.Find("GameManager").GetComponent<UIManager>();
+
+        Camera.main.GetComponent<GalaxyCameraScript>().starTarget = target;
+        Camera.main.GetComponent<GalaxyCameraScript>().systemZoomActive = true;
+        Camera.main.GetComponent<GalaxyCameraScript>().planetZoomActive = false;
+        Camera.main.GetComponent<GalaxyCameraScript>().provinceZoomActive = false;
+        gameDataRef.StarSelected = true; // probably need to move to a global UI manager
+        uiManagerRef.selectedSystem = target.GetComponent<Star>().starData;
+        uiManagerRef.SetActiveViewLevel(ViewManager.eViewLevel.System);
     }
 }

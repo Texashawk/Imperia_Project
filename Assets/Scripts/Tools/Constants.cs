@@ -60,7 +60,7 @@ namespace Constants
         public const float HeavyMaterialsPerInfraLevel = 15f;
         public const float RareMaterialsPerInfraLevel = 0f;
 
-        // eco constants
+        // economic constants
         public const float ResourceBaseCost = .08f;
         public const float BaseEconFactor = .055f;
         public const float BaseTradeFactor = .0013f;
@@ -100,11 +100,11 @@ namespace Constants
         public const int Level5StarbaseCapacity = 160;
 
         // trade hub ranges
-        public const int SecondaryHubBaseRange = 350;
-        public const int ProvinceHubBaseRange = 525;
-        public const int ImperialHubBaseRange = 1000;
+        public const int SecondaryHubBaseRange = 400;
+        public const int ProvinceHubBaseRange = 1000;
+        public const int ImperialHubBaseRange = 1600;
 
-        // development level consts
+        // development level consts (what each development level contributes to the weighted development level of the planet)
         public const float FarmingDevelopmentModifier = .2f;
         public const float ScienceDevelopmentModifier = 3.2f;
         public const float ManufacturingDevelopmentModifier = 1.3f;

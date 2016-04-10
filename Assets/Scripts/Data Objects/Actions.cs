@@ -258,7 +258,7 @@ namespace Actions
             return response;
         }
 
-        public static string OrderToChangeExport(Character target, Character initiator, Trade.eTradeGoodRequested currentExport, Trade.eTradeGoodRequested desiredExport)
+        public static string OrderToChangeExport(Character target, Character initiator, Trade.eTradeGood currentExport, Trade.eTradeGood desiredExport)
         {
             GameData gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
             Character eData = gDataRef.CivList[0].Leader; // you
@@ -270,26 +270,26 @@ namespace Actions
             float newExportProfit = 0f;           
 
             // inputs
-            List<Trade.eTradeGoodRequested> tradeGoodsExported = new List<Trade.eTradeGoodRequested>();
-            List<Trade.eTradeGoodRequested> tradeGoodsImported = new List<Trade.eTradeGoodRequested>();
+            List<Trade.eTradeGood> tradeGoodsExported = new List<Trade.eTradeGood>();
+            List<Trade.eTradeGood> tradeGoodsImported = new List<Trade.eTradeGood>();
             PlanetData targetPlanet = DataRetrivalFunctions.GetPlanet(target.PlanetAssignedID);
 
             // build the list of exports from a certain planet (may actually create a function for this within PlanetData)
             switch (currentExport)
             {
-                case Trade.eTradeGoodRequested.Food:
+                case Trade.eTradeGood.Food:
                     currentExportProfit = targetPlanet.FoodExported * targetPlanet.Owner.CurrentFoodPrice;
                     break;
-                case Trade.eTradeGoodRequested.Energy:
+                case Trade.eTradeGood.Energy:
                     currentExportProfit = targetPlanet.EnergyExported * targetPlanet.Owner.CurrentEnergyPrice;
                     break;
-                case Trade.eTradeGoodRequested.Basic:
+                case Trade.eTradeGood.Basic:
                     currentExportProfit = targetPlanet.AlphaExported * targetPlanet.Owner.CurrentBasicPrice;
                     break;
-                case Trade.eTradeGoodRequested.Heavy:
+                case Trade.eTradeGood.Heavy:
                     currentExportProfit = targetPlanet.HeavyExported * targetPlanet.Owner.CurrentHeavyPrice;
                     break;
-                case Trade.eTradeGoodRequested.Rare:
+                case Trade.eTradeGood.Rare:
                     currentExportProfit = targetPlanet.RareExported * targetPlanet.Owner.CurrentRarePrice;
                     break;
                 default:
@@ -298,19 +298,19 @@ namespace Actions
 
             switch (desiredExport)
             {
-                case Trade.eTradeGoodRequested.Food:
+                case Trade.eTradeGood.Food:
                     newExportProfit = targetPlanet.FoodExported * targetPlanet.Owner.CurrentFoodPrice;
                     break;
-                case Trade.eTradeGoodRequested.Energy:
+                case Trade.eTradeGood.Energy:
                     newExportProfit = targetPlanet.EnergyExported * targetPlanet.Owner.CurrentEnergyPrice;
                     break;
-                case Trade.eTradeGoodRequested.Basic:
+                case Trade.eTradeGood.Basic:
                     newExportProfit = targetPlanet.AlphaExported * targetPlanet.Owner.CurrentBasicPrice;
                     break;
-                case Trade.eTradeGoodRequested.Heavy:
+                case Trade.eTradeGood.Heavy:
                     newExportProfit = targetPlanet.HeavyExported * targetPlanet.Owner.CurrentHeavyPrice;
                     break;
-                case Trade.eTradeGoodRequested.Rare:
+                case Trade.eTradeGood.Rare:
                     newExportProfit = targetPlanet.RareExported * targetPlanet.Owner.CurrentRarePrice;
                     break;
                 default:
@@ -333,7 +333,7 @@ namespace Actions
                 conversationFlags += "[PLEASED]";
                 response += actionResult + ConversationEngine.GenerateResponse(target, aData, 100, false, conversationFlags);
                 TradeProposal tP = new TradeProposal();
-                tP.TradeResource = TradeProposal.eTradeResource.Energy;
+                tP.TradeResource = Trade.eTradeGood.Energy;
                 target.PlanetAssigned.ActiveTradeProposalList.Add(tP);
             }
             else

@@ -12,9 +12,9 @@ namespace GalaxyCreator
         private GameData gameDataRef;       
         private int galaxySizeWidth;
         private int galaxySizeHeight;
-        private static readonly System.Random rand = new System.Random();
+        //private static readonly System.Random rand = new System.Random();
 
-        private const int SpaceBetweenStars = 300; // the minimum space between star objects
+        private const int SpaceBetweenStars = 200; // the minimum space between star objects
 
         void Awake()
         {
@@ -65,7 +65,7 @@ namespace GalaxyCreator
 
         Vector3 DetermineStarLocation()
         {
-            bool locIsValid = true; // flag to show whether location is valid
+            bool locIsValid = false; // flag to show whether location is valid
             int placementTries = 0; // after 100 tries, place and move on
             Vector3 proposedLocation = new Vector3();
 
@@ -98,8 +98,8 @@ namespace GalaxyCreator
         Vector3 GenerateLocation()
         {          
             Vector3 pLoc;
-            pLoc.x = rand.Next(-galaxySizeWidth, galaxySizeWidth);
-            pLoc.y = rand.Next(-galaxySizeHeight, galaxySizeHeight);
+            pLoc.x = HelperFunctions.Formulas.GetRandomInt(-galaxySizeWidth, galaxySizeWidth);
+            pLoc.y = HelperFunctions.Formulas.GetRandomInt(-galaxySizeHeight, galaxySizeHeight);
             pLoc.z = 0;
 
             return pLoc;
@@ -154,7 +154,7 @@ namespace GalaxyCreator
 
         void GenerateNebulas()
         {
-            int nebulaCount = rand.Next(0, 3);
+            int nebulaCount = HelperFunctions.Formulas.GetRandomInt(0, 3);
             for (int x = 0; x < nebulaCount; x++)
             {
                 GenerateGameObject.GenerateNebula();

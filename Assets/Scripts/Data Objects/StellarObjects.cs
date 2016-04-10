@@ -237,15 +237,15 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                         break;
                     case PlanetData.eTradeHubType.SecondaryTradeHub:
                         hubRange = Constant.SecondaryHubBaseRange;
-                        hubRange += TotalMerchantPower / 8f; // base modifier
+                        hubRange += TotalMerchantPower / 6f; // base modifier
                         break;
                     case PlanetData.eTradeHubType.ProvinceTradeHub:
                         hubRange = Constant.ProvinceHubBaseRange;
-                        hubRange += TotalMerchantPower / 10f; // base modifier
+                        hubRange += TotalMerchantPower / 6f; // base modifier
                         break;
                     case PlanetData.eTradeHubType.CivTradeHub:
                         hubRange = Constant.ImperialHubBaseRange;
-                        hubRange += TotalMerchantPower / 12f; // base modifier
+                        hubRange += TotalMerchantPower / 5f; // base modifier
                         break;
                     default:
                         break;
@@ -529,18 +529,12 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         public eTradeStatus TradeStatus { get; set; }
         public eTradeHubType TradeHub { get; set; }
         public List<TradeProposal> ActiveTradeProposalList = new List<TradeProposal>();
+        public List<Trade> ActiveTradesList = new List<Trade>();
         public int MerchantsAvailableForExport { get; set; }  
         
         public bool PlanetIsLinkedToTradeHub { get; set; } // may change this to 'real-time' variable
-        public List<string> PlanetsInTradeGroup { get; set; } // list of planets that this planet may trade with (in their 'trade group') - calculated externally
-        //{
-            //get
-            //{
-            //    GalaxyData galDataRef = GameObject.Find("GameEngine").GetComponent<GalaxyData>(); // get a static link to the galaxy data object
-            //    foreach 
-            //}
-        //}      
-
+        public List<string> PlanetsInTradeGroup = new List<string>(); // list of planets that this planet may trade with (in their 'trade group') - calculated externally
+       
         // resource Importances on each planet
         private float _foodImportance;
         public float FoodImportance

@@ -157,7 +157,7 @@ namespace CivObjects
                 {
                     foreach (StarData sData in SystemList)
                     {
-                        if (sData.OwningCiv == this)
+                        if (sData.OwningCiv == this && sData.AssignedProvinceID != null)
                         {
                             if (!pList.Exists(p => p.ID == sData.AssignedProvinceID))
                                 pList.Add(sData.Province);

@@ -492,16 +492,28 @@ namespace Screens.Galaxy
                         hit.transform.GetComponent<Star>().tag = "Selected"; // select the star
 
                         //invoke zoom sequence
-                        Camera.main.GetComponent<GalaxyCameraScript>().starTarget = hit.transform;
-                        Camera.main.GetComponent<GalaxyCameraScript>().systemZoomActive = true;
-                        Camera.main.GetComponent<GalaxyCameraScript>().planetZoomActive = false;
-                        Camera.main.GetComponent<GalaxyCameraScript>().provinceZoomActive = false;
-                        gameDataRef.StarSelected = true; // probably need to move to a global UI manager
-                        uiManagerRef.selectedSystem = hit.transform.GetComponent<Star>().starData;
-                        uiManagerRef.SetActiveViewLevel(ViewManager.eViewLevel.System);
+                        StartSystemZoom(hit.transform);
+                        //Camera.main.GetComponent<GalaxyCameraScript>().starTarget = hit.transform;
+                        //Camera.main.GetComponent<GalaxyCameraScript>().systemZoomActive = true;
+                        //Camera.main.GetComponent<GalaxyCameraScript>().planetZoomActive = false;
+                        //Camera.main.GetComponent<GalaxyCameraScript>().provinceZoomActive = false;
+                        //gameDataRef.StarSelected = true; // probably need to move to a global UI manager
+                        //uiManagerRef.selectedSystem = hit.transform.GetComponent<Star>().starData;
+                        //uiManagerRef.SetActiveViewLevel(ViewManager.eViewLevel.System);
                     }
                 }
             }
+        }
+
+        private void StartSystemZoom(Transform target)
+        {
+            Camera.main.GetComponent<GalaxyCameraScript>().starTarget = target;
+            Camera.main.GetComponent<GalaxyCameraScript>().systemZoomActive = true;
+            Camera.main.GetComponent<GalaxyCameraScript>().planetZoomActive = false;
+            Camera.main.GetComponent<GalaxyCameraScript>().provinceZoomActive = false;
+            gameDataRef.StarSelected = true; // probably need to move to a global UI manager
+            uiManagerRef.selectedSystem = target.GetComponent<Star>().starData;
+            uiManagerRef.SetActiveViewLevel(ViewManager.eViewLevel.System);
         }
 
         //void GenerateProvinceNames()

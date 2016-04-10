@@ -1011,7 +1011,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: .5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: -774220525
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 2f2dd619a1bea81429c29a058e9afec0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -5625,7 +5625,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: .5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: -774220525
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: da8979b0f17ba034dac09705af10c9b1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -5681,8 +5681,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: .5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: 1
+  m_SortingLayerID: -774220525
+  m_SortingOrder: 5
   m_Sprite: {fileID: 21300000, guid: ed7d3c551a04f564584e688a7967a789, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &826734922
@@ -7316,7 +7316,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: .5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: -774220525
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: cb6e1a8bfd2bacd438fd1109d2618f24, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -8895,7 +8895,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: .5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: -774220525
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: f8fcf59efda8c9743ac65e838a6effc4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -11729,7 +11729,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 1
+  m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 32
@@ -11769,7 +11769,7 @@ Canvas:
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: -774220525
   m_SortingOrder: 0
 --- !u!224 &1545526015
 RectTransform:
@@ -12421,7 +12421,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1649778819}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -110.800003, y: .899999976, z: 0}
+  m_LocalPosition: {x: -110.800003, y: .400000006, z: 0}
   m_LocalScale: {x: 87.4292145, y: 83.1608047, z: 1}
   m_Children: []
   m_Father: {fileID: 702006071}
@@ -12450,7 +12450,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: .5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: -774220525
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 8dbd68b99a5945f439749668913a5969, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -12791,7 +12791,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -14309,6 +14309,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d18cde44dbf0d64abf8a83d87dd0582, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cameraFOV: 0
   RequestTradeViewGraphicRefresh: 0
   RequestPoliticalViewGraphicRefresh: 0
   SelectedStellarObject: {fileID: 0}
@@ -14530,8 +14531,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: .5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: 1
+  m_SortingLayerID: -774220525
+  m_SortingOrder: 5
   m_Sprite: {fileID: 21300000, guid: ef65e319bc3e5854bb02527aacf4f87c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1915013843
@@ -14960,7 +14961,6 @@ GameObject:
   - 114: {fileID: 1939966358}
   - 222: {fileID: 1939966359}
   - 20: {fileID: 1939966356}
-  - 114: {fileID: 1939966357}
   m_Layer: 5
   m_Name: UI Camera
   m_TagString: Untagged
@@ -15016,38 +15016,6 @@ Camera:
   m_StereoConvergence: 10
   m_StereoSeparation: .0219999999
   m_StereoMirrorMode: 0
---- !u!114 &1939966357
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1939966352}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
-    m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 10
-    m_MaxSize: 40
-    m_Alignment: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: 
 --- !u!114 &1939966358
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16124,8 +16092,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: .5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: 1
+  m_SortingLayerID: -774220525
+  m_SortingOrder: 5
   m_Sprite: {fileID: 21300000, guid: 5bd6970c5f06a9f4a9fbd8bbd1db3ab4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &2055066052

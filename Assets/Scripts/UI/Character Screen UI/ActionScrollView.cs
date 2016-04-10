@@ -104,7 +104,7 @@ public class ActionScrollView : MonoBehaviour
                 response = ActionFunctions.IssueInsultToCharacter(activeChar.Civ.Leader, cData);
                 break;
             case "A6":
-                response = ActionFunctions.OrderToChangeExport(activeChar, activeChar.Civ.Leader, Trade.eTradeGoodRequested.Basic, Trade.eTradeGoodRequested.Energy); // will need to rewrite to add 'sub action panel'
+                response = ActionFunctions.OrderToChangeExport(activeChar, activeChar.Civ.Leader, Trade.eTradeGood.Basic, Trade.eTradeGood.Energy); // will need to rewrite to add 'sub action panel'
                 break;
             default:
                 break;

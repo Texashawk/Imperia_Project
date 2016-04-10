@@ -19,7 +19,7 @@ namespace EconomicObjects
             Complete // all runs of trade have been completed and trade will be removed in end of turn processing
         }
 
-        public enum eTradeGoodRequested : int
+        public enum eTradeGood : int
         {
             Food,
             Energy,
@@ -28,8 +28,10 @@ namespace EconomicObjects
             Rare
         }
 
-        public int AmountRequested { get; set; }
-        public decimal OfferPerUnit { get; set; }
+        public eTradeStatus Status { get; set; }
+        public eTradeGood TradeGood { get; set; }
+        public float AmountRequested { get; set; }
+        public float OfferPerUnit { get; set; }
         public int RunsRequested { get; set; }
         public string TradeID { get; set; } // randomly generated ID to link trades to trade fleets
 
@@ -80,20 +82,22 @@ namespace EconomicObjects
         public List<string> PlanetIDList = new List<string>();
         public List<string> SystemIDList = new List<string>();
         public Color GroupColor = new Color(); // color of the trade group
+        public string TradeGroupHubID = "";
+        public bool ConnectedToCivHub = false; // is the province hub connected to the civilization hub?
     }
 
     public class TradeProposal // this represents what each viceroy has valued each resource at, how much they want, what type of resource, and how much they are willing to pay for each one
     {
-        public enum eTradeResource : int
-        {
-            Food,
-            Energy,
-            Basic,
-            Heavy,
-            Rare
-        }
+        //public enum eTradeResource : int
+        //{
+        //    Food,
+        //    Energy,
+        //    Basic,
+        //    Heavy,
+        //    Rare
+        //}
 
-        public eTradeResource TradeResource { get; set; } // what type of resource
+        public Trade.eTradeGood TradeResource { get; set; } // what type of resource
         public float Importance { get; set; } // the assigned importance of this resource
         public float AmountDesired { get; set; } // how much the viceroy wants to get
         public float MaxCrownsToPay { get; set; } // max willing to pay for this proposal

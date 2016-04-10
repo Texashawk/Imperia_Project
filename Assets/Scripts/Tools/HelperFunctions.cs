@@ -1,13 +1,32 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.IO;
 using StellarObjects;
 using PlanetObjects;
-using System.Threading;
 using CharacterObjects;
 using CivObjects;
-using Random = UnityEngine.Random;
+
+namespace Logging
+{
+    public static class Logger
+    {
+        public static void LogThis(string logMessage)
+        {
+            Console.WriteLine(logMessage);
+            using (StreamWriter writer = new StreamWriter("C:/ImperiaLogs/" + FileDate() + ".txt", true))
+            {
+                writer.WriteLine(logMessage);
+                //writer.WriteLine();
+            }
+        }
+
+        private static string FileDate()
+        {
+            return DateTime.Now.ToString("yyyy-MM-dd");
+        }
+    }
+}
 
 namespace HelperFunctions
 {
@@ -283,7 +302,19 @@ namespace HelperFunctions
             return distance;
 
         }
+
+        private static readonly System.Random random = new System.Random();
+        private static readonly object syncLock = new object();
+
+        public static int GetRandomInt(int min, int max)
+        {
+            lock(syncLock)
+            {
+                return random.Next(min, max);
+            }
+        }
     }
+    
 
     public static class DataRetrivalFunctions
     {

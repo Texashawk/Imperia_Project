@@ -5,7 +5,6 @@ using CameraScripts;
 
 namespace Managers  
 {
-
     public class UIManager : MonoBehaviour
     { 
         public enum eViewMode : int
@@ -15,11 +14,8 @@ namespace Managers
             System,
             Planet
         }
-
-        //private Camera mainCamera; // accessor for the camera
-        //private GalaxyCameraScript gCameraRef; // accessor for the camera script
         
-        //private float cameraFOV; // current FOV of the camera
+        public float cameraFOV; // current FOV of the camera
 
         public bool RequestTradeViewGraphicRefresh = false; // the game is asking for a graphic request throughout the UI
         public bool RequestPoliticalViewGraphicRefresh = false;
@@ -47,10 +43,7 @@ namespace Managers
         // Use this for initialization
         void Awake()
         {
-            viewManagerRef = GameObject.Find("GameManager").GetComponent<ViewManager>();
-            //mainCamera = Camera.main; // GameObject.Find("Main Camera").GetComponent<Camera>(); // get global game data (date, location, version, etc)
-            //gCameraRef = mainCamera.GetComponent<GalaxyCameraScript>(); // get camera ref
-           
+            viewManagerRef = GameObject.Find("GameManager").GetComponent<ViewManager>();         
         }
 
         void Start()
@@ -74,14 +67,14 @@ namespace Managers
         {
             SetActivePrimaryMode(ViewManager.ePrimaryView.Political);
             SetActiveSecondaryMode(ViewManager.eSecondaryView.Sovereignity); // for testing
-            RequestPoliticalViewGraphicRefresh = true;
+            RequestPoliticalViewGraphicRefresh = true; //update the views
         }
 
         public void SetPrimaryModeToEconomic()
         {
             SetActivePrimaryMode(ViewManager.ePrimaryView.Economic);
             SetActiveSecondaryMode(ViewManager.eSecondaryView.Trade); // for testing
-            RequestTradeViewGraphicRefresh = true;
+            RequestTradeViewGraphicRefresh = true; //update the views
             
         }
 
@@ -94,7 +87,7 @@ namespace Managers
         public void SetPrimaryModeToPops()
         {
             SetActivePrimaryMode(ViewManager.ePrimaryView.Pops);
-            SetActiveSecondaryMode(ViewManager.eSecondaryView.Morale); // for testing
+            SetActiveSecondaryMode(ViewManager.eSecondaryView.Sovereignity); // for testing
         }
 
         public void SetActiveViewLevel(ViewManager.eViewLevel viewMode)
@@ -121,8 +114,7 @@ namespace Managers
 
         void LateUpdate()
         {
-            //cameraFOV = mainCamera.fieldOfView;
-            //viewMode = gCameraRef.ZoomLevel; // converts the camera FOV to current view mode
+            cameraFOV = Camera.main.fieldOfView;
         }
 
         public class StellarObjectDataBlock // block object used to show data in the galaxy view

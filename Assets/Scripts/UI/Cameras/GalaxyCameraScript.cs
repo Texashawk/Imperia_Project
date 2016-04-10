@@ -15,7 +15,7 @@ namespace CameraScripts
         [HideInInspector]public bool ScrollWheelIsValid { get; set; } // can the scrollwheel be used to manipulate the camera?
 	    private float zoomSpeed = 11f;
         private float zoomSensitivity = 60f;
-        public const float cameraTilt = 35f; // was 20f
+        public const float cameraTilt = 30f; // was 20f
         private Camera mainC; // camera reference
         private GameData gDataRef;
         private UIManager uiManagerRef;
@@ -46,8 +46,8 @@ namespace CameraScripts
         public const int galaxyMinZoomLevel = 30;
         public const int systemMinZoomLevel = 12;
         public const int planetMinZoomLevel = 2;
-        public const int maxZoomLevel = 40;
-        public const int minZoomLevel = 10;
+        public const int maxZoomLevel = 50;
+        public const int minZoomLevel = 15;
 
         public float zoom;
        
@@ -221,10 +221,10 @@ namespace CameraScripts
             float moveDownVector = transform.position.y + scrollSpeedVariable;
             float moveRightVector = transform.position.x + scrollSpeedVariable;
             float moveLeftVector = transform.position.x - scrollSpeedVariable;
-
+            
             if (ZoomLevel == ViewManager.eViewLevel.Galaxy) // don't pan map if in system or planet mode
             {
-                if (moveMapUp && ((yLocation <= galaxyHeight + tiltYOffset) && (yLocation >= -galaxyHeight + tiltYOffset)))
+                if (moveMapUp && ((yLocation <= galaxyHeight + Mathf.Round(tiltYOffset)) && (yLocation >= -galaxyHeight + Mathf.Round(tiltYOffset))))
                 {
                     transform.position = new Vector3(transform.position.x, Mathf.Lerp(yLocation, moveUpVector, Time.deltaTime * 3), transform.position.z);
                 }
@@ -233,7 +233,7 @@ namespace CameraScripts
                 {
                     transform.position = new Vector3(transform.position.x, Mathf.Lerp(yLocation, moveDownVector, Time.deltaTime * 3), transform.position.z);
                 }
-
+                
                 if (moveMapRight && ((xLocation <= galaxyWidth) && (xLocation >= -galaxyWidth)))
                 {
                     transform.position = new Vector3(Mathf.Lerp(xLocation, moveRightVector, Time.deltaTime * 3), transform.position.y, transform.position.z);
