@@ -73,9 +73,9 @@ public static class PlanetDevelopmentAI
                     factoryPriority += (10 - pData.ManufacturingLevel) / 2f; 
                 }
 
-                if (pData.AlphaPreProductionDifference < 0)
+                if (pData.BasicPreProductionDifference < 0)
                 {
-                    minePriority += Mathf.Abs(pData.AlphaPreProductionDifference);
+                    minePriority += Mathf.Abs(pData.BasicPreProductionDifference);
                 }
 
                 if (pData.HeavyPreProductionDifference < 0)

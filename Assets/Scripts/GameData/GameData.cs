@@ -45,6 +45,7 @@ public class GameData : MonoBehaviour
     public string gameVersion = "";
     public float GameDate { get; set; }
     public int GameMonth { get; set; }
+    public int GameNumber { get; set; } // this is a random number for the game number for saves, logging, etc
 
     // gamewide object lists
     public List<Civilization> CivList = new List<Civilization>();
@@ -75,10 +76,12 @@ public class GameData : MonoBehaviour
     {
         CivList = new List<Civilization>(); // initialize lists
         GameDate = 3050.0f;
+
         GameMonth = 0;
         GalaxySizeHeight = 6500;
         GalaxySizeWidth = 6500;
         MinSystems = 90;
+        GameNumber = Random.Range(0, 100000);
         MaxSystems = 115;
         TotalSystems = 50;
         NumberOfAICivs = 8; // static number to test UnityEngine.Random.Range(4, 7); // test

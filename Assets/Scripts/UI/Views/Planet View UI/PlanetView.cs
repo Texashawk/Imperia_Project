@@ -371,7 +371,7 @@ public class PlanetView : MonoBehaviour {
         pPanel.transform.Find("Commerce Total").GetComponent<Text>().text = HelperFunctions.StringConversions.ConvertFloatDollarToText(pData.RetailRevenue);
         pPanel.transform.Find("Imports Max Total").GetComponent<Text>().text = pData.PercentGPPForImports.ToString("P1") + "(" + HelperFunctions.StringConversions.ConvertFloatDollarToText(pData.BaseGrossPlanetaryProduct * pData.PercentGPPForImports) + ")";
         pPanel.transform.Find("Exports Max Total").GetComponent<Text>().text = pData.PercentGPPForTrade.ToString("P1") + "(" + HelperFunctions.StringConversions.ConvertFloatDollarToText(pData.BaseGrossPlanetaryProduct * pData.PercentGPPForTrade) + ")";
-        pPanel.transform.Find("Commerce Max Total").GetComponent<Text>().text = pData.FoodRetailPercentHold.ToString("P1");
+        pPanel.transform.Find("Commerce Max Total").GetComponent<Text>().text = pData.FoodExportPercentHold.ToString("P1");
     }
 
     void CreateStockPanel()
@@ -398,8 +398,8 @@ public class PlanetView : MonoBehaviour {
             pPanel.transform.Find("Food Stock Level").GetComponent<Text>().color = Color.red;
         }
 
-        pPanel.transform.Find("Alpha Stock Level").GetComponent<Text>().text = pData.AlphaStored.ToString("N1");
-        if (pData.AlphaStored == 0)
+        pPanel.transform.Find("Alpha Stock Level").GetComponent<Text>().text = pData.BasicStored.ToString("N1");
+        if (pData.BasicStored == 0)
         {
             pPanel.transform.Find("Alpha Stock Level").GetComponent<Text>().color = Color.red;
         }
@@ -472,7 +472,7 @@ public class PlanetView : MonoBehaviour {
         pPanel.transform.Find("Heavy Usage").GetComponent<Text>().text = pData.TotalHeavyMaterialsConsumed.ToString("N1");
         pPanel.transform.Find("Rare Usage").GetComponent<Text>().text = pData.TotalRareMaterialsConsumed.ToString("N1");
         pPanel.transform.Find("Energy Trade").GetComponent<Text>().text = pData.EnergyTrade.ToString("N1");
-        pPanel.transform.Find("Alpha BPs Generated").GetComponent<Text>().text = pData.AlphaBPsGeneratedMonthly.ToString("N1");
+        pPanel.transform.Find("Alpha BPs Generated").GetComponent<Text>().text = pData.BasicBPsGeneratedMonthly.ToString("N1");
         pPanel.transform.Find("Heavy BPs Generated").GetComponent<Text>().text = pData.HeavyBPsGeneratedMonthly.ToString("N1");
         pPanel.transform.Find("Rare BPs Generated").GetComponent<Text>().text = pData.RareBPsGeneratedMonthly.ToString("N1");
 
@@ -497,8 +497,8 @@ public class PlanetView : MonoBehaviour {
         pPanel.transform.Find("Energy Difference").GetComponent<Text>().text = pData.EnergyDifference.ToString("N1");
         if (pData.EnergyDifference < 0)
             pPanel.transform.Find("Energy Difference").GetComponent<Text>().color = Color.red;
-        pPanel.transform.Find("Alpha Difference").GetComponent<Text>().text = pData.AlphaPreProductionDifference.ToString("N1") + "(" + pData.AlphaTotalDifference.ToString("N1") + ")";
-        if (pData.AlphaPreProductionDifference < 0)
+        pPanel.transform.Find("Alpha Difference").GetComponent<Text>().text = pData.BasicPreProductionDifference.ToString("N1") + "(" + pData.AlphaTotalDifference.ToString("N1") + ")";
+        if (pData.BasicPreProductionDifference < 0)
             pPanel.transform.Find("Alpha Difference").GetComponent<Text>().color = Color.red;
         pPanel.transform.Find("Heavy Difference").GetComponent<Text>().text = pData.HeavyPreProductionDifference.ToString("N1") + "(" + pData.HeavyTotalDifference.ToString("N1") + ")";
         if (pData.HeavyPreProductionDifference < 0)

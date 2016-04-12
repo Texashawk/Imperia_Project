@@ -567,7 +567,52 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
             set { _rareImportance = Mathf.Clamp(value, 0, 1000); }
         }
 
-        public float FoodRetailPercentHold { get; set; }
+        // export percent holds
+        public float FoodExportPercentHold { get; set; }
+        public float EnergyExportPercentHold { get; set; }
+        public float BasicExportPercentHold { get; set; }
+        public float HeavyExportPercentHold { get; set; }
+        public float RareExportPercentHold { get; set; }
+
+        // commerce percent holds
+        public float FoodCommercePercentHold { get; set; }
+        public float EnergyCommercePercentHold { get; set; }
+        public float BasicCommercePercentHold { get; set; }
+        public float HeavyCommercePercentHold { get; set; }
+        public float RareCommercePercentHold { get; set; }
+
+        // stockpile % allowed to export or use for commerce
+        private float _foodStockpilePercentAvailable;
+        public float FoodStockpilePercentAvailable
+        {
+            get { return _foodStockpilePercentAvailable; }
+            set { _foodStockpilePercentAvailable = Mathf.Clamp(value, 0f, 1f); }          
+        }
+        private float _energyStockpilePercentAvailable;
+        public float EnergyStockpilePercentAvailable
+        {
+            get { return _energyStockpilePercentAvailable; }
+            set { _energyStockpilePercentAvailable = Mathf.Clamp(value, 0f, 1f); }
+        }
+        private float _basicStockpilePercentAvailable;
+        public float BasicStockpilePercentAvailable
+        {
+            get { return _basicStockpilePercentAvailable; }
+            set { _basicStockpilePercentAvailable = Mathf.Clamp(value, 0f, 1f); }
+        }
+        private float _heavyStockpilePercentAvailable;
+        public float HeavyStockpilePercentAvailable
+        {
+            get { return _heavyStockpilePercentAvailable; }
+            set { _heavyStockpilePercentAvailable = Mathf.Clamp(value, 0f, 1f); }
+        }
+        private float _rareStockpilePercentAvailable;
+        public float RareStockpilePercentAvailable
+        {
+            get { return _rareStockpilePercentAvailable; }
+            set { _rareStockpilePercentAvailable = Mathf.Clamp(value, 0f, 1f); }
+        }
+
         public float CommerceTax { get; set; }
         public int PlanetSpot { get; set; }
         
@@ -712,10 +757,21 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         {
             get
             {
-                float domesticFoodAvailable = FoodDifference * FoodRetailPercentHold;
+                float domesticFoodAvailable = FoodDifference * FoodCommercePercentHold;
                 if (domesticFoodAvailable < 0)
                     domesticFoodAvailable = 0;
                 return domesticFoodAvailable;
+            }
+        }
+
+        public float DomesticEnergyAvailable
+        {
+            get
+            {
+                float domesticEnergyAvailable = EnergyDifference * EnergyCommercePercentHold;
+                if (domesticEnergyAvailable < 0)
+                    domesticEnergyAvailable = 0;
+                return domesticEnergyAvailable;
             }
         }
 
@@ -724,8 +780,28 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
             get
             {
                 float retailRevenue;
-                retailRevenue = FoodRetailRevenue;
+                retailRevenue = FoodRetailRevenue + EnergyRetailRevenue;
                 return retailRevenue;
+            }
+        }
+
+        public float EnergyRetailRevenue
+        {
+            get
+            {
+                float energyRetailRevenue = 0f;
+                float energyAvailable = DomesticEnergyAvailable;
+                float merchantsTotal = TotalMerchants;
+                float merchantEfficiency = TotalMerchants / energyAvailable;
+
+                if (merchantEfficiency > 1f) // normalize efficiency
+                {
+                    merchantEfficiency = 1f;
+                }
+
+                energyRetailRevenue = (energyAvailable * merchantEfficiency) * (AverageMerchantSkill / 100f) * Owner.CurrentEnergyPrice * energyAvailable * CommerceTax;
+
+                return energyRetailRevenue;
             }
         }
 
@@ -825,17 +901,17 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 _pFoodStored = Mathf.Clamp(value,0,999999);
             }
         }
-        private float _pAlphaStored;
-        public float AlphaStored
+        private float _pBasicStored;
+        public float BasicStored
         {
             get
             {
-                return _pAlphaStored;
+                return _pBasicStored;
             }
 
             set
             {
-                _pAlphaStored = Mathf.Clamp(value, 0, 999999);
+                _pBasicStored = Mathf.Clamp(value, 0, 999999);
             }
         }
         private float _pHeavyStored;
@@ -981,33 +1057,33 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
             }
         }
 
-        public float ProductionAlphaMaterialsAllocated
+        public float ProductionBasicMaterialsAllocated
         {
             get
             {
-                float alphaMaterialsRequested = 0; // what is the amount of materials needed to conform to overdrive/build plan?
-                float alphaMaterialsAllocated = 0; // what will actually be used?
+                float basicMaterialsRequested = 0; // what is the amount of materials needed to conform to overdrive/build plan?
+                float basicMaterialsAllocated = 0; // what will actually be used?
 
-                alphaMaterialsRequested = FactoriesOnline * (1 * BuildPlan.OverdriveMultiplier);
+                basicMaterialsRequested = FactoriesOnline * (1 * BuildPlan.OverdriveMultiplier);
                
-                if (AlphaPreProductionDifference > 0) // if there are alpha materials available
+                if (BasicPreProductionDifference > 0) // if there are alpha materials available
                 {
-                    if (alphaMaterialsRequested < AlphaPreProductionDifference)
-                        alphaMaterialsAllocated += alphaMaterialsRequested;
+                    if (basicMaterialsRequested < BasicPreProductionDifference)
+                        basicMaterialsAllocated += basicMaterialsRequested;
                     else
-                        alphaMaterialsAllocated += AlphaPreProductionDifference;                    
+                        basicMaterialsAllocated += BasicPreProductionDifference;                    
                 }
 
                 // if there is still a shortage after using any difference in production
-                if (alphaMaterialsAllocated < alphaMaterialsRequested)
+                if (basicMaterialsAllocated < basicMaterialsRequested)
                 {
-                    if (AlphaStored > (alphaMaterialsRequested - alphaMaterialsAllocated))
+                    if (BasicStored > (basicMaterialsRequested - basicMaterialsAllocated))
                     {
-                        alphaMaterialsAllocated += (alphaMaterialsRequested - alphaMaterialsAllocated);
+                        basicMaterialsAllocated += (basicMaterialsRequested - basicMaterialsAllocated);
                     }
                 }
                
-                return alphaMaterialsAllocated;
+                return basicMaterialsAllocated;
             }
         }
 
@@ -1103,21 +1179,21 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
             }
         }
 
-        public double AlphaBPsGeneratedMonthly
+        public double BasicBPsGeneratedMonthly
         {
             get
             {
                 // determine the number of materials used
-                float materialsUsed = ProductionAlphaMaterialsAllocated;
+                float materialsUsed = ProductionBasicMaterialsAllocated;
                 if (FactoriesOnline == 0)
                     return 0;
                 float worldEngineerRating = PlanetEngineerRating;
-                float alphaMaterialsUsedPerFactory = ProductionAlphaMaterialsAllocated / FactoriesOnline;
+                float basicMaterialsUsedPerFactory = ProductionBasicMaterialsAllocated / FactoriesOnline;
                 
                 double engineerModifier = Math.Pow(worldEngineerRating / 25,2);
                 double viceroyAptitudeModifier = 1 + Math.Pow(Viceroy.EngineeringAptitude / 150,2);
                 double viceroyEngineeringSkillModifier =  1 + Math.Pow(Viceroy.Engineering / 150,2);
-                double alphaBPsGenerated = ((engineerModifier * viceroyAptitudeModifier * viceroyEngineeringSkillModifier) * (Math.Log10(alphaMaterialsUsedPerFactory + 1))) * FactoriesOnline * IndustrialMultiplier;
+                double alphaBPsGenerated = ((engineerModifier * viceroyAptitudeModifier * viceroyEngineeringSkillModifier) * (Math.Log10(basicMaterialsUsedPerFactory + 1))) * FactoriesOnline * IndustrialMultiplier;
                 
                 return alphaBPsGenerated;
             }
@@ -1260,17 +1336,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         {
             get
             {
-                float exportAvailable = FoodDifference - DomesticFoodAvailable;
-                if (exportAvailable > 0)
-                {
-                    foreach (TradeFleet tradeAgreement in ActiveTradeFleets)
-                    {
-                        exportAvailable -= tradeAgreement.FoodOnBoard;
-                    }
-                }
-                else
-                    exportAvailable = 0;
-
+                float exportAvailable = (FoodDifference - DomesticFoodAvailable) * FoodExportPercentHold + (FoodStored * FoodStockpilePercentAvailable);
                 return exportAvailable;
             }
         }
@@ -1278,36 +1344,16 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         {
             get
             {
-                float exportAvailable = EnergyDifference;
-                if (exportAvailable > 0)
-                {
-                    foreach (TradeFleet tradeAgreement in ActiveTradeFleets)
-                    {                     
-                        exportAvailable -= tradeAgreement.EnergyOnBoard;                        
-                    }
-                }
-                else
-                    exportAvailable = 0;
-
+                float exportAvailable = (EnergyDifference - DomesticEnergyAvailable) * EnergyExportPercentHold + (EnergyStored * EnergyStockpilePercentAvailable);
                 return exportAvailable;
             }
         }
 
-        public float AlphaExportAvailable
+        public float BasicExportAvailable
         {
             get
             {
-                float exportAvailable = AlphaTotalDifference;
-                if (exportAvailable > 0)
-                {
-                    foreach (TradeFleet tradeAgreement in ActiveTradeFleets)
-                    {                       
-                        exportAvailable -= tradeAgreement.BasicOnBoard;                      
-                    }
-                }
-                else
-                    exportAvailable = 0;
-
+                float exportAvailable = AlphaTotalDifference * BasicExportPercentHold + (BasicStored * BasicStockpilePercentAvailable);
                 return exportAvailable;
             }
         }
@@ -1316,17 +1362,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         {
             get
             {
-                float exportAvailable = HeavyTotalDifference;
-                if (exportAvailable > 0)
-                {
-                    foreach (TradeFleet tradeAgreement in ActiveTradeFleets)
-                    {                       
-                        exportAvailable -= tradeAgreement.HeavyOnBoard;                      
-                    }
-                }
-                else
-                    exportAvailable = 0;
-
+                float exportAvailable = HeavyTotalDifference * HeavyExportPercentHold + (HeavyStored * HeavyStockpilePercentAvailable);
                 return exportAvailable;
             }
         }
@@ -1335,17 +1371,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         {
             get
             {
-                float exportAvailable = RareTotalDifference;
-                if (exportAvailable > 0)
-                {
-                    foreach (TradeFleet tradeAgreement in ActiveTradeFleets)
-                    {                
-                        exportAvailable -= tradeAgreement.RareOnBoard;
-                    }
-                }
-                else
-                    exportAvailable = 0;
-
+                float exportAvailable = RareTotalDifference * RareExportPercentHold + (RareStored * RareStockpilePercentAvailable);
                 return exportAvailable;
             }
         }
@@ -1741,7 +1767,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
 
             
 
-            if (AlphaBPsGeneratedMonthly > 0)
+            if (BasicBPsGeneratedMonthly > 0)
             {
                 if (Constants.Constant.AlphaMaterialsPerFarmLevel <= TotalAlphaBPsAllocatedFarms)
                 {
@@ -1788,7 +1814,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 if (!alphaBPsReachedForFarm)
                 {
                     float previousTotal = TotalHeavyBPsAllocatedFarms;
-                    TotalAlphaBPsAllocatedFarms += (float)(AlphaBPsGeneratedMonthly * BuildPlan.FarmsAllocation);
+                    TotalAlphaBPsAllocatedFarms += (float)(BasicBPsGeneratedMonthly * BuildPlan.FarmsAllocation);
                     if (TotalAlphaBPsAllocatedFarms > Constants.Constant.AlphaMaterialsPerFarmLevel)
                     {
                         AlphaBPsUsed = Constants.Constant.AlphaMaterialsPerFarmLevel - previousTotal;
@@ -1796,7 +1822,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                     }
                     else
                     {
-                        AlphaBPsUsed += (float)(AlphaBPsGeneratedMonthly * BuildPlan.FarmsAllocation);
+                        AlphaBPsUsed += (float)(BasicBPsGeneratedMonthly * BuildPlan.FarmsAllocation);
                     }
                    
                 }
@@ -1860,7 +1886,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
             int heavyBPMultiplier = 0;
             int rareBPMultiplier = 0;
 
-            if (AlphaBPsGeneratedMonthly > 0)
+            if (BasicBPsGeneratedMonthly > 0)
             {
                 if (Constants.Constant.AlphaMaterialsPerHighTechLevel <= TotalAlphaBPsAllocatedHighTech)
                 {
@@ -1907,7 +1933,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 if (!alphaBPsReachedForHighTech)
                 {
                     float previousTotal = TotalHeavyBPsAllocatedHighTech;
-                    TotalAlphaBPsAllocatedHighTech += (float)(AlphaBPsGeneratedMonthly * BuildPlan.HighTechAllocation);
+                    TotalAlphaBPsAllocatedHighTech += (float)(BasicBPsGeneratedMonthly * BuildPlan.HighTechAllocation);
                     if (TotalAlphaBPsAllocatedHighTech > Constants.Constant.AlphaMaterialsPerHighTechLevel)
                     {
                         AlphaBPsUsed = Constants.Constant.AlphaMaterialsPerHighTechLevel - previousTotal;
@@ -1915,7 +1941,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                     }
                     else
                     {
-                        AlphaBPsUsed += (float)(AlphaBPsGeneratedMonthly * BuildPlan.HighTechAllocation);
+                        AlphaBPsUsed += (float)(BasicBPsGeneratedMonthly * BuildPlan.HighTechAllocation);
                     }
 
                 }
@@ -1981,7 +2007,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
 
             
 
-            if (AlphaBPsGeneratedMonthly > 0)
+            if (BasicBPsGeneratedMonthly > 0)
             {
                 if (Constants.Constant.AlphaMaterialsPerFactoryLevel <= TotalAlphaBPsAllocatedFactory)
                 {
@@ -2028,7 +2054,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 if (!alphaBPsReachedForFactory)
                 {
                     float previousTotal = TotalHeavyBPsAllocatedFactory;
-                    TotalAlphaBPsAllocatedFactory += (float)(AlphaBPsGeneratedMonthly * BuildPlan.FactoryAllocation);
+                    TotalAlphaBPsAllocatedFactory += (float)(BasicBPsGeneratedMonthly * BuildPlan.FactoryAllocation);
                     if (TotalAlphaBPsAllocatedFactory > Constants.Constant.AlphaMaterialsPerFactoryLevel)
                     {
                         AlphaBPsUsed = Constants.Constant.AlphaMaterialsPerFactoryLevel - previousTotal;
@@ -2036,7 +2062,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                     }
                     else
                     {
-                        AlphaBPsUsed += (float)(AlphaBPsGeneratedMonthly * BuildPlan.FactoryAllocation);
+                        AlphaBPsUsed += (float)(BasicBPsGeneratedMonthly * BuildPlan.FactoryAllocation);
                     }
 
                 }
@@ -2101,7 +2127,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
             int rareBPMultiplier = 0;
 
             
-            if (AlphaBPsGeneratedMonthly > 0)
+            if (BasicBPsGeneratedMonthly > 0)
             {
                 if (Constants.Constant.AlphaMaterialsPerMineLevel <= TotalAlphaBPsAllocatedMine)
                 {
@@ -2148,7 +2174,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 if (!alphaBPsReachedForMine)
                 {
                     float previousTotal = TotalHeavyBPsAllocatedMine;
-                    TotalAlphaBPsAllocatedMine += (float)(AlphaBPsGeneratedMonthly * BuildPlan.MineAllocation);
+                    TotalAlphaBPsAllocatedMine += (float)(BasicBPsGeneratedMonthly * BuildPlan.MineAllocation);
                     if (TotalAlphaBPsAllocatedMine > Constants.Constant.AlphaMaterialsPerMineLevel)
                     {
                         AlphaBPsUsed = Constants.Constant.AlphaMaterialsPerMineLevel - previousTotal;
@@ -2156,7 +2182,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                     }
                     else
                     {
-                        AlphaBPsUsed += (float)(AlphaBPsGeneratedMonthly * BuildPlan.MineAllocation);
+                        AlphaBPsUsed += (float)(BasicBPsGeneratedMonthly * BuildPlan.MineAllocation);
                     }
 
                 }
@@ -2227,7 +2253,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
             float HeavyMaterialsRequired = Constant.HeavyMaterialsPerInfraLevel * (100 / AdjustedBio) * Mathf.Pow(targetRegion.HabitatationInfrastructureLevel, 3);
             float RareMaterialsRequired = Constant.RareMaterialsPerInfraLevel * (100 / AdjustedBio) * Mathf.Pow(targetRegion.HabitatationInfrastructureLevel, 3);
 
-            if (AlphaBPsGeneratedMonthly > 0)
+            if (BasicBPsGeneratedMonthly > 0)
             {
                 if (AlphaMaterialsRequired * (100 / AdjustedBio) <= targetRegion.TotalAlphaBPsAllocatedInfra)
                 {
@@ -2274,7 +2300,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 if (!alphaBPsReachedForInfra)
                 {
                     float previousTotal = TotalHeavyBPsAllocatedInfra;
-                    targetRegion.TotalAlphaBPsAllocatedInfra += (float)(AlphaBPsGeneratedMonthly * BuildPlan.InfraAllocation);
+                    targetRegion.TotalAlphaBPsAllocatedInfra += (float)(BasicBPsGeneratedMonthly * BuildPlan.InfraAllocation);
                     if (targetRegion.TotalAlphaBPsAllocatedInfra > AlphaMaterialsRequired)
                     {
                         AlphaBPsUsed = AlphaMaterialsRequired - previousTotal;
@@ -2282,7 +2308,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                     }
                     else
                     {
-                        AlphaBPsUsed += (float)(AlphaBPsGeneratedMonthly * BuildPlan.InfraAllocation);
+                        AlphaBPsUsed += (float)(BasicBPsGeneratedMonthly * BuildPlan.InfraAllocation);
                     }
 
                 }
@@ -2710,7 +2736,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         {
             get
             {
-                return TotalEnergyGenerated - TotalEnergyConsumed + EnergyImported - EnergyExported;
+                return TotalEnergyGenerated - TotalEnergyConsumed + EnergyImported;
             }
         }
 
@@ -2718,15 +2744,15 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         {
             get
             {
-                return TotalFoodGenerated - TotalFoodConsumed + FoodImported - FoodExported;
+                return TotalFoodGenerated - TotalFoodConsumed + FoodImported;
             }
         }
 
-        public float AlphaPreProductionDifference
+        public float BasicPreProductionDifference
         {
             get
             {
-                return TotalAlphaMaterialsGenerated - TotalAlphaMaterialsConsumed + AlphaImported - AlphaExported;
+                return TotalAlphaMaterialsGenerated - TotalAlphaMaterialsConsumed + AlphaImported;
             }
         }
 
@@ -2734,7 +2760,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         {
             get
             {
-                return AlphaPreProductionDifference - ProductionAlphaMaterialsAllocated;
+                return BasicPreProductionDifference - ProductionBasicMaterialsAllocated;
             }
         }
 
@@ -2742,7 +2768,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         {
             get
             {
-                return TotalHeavyMaterialsGenerated - TotalHeavyMaterialsConsumed + HeavyImported - HeavyExported;
+                return TotalHeavyMaterialsGenerated - TotalHeavyMaterialsConsumed + HeavyImported;
             }
         }
 
@@ -2758,7 +2784,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         {
             get
             {
-                return TotalRareMaterialsGenerated - TotalRareMaterialsConsumed + RareImported - RareExported;
+                return TotalRareMaterialsGenerated - TotalRareMaterialsConsumed + RareImported;
             }
         }
 

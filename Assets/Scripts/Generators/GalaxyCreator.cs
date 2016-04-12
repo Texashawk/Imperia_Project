@@ -14,7 +14,7 @@ namespace GalaxyCreator
         private int galaxySizeHeight;
         //private static readonly System.Random rand = new System.Random();
 
-        private const int SpaceBetweenStars = 200; // the minimum space between star objects
+        private const int SpaceBetweenStars = 225; // the minimum space between star objects
 
         void Awake()
         {

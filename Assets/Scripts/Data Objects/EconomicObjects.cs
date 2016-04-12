@@ -12,7 +12,7 @@ namespace EconomicObjects
     {
         public enum eTradeStatus : int
         {
-            Request, // in request status
+            InReview, // in review status
             Accepted, // has been accepted by the exporting planet's vic
             Denied, // has been denied and will be removed in end of turn processing
             Active, // is active and a fleet has been created and is actively moving resources for this trade

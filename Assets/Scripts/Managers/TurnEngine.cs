@@ -425,9 +425,9 @@ public class TurnEngine : MonoBehaviour {
             newTrade.EnergyOnBoard = pData.EnergyExportAvailable / Constants.Constant.SupplyPlanetLow;
         }
 
-        if (pData.AlphaExportAvailable > 0)
+        if (pData.BasicExportAvailable > 0)
         {
-            newTrade.BasicOnBoard = pData.AlphaExportAvailable / Constants.Constant.SupplyPlanetLow;
+            newTrade.BasicOnBoard = pData.BasicExportAvailable / Constants.Constant.SupplyPlanetLow;
         }
 
         if (pData.HeavyExportAvailable > 0)

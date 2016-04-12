@@ -343,12 +343,12 @@ public class GenerateGameObject
         else
             pData.FoodStored = UnityEngine.Random.Range(0, 5000);
 
-        if (pData.AlphaPreProductionDifference > 0)
+        if (pData.BasicPreProductionDifference > 0)
         {
-            pData.AlphaStored = UnityEngine.Random.Range(20, 100) * pData.AlphaPreProductionDifference; // number of months of storage based on food flow
+            pData.BasicStored = UnityEngine.Random.Range(20, 100) * pData.BasicPreProductionDifference; // number of months of storage based on food flow
         }
         else
-            pData.AlphaStored = UnityEngine.Random.Range(0, 3000);
+            pData.BasicStored = UnityEngine.Random.Range(0, 3000);
 
         if (pData.HeavyPreProductionDifference > 0)
         {

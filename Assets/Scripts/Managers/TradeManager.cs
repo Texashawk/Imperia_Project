@@ -59,6 +59,7 @@ namespace Managers
                     if (ActiveTradeGroups.Exists(p => p.PlanetIDList.Find(q => q == pData.ID) == pData.ID))
                     {
                         activeTradeGroup = ActiveTradeGroups.Find(p => p.PlanetIDList.Find(q => q == pData.ID) == pData.ID);
+                        Logging.Logger.LogThis(""); // line
                         Logging.Logger.LogThis("Looking within " + activeTradeGroup.Name + "....");
 
                         if (activeTradeGroup.ConnectedToCivHub)
@@ -66,14 +67,15 @@ namespace Managers
                             pData = DataRetrivalFunctions.GetPlanet(civ.CapitalPlanetID);
                             Logging.Logger.LogThis("   Connected to civilization trade hub, so checking that trade hub as well...");
                             Logging.Logger.LogThis("Checking " + pData.TradeHub.ToString().ToLower() + ": " + pData.Name + ".");
-                            CheckHubWithinTradeGroup(activeTradeGroup, pData, availableMerchants);
+                            StartCoroutine(CheckHubWithinTradeGroup(activeTradeGroup, pData, availableMerchants));
                             Logging.Logger.LogThis("Checking " + checkedPlanet.TradeHub.ToString().ToLower() + ": " + checkedPlanet.Name + ".");
-                            CheckHubWithinTradeGroup(activeTradeGroup, checkedPlanet, availableMerchants);
+                            StartCoroutine(CheckHubWithinTradeGroup(activeTradeGroup, checkedPlanet, availableMerchants));
                         }
                         else
                         {
                             Logging.Logger.LogThis("Checking " + pData.TradeHub.ToString().ToLower() + ": " + pData.Name + ".");
-                            CheckHubWithinTradeGroup(activeTradeGroup, pData, availableMerchants);
+                            Logging.Logger.LogThis("   Viceroy trade tendency for hub " + pData.Name + " is " + pData.Viceroy.TraderTendency.ToString("N0") + "; caution is " + pData.Viceroy.Caution.ToString("N0"));
+                            StartCoroutine(CheckHubWithinTradeGroup(activeTradeGroup, pData, availableMerchants));
                         }
                                              
                     }                  
@@ -82,7 +84,7 @@ namespace Managers
             yield return 0;
         }
 
-        private void CheckHubWithinTradeGroup(TradeGroup activeTradeGroup, PlanetData pData, int availableMerchants)
+        private IEnumerator CheckHubWithinTradeGroup(TradeGroup activeTradeGroup, PlanetData pData, int availableMerchants)
         {
             foreach (string tDataID in activeTradeGroup.PlanetIDList)
             {
@@ -90,11 +92,14 @@ namespace Managers
                 {
                     PlanetData tData = DataRetrivalFunctions.GetPlanet(tDataID);
                     Logging.Logger.LogThis("Checking on valid trades for planet " + tData.Name + "....");
+                    
                     if (tData.ActiveTradeProposalList.Exists(p => p.TradeResource == Trade.eTradeGood.Food) && pData.FoodExportAvailable > 0 && availableMerchants > 0)
                     {
                         TradeProposal foodTradeProposal = tData.ActiveTradeProposalList.Find(p => p.TradeResource == Trade.eTradeGood.Food);
                         Logging.Logger.LogThis("Food request found for " + tData.Name + "! Checking stockpiles to see if it can be considered...");
-                        Logging.Logger.LogThis("Food requested: " + foodTradeProposal.AmountDesired.ToString("N0") + " units. Food available on " + pData.Name + ": " + pData.FoodExportAvailable.ToString("N0") + ".");
+                        Logging.Logger.LogThis("   Food requested: " + foodTradeProposal.AmountDesired.ToString("N0") + " units. Food allocated for export on " + pData.Name + ": " + pData.FoodExportAvailable.ToString("N0") + "(includes " +
+                            pData.FoodStockpilePercentAvailable.ToString("P0") + " allocated from stockpiles)");
+
                         if (pData.FoodExportAvailable > foodTradeProposal.AmountDesired)
                         {
                             CreateNewTrade(foodTradeProposal, tData, pData);
@@ -102,7 +107,7 @@ namespace Managers
                         }
                         else
                         {
-                            Logging.Logger.LogThis("Trade for food denied due to insufficient food surplus.");
+                            Logging.Logger.LogThis("   Trade for food denied due to insufficient food surplus.");
                         }
                     }
 
@@ -110,7 +115,9 @@ namespace Managers
                     {
                         TradeProposal energyTradeProposal = tData.ActiveTradeProposalList.Find(p => p.TradeResource == Trade.eTradeGood.Energy);
                         Logging.Logger.LogThis("Energy request found for " + tData.Name + "! Checking stockpiles to see if it can be considered...");
-                        Logging.Logger.LogThis("Energy requested: " + energyTradeProposal.AmountDesired.ToString("N0") + " units. Energy available on " + pData.Name + ": " + pData.EnergyExportAvailable.ToString("N0") + ".");
+                        Logging.Logger.LogThis("   Energy requested: " + energyTradeProposal.AmountDesired.ToString("N0") + " units. Energy allocated for export on " + pData.Name + ": " + pData.EnergyExportAvailable.ToString("N0") + "(includes " +
+                            pData.EnergyStockpilePercentAvailable.ToString("P0") + " allocated from stockpiles)");
+
                         if (pData.EnergyExportAvailable > energyTradeProposal.AmountDesired)
                         {
                             CreateNewTrade(energyTradeProposal, tData, pData);
@@ -118,23 +125,25 @@ namespace Managers
                         }
                         else
                         {
-                            Logging.Logger.LogThis("Trade for energy denied due to insufficient energy surplus.");
+                            Logging.Logger.LogThis("   Trade for energy denied due to insufficient energy surplus.");
                         }
                     }
 
-                    if (tData.ActiveTradeProposalList.Exists(p => p.TradeResource == Trade.eTradeGood.Basic) && pData.AlphaExportAvailable > 0 && availableMerchants > 0)
+                    if (tData.ActiveTradeProposalList.Exists(p => p.TradeResource == Trade.eTradeGood.Basic) && pData.BasicExportAvailable > 0 && availableMerchants > 0)
                     {
                         TradeProposal basicTradeProposal = tData.ActiveTradeProposalList.Find(p => p.TradeResource == Trade.eTradeGood.Basic);
                         Logging.Logger.LogThis("Basic material request found for " + tData.Name + "! Checking stockpiles to see if it can be considered...");
-                        Logging.Logger.LogThis("Basic materials requested: " + basicTradeProposal.AmountDesired.ToString("N0") + " units. Basic materials available on " + pData.Name + ": " + pData.AlphaExportAvailable.ToString("N0") + ".");
-                        if (pData.AlphaExportAvailable > basicTradeProposal.AmountDesired)
+                        Logging.Logger.LogThis("   Basic materials requested: " + basicTradeProposal.AmountDesired.ToString("N0") + " units. Basic materials allocated for export on " + pData.Name + ": " + pData.BasicExportAvailable.ToString("N0") + "(includes " +
+                            pData.BasicStockpilePercentAvailable.ToString("P0") + " allocated from stockpiles)");
+
+                        if (pData.BasicExportAvailable > basicTradeProposal.AmountDesired)
                         {
                             CreateNewTrade(basicTradeProposal, tData, pData);
                             availableMerchants -= 1;
                         }
                         else
                         {
-                            Logging.Logger.LogThis("Trade for basic materials denied due to insufficient basic material surplus.");
+                            Logging.Logger.LogThis("   Trade for basic materials denied due to insufficient basic material surplus.");
                         }
                     }
 
@@ -142,7 +151,9 @@ namespace Managers
                     {
                         TradeProposal heavyTradeProposal = tData.ActiveTradeProposalList.Find(p => p.TradeResource == Trade.eTradeGood.Heavy);
                         Logging.Logger.LogThis("Heavy material request found for " + tData.Name + "! Checking stockpiles to see if it can be considered...");
-                        Logging.Logger.LogThis("Heavy materials requested: " + heavyTradeProposal.AmountDesired.ToString("N0") + " units. Heavy materials available on " + pData.Name + ": " + pData.HeavyExportAvailable.ToString("N0") + ".");
+                        Logging.Logger.LogThis("   Heavy materials requested: " + heavyTradeProposal.AmountDesired.ToString("N0") + " units. Heavy materials allocated for export on " + pData.Name + ": " + pData.HeavyExportAvailable.ToString("N0") + "(includes " +
+                            pData.HeavyStockpilePercentAvailable.ToString("P0") + " allocated from stockpiles)");
+
                         if (pData.HeavyExportAvailable > heavyTradeProposal.AmountDesired)
                         {
                             CreateNewTrade(heavyTradeProposal, tData, pData);
@@ -150,7 +161,7 @@ namespace Managers
                         }
                         else
                         {
-                            Logging.Logger.LogThis("Trade for heavy materials denied due to insufficient heavy material surplus.");
+                            Logging.Logger.LogThis("   Trade for heavy materials denied due to insufficient heavy material surplus.");
                         }
                     }
 
@@ -158,7 +169,9 @@ namespace Managers
                     {
                         TradeProposal rareTradeProposal = tData.ActiveTradeProposalList.Find(p => p.TradeResource == Trade.eTradeGood.Rare);
                         Logging.Logger.LogThis("Rare material request found for " + tData.Name + "! Checking stockpiles to see if it can be considered...");
-                        Logging.Logger.LogThis("Rare materials requested: " + rareTradeProposal.AmountDesired.ToString("N0") + " units. Rare materials available on " + pData.Name + ": " + pData.RareExportAvailable.ToString("N0") + ".");
+                        Logging.Logger.LogThis("   Rare materials requested: " + rareTradeProposal.AmountDesired.ToString("N0") + " units. Rare materials allocated for export on " + pData.Name + ": " + pData.RareExportAvailable.ToString("N0") + "(includes " +
+                            pData.RareStockpilePercentAvailable.ToString("P0") + " allocated from stockpiles)");
+
                         if (pData.RareExportAvailable > rareTradeProposal.AmountDesired)
                         {
                             CreateNewTrade(rareTradeProposal, tData, pData);
@@ -166,11 +179,13 @@ namespace Managers
                         }
                         else
                         {
-                            Logging.Logger.LogThis("Trade for rare materials denied due to insufficient rare material surplus.");
+                            Logging.Logger.LogThis("   Trade for rare materials denied due to insufficient rare material surplus.");
                         }
                     }
                 }
             }
+
+            yield return 0;
         }
 
         private void CreateNewTrade(TradeProposal proposal, PlanetData tData, PlanetData pData)
@@ -179,17 +194,20 @@ namespace Managers
             newTrade.AmountRequested = proposal.AmountDesired;
             newTrade.TradeGood = proposal.TradeResource;
             newTrade.ImportingPlanetID = tData.ID;
-            newTrade.Status = Trade.eTradeStatus.Request;
+            newTrade.Status = Trade.eTradeStatus.InReview;
             newTrade.ExportingPlanetID = pData.ID;
             newTrade.OfferPerUnit = proposal.MaxCrownsToPay;
             newTrade.RunsRequested = 1; // how many times back and forth
             pData.ActiveTradesList.Add(newTrade);
-            Logging.Logger.LogThis("New trade request created and under consideration: " + newTrade.AmountRequested.ToString("N0") + " " + newTrade.TradeGood.ToString() + " units of " + newTrade.TradeGood.ToString().ToLower() + " requested from " + pData.Name + " to " + tData.Name + ".");
+            Logging.Logger.LogThis("   Trade request has been accepted and is now under review: " + newTrade.AmountRequested.ToString("N0") + " " + newTrade.TradeGood.ToString() + " units of " + newTrade.TradeGood.ToString().ToLower() + " for "
+                + newTrade.OfferPerUnit.ToString("N1") + " MCs requested from " + pData.Name + " to " + tData.Name + ".");
         }
 
         public IEnumerator CreateTradeAgreements(Civilization civ)
         {          
             UpdateResourceBasePrices(civ);
+            CheckImportanceOfGoods(civ);
+            DetermineBaseStockpileHolds(civ);         
             yield return StartCoroutine(CheckForTrades(civ));
             yield return StartCoroutine(CreateTrades(civ));
         }
@@ -219,22 +237,70 @@ namespace Managers
             civ.CurrentRarePrice = rarePriceTotal / civ.Last6MonthsRarePrices.Length;
         }
 
-        private IEnumerator CheckForTrades(Civilization civ)
+        private void DetermineBaseStockpileHolds(Civilization civ)
+        {
+            foreach (PlanetData pData in civ.PlanetList)
+            {
+                if (pData.FoodImportance > 80f - pData.Viceroy.Caution)
+                    pData.FoodStockpilePercentAvailable = 0;
+                else if (pData.FoodImportance > 60f - pData.Viceroy.Caution)
+                    pData.FoodStockpilePercentAvailable = UnityEngine.Random.Range(.02f, .1f); // 2-10%
+                else
+                    pData.FoodStockpilePercentAvailable = UnityEngine.Random.Range(.05f, .5f); // 5-50%
+
+                if (pData.EnergyImportance > 80f - pData.Viceroy.Caution)
+                    pData.EnergyStockpilePercentAvailable = 0;
+                else if (pData.EnergyImportance > 60f - pData.Viceroy.Caution)
+                    pData.EnergyStockpilePercentAvailable = UnityEngine.Random.Range(.02f, .1f); // 2-10%
+                else
+                    pData.EnergyStockpilePercentAvailable = UnityEngine.Random.Range(.05f, .3f); // 5-30%
+
+                if (pData.BasicImportance > 80f - pData.Viceroy.Caution)
+                    pData.BasicStockpilePercentAvailable = 0;
+                else if (pData.BasicImportance > 60f - pData.Viceroy.Caution)
+                    pData.BasicStockpilePercentAvailable = UnityEngine.Random.Range(.02f, .1f); // 2-10%
+                else
+                    pData.BasicStockpilePercentAvailable = UnityEngine.Random.Range(.05f, .3f); // 5-30%
+
+                if (pData.HeavyImportance > 80f - pData.Viceroy.Caution)
+                    pData.HeavyStockpilePercentAvailable = 0;
+                else if (pData.HeavyImportance > 60f - pData.Viceroy.Caution)
+                    pData.HeavyStockpilePercentAvailable = UnityEngine.Random.Range(.02f, .08f); // 2-8%
+                else
+                    pData.HeavyStockpilePercentAvailable = UnityEngine.Random.Range(.05f, .25f); // 5-25%
+
+                if (pData.RareImportance > 80f - pData.Viceroy.Caution)
+                    pData.RareStockpilePercentAvailable = 0;
+                else if (pData.RareImportance > 60f - pData.Viceroy.Caution)
+                    pData.RareStockpilePercentAvailable = UnityEngine.Random.Range(.02f, .05f); // 2-5%
+                else
+                    pData.RareStockpilePercentAvailable = UnityEngine.Random.Range(.05f, .2f);  // 5-20%
+
+                // adjust stockpile holds by the viceroy's trader tendancy
+                pData.FoodStockpilePercentAvailable = pData.FoodStockpilePercentAvailable * (1 + (pData.Viceroy.TraderTendency / 100f));
+                pData.EnergyStockpilePercentAvailable = pData.EnergyStockpilePercentAvailable * (1 + (pData.Viceroy.TraderTendency / 100f));
+                pData.BasicStockpilePercentAvailable = pData.BasicStockpilePercentAvailable * (1 + (pData.Viceroy.TraderTendency / 100f));
+                pData.HeavyStockpilePercentAvailable = pData.HeavyStockpilePercentAvailable * 1 + (pData.Viceroy.TraderTendency / 100f);
+                pData.RareStockpilePercentAvailable = pData.RareStockpilePercentAvailable * (1 + (pData.Viceroy.TraderTendency / 100f));
+            }
+        }
+
+        private void CheckImportanceOfGoods(Civilization civ)
         {
             foreach (PlanetData pData in civ.PlanetList)
             {
                 // Step 2: determine Importance of each good on each planet
                 pData.FoodImportance = (((50f - (pData.FoodStored / pData.TotalFoodConsumed)) / 5f) - pData.FoodDifference) * Constant.FoodPriority;
                 pData.EnergyImportance = (((50f - (pData.EnergyStored / pData.TotalEnergyConsumed)) / 5f) - pData.EnergyDifference) * Constant.EnergyPriority;
-                pData.BasicImportance = (((50f - (pData.AlphaStored / pData.TotalAlphaMaterialsConsumed)) / 5f) - pData.AlphaTotalDifference) * Constant.BasicPriority;
+                pData.BasicImportance = (((50f - (pData.BasicStored / pData.TotalAlphaMaterialsConsumed)) / 5f) - pData.AlphaTotalDifference) * Constant.BasicPriority;
                 pData.HeavyImportance = (((50f - (pData.HeavyStored / pData.TotalHeavyMaterialsConsumed)) / 5f) - pData.HeavyTotalDifference) * Constant.HeavyPriority;
                 pData.RareImportance = (((50f - (pData.RareStored / pData.TotalRareMaterialsConsumed)) / 5f) - pData.RareTotalDifference) * Constant.RarePriority;
-
-                // now generate the trade proposals for each viceroy
-
-                yield return StartCoroutine(GenerateTradeProposals(pData));        
             }
+        }
 
+        private IEnumerator CheckForTrades(Civilization civ)
+        {
+            
             if (civ.ProvinceList.Count > 0)
             {
                 foreach (Province provData in civ.ProvinceList)
@@ -244,9 +310,12 @@ namespace Managers
                         yield return StartCoroutine(CalculateTradeGroups(provData));
                 }
             }
-
-            UpdateResourceStockBalances(civ);
-            //yield return 0;
+            yield return StartCoroutine(UpdateResourceStockBalances(civ));
+            foreach (PlanetData pData in civ.PlanetList)
+            {
+                yield return StartCoroutine(GenerateTradeProposals(pData));
+            }
+            yield return 0;
         }
 
         // Step 2b: create Trade Proposals based on each resource's Importance to that Viceroy
@@ -294,7 +363,7 @@ namespace Managers
             if (totalImportance == 0f) // if there is no importance on any resource, exit since there will not be any trades generated
             {
                 Logging.Logger.LogThis("No resources are determined to be needed by the viceroy this month, therefore no proposals will be considered.");
-                Logging.Logger.LogThis("Trade Request analysis completed. Exiting for " + pData.Name + "...");
+                Logging.Logger.LogThis("Trade Request analysis completed. Exiting " + pData.Name + "...");
                 Logging.Logger.LogThis("_________________________________________________________________________");
                 yield break;
             }
@@ -579,7 +648,7 @@ namespace Managers
             }
 
             merchantsAvailableForFleets = totalMerchants - merchantsAllocatedToFleets;
-            Debug.Log("Based on " + pData.TotalMerchants.ToString("N0") + " on planet " + pData.Name + ", there are " + merchantsAvailableForFleets.ToString("N0") + " merchants available for trade fleets.");
+            Logging.Logger.LogThis("Currently, there are " + pData.TotalMerchants.ToString("N0") + " merchants on planet " + pData.Name + ", of which " + merchantsAvailableForFleets.ToString("N0") + " merchants are available for trade fleets.");
             pData.MerchantsAvailableForExport = merchantsAvailableForFleets;
         }
 
@@ -740,16 +809,18 @@ namespace Managers
             }
         }
 
-        public void UpdateResourceStockBalances(Civilization civ)
+        public IEnumerator UpdateResourceStockBalances(Civilization civ)
         {
             foreach (PlanetData pData in civ.PlanetList)
             {
                 pData.FoodStored += pData.FoodDifference;
                 pData.EnergyStored += pData.EnergyDifference;
-                pData.AlphaStored += pData.AlphaTotalDifference;
+                pData.BasicStored += pData.AlphaTotalDifference;
                 pData.HeavyStored += pData.HeavyPreProductionDifference;
                 pData.RareStored += pData.RarePreProductionDifference;
             }
+
+            yield return 0;
         }
     }
 }

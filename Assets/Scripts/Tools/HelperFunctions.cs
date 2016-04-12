@@ -13,8 +13,12 @@ namespace Logging
     {
         public static void LogThis(string logMessage)
         {
+            GameData gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
             Console.WriteLine(logMessage);
-            using (StreamWriter writer = new StreamWriter("C:/ImperiaLogs/" + FileDate() + ".txt", true))
+
+            System.IO.Directory.CreateDirectory("C:/ImperiaLogs"); // create the directory if needed
+  
+            using (StreamWriter writer = new StreamWriter("C:/ImperiaLogs/" + FileDate() + "_" + gDataRef.GameNumber.ToString("N0") + ".txt", true))
             {
                 writer.WriteLine(logMessage);
                 //writer.WriteLine();

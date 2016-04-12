@@ -701,7 +701,20 @@ namespace CivCreator
                     pData.PercentGPPForImports = Random.Range(.25f, Constants.Constant.MaxGPPAllocatedForImports);
                     pData.PercentGPPForTrade = Random.Range(.1f, Constants.Constant.MaxGPPAllocatedForTrade);
                     pData.CommerceTax = Random.Range(.3f, .5f);
-                    pData.FoodRetailPercentHold = Random.Range(.1f, .4f);
+
+                    // what percent of a surplus a viceroy is willing to export
+                    pData.FoodExportPercentHold = Random.Range(.05f, .5f);
+                    pData.EnergyExportPercentHold = Random.Range(.05f, .5f);
+                    pData.BasicExportPercentHold = Random.Range(.05f, .4f);
+                    pData.HeavyExportPercentHold = Random.Range(.05f, .4f);
+                    pData.RareExportPercentHold = Random.Range(.05f, .3f);
+
+                    // what percent of a surplus a viceroy is willing to use for internal commerce
+                    pData.FoodCommercePercentHold = Random.Range(.05f, .5f);
+                    pData.EnergyCommercePercentHold = Random.Range(.05f, .5f);
+                    pData.BasicCommercePercentHold = Random.Range(.05f, .4f);
+                    pData.HeavyCommercePercentHold = Random.Range(.05f, .4f);
+                    pData.RareCommercePercentHold = Random.Range(.05f, .3f);
                 }
             }
         }
@@ -731,11 +744,11 @@ namespace CivCreator
             newCiv.Name = "Celestial Empire"; //gameDataRef.PlayerEmpireName;
             newCiv.Color = new Color(0f, .68f, 1f); // the color of the empire's system and planet holdings
             newCiv.Type = Civilization.eCivType.PlayerEmpire;  // default empire
-            newCiv.CivMaxProvinceSize = 5;
-            newCiv.AdminRating = 15; // rating that determines maximum size of governable provinces
+            newCiv.CivMaxProvinceSize = 6;
+            newCiv.AdminRating = 25; // rating that determines maximum size of governable provinces
             newCiv.Treasury = Random.Range(1000000f, 5000000f);  // starting treasury
             newCiv.Size = Civilization.eCivSize.Major;
-            newCiv.Range = (int)(gameDataRef.GalaxySizeWidth / 1.5f);
+            newCiv.Range = (int)(gameDataRef.GalaxySizeWidth / 1.9f); // determines how far humanity will go from Neo-Sirius (the Empire)
             newCiv.PlanetMinTolerance = 32; // lower since older world
             newCiv.AstronomyRating = Random.Range(6,11) * 1000; // not used
             newCiv.ID = "CIV0"; // use this to reference the player's civ
@@ -757,7 +770,7 @@ namespace CivCreator
             pData.HeavyMaterials = 60;
             pData.MaxTiles = 30;
             pData.MaxHabitableTiles = 26;
-            pData.RareMaterials = 30;
+            pData.RareMaterials = 40;
             pData.BasicMaterials = 88;
             pData.TradeStatus = PlanetData.eTradeStatus.HasTradePort;
             pData.TradeHub = PlanetData.eTradeHubType.CivTradeHub;
