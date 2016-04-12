@@ -37,8 +37,5 @@ namespace Managers
         public eSecondaryView SecondaryViewMode { get; set; } // which 'filter' is active in the galaxy view
         public ePrimaryView PrimaryViewMode { get; set; } // which 'sub mode' is active on the buttons (lower-right)
         public eViewLevel ViewLevel { get; set; } // which level of 'zoom' the game is at (galaxy, province, system, planet)
-
-        
-
     }
 }

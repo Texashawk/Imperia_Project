@@ -73,24 +73,27 @@ namespace Constants
         public const float SupplyPlanetLow = 4f; // 25%
         public const float SupplyPlanetModerate = 2f; // 50%
         public const float SupplyPlanetHigh = 1.5f; // 66%
-        public const float EnergyUsedPerLightYearCoeff = .001f;
+        public const float EnergyUsedPerLightYearCoeff = .0006f;
         public const float MaxResourcePrice = 100f;
         public const float MinResourcePrice = .01f;
         public const int RollingMonthsToDeterminePrices = 6; // how many months to consider when averaging a civ's price for a certain resource
 
         // base priorities of each resource
-        public const float FoodPriority = 5f;
+        public const float FoodPriority = 6f;
         public const float EnergyPriority = 4f;
         public const float BasicPriority = 3f;
         public const float HeavyPriority = 1f;
         public const float RarePriority = 2f;
 
         // base costs of each resource at game start
-        public const float BaseFoodPrice = .5f;
-        public const float BaseEnergyPrice = .8f;
+        public const float BaseFoodPrice = .3f;
+        public const float BaseEnergyPrice = .6f;
         public const float BaseBasicPrice = .7f;
-        public const float BaseHeavyPrice = 1.2f;
-        public const float BaseRarePrice = 2.5f;
+        public const float BaseHeavyPrice = 1.0f;
+        public const float BaseRarePrice = 2.0f;
+
+        // trader constants
+        public const int MerchantsPerTradeFleet = 20; // how many merchants it takes to create and maintain a trade fleet
 
         // starbase throughput levels
         public const int Level1StarbaseCapacity = 15;

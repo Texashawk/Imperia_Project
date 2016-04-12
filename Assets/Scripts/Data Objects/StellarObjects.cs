@@ -3139,7 +3139,10 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                         }
                     }
                 }
-                _pPopSupport = _pTotalPopSupport / _pPopCount;
+                if (_pPopCount > 0)
+                    _pPopSupport = _pTotalPopSupport / _pPopCount;
+                else
+                    _pPopSupport = 0;
 
                 return _pPopSupport;
             }

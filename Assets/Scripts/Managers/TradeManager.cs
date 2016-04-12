@@ -97,10 +97,10 @@ namespace Managers
                     {
                         TradeProposal foodTradeProposal = tData.ActiveTradeProposalList.Find(p => p.TradeResource == Trade.eTradeGood.Food);
                         Logging.Logger.LogThis("Food request found for " + tData.Name + "! Checking stockpiles to see if it can be considered...");
-                        Logging.Logger.LogThis("   Food requested: " + foodTradeProposal.AmountDesired.ToString("N0") + " units. Food allocated for export on " + pData.Name + ": " + pData.FoodExportAvailable.ToString("N0") + "(includes " +
+                        Logging.Logger.LogThis("   Food requested: " + foodTradeProposal.AmountRequested.ToString("N0") + " units. Food allocated for export on " + pData.Name + ": " + pData.FoodExportAvailable.ToString("N0") + "(includes " +
                             pData.FoodStockpilePercentAvailable.ToString("P0") + " allocated from stockpiles)");
 
-                        if (pData.FoodExportAvailable > foodTradeProposal.AmountDesired)
+                        if (pData.FoodExportAvailable > foodTradeProposal.AmountRequested)
                         {
                             CreateNewTrade(foodTradeProposal, tData, pData);
                             availableMerchants -= 1;
@@ -115,10 +115,10 @@ namespace Managers
                     {
                         TradeProposal energyTradeProposal = tData.ActiveTradeProposalList.Find(p => p.TradeResource == Trade.eTradeGood.Energy);
                         Logging.Logger.LogThis("Energy request found for " + tData.Name + "! Checking stockpiles to see if it can be considered...");
-                        Logging.Logger.LogThis("   Energy requested: " + energyTradeProposal.AmountDesired.ToString("N0") + " units. Energy allocated for export on " + pData.Name + ": " + pData.EnergyExportAvailable.ToString("N0") + "(includes " +
+                        Logging.Logger.LogThis("   Energy requested: " + energyTradeProposal.AmountRequested.ToString("N0") + " units. Energy allocated for export on " + pData.Name + ": " + pData.EnergyExportAvailable.ToString("N0") + "(includes " +
                             pData.EnergyStockpilePercentAvailable.ToString("P0") + " allocated from stockpiles)");
 
-                        if (pData.EnergyExportAvailable > energyTradeProposal.AmountDesired)
+                        if (pData.EnergyExportAvailable > energyTradeProposal.AmountRequested)
                         {
                             CreateNewTrade(energyTradeProposal, tData, pData);
                             availableMerchants -= 1;
@@ -133,10 +133,10 @@ namespace Managers
                     {
                         TradeProposal basicTradeProposal = tData.ActiveTradeProposalList.Find(p => p.TradeResource == Trade.eTradeGood.Basic);
                         Logging.Logger.LogThis("Basic material request found for " + tData.Name + "! Checking stockpiles to see if it can be considered...");
-                        Logging.Logger.LogThis("   Basic materials requested: " + basicTradeProposal.AmountDesired.ToString("N0") + " units. Basic materials allocated for export on " + pData.Name + ": " + pData.BasicExportAvailable.ToString("N0") + "(includes " +
+                        Logging.Logger.LogThis("   Basic materials requested: " + basicTradeProposal.AmountRequested.ToString("N0") + " units. Basic materials allocated for export on " + pData.Name + ": " + pData.BasicExportAvailable.ToString("N0") + "(includes " +
                             pData.BasicStockpilePercentAvailable.ToString("P0") + " allocated from stockpiles)");
 
-                        if (pData.BasicExportAvailable > basicTradeProposal.AmountDesired)
+                        if (pData.BasicExportAvailable > basicTradeProposal.AmountRequested)
                         {
                             CreateNewTrade(basicTradeProposal, tData, pData);
                             availableMerchants -= 1;
@@ -151,10 +151,10 @@ namespace Managers
                     {
                         TradeProposal heavyTradeProposal = tData.ActiveTradeProposalList.Find(p => p.TradeResource == Trade.eTradeGood.Heavy);
                         Logging.Logger.LogThis("Heavy material request found for " + tData.Name + "! Checking stockpiles to see if it can be considered...");
-                        Logging.Logger.LogThis("   Heavy materials requested: " + heavyTradeProposal.AmountDesired.ToString("N0") + " units. Heavy materials allocated for export on " + pData.Name + ": " + pData.HeavyExportAvailable.ToString("N0") + "(includes " +
+                        Logging.Logger.LogThis("   Heavy materials requested: " + heavyTradeProposal.AmountRequested.ToString("N0") + " units. Heavy materials allocated for export on " + pData.Name + ": " + pData.HeavyExportAvailable.ToString("N0") + "(includes " +
                             pData.HeavyStockpilePercentAvailable.ToString("P0") + " allocated from stockpiles)");
 
-                        if (pData.HeavyExportAvailable > heavyTradeProposal.AmountDesired)
+                        if (pData.HeavyExportAvailable > heavyTradeProposal.AmountRequested)
                         {
                             CreateNewTrade(heavyTradeProposal, tData, pData);
                             availableMerchants -= 1;
@@ -169,10 +169,10 @@ namespace Managers
                     {
                         TradeProposal rareTradeProposal = tData.ActiveTradeProposalList.Find(p => p.TradeResource == Trade.eTradeGood.Rare);
                         Logging.Logger.LogThis("Rare material request found for " + tData.Name + "! Checking stockpiles to see if it can be considered...");
-                        Logging.Logger.LogThis("   Rare materials requested: " + rareTradeProposal.AmountDesired.ToString("N0") + " units. Rare materials allocated for export on " + pData.Name + ": " + pData.RareExportAvailable.ToString("N0") + "(includes " +
+                        Logging.Logger.LogThis("   Rare materials requested: " + rareTradeProposal.AmountRequested.ToString("N0") + " units. Rare materials allocated for export on " + pData.Name + ": " + pData.RareExportAvailable.ToString("N0") + "(includes " +
                             pData.RareStockpilePercentAvailable.ToString("P0") + " allocated from stockpiles)");
 
-                        if (pData.RareExportAvailable > rareTradeProposal.AmountDesired)
+                        if (pData.RareExportAvailable > rareTradeProposal.AmountRequested)
                         {
                             CreateNewTrade(rareTradeProposal, tData, pData);
                             availableMerchants -= 1;
@@ -188,10 +188,49 @@ namespace Managers
             yield return 0;
         }
 
+        private IEnumerator DetermineNewTradeProfitability(Civilization civ)
+        {
+            Logging.Logger.LogThis(""); // blank line
+            Logging.Logger.LogThis("Now determining trade profitability for the " + civ.Name + ".");
+            
+            foreach (PlanetData pData in civ.PlanetList)
+            {
+                if (pData.TradeHub != PlanetData.eTradeHubType.NotHub)
+                {
+                    List<Trade> pendingTrades = pData.ActiveTradesList.FindAll(p => p.Status == Trade.eTradeStatus.InReview);
+                    float profitThreshold = 0f; // the minimum profit that the viceroy will take to make the deal
+
+                    profitThreshold = UnityEngine.Random.Range(.5f, (150f + pData.Viceroy.GluttonyTendency - pData.Viceroy.Humanity)/8f) * (1 + (pData.Viceroy.TradeAptitude / 1000f));
+                    if (profitThreshold < .5f)
+                        profitThreshold = .5f; // minimum profit
+
+                    Logging.Logger.LogThis("");
+                    Logging.Logger.LogThis("Viceroy Gluttony: " + pData.Viceroy.GluttonyTendency.ToString("N0") + " Trade Aptitude: " + pData.Viceroy.TradeAptitude.ToString("N0") + " Humanity: " + pData.Viceroy.Humanity.ToString("N0"));
+                    Logging.Logger.LogThis("Trade hub " + pData.Name + "'s viceroy will not consider trades with less than " + profitThreshold.ToString("N1") + " MCs per trade.");
+                    foreach (Trade analyzedTrade in pendingTrades)
+                    {
+                        Logging.Logger.LogThis("   Viceroy is considering trade with " + DataRetrivalFunctions.GetPlanet(analyzedTrade.ImportingPlanetID).Name + " for " + analyzedTrade.TradeGood.ToString() + "."
+                            + " The current profit per unit based on prices and energy needed for the trip is " + analyzedTrade.CurrentProfitPerUnit.ToString("N1") + " MCs, with total profit of " + analyzedTrade.TotalProfitForTrade.ToString("N1") + ".");
+                        if (analyzedTrade.TotalProfitForTrade > profitThreshold)
+                        {
+                            Logging.Logger.LogThis("    .... After careful consideration, this trade is accepted, pending sufficient fleet availability!");
+                            analyzedTrade.Status = Trade.eTradeStatus.Accepted; // the trade is now active!
+                        }
+                        else
+                        {
+                            Logging.Logger.LogThis("    .... After careful consideration, this trade is denied! Not enough profit to make the trip.");
+                            analyzedTrade.Status = Trade.eTradeStatus.Denied;
+                        }
+                    }
+                }
+            }
+            yield return 0;
+        }
+
         private void CreateNewTrade(TradeProposal proposal, PlanetData tData, PlanetData pData)
         {
             Trade newTrade = new Trade();
-            newTrade.AmountRequested = proposal.AmountDesired;
+            newTrade.AmountRequested = proposal.AmountRequested;
             newTrade.TradeGood = proposal.TradeResource;
             newTrade.ImportingPlanetID = tData.ID;
             newTrade.Status = Trade.eTradeStatus.InReview;
@@ -210,6 +249,7 @@ namespace Managers
             DetermineBaseStockpileHolds(civ);         
             yield return StartCoroutine(CheckForTrades(civ));
             yield return StartCoroutine(CreateTrades(civ));
+            yield return StartCoroutine(DetermineNewTradeProfitability(civ));
         }
 
         // Step 1: Determine base prices of each good in the civ
@@ -307,7 +347,7 @@ namespace Managers
                 {
                     // now determine whether each planet is in the trade network
                     if (provData != null)
-                        yield return StartCoroutine(CalculateTradeGroups(provData));
+                        yield return StartCoroutine(GenerateTradeGroups(provData));
                 }
             }
             yield return StartCoroutine(UpdateResourceStockBalances(civ));
@@ -425,16 +465,8 @@ namespace Managers
             yield return 0;
         }
 
-        // Step 4: Each planet with an active TradeProposal in their queue looks at each trade hub in range that could potentially fill that proposal.
-        public void DetermineEligibleTradePartners(PlanetData currentPData)
-        {
-            List<string> EligiblePlanetIDsInRange = new List<string>(); // holding list for planets that are potential trade candidates
-            List<string> EligiblePlanetIDsWithExports = new List<string>(); // holding list for planets that are in range AND have the export that is being sought
-           
-        }
-
         // Step 4a: Determine Trade Groups that currently exist this turn
-        private IEnumerator CalculateTradeGroups(Province provData)
+        private IEnumerator GenerateTradeGroups(Province provData)
         {
             if (provData.SystemList == null)
                 yield return null;
@@ -644,12 +676,13 @@ namespace Managers
             foreach (TradeFleet tFleet in ActiveTradeFleetsInGame)
             {
                 if (tFleet.ExportPlanetID == pData.ID)
-                    merchantsAllocatedToFleets += 1;
+                    merchantsAllocatedToFleets += Constant.MerchantsPerTradeFleet;
             }
 
             merchantsAvailableForFleets = totalMerchants - merchantsAllocatedToFleets;
             Logging.Logger.LogThis("Currently, there are " + pData.TotalMerchants.ToString("N0") + " merchants on planet " + pData.Name + ", of which " + merchantsAvailableForFleets.ToString("N0") + " merchants are available for trade fleets.");
             pData.MerchantsAvailableForExport = merchantsAvailableForFleets;
+            Logging.Logger.LogThis("This planet can currently support " + Math.Floor((double)pData.MerchantsAvailableForExport / (double)Constant.MerchantsPerTradeFleet).ToString("N0") + " more fleets.");
         }
 
         private static void RankResourcesByImportance(PlanetData pData, SortedList rP)
@@ -730,65 +763,46 @@ namespace Managers
                         case Trade.eTradeGood.Food:
                             tP.TradeResource = Trade.eTradeGood.Food;
                             tP.MaxCrownsToPay = pData.Owner.CurrentFoodPrice * (1f / (pData.Viceroy.Caution / 100f)) / (50f / pData.Viceroy.Intelligence);
-                            float foodBudgetCheck = 0f;
-
-                            // raise amount desired by .1 until either amount desired reached or budget for that resource hit
-                            while (foodBudgetCheck < maxFoodImportBudget && tP.AmountDesired < foodUnitsDesired)
-                            {
-                                tP.AmountDesired += .1f;
-                                foodBudgetCheck = tP.AmountDesired * tP.MaxCrownsToPay;
-                            }
+                            tP.MaxCrownsToPay *= 1.6f;
+                            tP.AmountRequested = maxFoodImportBudget / tP.MaxCrownsToPay;
+                            if (tP.AmountRequested > foodUnitsDesired)
+                                tP.AmountRequested = foodUnitsDesired;
                             break;
 
                         case Trade.eTradeGood.Energy:
                             tP.TradeResource = Trade.eTradeGood.Energy;
                             tP.MaxCrownsToPay = pData.Owner.CurrentEnergyPrice * (1f / (pData.Viceroy.Caution / 100f)) * (50f / pData.Viceroy.Intelligence);
-                            float energyBudgetCheck = 0;
-
-                            // raise amount desired by .1 until either amount desired reached or budget for that resource hit
-                            while (energyBudgetCheck < maxEnergyImportBudget && tP.AmountDesired < energyUnitsDesired)
-                            {
-                                tP.AmountDesired += .1f;
-                                energyBudgetCheck = tP.AmountDesired * tP.MaxCrownsToPay;
-                            }
+                            tP.MaxCrownsToPay *= 1.3f;
+                            tP.AmountRequested = maxEnergyImportBudget / tP.MaxCrownsToPay;
+                            if (tP.AmountRequested > energyUnitsDesired)
+                                tP.AmountRequested = energyUnitsDesired;
                             break;
 
                         case Trade.eTradeGood.Basic:
                             tP.TradeResource = Trade.eTradeGood.Basic;
                             tP.MaxCrownsToPay = pData.Owner.CurrentBasicPrice * (1f / (pData.Viceroy.Caution / 100f)) * (50f / pData.Viceroy.Intelligence);
-                            float basicBudgetCheck = 0f;
-
-                            // raise amount desired by .1 until either amount desired reached or budget for that resource hit
-                            while (basicBudgetCheck < maxBasicImportBudget && tP.AmountDesired < basicUnitsDesired)
-                            {
-                                tP.AmountDesired += .1f;
-                                basicBudgetCheck = tP.AmountDesired * tP.MaxCrownsToPay;
-                            }
+                            tP.MaxCrownsToPay *= 1.5f;
+                            tP.AmountRequested = maxBasicImportBudget / tP.MaxCrownsToPay;
+                            if (tP.AmountRequested > basicUnitsDesired)
+                                tP.AmountRequested = basicUnitsDesired;
                             break;
 
                         case Trade.eTradeGood.Heavy:
                             tP.TradeResource = Trade.eTradeGood.Heavy;
                             tP.MaxCrownsToPay = pData.Owner.CurrentHeavyPrice * (1f / (pData.Viceroy.Caution / 100f)) * (50f / pData.Viceroy.Intelligence);
-                            float heavyBudgetCheck = 0f;
-
-                            // raise amount desired by .1 until either amount desired reached or budget for that resource hit
-                            while (heavyBudgetCheck < maxHeavyImportBudget && tP.AmountDesired < heavyUnitsDesired)
-                            {
-                                tP.AmountDesired += .1f;
-                                heavyBudgetCheck = tP.AmountDesired * tP.MaxCrownsToPay;
-                            }
+                            tP.MaxCrownsToPay *= 2.2f;
+                            tP.AmountRequested = maxHeavyImportBudget / tP.MaxCrownsToPay;
+                            if (tP.AmountRequested > heavyUnitsDesired)
+                                tP.AmountRequested = heavyUnitsDesired;                          
                             break;
 
                         case Trade.eTradeGood.Rare:
                             tP.TradeResource = Trade.eTradeGood.Rare;
                             tP.MaxCrownsToPay = pData.Owner.CurrentRarePrice * (1f / (pData.Viceroy.Caution / 100f)) * (50f / pData.Viceroy.Intelligence);
-                            float rareBudgetCheck = 0f;
-                            // raise amount desired by .1 until either amount desired reached or budget for that resource hit
-                            while (rareBudgetCheck < maxRareImportBudget && tP.AmountDesired < rareUnitsDesired)
-                            {
-                                tP.AmountDesired += .1f;
-                                rareBudgetCheck = tP.AmountDesired * tP.MaxCrownsToPay;
-                            }
+                            tP.MaxCrownsToPay *= 2.6f;
+                            tP.AmountRequested = maxRareImportBudget / tP.MaxCrownsToPay;
+                            if (tP.AmountRequested > rareUnitsDesired)
+                                tP.AmountRequested = rareUnitsDesired;
                             break;
 
                         default:
@@ -796,12 +810,12 @@ namespace Managers
                     }
 
                     // add to trade list if amount requested is not zero
-                    if ((tP.AmountDesired > 0f) && ((tP.AmountDesired * tP.MaxCrownsToPay) <= maxTotalImportBudget))
+                    if ((tP.AmountRequested > 0f) && ((tP.AmountRequested * tP.MaxCrownsToPay) <= maxTotalImportBudget))
                     {
                         pData.ActiveTradeProposalList.Add(tP); // add the new trade proposal
-                        Logging.Logger.LogThis("New Trade Request generated! Taking export budget into account, " + pData.Name + " requests " + tP.AmountDesired.ToString("N1") + " units of " + tP.TradeResource.ToString() + " at a max price per unit of " + tP.MaxCrownsToPay.ToString("N1") + ".");
+                        Logging.Logger.LogThis("New Trade Request generated! Taking export budget into account, " + pData.Name + " requests " + tP.AmountRequested.ToString("N1") + " units of " + tP.TradeResource.ToString() + " at a max price per unit of " + tP.MaxCrownsToPay.ToString("N1") + ".");
                     }
-                    else if (tP.AmountDesired == 0f)
+                    else if (tP.AmountRequested == 0f)
                         Logging.Logger.LogThis("No trade generated - adjusted unit need was zero.");
                     else
                         Logging.Logger.LogThis("No trade generated - there is insufficient export budget available.");

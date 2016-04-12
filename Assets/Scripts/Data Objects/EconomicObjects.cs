@@ -4,6 +4,7 @@ using Constants;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using CivObjects;
 
 namespace EconomicObjects
 {
@@ -52,27 +53,88 @@ namespace EconomicObjects
         public string ImportingPlanetID { get; set; } // importing and exporting planet IDs (pass IDs to minimize memory used)
         public string ExportingPlanetID { get; set; }
 
-        private decimal _shippingCost;
-        public decimal ShippingCost
+        public float EnergyCostPerUnit
         {
-            get { return _shippingCost; }
-            set
+            get
             {
                 PlanetData exportPlanet = DataRetrivalFunctions.GetPlanet(ExportingPlanetID);
                 PlanetData importPlanet = DataRetrivalFunctions.GetPlanet(ImportingPlanetID);
+                float _energyCostPerUnit = 0f;
 
                 float distanceBetweenPlanets = Formulas.MeasureDistanceBetweenSystems(importPlanet.System, exportPlanet.System);
                 float energyRequired = (distanceBetweenPlanets * AmountRequested) * Constant.EnergyUsedPerLightYearCoeff;
-                decimal energyCostPerUnit = (decimal)(energyRequired / AmountRequested);
-                decimal shippingCost = energyCostPerUnit * (decimal)(Math.Exp(SecurityModifier) / 5) + 1;
-                _shippingCost = shippingCost;
+                float energyCostPerUnit = (energyRequired / AmountRequested);
+                _energyCostPerUnit = energyCostPerUnit;
+                _energyCostPerUnit = Mathf.Clamp(_energyCostPerUnit, 0f, 9999f);
+                return _energyCostPerUnit;
             }
         }
-        private decimal _currentProfit;
-        public decimal CurrentProfit
+   
+        public float ShippingCostPerUnit
         {
-            get { return _currentProfit; }
-            set { } // write derived variable for determining profit of current trade proposal
+            get
+            {
+                PlanetData exportPlanet = DataRetrivalFunctions.GetPlanet(ExportingPlanetID);
+                PlanetData importPlanet = DataRetrivalFunctions.GetPlanet(ImportingPlanetID);
+                float _shippingCost = 0f;
+
+                _shippingCost = EnergyCostPerUnit * (float)(Math.Exp(SecurityModifier) / 5) + 1;
+                _shippingCost = Mathf.Clamp(_shippingCost, 0f, 9999f);
+                return _shippingCost;
+            }
+        }
+
+        public float TotalProfitForTrade
+        {
+            get
+            {
+                PlanetData exportPlanet = DataRetrivalFunctions.GetPlanet(ExportingPlanetID);
+                PlanetData importPlanet = DataRetrivalFunctions.GetPlanet(ImportingPlanetID);
+                float _totalProfit = 0f;
+
+                _totalProfit = CurrentProfitPerUnit * AmountRequested;
+                _totalProfit = Mathf.Clamp(_totalProfit, 0f, 9999f);
+                return _totalProfit;
+            }
+        }
+
+        public float CurrentProfitPerUnit
+        {
+            get
+            {
+                PlanetData importPlanet = DataRetrivalFunctions.GetPlanet(ImportingPlanetID);
+                PlanetData exportPlanet = DataRetrivalFunctions.GetPlanet(ExportingPlanetID);
+                Civilization exportingCiv = exportPlanet.Owner;
+
+                float costOfGood = 0f;
+                float offerForGood = OfferPerUnit; // the offer for each unit
+                float currentProfit = 0f;
+
+                switch (TradeGood)
+                {
+                    case eTradeGood.Food:
+                        costOfGood = exportingCiv.CurrentFoodPrice;
+                        break;
+                    case eTradeGood.Energy:
+                        costOfGood = exportingCiv.CurrentEnergyPrice;
+                        break;
+                    case eTradeGood.Basic:
+                        costOfGood = exportingCiv.CurrentBasicPrice;
+                        break;
+                    case eTradeGood.Heavy:
+                        costOfGood = exportingCiv.CurrentHeavyPrice;
+                        break;
+                    case eTradeGood.Rare:
+                        costOfGood = exportingCiv.CurrentRarePrice;
+                        break;
+                    default:
+                        break;
+                }
+
+                currentProfit = offerForGood - (costOfGood + EnergyCostPerUnit);
+                currentProfit = Mathf.Clamp(currentProfit, 0f, 9999f);
+                return currentProfit;
+            }       
         }
     }
 
@@ -88,20 +150,52 @@ namespace EconomicObjects
 
     public class TradeProposal // this represents what each viceroy has valued each resource at, how much they want, what type of resource, and how much they are willing to pay for each one
     {
-        //public enum eTradeResource : int
-        //{
-        //    Food,
-        //    Energy,
-        //    Basic,
-        //    Heavy,
-        //    Rare
-        //}
-
+        
         public Trade.eTradeGood TradeResource { get; set; } // what type of resource
         public float Importance { get; set; } // the assigned importance of this resource
-        public float AmountDesired { get; set; } // how much the viceroy wants to get
+        public float AmountRequested { get; set; } // how much the viceroy wants to get
         public float MaxCrownsToPay { get; set; } // max willing to pay for this proposal
         public bool NoValidTradePartners { get; set; } // are there any valid trade partners?
+        public string ExportingPlanetID { get; set; }
+        public string ImportingPlanetID { get; set; }
+
+        private double _securityModifier;
+        public double SecurityModifier
+        {
+            get { return _securityModifier; }
+            set { } // need to write the derived code once security levels are added to planets
+        }
+
+        public float EnergyCostPerUnit
+        {
+            get
+            {
+                PlanetData exportPlanet = DataRetrivalFunctions.GetPlanet(ExportingPlanetID);
+                PlanetData importPlanet = DataRetrivalFunctions.GetPlanet(ImportingPlanetID);
+                float _energyCostPerUnit = 0f;
+
+                float distanceBetweenPlanets = Formulas.MeasureDistanceBetweenSystems(importPlanet.System, exportPlanet.System);
+                float energyRequired = (distanceBetweenPlanets * AmountRequested) * Constant.EnergyUsedPerLightYearCoeff;
+                float energyCostPerUnit = (energyRequired / AmountRequested);
+                _energyCostPerUnit = energyCostPerUnit;
+                _energyCostPerUnit = Mathf.Clamp(_energyCostPerUnit, 0f, 9999f);
+                return _energyCostPerUnit;
+            }
+        }
+
+        public float ShippingCostPerUnit
+        {
+            get
+            {
+                PlanetData exportPlanet = DataRetrivalFunctions.GetPlanet(ExportingPlanetID);
+                PlanetData importPlanet = DataRetrivalFunctions.GetPlanet(ImportingPlanetID);
+                float _shippingCost = 0f;
+
+                _shippingCost = EnergyCostPerUnit * (float)(Math.Exp(SecurityModifier) / 5) + 1;
+                _shippingCost = Mathf.Clamp(_shippingCost, 0f, 9999f);
+                return _shippingCost;
+            }
+        }
     }
 
     public class TradeFleet // This will have to be changed to reflect the new trade system, probably will have to be called TradeFleet
