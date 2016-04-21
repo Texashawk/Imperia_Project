@@ -745,10 +745,10 @@ namespace CivCreator
             newCiv.Color = new Color(0f, .68f, 1f); // the color of the empire's system and planet holdings
             newCiv.Type = Civilization.eCivType.PlayerEmpire;  // default empire
             newCiv.CivMaxProvinceSize = 6;
-            newCiv.AdminRating = 25; // rating that determines maximum size of governable provinces
+            newCiv.AdminRating = 35; // rating that determines maximum size of governable provinces
             newCiv.Treasury = Random.Range(1000000f, 5000000f);  // starting treasury
             newCiv.Size = Civilization.eCivSize.Major;
-            newCiv.Range = (int)(gameDataRef.GalaxySizeWidth / 1.9f); // determines how far humanity will go from Neo-Sirius (the Empire)
+            newCiv.Range = new Vector2(Random.Range(7000, 12000),Random.Range(7000,12000)); //(gameDataRef.GalaxySizeWidth / 1.9f); // determines how far humanity will go from Neo-Sirius (the Empire)
             newCiv.PlanetMinTolerance = 32; // lower since older world
             newCiv.AstronomyRating = Random.Range(6,11) * 1000; // not used
             newCiv.ID = "CIV0"; // use this to reference the player's civ

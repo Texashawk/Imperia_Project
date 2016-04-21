@@ -15,13 +15,13 @@ namespace CameraScripts
         [HideInInspector]public bool ScrollWheelIsValid { get; set; } // can the scrollwheel be used to manipulate the camera?
 	    private float zoomSpeed = 11f;
         private float zoomSensitivity = 60f;
-        public const float cameraTilt = 30f; // was 20f
+        public const float cameraTilt = 25f; // was 20f
         private Camera mainC; // camera reference
         private GameData gDataRef;
         private UIManager uiManagerRef;
 
         [HideInInspector]public ViewManager.eViewLevel ZoomLevel;
-	    private const int scrollSpeedVariable = 2000;
+	    private const int scrollSpeedVariable = 4000;
 	    [HideInInspector]public bool systemZoomActive = false;
         [HideInInspector]public bool planetZoomActive = false;
         [HideInInspector]public bool provinceZoomActive = false;
@@ -46,7 +46,7 @@ namespace CameraScripts
         public const int galaxyMinZoomLevel = 30;
         public const int systemMinZoomLevel = 12;
         public const int planetMinZoomLevel = 2;
-        public const int maxZoomLevel = 50;
+        public const int maxZoomLevel = 60;
         public const int minZoomLevel = 15;
 
         public float zoom;
@@ -81,12 +81,12 @@ namespace CameraScripts
                 DetermineZoomLevel(); // update zoom level of camera
 
                 // check for RMB pan of map
-                //if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.Galaxy && Input.GetMouseButton(1) && !systemZoomActive)
-                //{
-                //    Vector2 mousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-                //    Vector3 newCameraPosition = mainC.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y - 200f, transform.position.z + 4000)); // adjust y pos 200f with normal z position
-                //    transform.position = new Vector3(newCameraPosition.x, newCameraPosition.y + tiltYOffset, transform.position.z);
-                //}
+                if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.Galaxy && Input.GetMouseButton(1) && !systemZoomActive)
+                {
+                    Vector2 mousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+                    Vector3 newCameraPosition = mainC.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y - 200f, transform.position.z + 4000)); // adjust y pos 200f with normal z position
+                    transform.position = new Vector3(newCameraPosition.x, newCameraPosition.y + tiltYOffset, transform.position.z);
+                }
 
                 if (provinceZoomActive && !systemZoomActive && provinceTarget != null)
                 {

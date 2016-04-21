@@ -13,6 +13,8 @@
 [HATE]It is interesting that you have chosen this course of action. My House and I will remember.
 [HATE][ACTIONFAIL]Your Excellence, I am very disappointed that you tried to do this. Very disappointed. And angry!
 [HATE][ACTIONFAIL]Are you kidding? You seriously think I would do that? Don't make me laugh.
+[PLEASED][ACTIONSUCCESS]That sounds great, Your Excellence. I'm on board!
+[PLEASED][ACTIONSUCCESS]I'm happy to be of service. I will comply.
 [HATE]I have no end of malice for you and yours.
 [HATE][+PASSION]Only death will be justice for what you have done today. Never forget that.
 [HATE]Cruelty such as you have shown me today has only one response.
@@ -27,3 +29,4 @@
 [PLEASED]Cool. I am very happy that you have done this, [EMPEROR]. Rest assured that my friends will think likewise.
 [PLEASED]Awesome. That's really good to hear.
 [PLEASED][-PASSION]It is pleasing to see this decision was made. I am happy.
+[HATE][+PASSION][ACTIONFAIL]Your Excellence, I would sooner die than do this thing for you. Be aware that House [HOUSE] will also learn of your foolish request! 

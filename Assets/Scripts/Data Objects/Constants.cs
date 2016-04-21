@@ -9,33 +9,40 @@ namespace Constants
         public const int HighIntelMax = 10;
 
         // resource needs constants (to start)
-        public const float FarmingBaseAlphaUsage = .15f;
-        public const float FarmingBaseHeavyUsage = .1f;
-        public const float FarmingBaseEnergyUsage = .05f;
+        public const float FarmingBaseAlphaUsage = .03f;
+        public const float FarmingBaseHeavyUsage = .02f;
+        public const float FarmingBaseEnergyUsage = .01f;
         public const float FarmingBaseRareUsage = 0f;
 
-        public const float ScienceBaseAlphaUsage = .4f;
-        public const float ScienceBaseHeavyUsage = .15f;
-        public const float ScienceBaseEnergyUsage = .9f;
-        public const float ScienceBaseRareUsage = 0.12f;
+        public const float ScienceBaseAlphaUsage = .1f;
+        public const float ScienceBaseHeavyUsage = .12f;
+        public const float ScienceBaseEnergyUsage = .2f;
+        public const float ScienceBaseRareUsage = 0.03f;
 
-        public const float ManufacturingBaseAlphaUsage = .9f;
-        public const float ManufacturingBaseHeavyUsage = .7f;
-        public const float ManufacturingBaseEnergyUsage = .5f;
+        public const float ManufacturingBaseAlphaUsage = .2f;
+        public const float ManufacturingBaseHeavyUsage = .1f;
+        public const float ManufacturingBaseEnergyUsage = .05f;
         public const float ManufacturingBaseRareUsage = 0;
 
-        public const float HighTechBaseAlphaUsage = .5f;
-        public const float HighTechBaseHeavyUsage = .25f;
-        public const float HighTechBaseEnergyUsage = .15f;
-        public const float HighTechBaseRareUsage = 0.35f;
+        public const float HighTechBaseAlphaUsage = .08f;
+        public const float HighTechBaseHeavyUsage = .03f;
+        public const float HighTechBaseEnergyUsage = .03f;
+        public const float HighTechBaseRareUsage = 0.05f;
 
-        public const float MiningBaseAlphaUsage = .2f;
-        public const float MiningBaseHeavyUsage = .12f;
-        public const float MiningBaseEnergyUsage = .3f;
+        public const float MiningBaseAlphaUsage = .05f;
+        public const float MiningBaseHeavyUsage = .03f;
+        public const float MiningBaseEnergyUsage = .08f;
         public const float MiningBaseRareUsage = 0;
 
-        public const float FoodBaseUsagePerPop = .07f;
-        public const float EnergyBaseUsagePerPop = .045f;
+        // manufacturing constants
+        public const int BaseFoodProductionMod = 12000;
+        public const int BaseEnergyProductionMod = 10000;
+        public const int BaseBasicProductionMod = 12000;
+        public const int BaseHeavyProductionMod = 12000;
+        public const int BaseRareProductionMod = 14000;
+
+        public const float FoodBaseUsagePerPop = .015f;
+        public const float EnergyBaseUsagePerPop = .008f;
 
         // build amount constants
         public const float AlphaMaterialsPerFarmLevel = 30f;
@@ -73,7 +80,7 @@ namespace Constants
         public const float SupplyPlanetLow = 4f; // 25%
         public const float SupplyPlanetModerate = 2f; // 50%
         public const float SupplyPlanetHigh = 1.5f; // 66%
-        public const float EnergyUsedPerLightYearCoeff = .0006f;
+        public const float EnergyUsedPerLightYearCoeff = .0002f;
         public const float MaxResourcePrice = 100f;
         public const float MinResourcePrice = .01f;
         public const int RollingMonthsToDeterminePrices = 6; // how many months to consider when averaging a civ's price for a certain resource
@@ -103,9 +110,9 @@ namespace Constants
         public const int Level5StarbaseCapacity = 160;
 
         // trade hub ranges
-        public const int SecondaryHubBaseRange = 400;
-        public const int ProvinceHubBaseRange = 1000;
-        public const int ImperialHubBaseRange = 1600;
+        public const int SecondaryHubBaseRange = 500;
+        public const int ProvinceHubBaseRange = 1400;
+        public const int ImperialHubBaseRange = 2500;
 
         // development level consts (what each development level contributes to the weighted development level of the planet)
         public const float FarmingDevelopmentModifier = .2f;

@@ -157,7 +157,7 @@ public class RegionTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         toolTipObject.transform.Find("Region Type").GetComponent<Text>().text = rData.RegionType.Type.ToString().ToUpper();
 
         // production levels
-        toolTipObject.transform.Find("Region Production Panel/Basic Materials Production").GetComponent<Text>().text = rData.AlphaMaterialsPerTile.ToString("N0") + " mT"; // assign the name to the text object child
+        toolTipObject.transform.Find("Region Production Panel/Basic Materials Production").GetComponent<Text>().text = rData.BasicMaterialsPerTile.ToString("N0") + " mT"; // assign the name to the text object child
         toolTipObject.transform.Find("Region Production Panel/Energy Production").GetComponent<Text>().text = rData.EnergyPerTile.ToString("N0") + " tJ"; // assign the name to the text object
         toolTipObject.transform.Find("Region Production Panel/Food Production").GetComponent<Text>().text = rData.FoodPerTile.ToString("N0") + " kT"; // assign the name to the text object
         toolTipObject.transform.Find("Region Production Panel/Heavy Materials Production").GetComponent<Text>().text = rData.HeavyPerTile.ToString("N0") + " mT"; // assign the name to the text object

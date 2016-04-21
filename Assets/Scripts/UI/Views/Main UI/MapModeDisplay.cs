@@ -81,7 +81,7 @@ namespace Assets.Scripts.UI.Views.Galaxy_View_UI
                     galaxyMapModeInfo.text = "MILITARY COMMAND MODE";
                     break;
                 case ViewManager.ePrimaryView.Pops:
-                    galaxyMapModeInfo.text = "POPS COMMAND MODE";
+                    galaxyMapModeInfo.text = "DEMOGRAPHIC COMMAND MODE";
                     break;
                 default:
                     break;

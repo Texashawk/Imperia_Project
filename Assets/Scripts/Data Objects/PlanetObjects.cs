@@ -938,7 +938,7 @@ namespace PlanetObjects
         {
             get
             {
-                return EnergyRating / (1200 / FluxmenPopRating);
+                return EnergyRating / (Constant.BaseEnergyProductionMod / FluxmenPopRating);
             }
         }
 
@@ -1035,9 +1035,9 @@ namespace PlanetObjects
                 float prodMod = 0;
                 bool productionModFound = false;
 
-                if (HelperFunctions.DataRetrivalFunctions.GetPlanet(PlanetLocationID).PlanetTraits.Count > 0)
+                if (DataRetrivalFunctions.GetPlanet(PlanetLocationID).PlanetTraits.Count > 0)
                 {
-                    foreach(PlanetTraits trait in HelperFunctions.DataRetrivalFunctions.GetPlanet(PlanetLocationID).PlanetTraits)
+                    foreach(PlanetTraits trait in DataRetrivalFunctions.GetPlanet(PlanetLocationID).PlanetTraits)
                     {
                         if (trait.ProdMod > 0)
                         {
@@ -1054,20 +1054,20 @@ namespace PlanetObjects
             }
         }
      
-        public float AlphaMaterialsPerPop
+        public float BasicMaterialsPerPop
         {
             get
             {              
-                return (AlphaRating / (1500 / MiningPopRating)) * ProductionMod;
+                return (AlphaRating / (Constant.BaseBasicProductionMod / MiningPopRating)) * ProductionMod;
             }
         }
 
        
-        public float AlphaMaterialsPerTile
+        public float BasicMaterialsPerTile
         {
             get
             {
-                return  (MinesStaffed * RegionType.MineralMod) * AlphaMaterialsPerPop;
+                return  (MinesStaffed * RegionType.MineralMod) * BasicMaterialsPerPop;
             }
         }
 
@@ -1075,7 +1075,7 @@ namespace PlanetObjects
         {
             get
             {
-                return BioRating / (3000 / FarmingPopRating);
+                return BioRating / (Constant.BaseFoodProductionMod / FarmingPopRating);
             }
         }
 
@@ -1091,7 +1091,7 @@ namespace PlanetObjects
         {
             get
             {
-                return (HeavyRating / (2000 / MiningPopRating)) * ProductionMod;
+                return (HeavyRating / (Constant.BaseHeavyProductionMod / MiningPopRating)) * ProductionMod;
             }
 
         }
@@ -1108,7 +1108,7 @@ namespace PlanetObjects
         {
             get
             {
-                return (RareRating / (400 / HighTechPopRating)) / (600 / MiningPopRating) * ProductionMod;
+                return (RareRating / (Constant.BaseRareProductionMod / HighTechPopRating)) / (Constant.BaseRareProductionMod / MiningPopRating) * ProductionMod;
             }
 
         }

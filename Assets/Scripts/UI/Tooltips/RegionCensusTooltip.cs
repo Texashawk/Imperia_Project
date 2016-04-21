@@ -100,7 +100,7 @@ public class RegionCensusTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
         toolTipObject.transform.Find("Region Type").GetComponent<Text>().text = rData.RegionDevelopmentLevel.ToString().ToUpper() + "(" + rData.HabitatationInfrastructureLevel.ToString("N0") + ")";
 
         // production levels
-        toolTipObject.transform.Find("Region Production Panel/Basic Materials Production").GetComponent<Text>().text = rData.AlphaMaterialsPerPop.ToString("N0") + " mT"; // assign the name to the text object child
+        toolTipObject.transform.Find("Region Production Panel/Basic Materials Production").GetComponent<Text>().text = rData.BasicMaterialsPerPop.ToString("N0") + " mT"; // assign the name to the text object child
         toolTipObject.transform.Find("Region Production Panel/Energy Production").GetComponent<Text>().text = rData.EnergyPerPop.ToString("N0") + " tJ"; // assign the name to the text object
         toolTipObject.transform.Find("Region Production Panel/Food Production").GetComponent<Text>().text = rData.FoodPerPop.ToString("N0") + " kT"; // assign the name to the text object
         toolTipObject.transform.Find("Region Production Panel/Heavy Materials Production").GetComponent<Text>().text = rData.HeavyPerPop.ToString("N0") + " mT"; // assign the name to the text object

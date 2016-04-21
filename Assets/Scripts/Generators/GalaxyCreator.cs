@@ -14,13 +14,7 @@ namespace GalaxyCreator
         private int galaxySizeHeight;
         //private static readonly System.Random rand = new System.Random();
 
-        private const int SpaceBetweenStars = 225; // the minimum space between star objects
-
-        void Awake()
-        {
-            //gData = GameObject.Find("GameManager").GetComponent<GalaxyData>();
-            //gameDataRef = GameObject.Find("GameManager").GetComponent<GlobalGameData>();
-        }
+        private const int SpaceBetweenStars = 300; // the minimum space between star objects
 
         void Start()
         {
@@ -41,10 +35,12 @@ namespace GalaxyCreator
             int starCount = gameDataRef.TotalSystems;
             for (int i = 0; i < starCount; i++)
             {
-                Vector3 starLoc = DetermineStarLocation();
+                Vector3 starLoc = DetermineStarLocation(i);
                 if (starLoc == new Vector3(-1, -1, -1)) // if the location is invalid, don't create the star, continue the loop
+                {
                     continue;
-
+                }
+                
                 StarData newStar = new StarData();
                 newStar = GenerateGameObject.CreateNewStar(); // this creates the star and adds the data/accessor components
 
@@ -54,47 +50,55 @@ namespace GalaxyCreator
 
                 if (newStar.SpectralClass == 0)
                 {
+                    i -= 1;
+                    Logging.Logger.LogThis("Empty star or special star, retry.");
                     continue;
                 }
                 newStar.SetWorldLocation(starLoc);
                 gData.AddStarDataToList(newStar);
             }
-
+            float generationEfficiency = (float)gData.GalaxyStarDataList.Count / (float)starCount;
+            Logging.Logger.LogThis("Star generation efficiency: " + generationEfficiency.ToString("P1") + ".");
             gData.galaxyIsGenerated = true; // add more checks here
         }
 
-        Vector3 DetermineStarLocation()
+        Vector3 DetermineStarLocation(int starNumber)
         {
-            bool locIsValid = false; // flag to show whether location is valid
+            bool locIsValid = true; // flag to show whether location is valid
             int placementTries = 0; // after 100 tries, place and move on
             Vector3 proposedLocation = new Vector3();
 
-            if (gData.GalaxyStarDataList.Count == 0) // if nothing in the list, obviously any location will work! 
-                proposedLocation = GenerateLocation();           
-                
+            if (gData.GalaxyStarDataList.Count == 0) // if nothing in the list, obviously any location will work!
+            {
+                proposedLocation = GenerateLocation();
+                return proposedLocation;
+            }
+
             else
             {
-            restart:
+                restart:
                 placementTries += 1;
-                proposedLocation = GenerateLocation(); // generate a new tentative location
 
+                proposedLocation = GenerateLocation(); // generate a new tentative location
+                //Logging.Logger.LogThis("Placing attempt # " + placementTries.ToString("N0") + " at location " + proposedLocation.ToString());
                 foreach (StarData starLoc in gData.GalaxyStarDataList)
-                {                  
+                {
                     locIsValid = CheckLocation(starLoc.WorldLocation, proposedLocation);
 
-                    if (!locIsValid && placementTries < 10000) // if an overlap is found      
+                    if (!locIsValid && placementTries < 5000) // if an overlap is found      
                         goto restart; // restarts the loop from the beginning once a valid location is generated
-                    else if (placementTries == 10000)
+                    else if (placementTries == 5000)
                     {
-                        Debug.Log("Error; could not find suitable location for star within parameters. Star not valid.");
-                        return new Vector3(-1,-1,-1); // destroy the star by error coordinates
+                        Logging.Logger.LogThis("Error; could not find suitable location for star # " + starNumber.ToString("N0") + " within parameters. Deleting this star and moving on...");
+                        return new Vector3(-1, -1, -1); // destroy the star by error coordinates
                     }
                 }
+                Logging.Logger.LogThis("Success! Placing # " + starNumber.ToString("N0") + " star at " + proposedLocation.ToString() + ".");              
+                return proposedLocation;
             }
            
-            return proposedLocation;
         }
-
+        
         Vector3 GenerateLocation()
         {          
             Vector3 pLoc;
@@ -110,7 +114,7 @@ namespace GalaxyCreator
             if (Math.Abs(pLoc.x - sLoc.x) < SpaceBetweenStars) //&& pLoc.x > sLoc.x - SpaceBetweenStars) // x too close? return false
                 return false;
 
-            if (Math.Abs(pLoc.y - sLoc.y) < SpaceBetweenStars) // && pLoc.y > sLoc.y - SpaceBetweenStars) // y too close? return true
+            else if (Math.Abs(pLoc.y - sLoc.y) < SpaceBetweenStars) // && pLoc.y > sLoc.y - SpaceBetweenStars) // y too close? return true
                 return false;
 
             return true; // true if all checks pass

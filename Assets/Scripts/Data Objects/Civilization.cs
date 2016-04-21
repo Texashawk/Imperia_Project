@@ -44,7 +44,7 @@ namespace CivObjects
         public eCivSize Size { get; set; }
         public float Revenues { get; set; }
         public float Expenses { get; set; }
-        public float Range { get; set; }
+        public Vector2 Range { get; set; }
         public Character Leader
         {
             get

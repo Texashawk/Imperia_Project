@@ -8,39 +8,181 @@ using System.Collections;
 using System.Collections.Generic;
 using HelperFunctions;
 
-
 namespace Managers
 {
     public class TradeManager : MonoBehaviour
     {
         // static data references
         private GameData gameDataRef;
+        private GalaxyData galaxyDataRef;
         public List<Trade> ActiveTradesInGame = new List<Trade>();
         public List<TradeFleet> ActiveTradeFleetsInGame = new List<TradeFleet>();
+        public string ID = "";
+        //public List<GameObject> ActiveTradeFleetObjects = new List<GameObject>();
         public List<TradeGroup> ActiveTradeGroups = new List<TradeGroup>();
+        public GameObject TradeFleetObject; // the prefab for the trade fleet object
 
         public void Awake()
         {
             gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
+            galaxyDataRef = GameObject.Find("GameManager").GetComponent<GalaxyData>();
+            ID = UnityEngine.Random.Range(0, 10000).ToString("N0");
         }
 
         // this will update trade fleets that are actively moving to their destinations (update positions, etc)
-        public void UpdateActiveTradeFleets()
+        public IEnumerator UpdateActiveTradeFleets()
         {
 
+            foreach (TradeFleet tFleet in ActiveTradeFleetsInGame)
+            {
+                GameObject curFleetObject;
+
+                if (gameDataRef.ActiveTradeFleetObjects.Exists(p => p.name == tFleet.LinkedTradeID))
+                {
+                    curFleetObject = gameDataRef.ActiveTradeFleetObjects.Find(p => p.name == tFleet.LinkedTradeID);
+
+                    if (curFleetObject != null)
+                    {
+                        yield return StartCoroutine(curFleetObject.GetComponent<TradeFleetModel>().MoveFleet(500));
+
+                        if (curFleetObject.GetComponent<TradeFleetModel>().hasArrived)
+                        {
+                            DeactivateTradeFleet(curFleetObject);
+                            continue;
+                        }
+                    }
+                }              
+            }
+
+            yield return 0;
         }
 
         // once trade fleets have been determined, this function will create and load them, and assign a merchant pop
-        public void GenerateNewTradeFleets()
+        private IEnumerator GenerateNewTradeFleets(Civilization civ)
         {
+            foreach (PlanetData pData in civ.PlanetList)
+            {
+                if (pData.ActiveTradesList.Count > 0)
+                {
+                    foreach(Trade tData in pData.ActiveTradesList)
+                    {
+                        if (tData.Status == Trade.eTradeStatus.Accepted && (DataRetrivalFunctions.GetPlanet(tData.ExportingPlanetID).System != DataRetrivalFunctions.GetPlanet(tData.ImportingPlanetID).System))
+                        {
+                            tData.Status = Trade.eTradeStatus.Active; // change status to active
+                            tData.TradeID = "TID" + UnityEngine.Random.Range(0, 1000000);
+                            CreateTradeFleetObject(tData, pData);
+                            //GameObject tFleetObject = Instantiate(TradeFleetObject, pData.System.WorldLocation, Quaternion.identity) as GameObject; // draw the object
+                            ////tFleetObject.transform.Rotate(Vector3.RotateTowards(tFleetObject.transform.position, DataRetrivalFunctions.GetPlanet(tData.ImportingPlanetID).System.WorldLocation,2f,2f));
+                            
+                            //tFleetObject.name = tData.TradeID;
+                            //tFleetObject.transform.Rotate(new Vector3(180, 0, 0));
+                            //tFleetObject.transform.localScale = new Vector3(150, 150, 150);
+                            //tFleetObject.transform.position = new Vector3(pData.System.WorldLocation.x, pData.System.WorldLocation.y, 80f);
+                            //tFleetObject.GetComponent<TradeFleetModel>().tradeFleet = tData;
+                            //gameDataRef.ActiveTradeFleetObjects.Add(tFleetObject);
 
+                            // now remove the stocks from the exporting planet
+                            PlanetData exportPlanet = DataRetrivalFunctions.GetPlanet(tData.ExportingPlanetID);
+                            PlanetData importPlanet = DataRetrivalFunctions.GetPlanet(tData.ImportingPlanetID);
+                            switch (tData.TradeGood)
+                            {
+                                case Trade.eTradeGood.Food:
+                                    exportPlanet.FoodStored -= tData.AmountRequested;
+                                    break;
+                                case Trade.eTradeGood.Energy:
+                                    exportPlanet.EnergyStored -= tData.AmountRequested;
+                                    break;
+                                case Trade.eTradeGood.Basic:
+                                    exportPlanet.BasicStored -= tData.AmountRequested;
+                                    break;
+                                case Trade.eTradeGood.Heavy:
+                                    exportPlanet.HeavyStored -= tData.AmountRequested;
+                                    break;
+                                case Trade.eTradeGood.Rare:
+                                    exportPlanet.RareStored -= tData.AmountRequested;
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            // now pay for the trades
+                            importPlanet.YearlyImportExpenses += tData.TotalCostOfTrade;
+                            exportPlanet.ExportRevenue += tData.TotalCostOfTrade;
+                            exportPlanet.EnergyStored -= (float)tData.EnergyNeeded; // remove the energy required to power the trade fleet from the exporting planet
+
+                            // now add the trade fleet object
+                            TradeFleet tFleet = new TradeFleet();
+                            tFleet.ID = tData.TradeID;
+                            tFleet.Name = "TRADE FLEET ALPHA"; // temp
+                            tFleet.Location = pData.System.WorldLocation; // set the fleet to the same location as the object
+                            tFleet.LinkedTrade = tData;
+                            tFleet.LinkedTradeID = tData.TradeID;
+                            tFleet.ExportPlanetID = tData.ExportingPlanetID;
+                            tFleet.ImportPlanetID = tData.ImportingPlanetID;
+                            ActiveTradeFleetsInGame.Add(tFleet);
+                        }
+                    }
+                }
+            }
+
+            yield return 0;
         }
+
+        private void CreateTradeFleetObject(Trade tData, PlanetData pData)
+        {
+            Vector3 fleetStartPosition = new Vector3(pData.System.WorldLocation.x, pData.System.WorldLocation.y, 80f);           
+            PlanetData dData = DataRetrivalFunctions.GetPlanet(tData.ImportingPlanetID);
+            GameObject target = galaxyDataRef.GalaxyStarList.Find(p => p.name == dData.System.Name);
+            Vector3 RotatetoTarget = target.transform.position;
+            
+            GameObject tFleetObject = Instantiate(TradeFleetObject, fleetStartPosition, Quaternion.identity) as GameObject; // draw the object
+            Quaternion rotation = Quaternion.LookRotation(RotatetoTarget - tFleetObject.transform.localPosition, Vector3.forward);
+            tFleetObject.transform.localRotation = Quaternion.RotateTowards(tFleetObject.transform.localRotation, rotation, 360f);          
+            tFleetObject.transform.Rotate(90f, 90f, 90f);
+            tFleetObject.transform.Find("Canvas").transform.eulerAngles = new Vector3(180f, 0f, 0f); // to rotate just the canvas with the numbers (test)
+            tFleetObject.name = tData.TradeID;          
+            tFleetObject.transform.localScale = new Vector3(150, 150, 150);
+            tFleetObject.transform.position = new Vector3(pData.System.WorldLocation.x, pData.System.WorldLocation.y, 80f);
+            tFleetObject.GetComponent<TradeFleetModel>().tradeFleet = tData;
+            gameDataRef.ActiveTradeFleetObjects.Add(tFleetObject);
+        }
+
 
         // once a trade fleet has completed its mission, this function will deactivate them and release the merchant assigned
-        public void DeactivateTradeFleets()
+        public void DeactivateTradeFleet(GameObject tFleet)
         {
+            PlanetData destPlanet;
+            Trade curTrade;
+            gameDataRef.ActiveTradeFleetObjects.Remove(tFleet);
+            curTrade = tFleet.GetComponent<TradeFleetModel>().tradeFleet;
+            destPlanet = DataRetrivalFunctions.GetPlanet(curTrade.ImportingPlanetID);
 
-        }
+            // add the trade stocks to the destination planet
+            switch (curTrade.TradeGood)
+            {
+                case Trade.eTradeGood.Food:
+                    destPlanet.FoodStored += curTrade.AmountRequested;
+                    break;
+                case Trade.eTradeGood.Energy:
+                    destPlanet.EnergyStored += curTrade.AmountRequested;
+                    break;
+                case Trade.eTradeGood.Basic:
+                    destPlanet.BasicStored += curTrade.AmountRequested;
+                    break;
+                case Trade.eTradeGood.Heavy:
+                    destPlanet.HeavyStored += curTrade.AmountRequested;
+                    break;
+                case Trade.eTradeGood.Rare:
+                    destPlanet.RareStored += curTrade.AmountRequested;
+                    break;
+                default:
+                    break;
+            }
+            Logging.Logger.LogThis("Destroying fleet object " + tFleet.name);
+            Destroy(tFleet);
+       } 
+    
+       
 
         public IEnumerator CreateTrades(Civilization civ) // creates trades that
         {
@@ -200,9 +342,9 @@ namespace Managers
                     List<Trade> pendingTrades = pData.ActiveTradesList.FindAll(p => p.Status == Trade.eTradeStatus.InReview);
                     float profitThreshold = 0f; // the minimum profit that the viceroy will take to make the deal
 
-                    profitThreshold = UnityEngine.Random.Range(.5f, (150f + pData.Viceroy.GluttonyTendency - pData.Viceroy.Humanity)/8f) * (1 + (pData.Viceroy.TradeAptitude / 1000f));
-                    if (profitThreshold < .5f)
-                        profitThreshold = .5f; // minimum profit
+                    profitThreshold = UnityEngine.Random.Range(.5f, (150f + pData.Viceroy.GluttonyTendency - pData.Viceroy.Humanity)/10f) * (1 + (pData.Viceroy.TradeAptitude / 1000f));
+                    if (profitThreshold < .2f)
+                        profitThreshold = .2f; // minimum profit
 
                     Logging.Logger.LogThis("");
                     Logging.Logger.LogThis("Viceroy Gluttony: " + pData.Viceroy.GluttonyTendency.ToString("N0") + " Trade Aptitude: " + pData.Viceroy.TradeAptitude.ToString("N0") + " Humanity: " + pData.Viceroy.Humanity.ToString("N0"));
@@ -250,6 +392,7 @@ namespace Managers
             yield return StartCoroutine(CheckForTrades(civ));
             yield return StartCoroutine(CreateTrades(civ));
             yield return StartCoroutine(DetermineNewTradeProfitability(civ));
+            yield return StartCoroutine(GenerateNewTradeFleets(civ));
         }
 
         // Step 1: Determine base prices of each good in the civ
@@ -330,8 +473,8 @@ namespace Managers
             foreach (PlanetData pData in civ.PlanetList)
             {
                 // Step 2: determine Importance of each good on each planet
-                pData.FoodImportance = (((50f - (pData.FoodStored / pData.TotalFoodConsumed)) / 5f) - pData.FoodDifference) * Constant.FoodPriority;
-                pData.EnergyImportance = (((50f - (pData.EnergyStored / pData.TotalEnergyConsumed)) / 5f) - pData.EnergyDifference) * Constant.EnergyPriority;
+                pData.FoodImportance = (((50f - (pData.FoodStored / pData.TotalFoodConsumed)) / 5f) - pData.FoodDifference * 3) * Constant.FoodPriority;
+                pData.EnergyImportance = (((50f - (pData.EnergyStored / pData.TotalEnergyConsumed)) / 5f) - pData.EnergyDifference * 3) * Constant.EnergyPriority;
                 pData.BasicImportance = (((50f - (pData.BasicStored / pData.TotalAlphaMaterialsConsumed)) / 5f) - pData.AlphaTotalDifference) * Constant.BasicPriority;
                 pData.HeavyImportance = (((50f - (pData.HeavyStored / pData.TotalHeavyMaterialsConsumed)) / 5f) - pData.HeavyTotalDifference) * Constant.HeavyPriority;
                 pData.RareImportance = (((50f - (pData.RareStored / pData.TotalRareMaterialsConsumed)) / 5f) - pData.RareTotalDifference) * Constant.RarePriority;

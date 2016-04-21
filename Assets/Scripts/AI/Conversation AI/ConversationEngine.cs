@@ -158,7 +158,7 @@ namespace ConversationAI
                         readFile = new StringReader(eventData.text);
                 }
 
-                //System.IO.TextReader readFile = new StreamReader(path + "/Resources/ConversationFiles/ResponseTagSentences.txt");
+                // parse main emotions with responses.
                 while (!fileEmpty)
                 {
                     line = readFile.ReadLine();
@@ -318,9 +318,11 @@ namespace ConversationAI
                     goto chooseSentence;
                 if (cData.Passion > 30 && HateResponses[choice].Contains("[-PASSION]"))
                     goto chooseSentence;
-                if (cData.Lifeform == Character.eLifeformType.AI && !HateResponses[choice].Contains("[AI]")) // AI lifeforms mush always choose an AI flag
+                if (cData.Lifeform == Character.eLifeformType.AI && !HateResponses[choice].Contains("[AI]") || (cData.Lifeform != Character.eLifeformType.AI && HateResponses[choice].Contains("[AI]")))// AI lifeforms mush always choose an AI flag
                     goto chooseSentence;
                 if (!actionSuccess && !HateResponses[choice].Contains("[ACTIONFAIL]"))
+                    goto chooseSentence;
+                if (actionSuccess && !HateResponses[choice].Contains("[ACTIONSUCCESS]"))
                     goto chooseSentence;
 
                 activeString = HateResponses[choice];
@@ -349,14 +351,18 @@ namespace ConversationAI
 
             if (flags.Contains("[PLEASED]"))
             {
-                choices = BetrayedResponses.Count;
+                choices = PleasedResponses.Count;
             chooseSentence:
                 choice = UnityEngine.Random.Range(0, choices);
                 if (cData.Passion < 70 && PleasedResponses[choice].Contains("[+PASSION]")) // if character is not passionate and a passionate response is chosen, try again
                     goto chooseSentence;
                 if (cData.Passion > 30 && PleasedResponses[choice].Contains("[-PASSION]"))
                     goto chooseSentence;
-                if (cData.Lifeform == Character.eLifeformType.AI && !PleasedResponses[choice].Contains("[AI]")) // AI lifeforms mush always choose an AI flag
+                if (cData.Lifeform == Character.eLifeformType.AI && !PleasedResponses[choice].Contains("[AI]") || (cData.Lifeform != Character.eLifeformType.AI && HateResponses[choice].Contains("[AI]"))) // AI lifeforms mush always choose an AI flag
+                    goto chooseSentence;
+                if (!actionSuccess && !PleasedResponses[choice].Contains("[ACTIONFAIL]"))
+                    goto chooseSentence;
+                if (actionSuccess && !PleasedResponses[choice].Contains("[ACTIONSUCCESS]"))
                     goto chooseSentence;
 
                 activeString = PleasedResponses[choice];

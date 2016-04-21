@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
 using Assets.Scripts.Interfaces;
-using UnityEngine.UI;
 using Managers;
 
 namespace Assets.Scripts.States
@@ -15,6 +13,7 @@ namespace Assets.Scripts.States
         private UIManager uiManagerRef;
         public GameObject[] starObjects;
         private bool initialTurnGenerationProcessing = false;
+        bool turnInitialized = false;
 
         public SetupState(StateManager managerRef)
         {
@@ -34,6 +33,8 @@ namespace Assets.Scripts.States
 
         public void StateUpdate()
         {
+            
+
             if (gData.galaxyIsGenerated && gameData.CivsGenerated && !initialTurnGenerationProcessing) // && tEngineData.GameGenerationComplete) // if all parameters are ready to load
             {
                 initialTurnGenerationProcessing = true;               
@@ -41,7 +42,12 @@ namespace Assets.Scripts.States
 
             if (initialTurnGenerationProcessing)
             {
-                tEngineData.GenerateInitialTurn();
+                if (!turnInitialized)
+                {
+                    tEngineData.InitializeFirstTurn();
+                    turnInitialized = true;
+                }
+               
                 if (tEngineData.GameGenerationComplete)
                 {
                     Application.LoadLevel("GalaxyMap");

@@ -201,9 +201,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 2123576881}
   m_RootOrder: 0
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 105, y: 149}
+  m_AnchorMin: {x: .5, y: 0}
+  m_AnchorMax: {x: .5, y: 0}
+  m_AnchoredPosition: {x: -295.5, y: 57}
   m_SizeDelta: {x: 591, y: 45}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &258310114
@@ -246,7 +246,7 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 10
     m_MaxSize: 40
-    m_Alignment: 3
+    m_Alignment: 4
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
@@ -429,9 +429,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 2123576881}
   m_RootOrder: 1
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 105.300003, y: 112.699997}
+  m_AnchorMin: {x: .5, y: 0}
+  m_AnchorMax: {x: .5, y: 0}
+  m_AnchoredPosition: {x: -398, y: 23}
   m_SizeDelta: {x: 796, y: 45}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &495503983
@@ -474,7 +474,7 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 10
     m_MaxSize: 40
-    m_Alignment: 3
+    m_Alignment: 4
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
@@ -499,7 +499,7 @@ GameObject:
   - 114: {fileID: 735429010}
   - 114: {fileID: 735429011}
   m_Layer: 5
-  m_Name: Static Text
+  m_Name: Status Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -517,9 +517,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 2123576881}
   m_RootOrder: 3
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -4, y: 180}
+  m_AnchorMin: {x: .5, y: 1}
+  m_AnchorMax: {x: .5, y: 1}
+  m_AnchoredPosition: {x: -536.5, y: -66}
   m_SizeDelta: {x: 1073, y: 57}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &735429008
@@ -534,7 +534,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 1, b: .196078435, a: 1}
+  m_Color: {r: .944827557, g: 1, b: 0, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -703,9 +703,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 2123576881}
   m_RootOrder: 2
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 105.199997, y: 74}
+  m_AnchorMin: {x: .5, y: 0}
+  m_AnchorMax: {x: .5, y: 0}
+  m_AnchoredPosition: {x: -296.5, y: 89}
   m_SizeDelta: {x: 593, y: 46}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1439886472
@@ -748,7 +748,7 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 10
     m_MaxSize: 40
-    m_Alignment: 3
+    m_Alignment: 4
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0

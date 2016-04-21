@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using System.IO;
 using StellarObjects;
+using System.Threading;
 using PlanetObjects;
 using CharacterObjects;
 using CivObjects;
@@ -307,18 +308,33 @@ namespace HelperFunctions
 
         }
 
+        public static float MeasureDistanceBetweenLocations(Vector3 homeObject, Vector3 distantObject)
+        {
+            float distance = 0f;
+            float a = 0f;
+            float b = 0f;
+            float h = 0f;
+
+            a = Mathf.Abs(homeObject.x - distantObject.x); // x distance
+            b = Mathf.Abs(homeObject.y - distantObject.y); // y distance
+            h = Mathf.Pow(a, 2f) + Mathf.Pow(b, 2f);
+            distance = Mathf.Sqrt(h);
+
+            return distance;
+
+        }
+
         private static readonly System.Random random = new System.Random();
-        private static readonly object syncLock = new object();
+        //private static readonly object syncLock = new object();
 
         public static int GetRandomInt(int min, int max)
         {
-            lock(syncLock)
-            {
+            //lock(syncLock)
+           // {
                 return random.Next(min, max);
-            }
+           // }
         }
-    }
-    
+    }    
 
     public static class DataRetrivalFunctions
     {

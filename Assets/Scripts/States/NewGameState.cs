@@ -86,8 +86,8 @@ namespace Assets.Scripts.States
             gameDataRef.TotalSystems = int.Parse(starAmountInputField.text);
             gameDataRef.NumberOfAICivs = int.Parse(AICountInputField.text);
             gameDataRef.PlayerEmpireName = playerEmpireNameInputField.text;
-            gameDataRef.GalaxySizeHeight = int.Parse(galaxySizeInputField.text);
-            gameDataRef.GalaxySizeWidth = int.Parse(galaxySizeInputField.text);
+            //gameDataRef.GalaxySizeHeight = int.Parse(galaxySizeInputField.text);
+            //gameDataRef.GalaxySizeWidth = int.Parse(galaxySizeInputField.text);
         }
     }
 

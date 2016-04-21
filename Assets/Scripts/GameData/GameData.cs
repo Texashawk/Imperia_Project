@@ -53,6 +53,7 @@ public class GameData : MonoBehaviour
     public List<Challenge> ChallengeList = new List<Challenge>(); // tracks current challenges between different characters
     public List<TradeFleet> ActiveTradeFleets = new List<TradeFleet>();
     public List<Character> CharacterList = new List<Character>();
+    public List<GameObject> ActiveTradeFleetObjects = new List<GameObject>();
     public List<CharacterAction> CharacterActionList = new List<CharacterAction>();
     public List<CharacterTrait> CharacterTraitList = new List<CharacterTrait>();
     public List<House> HouseList = new List<House>(); // all houses generated in the game
@@ -78,8 +79,8 @@ public class GameData : MonoBehaviour
         GameDate = 3050.0f;
 
         GameMonth = 0;
-        GalaxySizeHeight = 6500;
-        GalaxySizeWidth = 6500;
+        GalaxySizeHeight = 20000;
+        GalaxySizeWidth = 20000;
         MinSystems = 90;
         GameNumber = Random.Range(0, 100000);
         MaxSystems = 115;

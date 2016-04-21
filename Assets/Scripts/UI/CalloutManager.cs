@@ -167,7 +167,7 @@ namespace Managers
 
             // set the base stats
            
-            callout.transform.Rotate(GalaxyCameraScript.cameraTilt - 10, 0, 0); // test
+            //callout.transform.Rotate(GalaxyCameraScript.cameraTilt - 10, 0, 0); // test
             // add the owning civs if present      
             foreach (Civilization civ in gameDataRef.CivList)
             {
@@ -312,8 +312,10 @@ namespace Managers
                     float fov = Camera.main.fieldOfView;
                     nameVector = Camera.main.WorldToScreenPoint(sysData.starTransform.position);
                     textLocation = nameVector;
-                    callout.transform.localPosition = new Vector3(textLocation.x - (Screen.width / 2) + 12 + ((45f / uiManagerRef.cameraFOV) * 6), textLocation.y - (Screen.height / 2) - 25, 5); // reset after making a parent to canvas relative coordinates (pivot in center)
-                    callout.transform.localScale = new Vector3(GalaxyCameraScript.maxZoomLevel / fov, GalaxyCameraScript.maxZoomLevel / fov, GalaxyCameraScript.maxZoomLevel / fov) / 1.75f;
+                    // callout.transform.localPosition = new Vector3(textLocation.x - (Screen.width / 2) - 3 + ((45f / uiManagerRef.cameraFOV) * 23), textLocation.y - (Screen.height / 2) - 35 - ((45f / uiManagerRef.cameraFOV) * 10), 5); // reset after making a parent to canvas relative coordinates (pivot in center)
+                    callout.transform.localPosition = new Vector3(textLocation.x - (Screen.width / 2) - 5, textLocation.y - (Screen.height / 2) - 10, 5); // reset after making a parent to canvas relative coordinates (pivot in center)
+                    // callout.transform.localScale = new Vector3(GalaxyCameraScript.maxZoomLevel / fov, GalaxyCameraScript.maxZoomLevel / fov, GalaxyCameraScript.maxZoomLevel / fov) / 1.75f;
+                    callout.transform.localScale = new Vector3(.65f, .65f, .65f);
 
                 }
             }

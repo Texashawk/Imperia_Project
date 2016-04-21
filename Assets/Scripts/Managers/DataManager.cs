@@ -12,6 +12,7 @@ using CivObjects; // for civs
 using HelperFunctions; // helper functions
 using Actions;
 using GameEvents;
+using Projects;
 using ConversationAI;
 
     public class DataManager
@@ -20,6 +21,7 @@ using ConversationAI;
         public static List<CharacterAction> characterActionList = new List<CharacterAction>();
         public static List<PlanetTraits> planetTraitDataList = new List<PlanetTraits>();
         public static List<PlanetAttributeData> planetAttributeDataList = new List<PlanetAttributeData>();
+        public static List<Project> projectDataList = new List<Project>();
         public static Dictionary<GameEvents.GameEvent.eEventType, string> Descriptions = new Dictionary<GameEvents.GameEvent.eEventType, string>();
         public static List<string> systemNameList = new List<string>();
         public static List<string> planetNameList = new List<string>();
@@ -230,7 +232,84 @@ using ConversationAI;
 
         }
 
-        public static void ReadCharacterTraitXMLFiles()
+    public static void ReadXMLProjectFiles()
+    {
+        string path = Application.dataPath;
+        XmlDocument xmlDoc = new XmlDocument(); // creates the new document
+        TextAsset projectData = null;
+        projectData = Resources.Load("ProjectXMLData") as TextAsset;  // load the XML file from the Resources folder
+        xmlDoc.LoadXml(projectData.text); // and add it to the xmldoc object
+        XmlNodeList projectList = xmlDoc.GetElementsByTagName("Row"); // separate elements by type (trait, in this case)
+
+        foreach (XmlNode projects in projectList)
+        {
+            XmlNodeList projectContent = projects.ChildNodes;
+            Project currentProject = new Project();
+
+            foreach (XmlNode project in projectContent)
+            {
+                if (project.Name == "ID")
+                {
+                    currentProject.ID = project.InnerText.ToUpper();
+                }
+                if (project.Name == "NAME")
+                {
+                    currentProject.Name = project.InnerText.ToUpper();
+                }
+                if (project.Name == "TYPE")
+                {
+                    currentProject.Type = (Project.eProjectType)int.Parse(project.InnerText);
+                }
+                if (project.Name == "DESCRIPTION")
+                {
+                    currentProject.Description = project.InnerText.ToUpper();
+                }
+                if (project.Name == "SCOPE")
+                {
+                    currentProject.Scope = (Project.eProjectScope)int.Parse(project.InnerText);
+                }
+                if (project.Name == "BASE_ADM")
+                {
+                    currentProject.BaseADMReq = int.Parse(project.InnerText);
+                }
+                if (project.Name == "BASE_ENERGY")
+                {
+                    currentProject.BaseEnergyReq = float.Parse(project.InnerText);
+                }
+                if (project.Name == "BASE_BASIC")
+                {
+                    currentProject.BaseBasicReq = float.Parse(project.InnerText);
+                }
+                if (project.Name == "BASE_HEAVY")
+                {
+                    currentProject.BaseHeavyReq = float.Parse(project.InnerText);
+                }
+                if (project.Name == "BASE_RARE")
+                {
+                    currentProject.BaseRareReq = float.Parse(project.InnerText);
+                }
+                if (project.Name == "BASE_COST")
+                {
+                    currentProject.BaseCostReq = float.Parse(project.InnerText);
+                }
+                if (project.Name == "TYRANNICAL_EFFECT")
+                {
+                    currentProject.TyrannicalEffect = float.Parse(project.InnerText);
+                }
+                if (project.Name == "BENEVOLENT_EFFECT")
+                {
+                    currentProject.BenevolentEffect = float.Parse(project.InnerText);
+                }
+
+            }
+
+            // add the trait once done
+            projectDataList.Add(currentProject);
+        }
+
+    }
+
+    public static void ReadCharacterTraitXMLFiles()
         {
             string path = Application.dataPath;
             GameData gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();

@@ -120,7 +120,7 @@ public class GenerateGameObject
         // Step 3: Generate other base stats (treasury, size, etc)      
       
         // size/range
-        newCiv.Range = 40; // to start with
+        newCiv.Range = new Vector2(100,100); // to start with
         int size = UnityEngine.Random.Range(0, 100);
 
         // adjust size/other ratings for civ type
@@ -161,12 +161,12 @@ public class GenerateGameObject
         else if (size < 90)
         {
             newCiv.Size = Civilization.eCivSize.Minor;
-            newCiv.Range = UnityEngine.Random.Range(MultiSystemEmpireRange - 200, MultiSystemEmpireRange + 200);
+            newCiv.Range = new Vector2(UnityEngine.Random.Range(MultiSystemEmpireRange - 200, MultiSystemEmpireRange + 200), UnityEngine.Random.Range(MultiSystemEmpireRange - 200, MultiSystemEmpireRange + 200));
         }
         else
         {
             newCiv.Size = Civilization.eCivSize.Major;
-            newCiv.Range = UnityEngine.Random.Range(MultiRegionEmpireRange - 400, MultiRegionEmpireRange + 400);
+            newCiv.Range = new Vector2(UnityEngine.Random.Range(MultiRegionEmpireRange - 400, MultiRegionEmpireRange + 400), UnityEngine.Random.Range(MultiRegionEmpireRange - 400, MultiRegionEmpireRange + 400));
         }
 
         // skill ratings
@@ -280,7 +280,7 @@ public class GenerateGameObject
         gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
         galaxyDataRef = GameObject.Find("GameManager").GetComponent<GalaxyData>();
 
-        float civMaxDistance = newCiv.Range;
+        Vector2 civMaxDistance = newCiv.Range;
         PlanetData homePlanet = galaxyDataRef.GalaxyPlanetDataList.Find(p => p.ID == newCiv.CapitalPlanetID);
         StarData homeStar = galaxyDataRef.GalaxyStarDataList.Find(p => p.ID == homePlanet.SystemID);
 
@@ -288,7 +288,7 @@ public class GenerateGameObject
         foreach (StarData star in galaxyDataRef.GalaxyStarDataList)
         {
             float distance = HelperFunctions.Formulas.MeasureDistanceBetweenSystems(star, homeStar);
-            if ( distance <= civMaxDistance) // must be within range and also include the home system
+            if ((distance <= civMaxDistance.x) && (distance <= civMaxDistance.y)) // must be within range and also include the home system
                 eligibleSystems.Add(star); // add systems that are close to the home star
         }
 
@@ -338,38 +338,38 @@ public class GenerateGameObject
     {
         if (pData.FoodDifference > 0)
         {
-            pData.FoodStored = UnityEngine.Random.Range(20, 100) * pData.FoodDifference; // number of months of storage based on food flow
+            pData.FoodStored = UnityEngine.Random.Range(4, 20) * pData.FoodDifference; // number of months of storage based on food flow
         }
         else
-            pData.FoodStored = UnityEngine.Random.Range(0, 5000);
+            pData.FoodStored = UnityEngine.Random.Range(0, 1000);
 
         if (pData.BasicPreProductionDifference > 0)
         {
-            pData.BasicStored = UnityEngine.Random.Range(20, 100) * pData.BasicPreProductionDifference; // number of months of storage based on food flow
+            pData.BasicStored = UnityEngine.Random.Range(4, 20) * pData.BasicPreProductionDifference; // number of months of storage based on food flow
         }
         else
-            pData.BasicStored = UnityEngine.Random.Range(0, 3000);
+            pData.BasicStored = UnityEngine.Random.Range(0, 600);
 
         if (pData.HeavyPreProductionDifference > 0)
         {
-            pData.HeavyStored = UnityEngine.Random.Range(20, 100) * pData.HeavyPreProductionDifference; // number of months of storage based on food flow
+            pData.HeavyStored = UnityEngine.Random.Range(4, 20) * pData.HeavyPreProductionDifference; // number of months of storage based on food flow
         }
         else
-            pData.HeavyStored = UnityEngine.Random.Range(0, 500);
+            pData.HeavyStored = UnityEngine.Random.Range(0, 100);
 
         if (pData.RarePreProductionDifference > 0)
         {
-            pData.RareStored = UnityEngine.Random.Range(20, 100) * pData.RarePreProductionDifference; // number of months of storage based on food flow
+            pData.RareStored = UnityEngine.Random.Range(4, 20) * pData.RarePreProductionDifference; // number of months of storage based on food flow
         }
         else
-            pData.RareStored = UnityEngine.Random.Range(0, 300);
+            pData.RareStored = UnityEngine.Random.Range(0, 60);
 
         if (pData.EnergyDifference > 0)
         {
-            pData.EnergyStored = UnityEngine.Random.Range(20, 100) * pData.EnergyDifference; // number of months of storage based on food flow
+            pData.EnergyStored = UnityEngine.Random.Range(4, 20) * pData.EnergyDifference; // number of months of storage based on food flow
         }
         else
-            pData.EnergyStored = UnityEngine.Random.Range(0, 5000);
+            pData.EnergyStored = UnityEngine.Random.Range(0, 1000);
 
     }
 

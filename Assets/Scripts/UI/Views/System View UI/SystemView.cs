@@ -138,14 +138,14 @@ public class SystemView : MonoBehaviour {
         StarData selectedStarData = selectedStar.GetComponent<Star>().starData;
         int planetCount = 0;
         
-            for (int x = 0; x < 6; x++)
+            for (int x = 0; x < 5; x++)
             {
                 if (selectedStarData.PlanetSpots[x] != null)
                 {
                     Vector3 boxLocation;
                     PlanetData planetData = selectedStarData.PlanetSpots[x]; // ref for planet's data
-                    Vector3 nameVector = Camera.main.WorldToScreenPoint(gScreenRef.listSystemPlanetsCreated[planetCount].transform.position); // gets the screen point of the planet's transform position
-                    
+                    //Vector3 nameVector = Camera.main.WorldToScreenPoint(gScreenRef.listSystemPlanetsCreated[planetCount].transform.position); // gets the screen point of the planet's transform position
+                    Vector3 nameVector = Camera.main.WorldToScreenPoint(gScreenRef.listSystemPlanetsCreated.Find(p => p.name == selectedStarData.PlanetSpots[x].Name).transform.position); // gets the screen point of the planet's transform position
                     // set the planet data box position relative to the planet's world location
                     boxLocation = new Vector3(nameVector.x, nameVector.y - 120, 0); // where the text box is located
                     GameObject pPanel = Instantiate(systemPlanetSummaryPanel, boxLocation, Quaternion.identity) as GameObject; // draw the panel

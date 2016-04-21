@@ -256,7 +256,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         }
 
         // array list
-        public PlanetData[] PlanetSpots = new PlanetData[6];
+        public PlanetData[] PlanetSpots = new PlanetData[5];
         public List<PlanetData> PlanetList
         {
             get
@@ -2652,7 +2652,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 foreach (Region r in RegionList)
                 {
                     if (r.OwnerCivID == "CIV0") // only add to total if the player controls the region
-                        alpha += r.AlphaMaterialsPerTile;
+                        alpha += r.BasicMaterialsPerTile;
                 }
                 return alpha;
             }

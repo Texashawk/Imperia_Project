@@ -446,6 +446,7 @@ namespace Screens.Galaxy
             systemTrailCreated = false;
             systemUICanvas.SetActive(false); // don't show panel
             selectedUnitInfoCanvas.SetActive(false);
+            planetsDrawn = false; // test
         }
 
         void DrawGalaxyMapUI()
@@ -493,13 +494,6 @@ namespace Screens.Galaxy
 
                         //invoke zoom sequence
                         StartSystemZoom(hit.transform);
-                        //Camera.main.GetComponent<GalaxyCameraScript>().starTarget = hit.transform;
-                        //Camera.main.GetComponent<GalaxyCameraScript>().systemZoomActive = true;
-                        //Camera.main.GetComponent<GalaxyCameraScript>().planetZoomActive = false;
-                        //Camera.main.GetComponent<GalaxyCameraScript>().provinceZoomActive = false;
-                        //gameDataRef.StarSelected = true; // probably need to move to a global UI manager
-                        //uiManagerRef.selectedSystem = hit.transform.GetComponent<Star>().starData;
-                        //uiManagerRef.SetActiveViewLevel(ViewManager.eViewLevel.System);
                     }
                 }
             }
@@ -818,9 +812,21 @@ namespace Screens.Galaxy
                             child.GetComponent<SpriteRenderer>().enabled = true;
                             child.GetComponent<Light>().enabled = true;
                         }
+                        StarData starDat = star.GetComponent<Star>().starData;
+
+                        if (!planetsDrawn)
+                        {
+                            // draw planets in system view if not yet created
+                            if ((starDat.IntelLevel > eStellarIntelLevel.Low || gameDataRef.DebugMode))
+                            {
+                                DrawPlanets(starDat, star);
+                            }
+                        }
                     }
                 }
             }
+
+            planetsDrawn = true;
 
             foreach (GameObject nebula in galaxyDataRef.stellarPhenonomaList)
             {
@@ -832,6 +838,8 @@ namespace Screens.Galaxy
                     }
                 }
             }
+
+            
         }
 
         void ShowAllPlanets()
@@ -926,7 +934,7 @@ namespace Screens.Galaxy
                 // draw planets in system view if not yet created
                 if (!planetsDrawn && (starDat.IntelLevel > eStellarIntelLevel.Low || gameDataRef.DebugMode))
                 {
-                    DrawPlanets(starDat);
+                    //DrawPlanets(starDat);
                 }
 
                 smallSystemGrid.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, ((30 - fov) * 8) / 255);  // fade in the grid
@@ -935,12 +943,13 @@ namespace Screens.Galaxy
             }
         }
 
-        void DrawPlanets(StarData sData)
+        void DrawPlanets(StarData sData, GameObject star)
         {
-            GameObject selectedStar = GetSelectedStar();
-            Vector3 starPosition = GetSelectedStar().GetComponent<Star>().transform.position;
-
-            for (int x = 0; x < 6; x++)
+            //GameObject selectedStar = GetSelectedStar();
+            //Vector3 starPosition = GetSelectedStar().GetComponent<Star>().transform.position;
+            Vector3 starPosition = sData.WorldLocation;
+            Array.Clear(planetsToDraw, 0, 5); // clear the array each time
+            for (int x = 0; x < 5; x++)
             {
                 if (sData.PlanetSpots[x] != null)
                 {
@@ -1057,7 +1066,8 @@ namespace Screens.Galaxy
 
                     pData = sData.PlanetSpots[x];
 
-                    Vector3 position = new Vector3(starPosition.x + ((selectedStar.transform.localScale.x / 2) + (startingPlanetMargin * screenScaleFactor)) + ((x + 1) * ((float)Screen.width / screenWidthFactor)), starPosition.y, 10); // derive the planet position from the star
+                    Vector3 position = new Vector3(starPosition.x + ((star.transform.localScale.x / 2) + (startingPlanetMargin * screenScaleFactor)) + ((x + 1) * ((float)Screen.width / screenWidthFactor)), starPosition.y, 10); // derive the planet position from the star
+                    //Vector3 position = new Vector3(starPosition.x + ((selectedStar.transform.localScale.x / 2) + (startingPlanetMargin * screenScaleFactor)) + ((x + 1) * ((float)Screen.width / screenWidthFactor)), starPosition.y, 10); // derive the planet position from the star
                     GameObject planet = Instantiate(planetsToDraw[x], position, Quaternion.Euler(0, 180, 0)) as GameObject; // draw the planet
                     planet.AddComponent<Planet>(); // add the planet container
                     planet.GetComponent<Planet>().planetData = pData; // and attach the data
@@ -1090,7 +1100,7 @@ namespace Screens.Galaxy
                     }
                 }
             }
-            planetsDrawn = true; // set flag
+            //planetsDrawn = true; // set flag
         }
     }
 }

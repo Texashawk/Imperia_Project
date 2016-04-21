@@ -15,6 +15,7 @@ public class TradeGalaxyView : MonoBehaviour
     public GameObject tradeModeDataObject; // the trade mode prefab that is used in this mode
     public List<GameObject> listTradeViewObjectsCreated = new List<GameObject>(); // list of all UI elements created (lines, range circles, etc)
     private List<GameObject> listTradeTextBlocksCreated = new List<GameObject>(); // list of text labels (so can move dynamically onGUI)
+    //public List<GameObject> listActiveTradeFleets = new List<GameObject>(); // list of trade fleet objects that are moving
     private GameData gameDataRef; // game data reference
     public bool RefreshTradeView = false;
     private GalaxyData galaxyDataRef;  // stellar data reference
@@ -41,6 +42,7 @@ public class TradeGalaxyView : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         // check whether the mode is active and if so, show what needs to be shown
         if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.Galaxy)
         {
@@ -53,6 +55,7 @@ public class TradeGalaxyView : MonoBehaviour
                 HideTradeHubRanges();
             if (tradeInfoDrawn)
                 HideTradeDataBlocks();
+            SetTradeFleetVisibility(false);
         }
             //ClearView(); // destroy all objects so that they can be rebuilt on new view
 
@@ -73,11 +76,30 @@ public class TradeGalaxyView : MonoBehaviour
         {
             ShowTradeHubRanges();
             ShowTradeDataBlocks();
+            SetTradeFleetVisibility(true);
         }
         else
         {
             HideTradeHubRanges();
             HideTradeDataBlocks();
+            SetTradeFleetVisibility(false);
+        }
+    }
+
+    void SetTradeFleetVisibility(bool isVisible)
+    {
+        if (gameDataRef.ActiveTradeFleetObjects.Count > 0)
+        {
+            foreach (GameObject rFleet in gameDataRef.ActiveTradeFleetObjects)
+            {
+                if (rFleet != null)
+                {
+                    if (!isVisible)
+                        rFleet.SetActive(false);
+                    else
+                        rFleet.SetActive(true);
+                }
+            }
         }
     }
 
@@ -120,7 +142,7 @@ public class TradeGalaxyView : MonoBehaviour
                 {
                     if (sData.LargestTradeHub != PlanetData.eTradeHubType.NotHub)
                     {
-                        Vector3 cirLocation = sData.WorldLocation; // pull the coordinate location of the system
+                        Vector3 cirLocation = new Vector3(sData.WorldLocation.x, sData.WorldLocation.y, sData.WorldLocation.z + 20); // pull the coordinate location of the system
                         string hubSize = "";
                         string hubName = "";
                         string tradeGroupName = "NONE";
@@ -168,12 +190,23 @@ public class TradeGalaxyView : MonoBehaviour
                                 }
                             }
                         }
-                        
+
+
+                        //GameObject tradeHubCircle = Instantiate(Resources.Load("Galaxy View Assets/Trade Range Circle", typeof(GameObject)), cirLocation, Quaternion.Euler(new Vector3(90, 0, 0))) as GameObject;
+                        //tradeHubCircle.transform.localScale = new Vector3(hubRange, 1, hubRange); // expand the circle
+                        //TextMesh[] tradeHubComponents = tradeHubCircle.GetComponentsInChildren<TextMesh>(); // get each component
+                        //tradeHubComponents[0].text = hubName; // get the first text component assigned
+                        ////tradeHubComponents[1].text = tradeGroupName; // get the second text component assigned
+                        ////tradeHubComponents[3].text = TotalMerchantSkill.ToString("N0"); 
+                        ////tradeHubComponents[1].color = tradeGroupColor;
+                        //listTradeViewObjectsCreated.Add(tradeHubCircle);
+                        //tradeHubCircle.GetComponent<MeshRenderer>().material.color = new Color(0f, 153/255f, 0f); // set range circle to show green color
+
                         GameObject tradeHubCircle = Instantiate(TradeHubCircle, cirLocation, Quaternion.Euler(new Vector3(180, 0, 0))) as GameObject;
                         CurvedText[] tradeHubComponents = tradeHubCircle.GetComponentsInChildren<CurvedText>(); // get each component
                         tradeHubComponents[0].text = hubName; // get the first text component assigned
                         tradeHubComponents[1].text = tradeGroupName; // get the second text component assigned
-                        tradeHubComponents[3].text = TotalMerchantSkill.ToString("N0"); 
+                        tradeHubComponents[3].text = TotalMerchantSkill.ToString("N0");
                         tradeHubComponents[1].color = tradeGroupColor;
                         tradeHubCircle.transform.localScale = new Vector3(hubRange, hubRange, 0); // expand the circle
                         tradeHubCircle.GetComponentInChildren<SpriteRenderer>().color = new Color(1f, 1f, 1f, .35f); // set the transparency to half
@@ -209,8 +242,7 @@ public class TradeGalaxyView : MonoBehaviour
             {
                 rCircle.SetActive(false);
             }
-        }
-       
+        }     
     }
 
     void HideTradeDataBlocks()
@@ -218,8 +250,7 @@ public class TradeGalaxyView : MonoBehaviour
         foreach (GameObject star in listTradeTextBlocksCreated)
         {
             star.SetActive(false);
-        }
-       
+        }      
     }
 
     void ShowTradeDataBlocks()

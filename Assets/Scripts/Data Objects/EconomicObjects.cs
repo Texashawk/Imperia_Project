@@ -98,6 +98,16 @@ namespace EconomicObjects
             }
         }
 
+        public float TotalCostOfTrade
+        {
+            get
+            {
+                float _totalCost = 0f;
+                _totalCost = (AmountRequested * ShippingCostPerUnit) + (AmountRequested * OfferPerUnit);
+                return _totalCost;
+            }
+        }
+
         public float CurrentProfitPerUnit
         {
             get
@@ -215,10 +225,20 @@ namespace EconomicObjects
         }
 
         public string Name { get; set;} // name of fleet - for flavor only
+        public string ID { get; set; }
+        public string LinkedTradeID { get; set; }
         public eTradeFleetStatus Status { get; set; }
         public eTradeFleetType Type { get; set; }
-        public string TradeLinkedID { get; set; } // which trade is linked to this fleet
+        public string DestinationSystemID
+        {
+            get
+            {
+                return ImportPlanet.SystemID;
+            }
+        }
+        public Trade LinkedTrade = new Trade(); // which trade is linked to this fleet
         public int RunsRemaining { get; set; } // how many times the trade fleet will make the current run
+        public Vector3 Location { get; set; } // where the fleet is in world space
         public float Distance
         {
             get
@@ -231,7 +251,7 @@ namespace EconomicObjects
             }
         }
 
-        public string ImportPlanetID { get; set; } // importing planet
+        public string ImportPlanetID { get; set; } // importing planet, destination
         public string ExportPlanetID { get; set; } // exporting planet
 
         // get planets

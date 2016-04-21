@@ -14,16 +14,12 @@ public class TurnEngine : MonoBehaviour {
     private GalaxyData galDataRef; // galaxy data
     private UIManager uiManagerRef; // UI Manager reference
     private TradeManager tManagerRef; // Trade Manager reference
-    //private TradeGalaxyView tradeViewDataRef; // there has to be a better way to send a refresh event
+ 
     public bool newTurnRequest = false;
+    public string EngineID = "";
     public bool GameGenerationComplete = false;
-    private bool updatePlanetsComplete = false;
-    private bool updateTradesComplete = false;
-
-    void Awake()
-    {
-        
-    }
+    public bool TurnGenerationActive {get; set;} // to lock out the controls while a turn is being generated
+    public string InitializationStatus = "GENERATING THE GALAXY...";
 
 	// Use this for initialization
 	void Start () 
@@ -32,51 +28,42 @@ public class TurnEngine : MonoBehaviour {
         gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
         uiManagerRef = GameObject.Find("GameManager").GetComponent<UIManager>();
         tManagerRef = GameObject.Find("GameManager").GetComponent<TradeManager>();
+        TurnGenerationActive = false;
+        EngineID = Random.Range(0, 10000).ToString("N0"); // for testing
     }
 
-    public void GenerateInitialTurn()
+    public void InitializeFirstTurn()
     {
-        // run 2 times before first turn to maximize
-        // run a turn 
-        //for (int x = 0; x < 1; x++)
-        //{
-        //    foreach (Civilization civ in gDataRef.CivList)
-        //    {
-        //        StartCoroutine(UpdatePlanets(civ));
-        //        CheckForMigration(civ); // check for intraplanet migration
-        //        MigratePopsBetweenPlanets(civ); // and if there are any pops who want to leave, check for where
-        //        UpdateTrades(civ);
-        //    }
-        //}
+        StartCoroutine(GenerateInitialTurn());
+    }
 
-        StartCoroutine(ExecuteNewTurn());
-        UpdateEmperor();
+    public IEnumerator GenerateInitialTurn()
+    {
+        tManagerRef.ActiveTradeGroups.Clear(); // clear out the trade groups globally at once 
+        yield return StartCoroutine(ExecuteNewTurn()); // waits until complete
         gDataRef.RequestGraphicRefresh = true;
-        uiManagerRef.RequestGraphicRefresh(); // update the modes
-        //if (IsGameGenerationComplete())
         GameGenerationComplete = true;
+        yield return 0;
     }
 
-    public void Update()
+    private IEnumerator GenerateNewTurn()
     {
-        //if (newTurnRequest)
-        //{
-            //StartCoroutine(ExecuteNewTurn());
-            //newTurnRequest = false;
-            //gDataRef.RequestGraphicRefresh = true;
-        //}
-        //Debug.Log("Update() accessed...");
+        TurnGenerationActive = true;
+        tManagerRef.ActiveTradeGroups.Clear(); // clear out the trade groups globally at once     
+        yield return StartCoroutine(ExecuteNewTurn());
+        gDataRef.RequestGraphicRefresh = true;
+        TurnGenerationActive = false;
+        yield return 0;
     }
 
     public void NewTurnRequest()
-    {       
-        tManagerRef.ActiveTradeGroups.Clear(); // clear out the trade groups globally at once
-        StartCoroutine(ExecuteNewTurn());           
-        gDataRef.RequestGraphicRefresh = true;     
+    {
+        TurnGenerationActive = true;
+        StartCoroutine(GenerateNewTurn());
     }
 
     IEnumerator ExecuteNewTurn() // this is the master turn execution function
-    {        
+    {
         foreach (Civilization civ in gDataRef.CivList)
         {
             if (gDataRef.GameMonth == 0)
@@ -85,6 +72,10 @@ public class TurnEngine : MonoBehaviour {
             }
         }
 
+        if (GameGenerationComplete) // don't run this if there hasn't been a turn created yet!
+        { 
+            yield return StartCoroutine(tManagerRef.UpdateActiveTradeFleets()); // this will update the location and status of all active trade fleets, probably should move to a 'move all fleet objects' coroutine
+        }
         yield return StartCoroutine(UpdateAllCivs());
         UpdateEmperor();
         gDataRef.UpdateGameDate(); // advance the year
@@ -92,35 +83,28 @@ public class TurnEngine : MonoBehaviour {
         uiManagerRef.RequestPoliticalViewGraphicRefresh = true;
         uiManagerRef.RequestTradeViewGraphicRefresh = true;
         newTurnRequest = false; // reset the turn request
-        yield return 0;
+        yield return 0;      
     }
 
     private IEnumerator UpdateAllCivs()
     {
-       
-
         foreach (Civilization civ in gDataRef.CivList)
         {
             yield return StartCoroutine(UpdatePopularSupport(civ)); // advance popular support
+            InitializationStatus = "CREATING NEW " + civ.Name.ToUpper() + " PLANETS....";
             yield return StartCoroutine(UpdatePlanets(civ)); // advance economy, move pops to same planet, update unrest/popular support levels, etc
+            InitializationStatus = "CREATING NEW " + civ.Name.ToUpper() + " EVENTS...";
             yield return StartCoroutine(UpdateEvents(civ));
             yield return new WaitForSeconds(2.0f);
-            yield return StartCoroutine(UpdateTrades(civ));
+            if (GameGenerationComplete)
+            {
+                InitializationStatus = "GENERATING TRADES BETWEEN " + civ.Name.ToUpper() + " WORLDS...";
+                yield return StartCoroutine(UpdateTrades(civ));
+            }
             //CheckForMigration(civ); // check for intraplanet migration                     
             //MigratePopsBetweenPlanets(civ); // and if there are any pops who want to leave, check for where                     
         }
         yield return 0;
-    }
-
-    private bool IsGameGenerationComplete() // determines if all routines have completed prior to starting the game
-    {
-        if (updatePlanetsComplete)
-        {
-            updatePlanetsComplete = false;
-            return true;
-        }
-        else
-            return false;
     }
 
     private void UpdateEmperor()
@@ -165,10 +149,8 @@ public class TurnEngine : MonoBehaviour {
     
     private IEnumerator UpdateTrades(Civilization civ)
     {
-        StartCoroutine(tManagerRef.CreateTradeAgreements(civ)); // this will analyze each planet's needs and generate proposals for trade     
-        //TradeManager.UpdateActiveTradeFleets(); // this will update the location and status of all active trade fleets      
-        //TradeManager.GenerateNewTradeFleets(); // this will create new trade fleets that will begin to move next month towards their destination
-        //TradeManager.DeactivateTradeFleets(); // this will deactivate any trade fleets that have completed their journey and do not have any runs left      
+         
+        yield return StartCoroutine(tManagerRef.CreateTradeAgreements(civ)); // this will analyze each planet's needs and generate proposals for trade       
         tManagerRef.UpdateResourceStockBalances(civ);
         yield return 0; 
     }
@@ -195,7 +177,6 @@ public class TurnEngine : MonoBehaviour {
             //GameEvents.PlanetEventCreator.GeneratePlanetEvents(pData, civ); // generate the events for each planet
             yield return 0; // do work
         }
-        updatePlanetsComplete = true;
         yield return 0;
     }
 
@@ -297,14 +278,12 @@ public class TurnEngine : MonoBehaviour {
     {
 
         float planetValue = 0f;
-
         float FarmerJobsOnPlanet = 0f;
         float MinerJobsOnPlanet = 0f;
         float EngineerJobsOnPlanet = 0f;
         float FluxmenJobsOnPlanet = 0f;
         float AdministratorJobsOnPlanet = 0f;
         float ScientistJobsOnPlanet = 0f;
-
         float releventJobsOnPlanet = 0f;
 
         foreach (Region rData in pData.RegionList)
