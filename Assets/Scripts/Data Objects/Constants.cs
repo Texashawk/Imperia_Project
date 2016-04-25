@@ -110,9 +110,9 @@ namespace Constants
         public const int Level5StarbaseCapacity = 160;
 
         // trade hub ranges
-        public const int SecondaryHubBaseRange = 500;
-        public const int ProvinceHubBaseRange = 1400;
-        public const int ImperialHubBaseRange = 2500;
+        public const int SecondaryHubBaseRange = 900;
+        public const int ProvinceHubBaseRange = 2500;
+        public const int ImperialHubBaseRange = 4500;
 
         // development level consts (what each development level contributes to the weighted development level of the planet)
         public const float FarmingDevelopmentModifier = .2f;

@@ -185,7 +185,7 @@ public class TradeGalaxyView : MonoBehaviour
                                     tradeGroupColor = tradeGroup.GroupColor;
                                     if (tradeGroup.ConnectedToCivHub && sData.LargestTradeHub == PlanetData.eTradeHubType.ProvinceTradeHub)
                                     {
-                                        tradeGroupName += "(CIV HUB CONNECTION)";
+                                        tradeGroupName += " (CIV CONNECTED)";
                                     }
                                 }
                             }
@@ -204,12 +204,12 @@ public class TradeGalaxyView : MonoBehaviour
 
                         GameObject tradeHubCircle = Instantiate(TradeHubCircle, cirLocation, Quaternion.Euler(new Vector3(180, 0, 0))) as GameObject;
                         CurvedText[] tradeHubComponents = tradeHubCircle.GetComponentsInChildren<CurvedText>(); // get each component
-                        tradeHubComponents[0].text = hubName; // get the first text component assigned
-                        tradeHubComponents[1].text = tradeGroupName; // get the second text component assigned
-                        tradeHubComponents[3].text = TotalMerchantSkill.ToString("N0");
+                        tradeHubComponents[0].text = tradeGroupName; // get the first text component assigned
+                        //tradeHubComponents[1].text = tradeGroupName; // get the second text component assigned
+                        //tradeHubComponents[3].text = TotalMerchantSkill.ToString("N0");
                         tradeHubComponents[1].color = tradeGroupColor;
-                        tradeHubCircle.transform.localScale = new Vector3(hubRange, hubRange, 0); // expand the circle
-                        tradeHubCircle.GetComponentInChildren<SpriteRenderer>().color = new Color(1f, 1f, 1f, .35f); // set the transparency to half
+                        tradeHubCircle.transform.localScale = new Vector3(hubRange / 10f, hubRange / 10f, 0); // expand the circle
+                        tradeHubCircle.GetComponentInChildren<SpriteRenderer>().color = new Color(tradeGroupColor.r, tradeGroupColor.g, tradeGroupColor.b, .25f); // set the transparency on the circle to half
                         listTradeViewObjectsCreated.Add(tradeHubCircle);
                     }
                 }
@@ -276,7 +276,24 @@ public class TradeGalaxyView : MonoBehaviour
 
                 if (!gameDataRef.DebugMode)
                 {
+                    int fleetsAvailable = 0;
                     tradeBlock.GetComponentInChildren<TextMeshProUGUI>().text = starData.Name.ToUpper();
+                   
+                    foreach (PlanetData pData in starData.PlanetList)
+                    {
+                        if (pData.TradeStatus != PlanetData.eTradeStatus.ImportOnly || pData.TradeStatus != PlanetData.eTradeStatus.NoTrade)
+                        {
+                            fleetsAvailable += (int)Mathf.Floor(pData.MerchantsAvailableForExport / 20);
+                        }
+                    }
+
+                    if (starData.SystemIsTradeHub && starData.IntelLevel > eStellarIntelLevel.Medium)
+                    {
+                        tradeBlock.transform.Find("Fleets Available").GetComponent<TextMeshProUGUI>().text = fleetsAvailable.ToString("N0");
+                        tradeBlock.transform.Find("Fleets Available").GetComponent<TextMeshProUGUI>().enabled = true;
+                    }
+                    else
+                        tradeBlock.transform.Find("Fleets Available").GetComponent<TextMeshProUGUI>().enabled = false;
                     if (starData.IntelValue > Constant.MediumIntelLevelMax)
                         textColor = sysData.ownerColor;
                     else

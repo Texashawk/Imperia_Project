@@ -540,31 +540,31 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         public float FoodImportance
         { 
             get { return _foodImportance; }
-            set { _basicImportance = Mathf.Clamp(value, 0, 1000); }
+            set { _basicImportance = Mathf.Clamp(value, 0, 100); }
         }
         private float _energyImportance;
         public float EnergyImportance
         {
             get { return _energyImportance; }
-            set { _energyImportance = Mathf.Clamp(value, 0, 1000); }
+            set { _energyImportance = Mathf.Clamp(value, 0, 100); }
         }
         private float _basicImportance;
         public float BasicImportance
         {
             get { return _basicImportance; }
-            set { _basicImportance = Mathf.Clamp(value, 0, 1000); }
+            set { _basicImportance = Mathf.Clamp(value, 0, 100); }
         }
         private float _heavyImportance;
         public float HeavyImportance
         {
             get { return _heavyImportance; }
-            set { _heavyImportance = Mathf.Clamp(value, 0, 1000); }
+            set { _heavyImportance = Mathf.Clamp(value, 0, 100); }
         }
         private float _rareImportance;
         public float RareImportance
         {
             get { return _rareImportance; }
-            set { _rareImportance = Mathf.Clamp(value, 0, 1000); }
+            set { _rareImportance = Mathf.Clamp(value, 0, 100); }
         }
 
         // export percent holds

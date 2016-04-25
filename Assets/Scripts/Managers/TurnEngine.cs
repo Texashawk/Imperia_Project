@@ -95,12 +95,12 @@ public class TurnEngine : MonoBehaviour {
             yield return StartCoroutine(UpdatePlanets(civ)); // advance economy, move pops to same planet, update unrest/popular support levels, etc
             InitializationStatus = "CREATING NEW " + civ.Name.ToUpper() + " EVENTS...";
             yield return StartCoroutine(UpdateEvents(civ));
-            yield return new WaitForSeconds(2.0f);
-            if (GameGenerationComplete)
-            {
+            //yield return new WaitForSeconds(2.0f);
+            //if (GameGenerationComplete)
+            //{
                 InitializationStatus = "GENERATING TRADES BETWEEN " + civ.Name.ToUpper() + " WORLDS...";
                 yield return StartCoroutine(UpdateTrades(civ));
-            }
+            //}
             //CheckForMigration(civ); // check for intraplanet migration                     
             //MigratePopsBetweenPlanets(civ); // and if there are any pops who want to leave, check for where                     
         }
@@ -148,10 +148,10 @@ public class TurnEngine : MonoBehaviour {
     }
     
     private IEnumerator UpdateTrades(Civilization civ)
-    {
-         
+    {        
         yield return StartCoroutine(tManagerRef.CreateTradeAgreements(civ)); // this will analyze each planet's needs and generate proposals for trade       
         tManagerRef.UpdateResourceStockBalances(civ);
+        yield return StartCoroutine(tManagerRef.UpdateMonthlyResourcePrices(civ));
         yield return 0; 
     }
 

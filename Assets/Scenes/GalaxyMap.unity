@@ -15908,15 +15908,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22401740, guid: 4cfc610a288abdd4fbe4177e2c77c624, type: 2}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 22401740, guid: 4cfc610a288abdd4fbe4177e2c77c624, type: 2}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 22401740, guid: 4cfc610a288abdd4fbe4177e2c77c624, type: 2}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: -17
       objectReference: {fileID: 0}
     - target: {fileID: 22440450, guid: 4cfc610a288abdd4fbe4177e2c77c624, type: 2}
       propertyPath: m_AnchorMax.x
@@ -15928,15 +15928,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22405792, guid: 4cfc610a288abdd4fbe4177e2c77c624, type: 2}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 22405792, guid: 4cfc610a288abdd4fbe4177e2c77c624, type: 2}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 22405792, guid: 4cfc610a288abdd4fbe4177e2c77c624, type: 2}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: -17
       objectReference: {fileID: 0}
     - target: {fileID: 22497958, guid: 4cfc610a288abdd4fbe4177e2c77c624, type: 2}
       propertyPath: m_AnchoredPosition.y
@@ -16002,6 +16002,21 @@ RectTransform:
   m_PrefabParentObject: {fileID: 22409538, guid: 4cfc610a288abdd4fbe4177e2c77c624,
     type: 2}
   m_PrefabInternal: {fileID: 1948725120}
+--- !u!1 &1948725122 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 181042, guid: 4cfc610a288abdd4fbe4177e2c77c624, type: 2}
+  m_PrefabInternal: {fileID: 1948725120}
+--- !u!114 &1948725123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1948725122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 539467f0f20f3bc42ba8eee60bc8cfb9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1968074302
 GameObject:
   m_ObjectHideFlags: 0
@@ -17567,7 +17582,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 826734924}
   m_HandleRect: {fileID: 826734923}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

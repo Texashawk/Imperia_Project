@@ -229,6 +229,7 @@ namespace EconomicObjects
         public string LinkedTradeID { get; set; }
         public eTradeFleetStatus Status { get; set; }
         public eTradeFleetType Type { get; set; }
+        public bool IsSystemTrade { get; set; }
         public string DestinationSystemID
         {
             get

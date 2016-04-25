@@ -26,12 +26,15 @@ public class TradeFleetModel : MonoBehaviour
         turnLabel = transform.FindChild("Canvas/Turn Label").GetComponent<TextMeshProUGUI>();
         gameObject.AddComponent<LineRenderer>(); // attach a new line renderer
         lr = gameObject.GetComponent<LineRenderer>(); // and then create a reference to it
-        UpdateDestinationLine();
+       
     }
     void Update()
     {
         if (tradeFleet != null && !tradeDataLoaded)
+        {
             LoadTradeData(); // load data for the object from the attached trade object
+            UpdateDestinationLine();
+        }
 
         turnsRemaining = Mathf.CeilToInt(Formulas.MeasureDistanceBetweenLocations(transform.position, Destination) / distancePerTurn); // calculate the turns remaining
         // check for reaching target
@@ -43,6 +46,7 @@ public class TradeFleetModel : MonoBehaviour
         tradeLabel.text = tradeFleet.AmountRequested.ToString("N1") + " " + tradeFleet.TradeGood.ToString().ToUpper() + " FROM "
             + DataRetrivalFunctions.GetPlanet(tradeFleet.ExportingPlanetID).Name.ToUpper() + " TO " + DataRetrivalFunctions.GetPlanet(tradeFleet.ImportingPlanetID).Name.ToUpper();
         turnLabel.text = turnsRemaining.ToString("N0") + " MOs";
+        
     }
 
     void UpdateDestinationLine()
@@ -51,7 +55,7 @@ public class TradeFleetModel : MonoBehaviour
         lr.SetPosition(1, Destination);
         lr.material = lineMaterial;
         lr.SetColors(Color.white,Color.red);
-        lr.SetWidth(8f, 1f);
+        lr.SetWidth(8f, 5f);
     }
 
     void LoadTradeData()

@@ -15,6 +15,19 @@ namespace Managers
         // static data references
         private GameData gameDataRef;
         private GalaxyData galaxyDataRef;
+        private List<Color> colorList = new List<Color>();
+        //{         
+        //    Color.blue,
+        //    Color.red,
+        //    Color.green,
+        //    Color.yellow,
+        //    Color.cyan,
+        //    Color.magenta,
+        //    new Color(1f, 51f/255f, 0f),
+        //    new Color(1f, 204f/255f, 51f/255f),
+        //    new Color(102f/255f, 153f/255f, 51f/255f)
+        //};
+
         public List<Trade> ActiveTradesInGame = new List<Trade>();
         public List<TradeFleet> ActiveTradeFleetsInGame = new List<TradeFleet>();
         public string ID = "";
@@ -27,6 +40,14 @@ namespace Managers
             gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
             galaxyDataRef = GameObject.Find("GameManager").GetComponent<GalaxyData>();
             ID = UnityEngine.Random.Range(0, 10000).ToString("N0");
+
+            // initialize the trade group color list
+            for (int x = 0; x < 50; x++)
+            {
+                Color tempColor;
+                tempColor = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f));
+                colorList.Add(tempColor);
+            }
         }
 
         // this will update trade fleets that are actively moving to their destinations (update positions, etc)
@@ -47,14 +68,27 @@ namespace Managers
 
                         if (curFleetObject.GetComponent<TradeFleetModel>().hasArrived)
                         {
-                            DeactivateTradeFleet(curFleetObject);
+                            DeactivateTradeFleet(tFleet,curFleetObject);
                             continue;
                         }
                     }
+                }
+                else if (tFleet.IsSystemTrade)
+                {
+                    DeactivateTradeFleet(tFleet, null);
+                    continue;
                 }              
             }
 
             yield return 0;
+        }
+
+        private void ResetTradeBudgets(Civilization civ)
+        {
+            foreach (PlanetData pData in civ.PlanetList)
+            {
+                pData.YearlyImportExpenses = 0;
+            }
         }
 
         // once trade fleets have been determined, this function will create and load them, and assign a merchant pop
@@ -66,20 +100,36 @@ namespace Managers
                 {
                     foreach(Trade tData in pData.ActiveTradesList)
                     {
-                        if (tData.Status == Trade.eTradeStatus.Accepted && (DataRetrivalFunctions.GetPlanet(tData.ExportingPlanetID).System != DataRetrivalFunctions.GetPlanet(tData.ImportingPlanetID).System))
+                        if (tData.Status == Trade.eTradeStatus.Accepted && DataRetrivalFunctions.GetPlanet(tData.ExportingPlanetID).MerchantsAvailableForExport >= Constant.MerchantsPerTradeFleet)
                         {
                             tData.Status = Trade.eTradeStatus.Active; // change status to active
                             tData.TradeID = "TID" + UnityEngine.Random.Range(0, 1000000);
-                            CreateTradeFleetObject(tData, pData);
-                            //GameObject tFleetObject = Instantiate(TradeFleetObject, pData.System.WorldLocation, Quaternion.identity) as GameObject; // draw the object
-                            ////tFleetObject.transform.Rotate(Vector3.RotateTowards(tFleetObject.transform.position, DataRetrivalFunctions.GetPlanet(tData.ImportingPlanetID).System.WorldLocation,2f,2f));
                             
-                            //tFleetObject.name = tData.TradeID;
-                            //tFleetObject.transform.Rotate(new Vector3(180, 0, 0));
-                            //tFleetObject.transform.localScale = new Vector3(150, 150, 150);
-                            //tFleetObject.transform.position = new Vector3(pData.System.WorldLocation.x, pData.System.WorldLocation.y, 80f);
-                            //tFleetObject.GetComponent<TradeFleetModel>().tradeFleet = tData;
-                            //gameDataRef.ActiveTradeFleetObjects.Add(tFleetObject);
+                            // now add the trade fleet object
+                            TradeFleet tFleet = new TradeFleet();
+                            tFleet.ID = tData.TradeID;
+                            tFleet.Name = "TRADE FLEET ALPHA"; // temp
+                            tFleet.Location = pData.System.WorldLocation; // set the fleet to the same location as the object
+                            tFleet.LinkedTrade = tData;
+                            tFleet.IsSystemTrade = false;
+                            tFleet.LinkedTradeID = tData.TradeID;
+                            tFleet.ExportPlanetID = tData.ExportingPlanetID;
+                            tFleet.ImportPlanetID = tData.ImportingPlanetID;
+                            ActiveTradeFleetsInGame.Add(tFleet);
+
+                            // now tie up the merchants on the exporting planet while the trade fleet is active
+                            tFleet.ExportPlanet.MerchantsAvailableForExport -= Constant.MerchantsPerTradeFleet;
+
+                            // now create the actual physical fleet on the galaxy screen if out of system trade
+                            if ((DataRetrivalFunctions.GetPlanet(tData.ExportingPlanetID).System != DataRetrivalFunctions.GetPlanet(tData.ImportingPlanetID).System))
+                            {
+                                CreateTradeFleetObject(tData, pData);
+                                tFleet.IsSystemTrade = false;
+                            }
+                            else
+                            {
+                                tFleet.IsSystemTrade = true;
+                            }
 
                             // now remove the stocks from the exporting planet
                             PlanetData exportPlanet = DataRetrivalFunctions.GetPlanet(tData.ExportingPlanetID);
@@ -109,17 +159,6 @@ namespace Managers
                             importPlanet.YearlyImportExpenses += tData.TotalCostOfTrade;
                             exportPlanet.ExportRevenue += tData.TotalCostOfTrade;
                             exportPlanet.EnergyStored -= (float)tData.EnergyNeeded; // remove the energy required to power the trade fleet from the exporting planet
-
-                            // now add the trade fleet object
-                            TradeFleet tFleet = new TradeFleet();
-                            tFleet.ID = tData.TradeID;
-                            tFleet.Name = "TRADE FLEET ALPHA"; // temp
-                            tFleet.Location = pData.System.WorldLocation; // set the fleet to the same location as the object
-                            tFleet.LinkedTrade = tData;
-                            tFleet.LinkedTradeID = tData.TradeID;
-                            tFleet.ExportPlanetID = tData.ExportingPlanetID;
-                            tFleet.ImportPlanetID = tData.ImportingPlanetID;
-                            ActiveTradeFleetsInGame.Add(tFleet);
                         }
                     }
                 }
@@ -132,7 +171,8 @@ namespace Managers
         {
             Vector3 fleetStartPosition = new Vector3(pData.System.WorldLocation.x, pData.System.WorldLocation.y, 80f);           
             PlanetData dData = DataRetrivalFunctions.GetPlanet(tData.ImportingPlanetID);
-            GameObject target = galaxyDataRef.GalaxyStarList.Find(p => p.name == dData.System.Name);
+            //Vector3 target = galaxyDataRef.GalaxyStarDataList.Find(p => p.ID == dData.System.ID).WorldLocation;
+            GameObject target = galaxyDataRef.GalaxyStarList.Find(p => p.name.ToLower() == dData.System.Name.ToLower());
             Vector3 RotatetoTarget = target.transform.position;
             
             GameObject tFleetObject = Instantiate(TradeFleetObject, fleetStartPosition, Quaternion.identity) as GameObject; // draw the object
@@ -147,43 +187,52 @@ namespace Managers
             gameDataRef.ActiveTradeFleetObjects.Add(tFleetObject);
         }
 
-
         // once a trade fleet has completed its mission, this function will deactivate them and release the merchant assigned
-        public void DeactivateTradeFleet(GameObject tFleet)
+        public void DeactivateTradeFleet(TradeFleet tFleet, GameObject tFleetObject)
         {
-            PlanetData destPlanet;
+            PlanetData importPlanet;
+            PlanetData exportPlanet;
             Trade curTrade;
-            gameDataRef.ActiveTradeFleetObjects.Remove(tFleet);
-            curTrade = tFleet.GetComponent<TradeFleetModel>().tradeFleet;
-            destPlanet = DataRetrivalFunctions.GetPlanet(curTrade.ImportingPlanetID);
+            if (tFleetObject != null)
+            {
+                gameDataRef.ActiveTradeFleetObjects.Remove(tFleetObject);
+                Logging.Logger.LogThis("Destroying fleet object " + tFleetObject.name);
+                Destroy(tFleetObject);
+            }
+
+            // get the trade information
+            curTrade = tFleet.LinkedTrade;
+            importPlanet = DataRetrivalFunctions.GetPlanet(curTrade.ImportingPlanetID);
+            exportPlanet = DataRetrivalFunctions.GetPlanet(curTrade.ExportingPlanetID);
 
             // add the trade stocks to the destination planet
             switch (curTrade.TradeGood)
             {
                 case Trade.eTradeGood.Food:
-                    destPlanet.FoodStored += curTrade.AmountRequested;
+                    importPlanet.FoodStored += curTrade.AmountRequested;
                     break;
                 case Trade.eTradeGood.Energy:
-                    destPlanet.EnergyStored += curTrade.AmountRequested;
+                    importPlanet.EnergyStored += curTrade.AmountRequested;
                     break;
                 case Trade.eTradeGood.Basic:
-                    destPlanet.BasicStored += curTrade.AmountRequested;
+                    importPlanet.BasicStored += curTrade.AmountRequested;
                     break;
                 case Trade.eTradeGood.Heavy:
-                    destPlanet.HeavyStored += curTrade.AmountRequested;
+                    importPlanet.HeavyStored += curTrade.AmountRequested;
                     break;
                 case Trade.eTradeGood.Rare:
-                    destPlanet.RareStored += curTrade.AmountRequested;
+                    importPlanet.RareStored += curTrade.AmountRequested;
                     break;
                 default:
                     break;
             }
-            Logging.Logger.LogThis("Destroying fleet object " + tFleet.name);
-            Destroy(tFleet);
+
+            // remove the trade from the active rolls and the trade from the exported planet
+            gameDataRef.ActiveTradeFleets.Remove(tFleet);
+            ActiveTradesInGame.Remove(curTrade);
+            importPlanet.ActiveTradesList.Remove(tFleet.LinkedTrade);                  
        } 
     
-       
-
         public IEnumerator CreateTrades(Civilization civ) // creates trades that
         {
             Logging.Logger.LogThis("Checking trades for the " + civ.Name + ".");
@@ -234,96 +283,107 @@ namespace Managers
                 {
                     PlanetData tData = DataRetrivalFunctions.GetPlanet(tDataID);
                     Logging.Logger.LogThis("Checking on valid trades for planet " + tData.Name + "....");
-                    
-                    if (tData.ActiveTradeProposalList.Exists(p => p.TradeResource == Trade.eTradeGood.Food) && pData.FoodExportAvailable > 0 && availableMerchants > 0)
+                    if (availableMerchants > 20 && tData.ActiveTradeProposalList.Count > 0)
                     {
-                        TradeProposal foodTradeProposal = tData.ActiveTradeProposalList.Find(p => p.TradeResource == Trade.eTradeGood.Food);
-                        Logging.Logger.LogThis("Food request found for " + tData.Name + "! Checking stockpiles to see if it can be considered...");
-                        Logging.Logger.LogThis("   Food requested: " + foodTradeProposal.AmountRequested.ToString("N0") + " units. Food allocated for export on " + pData.Name + ": " + pData.FoodExportAvailable.ToString("N0") + "(includes " +
-                            pData.FoodStockpilePercentAvailable.ToString("P0") + " allocated from stockpiles)");
+                        if (tData.ActiveTradeProposalList.Exists(p => p.TradeResource == Trade.eTradeGood.Food) && pData.FoodExportAvailable > 0 && availableMerchants > 20)
+                        {
+                            TradeProposal foodTradeProposal = tData.ActiveTradeProposalList.Find(p => p.TradeResource == Trade.eTradeGood.Food);
+                            Logging.Logger.LogThis("Food request found for " + tData.Name + "! Checking stockpiles to see if it can be considered...");
+                            Logging.Logger.LogThis("   Food requested: " + foodTradeProposal.AmountRequested.ToString("N0") + " units. Food allocated for export on " + pData.Name + ": " + pData.FoodExportAvailable.ToString("N0") + "(includes " +
+                                pData.FoodStockpilePercentAvailable.ToString("P0") + " allocated from stockpiles)");
 
-                        if (pData.FoodExportAvailable > foodTradeProposal.AmountRequested)
-                        {
-                            CreateNewTrade(foodTradeProposal, tData, pData);
-                            availableMerchants -= 1;
+                            if (pData.FoodExportAvailable > foodTradeProposal.AmountRequested)
+                            {
+                                CreateNewTrade(foodTradeProposal, tData, pData);
+                                availableMerchants -= 20;
+                            }
+                            else
+                            {
+                                Logging.Logger.LogThis("   Trade for food denied due to insufficient food surplus.");
+                            }
                         }
-                        else
+
+                        if (tData.ActiveTradeProposalList.Exists(p => p.TradeResource == Trade.eTradeGood.Energy) && pData.EnergyExportAvailable > 0 && availableMerchants > 20)
                         {
-                            Logging.Logger.LogThis("   Trade for food denied due to insufficient food surplus.");
+                            TradeProposal energyTradeProposal = tData.ActiveTradeProposalList.Find(p => p.TradeResource == Trade.eTradeGood.Energy);
+                            Logging.Logger.LogThis("Energy request found for " + tData.Name + "! Checking stockpiles to see if it can be considered...");
+                            Logging.Logger.LogThis("   Energy requested: " + energyTradeProposal.AmountRequested.ToString("N0") + " units. Energy allocated for export on " + pData.Name + ": " + pData.EnergyExportAvailable.ToString("N0") + "(includes " +
+                                pData.EnergyStockpilePercentAvailable.ToString("P0") + " allocated from stockpiles)");
+
+                            if (pData.EnergyExportAvailable > energyTradeProposal.AmountRequested)
+                            {
+                                CreateNewTrade(energyTradeProposal, tData, pData);
+                                availableMerchants -= 20;
+                            }
+                            else
+                            {
+                                Logging.Logger.LogThis("   Trade for energy denied due to insufficient energy surplus.");
+                            }
+                        }
+
+                        if (tData.ActiveTradeProposalList.Exists(p => p.TradeResource == Trade.eTradeGood.Basic) && pData.BasicExportAvailable > 0 && availableMerchants > 20)
+                        {
+                            TradeProposal basicTradeProposal = tData.ActiveTradeProposalList.Find(p => p.TradeResource == Trade.eTradeGood.Basic);
+                            Logging.Logger.LogThis("Basic material request found for " + tData.Name + "! Checking stockpiles to see if it can be considered...");
+                            Logging.Logger.LogThis("   Basic materials requested: " + basicTradeProposal.AmountRequested.ToString("N0") + " units. Basic materials allocated for export on " + pData.Name + ": " + pData.BasicExportAvailable.ToString("N0") + "(includes " +
+                                pData.BasicStockpilePercentAvailable.ToString("P0") + " allocated from stockpiles)");
+
+                            if (pData.BasicExportAvailable > basicTradeProposal.AmountRequested)
+                            {
+                                CreateNewTrade(basicTradeProposal, tData, pData);
+                                availableMerchants -= 20;
+                            }
+                            else
+                            {
+                                Logging.Logger.LogThis("   Trade for basic materials denied due to insufficient basic material surplus.");
+                            }
+                        }
+
+                        if (tData.ActiveTradeProposalList.Exists(p => p.TradeResource == Trade.eTradeGood.Heavy) && pData.HeavyExportAvailable > 0 && availableMerchants > 20)
+                        {
+                            TradeProposal heavyTradeProposal = tData.ActiveTradeProposalList.Find(p => p.TradeResource == Trade.eTradeGood.Heavy);
+                            Logging.Logger.LogThis("Heavy material request found for " + tData.Name + "! Checking stockpiles to see if it can be considered...");
+                            Logging.Logger.LogThis("   Heavy materials requested: " + heavyTradeProposal.AmountRequested.ToString("N0") + " units. Heavy materials allocated for export on " + pData.Name + ": " + pData.HeavyExportAvailable.ToString("N0") + "(includes " +
+                                pData.HeavyStockpilePercentAvailable.ToString("P0") + " allocated from stockpiles)");
+
+                            if (pData.HeavyExportAvailable > heavyTradeProposal.AmountRequested)
+                            {
+                                CreateNewTrade(heavyTradeProposal, tData, pData);
+                                availableMerchants -= 20;
+                            }
+                            else
+                            {
+                                Logging.Logger.LogThis("   Trade for heavy materials denied due to insufficient heavy material surplus.");
+                            }
+                        }
+
+                        if (tData.ActiveTradeProposalList.Exists(p => p.TradeResource == Trade.eTradeGood.Rare) && pData.RareExportAvailable > 0 && availableMerchants > 20)
+                        {
+                            TradeProposal rareTradeProposal = tData.ActiveTradeProposalList.Find(p => p.TradeResource == Trade.eTradeGood.Rare);
+                            Logging.Logger.LogThis("Rare material request found for " + tData.Name + "! Checking stockpiles to see if it can be considered...");
+                            Logging.Logger.LogThis("   Rare materials requested: " + rareTradeProposal.AmountRequested.ToString("N0") + " units. Rare materials allocated for export on " + pData.Name + ": " + pData.RareExportAvailable.ToString("N0") + "(includes " +
+                                pData.RareStockpilePercentAvailable.ToString("P0") + " allocated from stockpiles)");
+
+                            if (pData.RareExportAvailable > rareTradeProposal.AmountRequested)
+                            {
+                                CreateNewTrade(rareTradeProposal, tData, pData);
+                                availableMerchants -= 20;
+                            }
+                            else
+                            {
+                                Logging.Logger.LogThis("   Trade for rare materials denied due to insufficient rare material surplus.");
+                            }
                         }
                     }
-
-                    if (tData.ActiveTradeProposalList.Exists(p => p.TradeResource == Trade.eTradeGood.Energy) && pData.EnergyExportAvailable > 0 && availableMerchants > 0)
+                    else
                     {
-                        TradeProposal energyTradeProposal = tData.ActiveTradeProposalList.Find(p => p.TradeResource == Trade.eTradeGood.Energy);
-                        Logging.Logger.LogThis("Energy request found for " + tData.Name + "! Checking stockpiles to see if it can be considered...");
-                        Logging.Logger.LogThis("   Energy requested: " + energyTradeProposal.AmountRequested.ToString("N0") + " units. Energy allocated for export on " + pData.Name + ": " + pData.EnergyExportAvailable.ToString("N0") + "(includes " +
-                            pData.EnergyStockpilePercentAvailable.ToString("P0") + " allocated from stockpiles)");
-
-                        if (pData.EnergyExportAvailable > energyTradeProposal.AmountRequested)
-                        {
-                            CreateNewTrade(energyTradeProposal, tData, pData);
-                            availableMerchants -= 1;
-                        }
+                        if (tData.ActiveTradeProposalList.Count == 0)
+                            Logging.Logger.LogThis("   There are no active trade proposals on " + tData.Name + ".");
                         else
-                        {
-                            Logging.Logger.LogThis("   Trade for energy denied due to insufficient energy surplus.");
-                        }
+                            Logging.Logger.LogThis("   While there are active trade requests pending on " + tData.Name + ", there are not enough free merchants on " + pData.Name + " to organize a fleet! Merchants available: " + availableMerchants.ToString("N0"));
+
                     }
 
-                    if (tData.ActiveTradeProposalList.Exists(p => p.TradeResource == Trade.eTradeGood.Basic) && pData.BasicExportAvailable > 0 && availableMerchants > 0)
-                    {
-                        TradeProposal basicTradeProposal = tData.ActiveTradeProposalList.Find(p => p.TradeResource == Trade.eTradeGood.Basic);
-                        Logging.Logger.LogThis("Basic material request found for " + tData.Name + "! Checking stockpiles to see if it can be considered...");
-                        Logging.Logger.LogThis("   Basic materials requested: " + basicTradeProposal.AmountRequested.ToString("N0") + " units. Basic materials allocated for export on " + pData.Name + ": " + pData.BasicExportAvailable.ToString("N0") + "(includes " +
-                            pData.BasicStockpilePercentAvailable.ToString("P0") + " allocated from stockpiles)");
-
-                        if (pData.BasicExportAvailable > basicTradeProposal.AmountRequested)
-                        {
-                            CreateNewTrade(basicTradeProposal, tData, pData);
-                            availableMerchants -= 1;
-                        }
-                        else
-                        {
-                            Logging.Logger.LogThis("   Trade for basic materials denied due to insufficient basic material surplus.");
-                        }
-                    }
-
-                    if (tData.ActiveTradeProposalList.Exists(p => p.TradeResource == Trade.eTradeGood.Heavy) && pData.HeavyExportAvailable > 0 && availableMerchants > 0)
-                    {
-                        TradeProposal heavyTradeProposal = tData.ActiveTradeProposalList.Find(p => p.TradeResource == Trade.eTradeGood.Heavy);
-                        Logging.Logger.LogThis("Heavy material request found for " + tData.Name + "! Checking stockpiles to see if it can be considered...");
-                        Logging.Logger.LogThis("   Heavy materials requested: " + heavyTradeProposal.AmountRequested.ToString("N0") + " units. Heavy materials allocated for export on " + pData.Name + ": " + pData.HeavyExportAvailable.ToString("N0") + "(includes " +
-                            pData.HeavyStockpilePercentAvailable.ToString("P0") + " allocated from stockpiles)");
-
-                        if (pData.HeavyExportAvailable > heavyTradeProposal.AmountRequested)
-                        {
-                            CreateNewTrade(heavyTradeProposal, tData, pData);
-                            availableMerchants -= 1;
-                        }
-                        else
-                        {
-                            Logging.Logger.LogThis("   Trade for heavy materials denied due to insufficient heavy material surplus.");
-                        }
-                    }
-
-                    if (tData.ActiveTradeProposalList.Exists(p => p.TradeResource == Trade.eTradeGood.Rare) && pData.RareExportAvailable > 0 && availableMerchants > 0)
-                    {
-                        TradeProposal rareTradeProposal = tData.ActiveTradeProposalList.Find(p => p.TradeResource == Trade.eTradeGood.Rare);
-                        Logging.Logger.LogThis("Rare material request found for " + tData.Name + "! Checking stockpiles to see if it can be considered...");
-                        Logging.Logger.LogThis("   Rare materials requested: " + rareTradeProposal.AmountRequested.ToString("N0") + " units. Rare materials allocated for export on " + pData.Name + ": " + pData.RareExportAvailable.ToString("N0") + "(includes " +
-                            pData.RareStockpilePercentAvailable.ToString("P0") + " allocated from stockpiles)");
-
-                        if (pData.RareExportAvailable > rareTradeProposal.AmountRequested)
-                        {
-                            CreateNewTrade(rareTradeProposal, tData, pData);
-                            availableMerchants -= 1;
-                        }
-                        else
-                        {
-                            Logging.Logger.LogThis("   Trade for rare materials denied due to insufficient rare material surplus.");
-                        }
-                    }
                 }
             }
 
@@ -342,7 +402,7 @@ namespace Managers
                     List<Trade> pendingTrades = pData.ActiveTradesList.FindAll(p => p.Status == Trade.eTradeStatus.InReview);
                     float profitThreshold = 0f; // the minimum profit that the viceroy will take to make the deal
 
-                    profitThreshold = UnityEngine.Random.Range(.5f, (150f + pData.Viceroy.GluttonyTendency - pData.Viceroy.Humanity)/10f) * (1 + (pData.Viceroy.TradeAptitude / 1000f));
+                    profitThreshold = UnityEngine.Random.Range(.2f, (150f + pData.Viceroy.GluttonyTendency - pData.Viceroy.Humanity)/12f) * (1 + (pData.Viceroy.TradeAptitude / 1000f));
                     if (profitThreshold < .2f)
                         profitThreshold = .2f; // minimum profit
 
@@ -384,6 +444,116 @@ namespace Managers
                 + newTrade.OfferPerUnit.ToString("N1") + " MCs requested from " + pData.Name + " to " + tData.Name + ".");
         }
 
+        public IEnumerator UpdateMonthlyResourcePrices(Civilization civ)
+        {
+            // step 1: move off the last array on an index and replace with the new price average for rolling 6 months
+            float[] tempPriceFoodArray = new float[6];
+            Array.Copy(civ.Last6MonthsFoodPrices, 1, tempPriceFoodArray, 0, 5);
+            civ.Last6MonthsFoodPrices = tempPriceFoodArray;
+
+            float[] tempPriceEnergyArray = new float[6];
+            Array.Copy(civ.Last6MonthsEnergyPrices, 1, tempPriceEnergyArray, 0, 5);
+            civ.Last6MonthsEnergyPrices = tempPriceEnergyArray;
+
+            float[] tempPriceBasicArray = new float[6];
+            Array.Copy(civ.Last6MonthsBasicPrices, 1, tempPriceBasicArray, 0, 5);
+            civ.Last6MonthsBasicPrices = tempPriceBasicArray;
+
+            float[] tempPriceHeavyArray = new float[6];
+            Array.Copy(civ.Last6MonthsHeavyPrices, 1, tempPriceHeavyArray, 0, 5);
+            civ.Last6MonthsHeavyPrices = tempPriceHeavyArray;
+
+            float[] tempPriceRareArray = new float[6];
+            Array.Copy(civ.Last6MonthsRarePrices, 1, tempPriceRareArray, 0, 5);
+            civ.Last6MonthsRarePrices = tempPriceRareArray;
+
+
+            // step 2: find the average price paid for each resource on each planet, determined by trade price paid or if no trade, the prevailing price in the civ
+            float allPlanetsTotalFoodPriceThisMonth = 0;                    
+            float allPlanetsTotalEnergyPriceThisMonth = 0;           
+            float allPlanetsTotalBasicPriceThisMonth = 0;           
+            float allPlanetsTotalHeavyPriceThisMonth = 0;          
+            float allPlanetsTotalRarePriceThisMonth = 0;
+                     
+            foreach (PlanetData pData in civ.PlanetList)
+            {
+                int foodTrades = 0;
+                int energyTrades = 0;
+                int basicTrades = 0;
+                int heavyTrades = 0;
+                int rareTrades = 0;
+
+                float planetFoodPriceTotal = 0;
+                float planetEnergyPriceTotal = 0;
+                float planetBasicPriceTotal = 0;
+                float planetHeavyPriceTotal = 0;
+                float planetRarePriceTotal = 0;
+
+                foreach (Trade tData in pData.ActiveTradesList)
+                {
+                    if (tData.Status == Trade.eTradeStatus.Active)
+                    {
+                        switch (tData.TradeGood)
+                        {
+                            case Trade.eTradeGood.Food:
+                                planetFoodPriceTotal += tData.OfferPerUnit;
+                                foodTrades += 1;
+                                break;
+                            case Trade.eTradeGood.Energy:
+                                planetEnergyPriceTotal += tData.OfferPerUnit;
+                                energyTrades += 1;
+                                break;
+                            case Trade.eTradeGood.Basic:
+                                planetBasicPriceTotal += tData.OfferPerUnit;
+                                basicTrades += 1;
+                                break;
+                            case Trade.eTradeGood.Heavy:
+                                planetHeavyPriceTotal += tData.OfferPerUnit;
+                                heavyTrades += 1;
+                                break;
+                            case Trade.eTradeGood.Rare:
+                                planetRarePriceTotal += tData.OfferPerUnit;
+                                rareTrades += 1;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+             
+                if (foodTrades > 0)
+                    allPlanetsTotalFoodPriceThisMonth += (planetFoodPriceTotal / foodTrades);
+                else
+                    allPlanetsTotalFoodPriceThisMonth += civ.CurrentFoodPrice * .9f; // decay of prices if there are no trades
+                if (energyTrades > 0)
+                    allPlanetsTotalEnergyPriceThisMonth += (planetEnergyPriceTotal / energyTrades);
+                else
+                    allPlanetsTotalEnergyPriceThisMonth += civ.CurrentEnergyPrice * .9f;
+                if (basicTrades > 0)
+                    allPlanetsTotalBasicPriceThisMonth += (planetBasicPriceTotal / basicTrades);
+                else
+                    allPlanetsTotalBasicPriceThisMonth += civ.CurrentBasicPrice * .9f;
+                if (heavyTrades > 0)
+                    allPlanetsTotalHeavyPriceThisMonth += (planetHeavyPriceTotal / heavyTrades);
+                else
+                    allPlanetsTotalHeavyPriceThisMonth += civ.CurrentHeavyPrice * .9f;
+                if (rareTrades > 0)
+                    allPlanetsTotalRarePriceThisMonth += (planetRarePriceTotal / rareTrades);
+                else
+                    allPlanetsTotalRarePriceThisMonth += civ.CurrentRarePrice * .9f;
+               
+            }
+
+            // step 3: add the current price for the month to the 6 month rolling array for the civ so that the correct price can calculate next turn
+            civ.Last6MonthsFoodPrices[5] = allPlanetsTotalFoodPriceThisMonth / civ.PlanetList.Count;
+            civ.Last6MonthsEnergyPrices[5] = allPlanetsTotalEnergyPriceThisMonth / civ.PlanetList.Count;
+            civ.Last6MonthsBasicPrices[5] = allPlanetsTotalBasicPriceThisMonth / civ.PlanetList.Count;
+            civ.Last6MonthsHeavyPrices[5] = allPlanetsTotalHeavyPriceThisMonth / civ.PlanetList.Count;
+            civ.Last6MonthsRarePrices[5] = allPlanetsTotalRarePriceThisMonth / civ.PlanetList.Count;
+           
+            yield return 0;
+        }
+
         public IEnumerator CreateTradeAgreements(Civilization civ)
         {          
             UpdateResourceBasePrices(civ);
@@ -404,6 +574,8 @@ namespace Managers
             float heavyPriceTotal = 0f;
             float rarePriceTotal = 0f;
 
+            
+
             for (int x = 0; x < civ.Last6MonthsFoodPrices.Length; x++)
             {
                 foodPriceTotal += civ.Last6MonthsFoodPrices[x];
@@ -418,6 +590,12 @@ namespace Managers
             civ.CurrentBasicPrice = basicPriceTotal / civ.Last6MonthsBasicPrices.Length;
             civ.CurrentHeavyPrice = heavyPriceTotal / civ.Last6MonthsHeavyPrices.Length;
             civ.CurrentRarePrice = rarePriceTotal / civ.Last6MonthsRarePrices.Length;
+
+            Logging.Logger.LogThis("RESOURCE PRICES FOR " + civ.Name.ToUpper() + " IN GALACTIC YEAR " + gameDataRef.GameDate.ToString("N1"));
+            Logging.Logger.LogThis("    FOOD    ENERGY    BASIC    HEAVY    RARE");
+            Logging.Logger.LogThis("    " + civ.CurrentFoodPrice.ToString("N1") + "      " + civ.CurrentEnergyPrice.ToString("N1") + "      " + civ.CurrentBasicPrice.ToString("N1") + "      " +
+                civ.CurrentHeavyPrice.ToString("N1") + "      " + civ.CurrentRarePrice.ToString("N1"));
+            Logging.Logger.LogThis("");
         }
 
         private void DetermineBaseStockpileHolds(Civilization civ)
@@ -473,11 +651,11 @@ namespace Managers
             foreach (PlanetData pData in civ.PlanetList)
             {
                 // Step 2: determine Importance of each good on each planet
-                pData.FoodImportance = (((50f - (pData.FoodStored / pData.TotalFoodConsumed)) / 5f) - pData.FoodDifference * 3) * Constant.FoodPriority;
-                pData.EnergyImportance = (((50f - (pData.EnergyStored / pData.TotalEnergyConsumed)) / 5f) - pData.EnergyDifference * 3) * Constant.EnergyPriority;
-                pData.BasicImportance = (((50f - (pData.BasicStored / pData.TotalAlphaMaterialsConsumed)) / 5f) - pData.AlphaTotalDifference) * Constant.BasicPriority;
-                pData.HeavyImportance = (((50f - (pData.HeavyStored / pData.TotalHeavyMaterialsConsumed)) / 5f) - pData.HeavyTotalDifference) * Constant.HeavyPriority;
-                pData.RareImportance = (((50f - (pData.RareStored / pData.TotalRareMaterialsConsumed)) / 5f) - pData.RareTotalDifference) * Constant.RarePriority;
+                pData.FoodImportance = (((50f - (pData.FoodStored / pData.TotalFoodConsumed)) / 5f) -( pData.FoodDifference * 4)) * Constant.FoodPriority;
+                pData.EnergyImportance = (((50f - (pData.EnergyStored / pData.TotalEnergyConsumed)) / 5f) - (pData.EnergyDifference * 4)) * Constant.EnergyPriority;
+                pData.BasicImportance = (((50f - (pData.BasicStored / pData.TotalAlphaMaterialsConsumed)) / 5f) - (pData.AlphaTotalDifference * 2)) * Constant.BasicPriority;
+                pData.HeavyImportance = (((50f - (pData.HeavyStored / pData.TotalHeavyMaterialsConsumed)) / 5f) - (pData.HeavyTotalDifference * 2)) * Constant.HeavyPriority;
+                pData.RareImportance = (((50f - (pData.RareStored / pData.TotalRareMaterialsConsumed)) / 5f) - (pData.RareTotalDifference * 1)) * Constant.RarePriority;
             }
         }
 
@@ -490,7 +668,7 @@ namespace Managers
                 {
                     // now determine whether each planet is in the trade network
                     if (provData != null)
-                        yield return StartCoroutine(GenerateTradeGroups(provData));
+                        yield return StartCoroutine(UpdateTradeGroups(provData));
                 }
             }
             yield return StartCoroutine(UpdateResourceStockBalances(civ));
@@ -537,7 +715,7 @@ namespace Managers
             Logging.Logger.LogThis("Rare Importance: " + pData.RareImportance.ToString("N1"));
 
             // first, determine the budget that can be allocated for these trades by taking the yearly import budget, subtracting the expenses, and dividing by the months left in the year
-            maxTotalImportBudget = ((pData.YearlyImportBudget - pData.YearlyImportExpenses) / 10) * (11 - gameDataRef.GameMonth); // max allowed total for this month
+            maxTotalImportBudget = ((pData.YearlyImportBudget - pData.YearlyImportExpenses) / 10) * (11 - gameDataRef.GameMonth) * (100f / (100f - pData.Viceroy.Caution)); // max allowed total for this month
             Logging.Logger.LogThis("Total Import Budget for this month is " + maxTotalImportBudget.ToString("N1"));
 
             // now determine the base budget for each item based on weighted importance
@@ -551,15 +729,15 @@ namespace Managers
                 yield break;
             }
 
-            maxFoodImportBudget = (maxTotalImportBudget * (pData.FoodImportance / totalImportance));
+            maxFoodImportBudget = maxTotalImportBudget * (pData.FoodImportance / totalImportance) * (pData.Viceroy.Caution / 100f);
             Logging.Logger.LogThis("Viceroy allocates " + maxFoodImportBudget.ToString("N1") + " crowns towards food imports this month.");
-            maxEnergyImportBudget = (maxTotalImportBudget * (pData.EnergyImportance / totalImportance));
+            maxEnergyImportBudget = maxTotalImportBudget * (pData.EnergyImportance / totalImportance) * (pData.Viceroy.Caution / 100f);
             Logging.Logger.LogThis("Viceroy allocates " + maxEnergyImportBudget.ToString("N1") + " crowns towards energy imports this month.");
-            maxBasicImportBudget = (maxTotalImportBudget * (pData.BasicImportance / totalImportance));
+            maxBasicImportBudget = maxTotalImportBudget * (pData.BasicImportance / totalImportance) * (pData.Viceroy.Caution / 100f);
             Logging.Logger.LogThis("Viceroy allocates " + maxBasicImportBudget.ToString("N1") + " crowns towards basic imports this month.");
-            maxHeavyImportBudget = (maxTotalImportBudget * (pData.HeavyImportance / totalImportance));
+            maxHeavyImportBudget = maxTotalImportBudget * (pData.HeavyImportance / totalImportance) * (pData.Viceroy.Caution / 100f);
             Logging.Logger.LogThis("Viceroy allocates " + maxHeavyImportBudget.ToString("N1") + " crowns towards heavy imports this month.");
-            maxRareImportBudget = (maxTotalImportBudget * (pData.RareImportance / totalImportance));
+            maxRareImportBudget = maxTotalImportBudget * (pData.RareImportance / totalImportance) * (pData.Viceroy.Caution / 100f);
             Logging.Logger.LogThis("Viceroy allocates " + maxRareImportBudget.ToString("N1") + " crowns towards rare imports this month.");
 
             // determine what is left to spend if needed
@@ -597,7 +775,7 @@ namespace Managers
 
             // now in order of top 3 resource priority, and excluding low priority items, calculate what base expenditure will be for each resource
             DetermineTradeAgreementParameters(pData, ResourcePriority, maxFoodImportBudget, foodUnitsDesired, maxEnergyImportBudget, energyUnitsDesired, maxBasicImportBudget, basicUnitsDesired,
-                maxRareImportBudget, heavyUnitsDesired, maxHeavyImportBudget, rareUnitsDesired, maxTotalImportBudget);
+                maxHeavyImportBudget, heavyUnitsDesired, maxRareImportBudget, rareUnitsDesired, maxTotalImportBudget);
 
             // Step 3: Determine how many trade fleets each planet can support this month
             DetermineTradeFleetsAvailable(pData);
@@ -609,7 +787,7 @@ namespace Managers
         }
 
         // Step 4a: Determine Trade Groups that currently exist this turn
-        private IEnumerator GenerateTradeGroups(Province provData)
+        private IEnumerator UpdateTradeGroups(Province provData)
         {
             if (provData.SystemList == null)
                 yield return null;
@@ -723,12 +901,12 @@ namespace Managers
 
             // now look for all stars in range of the system's trade hub                
             foreach (StarData sData2 in starsInProvince)
-            {              
+            {
                 planetsInSystemOwned.Clear(); // clear the planet list
-    
+                ChainIsActive = true; // reset
                 if (Formulas.MeasureDistanceBetweenSystems(sData, sData2) <= (sData.GetRangeOfHub + sData2.GetRangeOfHub))
                 {
-                    if (sData != sData2 && !sData.SystemIsTradeHub) // not the same star, and the system is not already its own trade hub
+                    if (sData != sData2 && !sData2.SystemIsTradeHub && !newTG.SystemIDList.Exists(p => p == sData2.ID)) // not the same star, and the system is not already its own trade hub, and it's not already in the trade hub
                     {
                         planetsInSystemOwned = sData2.PlanetList.FindAll(p => p.Owner == hubPlanet.Owner); // add all the planets that belong to the province hub owner
                         newTG.SystemIDList.Add(sData2.ID);
@@ -739,53 +917,58 @@ namespace Managers
                             pData.PlanetIsLinkedToTradeHub = true;
                             newTG.PlanetIDList.Add(pData.ID);
                         }
-                    }
-                }
 
-                // now look for stars that 'chain' to any of the current trade group hubs; if there are no further links, close the trade group
-                while (ChainIsActive)
-                {
-                    TestActive:
-                    foreach (string pDataID in newTG.PlanetIDList)
-                    {
-                        planetsInSystemOwned.Clear();
-                        PlanetData pData = DataRetrivalFunctions.GetPlanet(pDataID);
-                        StarData originStar = pData.System;
-
-                        foreach (StarData checkedStar in starsWithHubs)
+                        // now look for stars that 'chain' to any of the current trade group hubs; if there are no further links, close the trade group
+                        while (ChainIsActive)
                         {
-                            if (checkedStar != originStar && (!newTG.SystemIDList.Exists(p => p == checkedStar.ID)))
+                            TestActive:
+                            foreach (string pDataID in newTG.PlanetIDList)
                             {
-                                if (CheckForTradeHubLink(originStar, checkedStar, pData.TradeHub, PlanetData.eTradeHubType.SecondaryTradeHub))
-                                {
-                                    planetsInSystemOwned = checkedStar.PlanetList.FindAll(p => p.Owner == hubPlanet.Owner); // add all the planets that belong to the province hub owner
-                                    newTG.SystemIDList.Add(checkedStar.ID);
+                                planetsInSystemOwned.Clear();
+                                PlanetData pData = DataRetrivalFunctions.GetPlanet(pDataID);
+                                StarData originStar = pData.System;
 
-                                    // add each planet that belongs to the province hub owner
-                                    foreach (PlanetData checkedPlanet in planetsInSystemOwned)
+                                foreach (StarData checkedStar in starsWithHubs)
+                                {
+                                    if (checkedStar != originStar && (!newTG.SystemIDList.Exists(p => p == checkedStar.ID)))
                                     {
-                                        checkedPlanet.PlanetIsLinkedToTradeHub = true;
-                                        newTG.PlanetIDList.Add(checkedPlanet.ID);
+                                        if (CheckForTradeHubLink(originStar, checkedStar, pData.TradeHub, PlanetData.eTradeHubType.SecondaryTradeHub))
+                                        {
+                                            planetsInSystemOwned = checkedStar.PlanetList.FindAll(p => p.Owner == hubPlanet.Owner); // add all the planets that belong to the province hub owner
+                                            newTG.SystemIDList.Add(checkedStar.ID);
+
+                                            // add each planet that belongs to the province hub owner
+                                            foreach (PlanetData checkedPlanet in planetsInSystemOwned)
+                                            {
+                                                checkedPlanet.PlanetIsLinkedToTradeHub = true;
+                                                newTG.PlanetIDList.Add(checkedPlanet.ID);
+                                            }
+                                            goto TestActive; // recursive goto                         
+                                        }
                                     }
-                                    goto TestActive; // recursive goto                         
                                 }
                             }
+                            ChainIsActive = false; // if you get here, you have iterated through the entire loop without finding another link, so end the group
                         }
-                    }
-                    ChainIsActive = false; // if you get here, you have iterated through the entire loop without finding another link, so end the group
-                }
-
-                // chain is broken, so add the new group and start again
-                if (!ActiveTradeGroups.Exists(p => p.Name == newTG.Name)) // only take the largest group
-                {
-                    if (!ActiveTradeGroups.Exists(p => p.SystemIDList.Exists(x => x == sData.ID))) // if the star doesn't already belong to a trade group
-                    {
-                        newTG.GroupColor = new Color(UnityEngine.Random.Range(.5f, 1f), UnityEngine.Random.Range(.5f, 1f), UnityEngine.Random.Range(.5f, 1f));
-                        ActiveTradeGroups.Add(newTG); // replace with the more iterated one
-                        Logging.Logger.LogThis("New Trade Group Created! Name: " + newTG.Name + " containing " + newTG.PlanetIDList.Count.ToString("N0") + " planets.");
-                    }
+                    }           
                 }
             }
+
+            // chain is broken, so add the new group and start again
+            if (!ActiveTradeGroups.Exists(p => p.Name == newTG.Name)) // only take the largest group
+            {
+                if (!ActiveTradeGroups.Exists(p => p.SystemIDList.Exists(x => x == sData.ID))) // if the star doesn't already belong to a trade group
+                {
+                    if (ActiveTradeGroups.Count <= colorList.Count)
+                        newTG.GroupColor = colorList[ActiveTradeGroups.Count]; // assign the color of the trade group in a set order
+                    else
+                        newTG.GroupColor = Color.white;
+                    ActiveTradeGroups.Add(newTG); // replace with the more iterated one
+                    Logging.Logger.LogThis("New Trade Group Created! Name: " + newTG.Name + " containing " + newTG.PlanetIDList.Count.ToString("N0") + " planets and " + newTG.SystemIDList.Count.ToString("N0") + " systems.");
+                }
+            }
+            
+            
         }
 
         private bool CheckForTradeHubLink(StarData originStar, StarData checkedStar, PlanetData.eTradeHubType star1TradeHubType, PlanetData.eTradeHubType star2tradeHubType)
@@ -890,23 +1073,29 @@ namespace Managers
         }
 
         private static void DetermineTradeAgreementParameters(PlanetData pData, SortedList rP, float maxFoodImportBudget, float foodUnitsDesired, float maxEnergyImportBudget,
-            float energyUnitsDesired, float maxBasicImportBudget, float basicUnitsDesired, float maxRareImportBudget, float heavyUnitsDesired, float maxHeavyImportBudget, float rareUnitsDesired, 
+            float energyUnitsDesired, float maxBasicImportBudget, float basicUnitsDesired, float maxHeavyImportBudget, float heavyUnitsDesired, float maxRareImportBudget, float rareUnitsDesired, 
             float maxTotalImportBudget)
         {
             for (int i = 0; i < 3; i++)
             {
                 float currentImportance = (float)rP.GetKey(4 - i);
 
-                if (currentImportance >= (0f - pData.Viceroy.Intelligence)) //if the importance is too low, ignore it
+                if (currentImportance >= (20f - pData.Viceroy.Intelligence)) //if the importance is too low or the viceroy is too stupid to create a trade, ignore it
                 {
                     TradeProposal tP = new TradeProposal(); // generate new proposal
+                    float EnergySubsidy = Constant.EnergyUsedPerLightYearCoeff * (currentImportance * 1000); // add a subsidy for the energy required to trade the good; higher importance will add to this
                     switch ((Trade.eTradeGood)rP.GetByIndex(4 - i))
                     {
                         // depending on the trade good, generate the trade agreement based on the type of good, the amount needed, and the viceroy's attributes
                         case Trade.eTradeGood.Food:
                             tP.TradeResource = Trade.eTradeGood.Food;
                             tP.MaxCrownsToPay = pData.Owner.CurrentFoodPrice * (1f / (pData.Viceroy.Caution / 100f)) / (50f / pData.Viceroy.Intelligence);
-                            tP.MaxCrownsToPay *= 1.6f;
+
+                            // cap out the max at 3 times the market price
+                            if (tP.MaxCrownsToPay > pData.Owner.CurrentFoodPrice * 3)
+                                tP.MaxCrownsToPay = pData.Owner.CurrentFoodPrice * 3;
+
+                            tP.MaxCrownsToPay += EnergySubsidy; // add the energy subsidy                       
                             tP.AmountRequested = maxFoodImportBudget / tP.MaxCrownsToPay;
                             if (tP.AmountRequested > foodUnitsDesired)
                                 tP.AmountRequested = foodUnitsDesired;
@@ -915,7 +1104,12 @@ namespace Managers
                         case Trade.eTradeGood.Energy:
                             tP.TradeResource = Trade.eTradeGood.Energy;
                             tP.MaxCrownsToPay = pData.Owner.CurrentEnergyPrice * (1f / (pData.Viceroy.Caution / 100f)) * (50f / pData.Viceroy.Intelligence);
-                            tP.MaxCrownsToPay *= 1.3f;
+
+                            // cap out the max at 3 times the market price
+                            if (tP.MaxCrownsToPay > pData.Owner.CurrentEnergyPrice * 3)
+                                tP.MaxCrownsToPay = pData.Owner.CurrentEnergyPrice * 3;
+
+                            tP.MaxCrownsToPay += EnergySubsidy; // add the energy subsidy                           
                             tP.AmountRequested = maxEnergyImportBudget / tP.MaxCrownsToPay;
                             if (tP.AmountRequested > energyUnitsDesired)
                                 tP.AmountRequested = energyUnitsDesired;
@@ -924,7 +1118,12 @@ namespace Managers
                         case Trade.eTradeGood.Basic:
                             tP.TradeResource = Trade.eTradeGood.Basic;
                             tP.MaxCrownsToPay = pData.Owner.CurrentBasicPrice * (1f / (pData.Viceroy.Caution / 100f)) * (50f / pData.Viceroy.Intelligence);
-                            tP.MaxCrownsToPay *= 1.5f;
+
+                            // cap out the max at 3 times the market price
+                            if (tP.MaxCrownsToPay > pData.Owner.CurrentBasicPrice * 3)
+                                tP.MaxCrownsToPay = pData.Owner.CurrentBasicPrice * 3;
+
+                            tP.MaxCrownsToPay += EnergySubsidy; // add the energy subsidy                          
                             tP.AmountRequested = maxBasicImportBudget / tP.MaxCrownsToPay;
                             if (tP.AmountRequested > basicUnitsDesired)
                                 tP.AmountRequested = basicUnitsDesired;
@@ -933,7 +1132,12 @@ namespace Managers
                         case Trade.eTradeGood.Heavy:
                             tP.TradeResource = Trade.eTradeGood.Heavy;
                             tP.MaxCrownsToPay = pData.Owner.CurrentHeavyPrice * (1f / (pData.Viceroy.Caution / 100f)) * (50f / pData.Viceroy.Intelligence);
-                            tP.MaxCrownsToPay *= 2.2f;
+
+                            // cap out the max at 3 times the market price
+                            if (tP.MaxCrownsToPay > pData.Owner.CurrentHeavyPrice * 3)
+                                tP.MaxCrownsToPay = pData.Owner.CurrentHeavyPrice * 3;
+
+                            tP.MaxCrownsToPay += EnergySubsidy; // add the energy subsidy                         
                             tP.AmountRequested = maxHeavyImportBudget / tP.MaxCrownsToPay;
                             if (tP.AmountRequested > heavyUnitsDesired)
                                 tP.AmountRequested = heavyUnitsDesired;                          
@@ -942,7 +1146,12 @@ namespace Managers
                         case Trade.eTradeGood.Rare:
                             tP.TradeResource = Trade.eTradeGood.Rare;
                             tP.MaxCrownsToPay = pData.Owner.CurrentRarePrice * (1f / (pData.Viceroy.Caution / 100f)) * (50f / pData.Viceroy.Intelligence);
-                            tP.MaxCrownsToPay *= 2.6f;
+
+                            // cap out the base max at 3 times the market price
+                            if (tP.MaxCrownsToPay > pData.Owner.CurrentRarePrice * 3)
+                                tP.MaxCrownsToPay = pData.Owner.CurrentRarePrice * 3;
+
+                            tP.MaxCrownsToPay += EnergySubsidy; // add the energy subsidy                         
                             tP.AmountRequested = maxRareImportBudget / tP.MaxCrownsToPay;
                             if (tP.AmountRequested > rareUnitsDesired)
                                 tP.AmountRequested = rareUnitsDesired;
@@ -959,9 +1168,9 @@ namespace Managers
                         Logging.Logger.LogThis("New Trade Request generated! Taking export budget into account, " + pData.Name + " requests " + tP.AmountRequested.ToString("N1") + " units of " + tP.TradeResource.ToString() + " at a max price per unit of " + tP.MaxCrownsToPay.ToString("N1") + ".");
                     }
                     else if (tP.AmountRequested == 0f)
-                        Logging.Logger.LogThis("No trade generated - adjusted unit need was zero.");
+                        Logging.Logger.LogThis("No trade generated for " + tP.TradeResource.ToString().ToLower() + " - adjusted unit need was zero.");
                     else
-                        Logging.Logger.LogThis("No trade generated - there is insufficient export budget available.");
+                        Logging.Logger.LogThis("No trade generated for " + tP.TradeResource.ToString().ToLower() + " - there is insufficient import budget available.");
                 }
             }
         }

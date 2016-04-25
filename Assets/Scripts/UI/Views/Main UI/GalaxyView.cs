@@ -1052,17 +1052,17 @@ namespace Screens.Galaxy
 
                     if (Screen.width >= 1600)
                     {
-                        screenWidthFactor = 15f;
+                        screenWidthFactor = 20f;
                     }
                     else if (Screen.width >= 1400)
                     {
-                        screenWidthFactor = 14f;
+                        screenWidthFactor = 17f;
                     }
                     else if (Screen.width >= 1280)
-                        screenWidthFactor = 14f;
+                        screenWidthFactor = 16f;
 
                     else
-                        screenWidthFactor = 12.3f;
+                        screenWidthFactor = 14f;
 
                     pData = sData.PlanetSpots[x];
 
@@ -1082,7 +1082,7 @@ namespace Screens.Galaxy
                         size = pData.Size;                        
                     
                     // size of the planet (need to increase)                                     
-                    pData.PlanetSystemScaleSize = size *.25f; // set the planet's size as it should be in the system view (will probably set with the gameobject)
+                    pData.PlanetSystemScaleSize = size *.2f; // set the planet's size as it should be in the system view (will probably set with the gameobject)
 
                     planet.transform.localScale = new Vector2(pData.PlanetSystemScaleSize, pData.PlanetSystemScaleSize); // scale the sprite depending on size
                     planet.transform.Rotate(180, 180, 0);
