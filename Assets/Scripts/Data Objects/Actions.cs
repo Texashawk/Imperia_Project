@@ -183,13 +183,13 @@ namespace Actions
                         HelperFunctions.DataRetrivalFunctions.GetCharacter(cID).Relationships[eData.ID].Trust += Random.Range(0, (speechEffectiveness / 10)); // improve trust slightly with the emperor
                     }
 
-                    if (cData.Relationships[cID].RelationshipState == Relationship.eRelationshipState.Rivals || cData.Relationships[cID].RelationshipState == Relationship.eRelationshipState.Vendetta)
+                    if (cData.Relationships[cID].RelationshipState == Relationship.eRelationshipState.Rival || cData.Relationships[cID].RelationshipState == Relationship.eRelationshipState.Vendetta)
                     {
                         cData.Relationships[cID].Trust -= Random.Range(0, (speechEffectiveness / 8));
                         HelperFunctions.DataRetrivalFunctions.GetCharacter(cID).Relationships[eData.ID].Trust -= Random.Range(0, (speechEffectiveness / 10)); // distrusts slightly with the emperor
                     }
 
-                    if (cData.Relationships[cID].RelationshipState == Relationship.eRelationshipState.Vengeance)
+                    if (cData.Relationships[cID].RelationshipState == Relationship.eRelationshipState.SwornVengeance)
                     {
                         cData.Relationships[cID].Trust -= Random.Range(0, (speechEffectiveness / 6));
                         HelperFunctions.DataRetrivalFunctions.GetCharacter(cID).Relationships[eData.ID].Trust -= Random.Range(0, (speechEffectiveness / 6)); // distrusts a lot with the emperor
@@ -238,13 +238,13 @@ namespace Actions
                         HelperFunctions.DataRetrivalFunctions.GetCharacter(cID).Relationships[reprimandingChar.ID].Trust -= Random.Range(0, (speechEffectiveness / 10)); // improve trust slightly with the emperor
                     }
 
-                    if (reprimandedChar.Relationships[cID].RelationshipState == Relationship.eRelationshipState.Rivals || reprimandedChar.Relationships[cID].RelationshipState == Relationship.eRelationshipState.Vendetta)
+                    if (reprimandedChar.Relationships[cID].RelationshipState == Relationship.eRelationshipState.Rival || reprimandedChar.Relationships[cID].RelationshipState == Relationship.eRelationshipState.Vendetta)
                     {
                         reprimandedChar.Relationships[cID].Trust -= Random.Range(0, (speechEffectiveness / 8));
                         HelperFunctions.DataRetrivalFunctions.GetCharacter(cID).Relationships[reprimandingChar.ID].Trust += Random.Range(0, (speechEffectiveness / 10)); // distrusts slightly with the emperor
                     }
 
-                    if (reprimandedChar.Relationships[cID].RelationshipState == Relationship.eRelationshipState.Vengeance)
+                    if (reprimandedChar.Relationships[cID].RelationshipState == Relationship.eRelationshipState.SwornVengeance)
                     {
                         reprimandedChar.Relationships[cID].Trust -= Random.Range(0, (speechEffectiveness / 6));
                         HelperFunctions.DataRetrivalFunctions.GetCharacter(cID).Relationships[reprimandingChar.ID].Trust += Random.Range(0, (speechEffectiveness / 6)); // distrusts a lot with the emperor
@@ -464,7 +464,7 @@ namespace Actions
             }
 
             if (activeChallengeID != "")
-                secondCharacterInitialState.RelationshipState = Relationship.eRelationshipState.Challengee;
+                secondCharacterInitialState.RelationshipState = Relationship.eRelationshipState.Challenged;
 
             string response = "NEW RELSTATE: " + secondCharacterInitialState.RelationshipState.ToString() + " " + actionResult + " " + ConversationEngine.GenerateResponse(insultedChar, aData, 0f, false, conversationFlags);
             return response;

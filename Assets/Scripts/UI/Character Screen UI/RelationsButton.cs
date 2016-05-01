@@ -36,7 +36,7 @@ public class RelationsButton : MonoBehaviour
         RelationsText.text = relationshipType;
         switch (relations.RelationshipState)
         {
-            case Relationship.eRelationshipState.Neutral:      
+            case Relationship.eRelationshipState.None:      
                 RelationsText.color = Color.white;
                 break;              
             case Relationship.eRelationshipState.Allies:
@@ -54,16 +54,16 @@ public class RelationsButton : MonoBehaviour
             case Relationship.eRelationshipState.Challenger:
                 RelationsText.color = Color.magenta;
                 break;
-            case Relationship.eRelationshipState.Challengee:
+            case Relationship.eRelationshipState.Challenged:
                 RelationsText.color = Color.yellow;
                 break;
-            case Relationship.eRelationshipState.Rivals:
+            case Relationship.eRelationshipState.Rival:
                 RelationsText.color = Color.red;
                 break;
-            case Relationship.eRelationshipState.Vengeance:
+            case Relationship.eRelationshipState.SwornVengeance:
                 RelationsText.color = Color.red;
                 break;
-            case Relationship.eRelationshipState.VengeanceUpon:
+            case Relationship.eRelationshipState.ObjectOfVengeance:
                 RelationsText.color = Color.yellow;
                 break;
             case Relationship.eRelationshipState.Vendetta:

@@ -38,7 +38,7 @@ namespace Assets.Scripts.UI
             if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.System && uiManagerRef.selectedSystem != null)
             {
                 StarData starDat = uiManagerRef.selectedSystem;
-                selectedItemName.text = uiManagerRef.selectedSystem.Name.ToUpper();  //show text
+                selectedItemName.text = uiManagerRef.selectedSystem.Name.ToUpper() + " SYSTEM";  //show text
                 string starType = "";
                 if (starDat.starMultipleType == StarData.eStarMultiple.Binary)
                     starType = "BINARY ";

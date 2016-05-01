@@ -193,7 +193,7 @@ namespace CivObjects
                 List<House> hList = new List<House>();
                 foreach (House hData in DataRetrivalFunctions.GetHouseList())
                 {
-                    if (hData.AffiliatedCiv == ID)
+                    if (hData.AffiliatedCivID == ID)
                     {
                         hList.Add(hData);
                     }

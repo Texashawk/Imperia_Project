@@ -7,6 +7,7 @@ using System.Threading;
 using PlanetObjects;
 using CharacterObjects;
 using CivObjects;
+using Projects;
 
 namespace Logging
 {
@@ -356,6 +357,15 @@ namespace HelperFunctions
             }
 
             return pColor;
+        }
+
+        public static Project GetProjectData(string pID)
+        {
+            GameData gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
+            Project pData = new Project();
+
+            pData = gameDataRef.ProjectDataList.Find(p => p.ID == pID);
+            return pData;
         }
 
         public static Color FindProvinceOwnerColor(Province pData)

@@ -12,6 +12,7 @@ public class Province
     public string Name { get; set; }
     public string ID { get; set; }
     public string OwningCivID { get; set; }
+    public string HoldingHouseID { get; set; } // does a House hold this province as a Holding?
     public string CapitalPlanetID { get; set; }
     public Rect ProvinceBounds { get; set; }
 

@@ -215,7 +215,8 @@ namespace EconomicObjects
             Active,
             Inactive_Support,
             Inactive_Resources,       
-            Mothballed
+            Mothballed,
+            Reached_Destination
         }
 
         public enum eTradeFleetType : int

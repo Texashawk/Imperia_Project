@@ -306,6 +306,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         // other vars
         public bool IsProvinceHub = false;
         private string pAssignedProvince = "";
+        public string HouseIDHolding { get; set; } // which House holds this as a Holding
         public string SystemCapitalID = "";
         public string AssignedProvinceID
         {

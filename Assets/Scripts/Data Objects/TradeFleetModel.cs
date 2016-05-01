@@ -70,7 +70,7 @@ public class TradeFleetModel : MonoBehaviour
     public IEnumerator MoveFleet(float distance)
     {
         distancePerTurn = distance;
-        float step = distance / .33f * Time.deltaTime;
+        float step = distance / .2f * Time.deltaTime;
         float distanceMoved = 0;
 
         if (!hasArrived)

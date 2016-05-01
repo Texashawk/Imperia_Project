@@ -351,18 +351,18 @@ namespace CharacterObjects
     {
         public enum eRelationshipState : int
         {
-            Neutral,
+            None,
             Allies,
             Friends,
             Superior,
             Inferior,
             Challenger,
-            Challengee,
-            Rivals,
+            Challenged,
+            Rival,
             Shunning,
             Shunned,
-            Vengeance,
-            VengeanceUpon,
+            SwornVengeance,
+            ObjectOfVengeance,
             Vendetta,
             Married,
             Lovers,
@@ -495,9 +495,10 @@ namespace CharacterObjects
             Consolidating
         }
 
+        // basic stats common to all Houses
         public string Name { get; set; }
         public string ID { get; set; }
-        public string AffiliatedCiv { get; set; }
+        public string AffiliatedCivID { get; set; }
         public eHouseRank Rank { get; set; }
         public eHouseSpecialty Specialty { get; set; }
         public eHousePersonality Personality { get; set; }
@@ -505,6 +506,7 @@ namespace CharacterObjects
         public eHouseWealth Wealth { get; set; }
         public eHouseAmbition Ambition { get; set; }
         public bool IsRulingHouse { get; set; }
+        public bool IsPlayerHouse { get; set; } 
 
         // Traditions are values from 1-100 that determine how much a particular sector of activity has been learned and passed through the House for generations.
         // Great Houses might have values near 80, Minor Houses might have values near 40, and common Houses will have values around 5-10 (small and diffuse Houses don't accrue tradition)
@@ -526,14 +528,12 @@ namespace CharacterObjects
         public Color PrimaryColor { get; set; }
         public Color SecondaryColor { get; set; }
         public string LeaderID { get; set; }
-        public List<string> HeirList = new List<string>();
+        public List<string> HeirListIDs = new List<string>();
         public string LeaderTitle { get; set; }
         public string History { get; set; }
         public int Power; // derived
         public int Loyalty; // derived
-        public int Influence { get; set; } // formerly respect
-
-       
+        public int Influence { get; set; } // formerly respect      
 
         public void AddNewTrait(HouseTrait.eHouseTrait trait, int value)
         {

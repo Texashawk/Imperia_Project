@@ -100,7 +100,7 @@ namespace Constants
         public const float BaseRarePrice = 2.0f;
 
         // trader constants
-        public const int MerchantsPerTradeFleet = 20; // how many merchants it takes to create and maintain a trade fleet
+        public const int MerchantsPerTradeFleet = 15; // how many merchants it takes to create and maintain a trade fleet
 
         // starbase throughput levels
         public const int Level1StarbaseCapacity = 15;
@@ -130,18 +130,18 @@ namespace Constants
         public const float ScientistJobDesirability = 1.5f;
 
         // house generation percentages (must equal 100)
-        public const int CommonHouseChance = 55;
-        public const int MinorHouseChance = 25;
-        public const int GreatHouseChance = 20;
+        public const int CommonHouseChance = 10;
+        public const int MinorHouseChance = 20;
+        public const int GreatHouseChance = 70;
 
         // leader chance that they are in a certain house for different jobs
-        public const int ChanceProvinceGovernorGreat = 75;
-        public const int ChanceProvinceGovernorMinor = 20;
+        public const int ChanceProvinceGovernorGreat = 90;
+        public const int ChanceProvinceGovernorMinor = 10;
 
-        public const int ChanceSystemGovernorGreat = 65;
-        public const int ChanceSystemGovernorMinor = 20;
+        public const int ChanceSystemGovernorGreat = 85;
+        public const int ChanceSystemGovernorMinor = 15;
 
-        public const int ChanceViceroyGreat = 50;
+        public const int ChanceViceroyGreat = 70;
         public const int ChanceViceroyMinor = 25;
 
         // pop migration chances

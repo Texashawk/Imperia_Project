@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using StellarObjects;
 using CivObjects;
 using Managers;
+using System;
 using CameraScripts;
 using HelperFunctions;
 using EconomicObjects;
@@ -273,7 +274,7 @@ public class TradeGalaxyView : MonoBehaviour
                 Color textColor = new Color();
                 sysData = tradeBlock.GetComponent<TradeViewSystemData>();
                 StarData starData = sysData.starData;
-
+                
                 if (!gameDataRef.DebugMode)
                 {
                     int fleetsAvailable = 0;
@@ -283,8 +284,10 @@ public class TradeGalaxyView : MonoBehaviour
                     {
                         if (pData.TradeStatus != PlanetData.eTradeStatus.ImportOnly || pData.TradeStatus != PlanetData.eTradeStatus.NoTrade)
                         {
-                            fleetsAvailable += (int)Mathf.Floor(pData.MerchantsAvailableForExport / 20);
-                        }
+                            fleetsAvailable += (int)Math.Floor((double)pData.MerchantsAvailableForExport / Constant.MerchantsPerTradeFleet);
+                            if (fleetsAvailable < 0)
+                                fleetsAvailable = 0; // set the floor
+                        }                    
                     }
 
                     if (starData.SystemIsTradeHub && starData.IntelLevel > eStellarIntelLevel.Medium)
@@ -294,6 +297,7 @@ public class TradeGalaxyView : MonoBehaviour
                     }
                     else
                         tradeBlock.transform.Find("Fleets Available").GetComponent<TextMeshProUGUI>().enabled = false;
+
                     if (starData.IntelValue > Constant.MediumIntelLevelMax)
                         textColor = sysData.ownerColor;
                     else

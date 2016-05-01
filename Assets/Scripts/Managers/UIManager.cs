@@ -7,18 +7,12 @@ namespace Managers
 {
     public class UIManager : MonoBehaviour
     { 
-        public enum eViewMode : int
-        { 
-            Galaxy,
-            Province,
-            System,
-            Planet
-        }
-        
+             
         public float cameraFOV; // current FOV of the camera
 
-        public bool RequestTradeViewGraphicRefresh = false; // the game is asking for a graphic request throughout the UI
-        public bool RequestPoliticalViewGraphicRefresh = false;
+        public bool RequestTradeViewGraphicRefresh { get; set; } // the game is asking for a graphic request throughout the UI
+        public bool RequestPoliticalViewGraphicRefresh { get; set; }
+        public bool RequestProjectBarGraphicRefresh { get; set; }
 
         public Transform SelectedStellarObject; // what current stellar object is active
         public PlanetData selectedPlanet; // if a planet is selected, what kind
@@ -37,13 +31,13 @@ namespace Managers
         public ViewManager.eSecondaryView SecondaryViewMode; // primary 'main' view category
         public ViewManager.ePrimaryView PrimaryViewMode; // sub mode
 
-        // view references
-
-
         // Use this for initialization
         void Awake()
         {
-            viewManagerRef = GameObject.Find("GameManager").GetComponent<ViewManager>();         
+            viewManagerRef = GameObject.Find("GameManager").GetComponent<ViewManager>();
+            RequestProjectBarGraphicRefresh = false;
+            RequestTradeViewGraphicRefresh = false;
+            RequestPoliticalViewGraphicRefresh = false; 
         }
 
         void Start()
@@ -67,33 +61,43 @@ namespace Managers
         {
             SetActivePrimaryMode(ViewManager.ePrimaryView.Political);
             SetActiveSecondaryMode(ViewManager.eSecondaryView.Sovereignity); // for testing
-            RequestPoliticalViewGraphicRefresh = true; //update the views
+            RequestGraphicRefresh();
+            RequestProjectBarRefresh();
         }
 
         public void SetPrimaryModeToEconomic()
         {
             SetActivePrimaryMode(ViewManager.ePrimaryView.Economic);
             SetActiveSecondaryMode(ViewManager.eSecondaryView.Trade); // for testing
-            RequestTradeViewGraphicRefresh = true; //update the views
-            
+            RequestGraphicRefresh();
+            RequestProjectBarRefresh();
         }
 
         public void SetPrimaryModeToMilitary()
         {
             SetActivePrimaryMode(ViewManager.ePrimaryView.Military);
             SetActiveSecondaryMode(ViewManager.eSecondaryView.Military); // for testing
+            RequestGraphicRefresh();
+            RequestProjectBarRefresh();
         }
 
         public void SetPrimaryModeToPops()
         {
             SetActivePrimaryMode(ViewManager.ePrimaryView.Pops);
             SetActiveSecondaryMode(ViewManager.eSecondaryView.Sovereignity); // for testing
+            RequestGraphicRefresh();
+            RequestProjectBarRefresh();
         }
 
         public void SetActiveViewLevel(ViewManager.eViewLevel viewMode)
         {
             viewManagerRef.ViewLevel = viewMode;
             ViewLevel = viewManagerRef.ViewLevel;
+        }
+
+        public void ActivateProjectScreen(string pID)
+        {
+            Debug.Log("Project ID " + pID + " clicked! Drawing project screen here...");
         }
 
         public void SetActivePrimaryMode(ViewManager.ePrimaryView subView)
@@ -106,10 +110,16 @@ namespace Managers
             viewManagerRef.SecondaryViewMode = activeView;
         }
 
+        public void RequestProjectBarRefresh()
+        {
+            RequestProjectBarGraphicRefresh = true;
+        }
+
         public void RequestGraphicRefresh()
         {
             RequestPoliticalViewGraphicRefresh = true;
             RequestTradeViewGraphicRefresh = true;
+            
         }
 
         void LateUpdate()

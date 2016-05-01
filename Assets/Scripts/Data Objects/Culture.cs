@@ -1,8 +1,7 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-public class Culture : MonoBehaviour {
+public class Culture
+{ 
 
 	public enum eLocationRing : int
     {
@@ -14,6 +13,7 @@ public class Culture : MonoBehaviour {
     public eLocationRing LocationRing { get; set; }
     public string Name { get; set; }
     public string AssociatedHouseIDs { get; set; }
+    public string ImageID { get; set; } // the ID of the image/icon/glyph for this culture
     public string Description { get; set; }
     public List<string> FirstNameList { get; set; }
     public List<string> LastNameList { get; set; }

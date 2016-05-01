@@ -5,6 +5,7 @@ using CivObjects;
 using CharacterObjects;
 using EconomicObjects;
 using Tooltips;
+using Projects;
 using Actions;
 
 public class GameData : MonoBehaviour
@@ -54,6 +55,7 @@ public class GameData : MonoBehaviour
     public List<TradeFleet> ActiveTradeFleets = new List<TradeFleet>();
     public List<Character> CharacterList = new List<Character>();
     public List<GameObject> ActiveTradeFleetObjects = new List<GameObject>();
+    public List<Project> ProjectDataList = new List<Project>();
     public List<CharacterAction> CharacterActionList = new List<CharacterAction>();
     public List<CharacterTrait> CharacterTraitList = new List<CharacterTrait>();
     public List<House> HouseList = new List<House>(); // all houses generated in the game

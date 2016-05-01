@@ -16,22 +16,9 @@ namespace Managers
         private GameData gameDataRef;
         private GalaxyData galaxyDataRef;
         private List<Color> colorList = new List<Color>();
-        //{         
-        //    Color.blue,
-        //    Color.red,
-        //    Color.green,
-        //    Color.yellow,
-        //    Color.cyan,
-        //    Color.magenta,
-        //    new Color(1f, 51f/255f, 0f),
-        //    new Color(1f, 204f/255f, 51f/255f),
-        //    new Color(102f/255f, 153f/255f, 51f/255f)
-        //};
 
         public List<Trade> ActiveTradesInGame = new List<Trade>();
-        public List<TradeFleet> ActiveTradeFleetsInGame = new List<TradeFleet>();
         public string ID = "";
-        //public List<GameObject> ActiveTradeFleetObjects = new List<GameObject>();
         public List<TradeGroup> ActiveTradeGroups = new List<TradeGroup>();
         public GameObject TradeFleetObject; // the prefab for the trade fleet object
 
@@ -54,7 +41,7 @@ namespace Managers
         public IEnumerator UpdateActiveTradeFleets()
         {
 
-            foreach (TradeFleet tFleet in ActiveTradeFleetsInGame)
+            foreach (TradeFleet tFleet in gameDataRef.ActiveTradeFleets)
             {
                 GameObject curFleetObject;
 
@@ -108,17 +95,18 @@ namespace Managers
                             // now add the trade fleet object
                             TradeFleet tFleet = new TradeFleet();
                             tFleet.ID = tData.TradeID;
+                            tFleet.Status = TradeFleet.eTradeFleetStatus.Active;
                             tFleet.Name = "TRADE FLEET ALPHA"; // temp
                             tFleet.Location = pData.System.WorldLocation; // set the fleet to the same location as the object
                             tFleet.LinkedTrade = tData;
                             tFleet.IsSystemTrade = false;
                             tFleet.LinkedTradeID = tData.TradeID;
                             tFleet.ExportPlanetID = tData.ExportingPlanetID;
-                            tFleet.ImportPlanetID = tData.ImportingPlanetID;
-                            ActiveTradeFleetsInGame.Add(tFleet);
+                            tFleet.ImportPlanetID = tData.ImportingPlanetID;                          
+                            gameDataRef.ActiveTradeFleets.Add(tFleet);
 
                             // now tie up the merchants on the exporting planet while the trade fleet is active
-                            tFleet.ExportPlanet.MerchantsAvailableForExport -= Constant.MerchantsPerTradeFleet;
+                            DetermineTradeFleetsAvailable(civ); // update
 
                             // now create the actual physical fleet on the galaxy screen if out of system trade
                             if ((DataRetrivalFunctions.GetPlanet(tData.ExportingPlanetID).System != DataRetrivalFunctions.GetPlanet(tData.ImportingPlanetID).System))
@@ -165,6 +153,15 @@ namespace Managers
             }
 
             yield return 0;
+        }
+
+        public void RemoveCompletedTradeRuns()
+        {
+            //foreach (TradeFleet tFleet in gameDataRef.ActiveTradeFleets)
+            //{
+            //    if (tFleet.Status == TradeFleet.eTradeFleetStatus.Reached_Destination)
+            //        gameDataRef.ActiveTradeFleets.Remove(tFleet);
+            //}
         }
 
         private void CreateTradeFleetObject(Trade tData, PlanetData pData)
@@ -228,7 +225,8 @@ namespace Managers
             }
 
             // remove the trade from the active rolls and the trade from the exported planet
-            gameDataRef.ActiveTradeFleets.Remove(tFleet);
+           
+            tFleet.Status = TradeFleet.eTradeFleetStatus.Reached_Destination; // set the flag for cleanup at the end of the action
             ActiveTradesInGame.Remove(curTrade);
             importPlanet.ActiveTradesList.Remove(tFleet.LinkedTrade);                  
        } 
@@ -295,7 +293,7 @@ namespace Managers
                             if (pData.FoodExportAvailable > foodTradeProposal.AmountRequested)
                             {
                                 CreateNewTrade(foodTradeProposal, tData, pData);
-                                availableMerchants -= 20;
+                                availableMerchants -= Constant.MerchantsPerTradeFleet;
                             }
                             else
                             {
@@ -313,7 +311,7 @@ namespace Managers
                             if (pData.EnergyExportAvailable > energyTradeProposal.AmountRequested)
                             {
                                 CreateNewTrade(energyTradeProposal, tData, pData);
-                                availableMerchants -= 20;
+                                availableMerchants -= Constant.MerchantsPerTradeFleet;
                             }
                             else
                             {
@@ -331,7 +329,7 @@ namespace Managers
                             if (pData.BasicExportAvailable > basicTradeProposal.AmountRequested)
                             {
                                 CreateNewTrade(basicTradeProposal, tData, pData);
-                                availableMerchants -= 20;
+                                availableMerchants -= Constant.MerchantsPerTradeFleet;
                             }
                             else
                             {
@@ -349,7 +347,7 @@ namespace Managers
                             if (pData.HeavyExportAvailable > heavyTradeProposal.AmountRequested)
                             {
                                 CreateNewTrade(heavyTradeProposal, tData, pData);
-                                availableMerchants -= 20;
+                                availableMerchants -= Constant.MerchantsPerTradeFleet;
                             }
                             else
                             {
@@ -367,7 +365,7 @@ namespace Managers
                             if (pData.RareExportAvailable > rareTradeProposal.AmountRequested)
                             {
                                 CreateNewTrade(rareTradeProposal, tData, pData);
-                                availableMerchants -= 20;
+                                availableMerchants -= Constant.MerchantsPerTradeFleet;
                             }
                             else
                             {
@@ -555,7 +553,8 @@ namespace Managers
         }
 
         public IEnumerator CreateTradeAgreements(Civilization civ)
-        {          
+        {
+            DetermineTradeFleetsAvailable(civ);      
             UpdateResourceBasePrices(civ);
             CheckImportanceOfGoods(civ);
             DetermineBaseStockpileHolds(civ);         
@@ -775,10 +774,7 @@ namespace Managers
 
             // now in order of top 3 resource priority, and excluding low priority items, calculate what base expenditure will be for each resource
             DetermineTradeAgreementParameters(pData, ResourcePriority, maxFoodImportBudget, foodUnitsDesired, maxEnergyImportBudget, energyUnitsDesired, maxBasicImportBudget, basicUnitsDesired,
-                maxHeavyImportBudget, heavyUnitsDesired, maxRareImportBudget, rareUnitsDesired, maxTotalImportBudget);
-
-            // Step 3: Determine how many trade fleets each planet can support this month
-            DetermineTradeFleetsAvailable(pData);
+                maxHeavyImportBudget, heavyUnitsDesired, maxRareImportBudget, rareUnitsDesired, maxTotalImportBudget);      
 
             Logging.Logger.LogThis("TRADE ANALYSIS COMPLETED FOR " + pData.Name + "...");
             Logging.Logger.LogThis("_________________________________________________________________________");
@@ -991,24 +987,29 @@ namespace Managers
                 return false;
         }
         
-        public void DetermineTradeFleetsAvailable(PlanetData pData)
+        public void DetermineTradeFleetsAvailable(Civilization civ)
         {
-            int totalMerchants = 0;
-            int merchantsAllocatedToFleets = 0;
-            int merchantsAvailableForFleets = 0;
-            totalMerchants = pData.TotalMerchants;
+            
 
-            // determine how many merchants are tied up with active fleets
-            foreach (TradeFleet tFleet in ActiveTradeFleetsInGame)
+            foreach (PlanetData pData in civ.PlanetList)
             {
-                if (tFleet.ExportPlanetID == pData.ID)
-                    merchantsAllocatedToFleets += Constant.MerchantsPerTradeFleet;
-            }
+                int totalMerchants = 0;
+                int merchantsAllocatedToFleets = 0;
+                int merchantsAvailableForFleets = 0;
+                totalMerchants = pData.TotalMerchants;
 
-            merchantsAvailableForFleets = totalMerchants - merchantsAllocatedToFleets;
-            Logging.Logger.LogThis("Currently, there are " + pData.TotalMerchants.ToString("N0") + " merchants on planet " + pData.Name + ", of which " + merchantsAvailableForFleets.ToString("N0") + " merchants are available for trade fleets.");
-            pData.MerchantsAvailableForExport = merchantsAvailableForFleets;
-            Logging.Logger.LogThis("This planet can currently support " + Math.Floor((double)pData.MerchantsAvailableForExport / (double)Constant.MerchantsPerTradeFleet).ToString("N0") + " more fleets.");
+                // determine how many merchants are tied up with active fleets
+                foreach (TradeFleet tFleet in gameDataRef.ActiveTradeFleets)
+                {
+                    if (tFleet.ExportPlanetID == pData.ID && tFleet.Status == TradeFleet.eTradeFleetStatus.Active)
+                        merchantsAllocatedToFleets += Constant.MerchantsPerTradeFleet;
+                }
+
+                merchantsAvailableForFleets = totalMerchants - merchantsAllocatedToFleets;
+                Logging.Logger.LogThis("Currently, there are " + pData.TotalMerchants.ToString("N0") + " merchants on planet " + pData.Name + ", of which " + merchantsAvailableForFleets.ToString("N0") + " merchants are available for trade fleets.");
+                pData.MerchantsAvailableForExport = merchantsAvailableForFleets;
+                Logging.Logger.LogThis("This planet can currently support " + Math.Floor((double)pData.MerchantsAvailableForExport / Constant.MerchantsPerTradeFleet).ToString("N0") + " more fleets.");
+            }
         }
 
         private static void RankResourcesByImportance(PlanetData pData, SortedList rP)

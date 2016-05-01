@@ -49,6 +49,7 @@ using ConversationAI;
             characterActionList.Clear();
             systemNameList.Clear();
             planetNameList.Clear();
+            projectDataList.Clear();
             civNameList.Clear();
             civSurNameList.Clear();
             characterFemaleFirstNameList.Clear();
@@ -60,6 +61,7 @@ using ConversationAI;
             ReadCharacterTraitXMLFiles();
             ReadActionXMLFiles();
             ReadHouseXMLFiles();
+            ReadProjectXMLFiles();
             ReadXMLTraitFiles();
             PopulateObjectNameLists();
             PopulatePlanetTraitTables();
@@ -232,12 +234,13 @@ using ConversationAI;
 
         }
 
-    public static void ReadXMLProjectFiles()
+    public static void ReadProjectXMLFiles()
     {
+        GameData gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
         string path = Application.dataPath;
         XmlDocument xmlDoc = new XmlDocument(); // creates the new document
         TextAsset projectData = null;
-        projectData = Resources.Load("ProjectXMLData") as TextAsset;  // load the XML file from the Resources folder
+        projectData = Resources.Load("Project XML Data") as TextAsset;  // load the XML file from the Resources folder
         xmlDoc.LoadXml(projectData.text); // and add it to the xmldoc object
         XmlNodeList projectList = xmlDoc.GetElementsByTagName("Row"); // separate elements by type (trait, in this case)
 
@@ -252,21 +255,60 @@ using ConversationAI;
                 {
                     currentProject.ID = project.InnerText.ToUpper();
                 }
-                if (project.Name == "NAME")
+                if (project.Name == "Name")
                 {
                     currentProject.Name = project.InnerText.ToUpper();
                 }
                 if (project.Name == "TYPE")
                 {
-                    currentProject.Type = (Project.eProjectType)int.Parse(project.InnerText);
+                    switch (project.InnerText.ToUpper())
+                    {
+                        case "DEMOGRAPHIC":
+                            currentProject.Type = Project.eProjectType.Demographic;
+                            break;
+                        case "MILITARY":
+                            currentProject.Type = Project.eProjectType.Military;
+                            break;
+                        case "ECONOMIC":
+                            currentProject.Type = Project.eProjectType.Economic;
+                            break;
+                        case "POLITICAL":
+                            currentProject.Type = Project.eProjectType.Political;
+                            break;
+                        default:
+                            currentProject.Type = Project.eProjectType.Political;
+                            break;
+                    }
+                    
                 }
                 if (project.Name == "DESCRIPTION")
                 {
                     currentProject.Description = project.InnerText.ToUpper();
                 }
+                if (project.Name == "ICON_NAME")
+                {
+                    currentProject.IconName = project.InnerText.ToUpper();
+                }
                 if (project.Name == "SCOPE")
                 {
-                    currentProject.Scope = (Project.eProjectScope)int.Parse(project.InnerText);
+                    switch (project.InnerText.ToUpper())
+                    {
+                        case "EMPIRE":
+                            currentProject.Scope = Project.eProjectScope.Empire;
+                            break;
+                        case "SYSTEM":
+                            currentProject.Scope = Project.eProjectScope.System;
+                            break;
+                        case "PLANET":
+                            currentProject.Scope = Project.eProjectScope.Planet;
+                            break;
+                        case "PROVINCE":
+                            currentProject.Scope = Project.eProjectScope.Province;
+                            break;
+                        default:
+                            currentProject.Scope = Project.eProjectScope.Empire;
+                            break;
+                    }
                 }
                 if (project.Name == "BASE_ADM")
                 {
@@ -306,7 +348,7 @@ using ConversationAI;
             // add the trait once done
             projectDataList.Add(currentProject);
         }
-
+        gameDataRef.ProjectDataList = projectDataList;
     }
 
     public static void ReadCharacterTraitXMLFiles()

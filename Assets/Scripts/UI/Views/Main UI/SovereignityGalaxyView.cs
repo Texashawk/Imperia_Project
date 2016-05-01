@@ -184,39 +184,54 @@ public class SovereignityGalaxyView : MonoBehaviour {
         Vector3 textLocation;
         TradeViewSystemData sysData;
 
-        foreach (GameObject tradeBlock in listAstrographicTextObjectsCreated)
+        foreach (GameObject sovBlock in listAstrographicTextObjectsCreated)
         {
-            if (tradeBlock.activeSelf)
+            if (sovBlock.activeSelf)
             {
                 Color textColor = new Color();
-                sysData = tradeBlock.GetComponent<TradeViewSystemData>();
+                sysData = sovBlock.GetComponent<TradeViewSystemData>();
                 StarData starData = sysData.starData;
 
                 if (!gameDataRef.DebugMode)
                 {
-                    tradeBlock.GetComponentInChildren<TextMeshProUGUI>().text = starData.Name.ToUpper();
+                    sovBlock.GetComponentInChildren<TextMeshProUGUI>().text = starData.Name.ToUpper();
                     if (starData.IntelValue > Constant.MediumIntelLevelMax)
                         textColor = sysData.ownerColor;
                     else
                         textColor = Color.grey;
+                    //if (starData.OwningCiv == gameDataRef.CivList[0])
+                    //{
+                    //    int totalADM = 0;
+                    //    foreach (PlanetData pData in starData.PlanetList)
+                    //    {
+                    //        if (pData.IsInhabited)
+                    //        {
+                    //            if (pData.Owner == gameDataRef.CivList[0])
+                    //            {
+                    //                totalADM += pData.TotalAdmin;
+                    //            }
+                    //        }
+                    //    }
+                    //    sovBlock.transform.Find("ADM Value").GetComponent<TextMeshProUGUI>().text = totalADM.ToString("N0");
+                    //}
                 }
                 else
                 {
                     if (starData.OwningCiv != null)
                     {
-                        tradeBlock.GetComponentInChildren<TextMeshProUGUI>().text = starData.Name.ToUpper() + "(" + starData.WorldLocation.x.ToString("N0") + "," + starData.WorldLocation.y.ToString("N0") + ")" + starData.OwningCiv.Name + starData.OwningCiv.PlanetMinTolerance;// stellarObject.civNames;
+                        sovBlock.GetComponentInChildren<TextMeshProUGUI>().text = starData.Name.ToUpper() + "(" + starData.WorldLocation.x.ToString("N0") + "," + starData.WorldLocation.y.ToString("N0") + ")" + starData.OwningCiv.Name + starData.OwningCiv.PlanetMinTolerance;// stellarObject.civNames;
                         textColor = sysData.ownerColor;
                     }
                 }
 
-                tradeBlock.GetComponentInChildren<TextMeshProUGUI>().color = textColor; // change text to color of the owning civ
+                sovBlock.GetComponentInChildren<TextMeshProUGUI>().color = textColor; // change text to color of the owning civ
 
                 // reset location of data line blocks
                 Vector3 nameVector;
 
                 nameVector = Camera.main.WorldToScreenPoint(sysData.starTransform.position);
                 textLocation = nameVector;
-                tradeBlock.transform.localPosition = new Vector3(textLocation.x - (Screen.width / 2), textLocation.y - (Screen.height / 2), 0); // reset after making a parent to canvas relative coordinates (pivot in center)
+                sovBlock.transform.localPosition = new Vector3(textLocation.x - (Screen.width / 2), textLocation.y - (Screen.height / 2), 0); // reset after making a parent to canvas relative coordinates (pivot in center)
 
             }
         }
@@ -278,6 +293,22 @@ public class SovereignityGalaxyView : MonoBehaviour {
                                         sovInfoBlock.transform.Find("Empire Icon").GetComponent<Image>().enabled = false;
                                         sovInfoBlock.transform.localScale = new Vector3(.85f, .85f, 1); // do not scale
                                         sovInfoBlock.transform.Find("Province Name").GetComponent<TextMeshProUGUI>().text = "";
+                                    }
+
+                                    if (sys.OwningCiv == gameDataRef.CivList[0])
+                                    {
+                                        int totalADM = 0;
+                                        foreach (PlanetData pData in sys.PlanetList)
+                                        {
+                                            if (pData.IsInhabited)
+                                            {
+                                                if (pData.Owner == gameDataRef.CivList[0])
+                                                {
+                                                    totalADM += pData.TotalAdmin;
+                                                }
+                                            }
+                                        }
+                                        sovInfoBlock.transform.Find("ADM Value").GetComponent<TextMeshProUGUI>().text = totalADM.ToString("N0");
                                     }
 
                                     civOwnerFound = true;

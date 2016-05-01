@@ -19,6 +19,7 @@ public class SystemView : MonoBehaviour {
     private Canvas canvasRef;
     private GalaxyView gScreenRef;
     public GameObject systemPlanetSummaryPanel;
+    public GameObject houseShieldsPanel;
     private List<GameObject> systemObjectsDrawnList = new List<GameObject>();
     private float alphaValue = 0f; // change back to 0 when fix the issue with corouting and vars taking too much CPU
     private bool DrawPanelSummary = false;
@@ -43,6 +44,7 @@ public class SystemView : MonoBehaviour {
         graphicsDataRef = GameObject.Find("GameManager").GetComponent<GraphicAssets>();
         uiManagerRef = GameObject.Find("GameManager").GetComponent<UIManager>();
         gScreenRef = GameObject.Find("GameEngine").GetComponent<GalaxyView>();
+        houseShieldsPanel = GameObject.Find("House Shields Panel");
         lowIntelLevelPlanetData = GameObject.Find("Low Intel Level Text").GetComponent<Text>();
         noIntelLevelPlanetData = GameObject.Find("No Intel Level Text").GetComponent<Text>();
         noStellarObjectText = GameObject.Find("No Stellar Object Text").GetComponent<Text>();
@@ -56,11 +58,7 @@ public class SystemView : MonoBehaviour {
 
     void Update()
     {
-        //if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.System)
-        //{
-            
-        //}
-
+        DrawHouseShields();
         if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.System)
         {
             ShowSystemView();
@@ -122,6 +120,51 @@ public class SystemView : MonoBehaviour {
                 StartCoroutine(FadeInAlpha());
                 noIntelLevelPlanetData.color = new Color(noIntelLevelPlanetData.color.r, noIntelLevelPlanetData.color.g, noIntelLevelPlanetData.color.b, alphaValue / 255f);
             }
+        }
+    }
+
+    void DrawHouseShields()
+    {
+        if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.System)
+        {
+            GameObject selectedStar = gScreenRef.GetSelectedStar();
+            StarData selectedStarData = selectedStar.GetComponent<Star>().starData;
+
+            houseShieldsPanel.SetActive(true);
+            Image[] listOfShields = new Image[5];
+
+            listOfShields[0] = houseShieldsPanel.transform.Find("Crest Planet 1").GetComponent<Image>();
+            listOfShields[1] = houseShieldsPanel.transform.Find("Crest Planet 2").GetComponent<Image>();
+            listOfShields[2] = houseShieldsPanel.transform.Find("Crest Planet 3").GetComponent<Image>();
+            listOfShields[3] = houseShieldsPanel.transform.Find("Crest Planet 4").GetComponent<Image>();
+            listOfShields[4] = houseShieldsPanel.transform.Find("Crest Planet 5").GetComponent<Image>();
+
+            for (int x = 0; x < 5; x++)
+            {
+                if (selectedStarData.PlanetSpots[x] != null)
+                {
+
+                    if (selectedStarData.PlanetSpots[x].IsInhabited)
+                    {
+                        listOfShields[x].sprite = graphicsDataRef.HouseCrestList.Find(p => p.name == "CREST000"); // need to add code to read the Holding info of the planet
+                        listOfShields[x].color = new Color(1f, 1f, 1f, 1f); // faded out, but still there to force the correct spacing
+                    }
+                    else
+                    {
+                        listOfShields[x].sprite = graphicsDataRef.HouseCrestList.Find(p => p.name == "CREST000");
+                        listOfShields[x].color = new Color(1f, 1f, 1f, 0f); // faded out, but still there to force the correct spacing
+                    }
+                }
+                else
+                {
+                    listOfShields[x].sprite = graphicsDataRef.HouseCrestList.Find(p => p.name == "CREST000");
+                    listOfShields[x].color = new Color(1f, 1f, 1f, 0f); // faded out, but still there to force the correct spacing
+                }
+            }
+        }
+        else
+        {
+            houseShieldsPanel.SetActive(false);
         }
     }
 

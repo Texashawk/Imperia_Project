@@ -116,7 +116,7 @@ namespace CivCreator
                         // adjust existing relationship pairs appropriately if needed
                         if (otherCData.Relationships.ContainsKey(cData.ID))
                         {
-                            if (otherCData.Relationships[cData.ID].RelationshipState == Relationship.eRelationshipState.Challengee)
+                            if (otherCData.Relationships[cData.ID].RelationshipState == Relationship.eRelationshipState.Challenged)
                             {
                                 newRelationship.RelationshipState = Relationship.eRelationshipState.Challenger;
                                 baseTrust -= 20;
@@ -124,7 +124,7 @@ namespace CivCreator
 
                             else if (otherCData.Relationships[cData.ID].RelationshipState == Relationship.eRelationshipState.Challenger)
                             {
-                                newRelationship.RelationshipState = Relationship.eRelationshipState.Challengee;
+                                newRelationship.RelationshipState = Relationship.eRelationshipState.Challenged;
                                 baseTrust -= 20;
                             }
 
@@ -193,9 +193,9 @@ namespace CivCreator
                                 baseFear += 30;
                             }
 
-                            else if (otherCData.Relationships[cData.ID].RelationshipState == Relationship.eRelationshipState.Rivals)
+                            else if (otherCData.Relationships[cData.ID].RelationshipState == Relationship.eRelationshipState.Rival)
                             {
-                                newRelationship.RelationshipState = Relationship.eRelationshipState.Rivals;
+                                newRelationship.RelationshipState = Relationship.eRelationshipState.Rival;
                                 baseTrust -= 50;
                                 baseFear -= 20;
                             }
@@ -206,22 +206,22 @@ namespace CivCreator
                                 baseTrust -= 70;
                             }
 
-                            else if (otherCData.Relationships[cData.ID].RelationshipState == Relationship.eRelationshipState.Vengeance)
+                            else if (otherCData.Relationships[cData.ID].RelationshipState == Relationship.eRelationshipState.SwornVengeance)
                             {
-                                newRelationship.RelationshipState = Relationship.eRelationshipState.VengeanceUpon;
+                                newRelationship.RelationshipState = Relationship.eRelationshipState.ObjectOfVengeance;
                                 baseTrust -= 40;
                                 baseFear += 60;
                             }
 
-                            else if (otherCData.Relationships[cData.ID].RelationshipState == Relationship.eRelationshipState.VengeanceUpon)
+                            else if (otherCData.Relationships[cData.ID].RelationshipState == Relationship.eRelationshipState.ObjectOfVengeance)
                             {
-                                newRelationship.RelationshipState = Relationship.eRelationshipState.Vengeance;
+                                newRelationship.RelationshipState = Relationship.eRelationshipState.SwornVengeance;
                                 baseTrust -= 90;
                             }
 
-                            else if (otherCData.Relationships[cData.ID].RelationshipState == Relationship.eRelationshipState.Neutral)
+                            else if (otherCData.Relationships[cData.ID].RelationshipState == Relationship.eRelationshipState.None)
                             {
-                                newRelationship.RelationshipState = Relationship.eRelationshipState.Neutral;
+                                newRelationship.RelationshipState = Relationship.eRelationshipState.None;
                             }
 
                             else
@@ -234,21 +234,21 @@ namespace CivCreator
                                     else if (chance <= 2)
                                         newRelationship.RelationshipState = Relationship.eRelationshipState.Friends;
                                     else
-                                        newRelationship.RelationshipState = Relationship.eRelationshipState.Neutral;
+                                        newRelationship.RelationshipState = Relationship.eRelationshipState.None;
                                 }
 
                                 else if (baseTrust < 30)
                                 {
                                     int chance = Random.Range(0, 5);
                                     if (chance == 0)
-                                        newRelationship.RelationshipState = Relationship.eRelationshipState.Rivals;
+                                        newRelationship.RelationshipState = Relationship.eRelationshipState.Rival;
                                     else if (chance == 1)
                                         newRelationship.RelationshipState = Relationship.eRelationshipState.Vendetta;
                                     else if (chance == 2)
-                                        newRelationship.RelationshipState = Relationship.eRelationshipState.Vengeance;
+                                        newRelationship.RelationshipState = Relationship.eRelationshipState.SwornVengeance;
                                 }
                                 else
-                                    newRelationship.RelationshipState = Relationship.eRelationshipState.Neutral;
+                                    newRelationship.RelationshipState = Relationship.eRelationshipState.None;
                             }
                         }
                         else // if no existing states occur, or no reciprocal relationship yet, create one based on trust and fear factors
@@ -265,7 +265,7 @@ namespace CivCreator
                                 else if (chance <= 9 && cData.Gender != otherCData.Gender) // no same-sex marriages here
                                     newRelationship.RelationshipState = Relationship.eRelationshipState.Married;
                                 else
-                                    newRelationship.RelationshipState = Relationship.eRelationshipState.Neutral;
+                                    newRelationship.RelationshipState = Relationship.eRelationshipState.None;
                             }
 
                             else if (baseTrust < 30)
@@ -277,18 +277,18 @@ namespace CivCreator
                                     else if (cData.Influence > (otherCData.Influence * 1.5f))
                                         newRelationship.RelationshipState = Relationship.eRelationshipState.Prey;
                                     else
-                                        newRelationship.RelationshipState = Relationship.eRelationshipState.Rivals;
+                                        newRelationship.RelationshipState = Relationship.eRelationshipState.Rival;
                                 else if (chance == 1)
                                     newRelationship.RelationshipState = Relationship.eRelationshipState.Vendetta;
                                 else if (chance == 2)
-                                    newRelationship.RelationshipState = Relationship.eRelationshipState.Vengeance;
+                                    newRelationship.RelationshipState = Relationship.eRelationshipState.SwornVengeance;
                                 else if (chance == 3)
                                     newRelationship.RelationshipState = Relationship.eRelationshipState.Shunning;
                                 else
-                                    newRelationship.RelationshipState = Relationship.eRelationshipState.Neutral;
+                                    newRelationship.RelationshipState = Relationship.eRelationshipState.None;
                             }
                             else
-                                newRelationship.RelationshipState = Relationship.eRelationshipState.Neutral; // UnityEngine.Random.Range(0, 21);
+                                newRelationship.RelationshipState = Relationship.eRelationshipState.None; // UnityEngine.Random.Range(0, 21);
                         }
 
                         newRelationship.Trust = baseTrust;
@@ -297,6 +297,17 @@ namespace CivCreator
                     }                   
                 }
             }
+        }
+
+        void CreatePlayerHouse()
+        {
+            House pHouse = new House();
+            pHouse.Name = "Orthos"; // temp name
+            pHouse.IsPlayerHouse = true;
+            pHouse.IsRulingHouse = true;
+            pHouse.Loyalty = 100; // your House is loyal to you to start
+            pHouse.Power = 100; // the ruling House starts out with full Power
+            pHouse.BannerID = "HOUSE001";
         }
        
 
@@ -339,7 +350,7 @@ namespace CivCreator
             foreach (string name in DataManager.commonHouseNameList)
             {
                 int creationChance = Random.Range(0, 100);
-                if (creationChance > 90) // only one out of 10 houses will be generated
+                if (creationChance > 95) // only one out of 10 houses will be generated
                 {
                     House comHouse = new House(); // generate temp house
                     houseNumber += 1;
@@ -386,11 +397,13 @@ namespace CivCreator
             }
 
             leadingHouse.IsRulingHouse = true; // set the highest influence House to be the ruling House
+
+
         }
 
         void AssignHouses()
         {
-            Civilization currentCiv = gameDataRef.CivList[0]; // only the player empire has Houses, but this will change very soon! (Add a loop to go through each civ
+            Civilization currentCiv = gameDataRef.CivList[0]; // only the player empire has Houses, but this will change very soon! (Add a loop to go through each civ)
             List<Character> civCharList = new List<Character>();
             List<House>commonHouseList = gameDataRef.HouseList.FindAll(p => p.Rank == House.eHouseRank.Common);
             List<House> minorHouseList = gameDataRef.HouseList.FindAll(p => p.Rank == House.eHouseRank.Minor);

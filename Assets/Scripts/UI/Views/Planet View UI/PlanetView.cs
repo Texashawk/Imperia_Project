@@ -40,7 +40,7 @@ public class PlanetView : MonoBehaviour {
     private Text starbaseText;
     private Text starbaseValue;
     private Text tradeHubIndicator;
-    private Text throughputRemaining;
+    private Text fleetsRemainingCanSupport;
     private Image starbaseDataPanel;
    
     private GameObject industryDisplayButton;
@@ -93,7 +93,7 @@ public class PlanetView : MonoBehaviour {
         starbaseValue = GameObject.Find("Starbase Level").GetComponent<Text>();
         starbaseDataPanel = GameObject.Find("Starbase Data Panel").GetComponent<Image>();
         tradeHubIndicator = GameObject.Find("Trade Hub Indicator").GetComponent<Text>();
-        throughputRemaining = GameObject.Find("Capacity Remaining").GetComponent<Text>();
+        fleetsRemainingCanSupport = GameObject.Find("Capacity Remaining").GetComponent<Text>();
         tileMapLight = GameObject.Find("Region UI Light").GetComponent<Light>();
         edictPanel = GameObject.Find("Edict Panel");
         wireFrameOverlay = GameObject.Find("Wireframe Planet Overlay");
@@ -255,21 +255,14 @@ public class PlanetView : MonoBehaviour {
             {
                 starbaseValue.color = Color.red;
             }
-
-            //if (pData.IsSupplyPlanet)
-            //{
-            //    tradeHubIndicator.enabled = true;
-            //    tradeHubIndicator.text = "SUPPLYING " + HelperFunctions.DataRetrivalFunctions.GetPlanet(pData.SupplyToPlanetID).Name.ToUpper();
-            //    tradeHubIndicator.color = Color.yellow;
-            //}
            
-            if (pData.TradeStatus == PlanetData.eTradeStatus.HasTradeHub)
+            if (pData.TradeStatus != PlanetData.eTradeStatus.NoTrade && pData.TradeStatus != PlanetData.eTradeStatus.ImportOnly)
             {
                 tradeHubIndicator.enabled = true;
-                tradeHubIndicator.text = "TRADE HUB";
+                tradeHubIndicator.text = pData.TradeHub.ToString().ToUpper();
                 tradeHubIndicator.color = Color.green;
-                throughputRemaining.enabled = true;
-                throughputRemaining.text = pData.StarbaseCapacityRemaining.ToString("N1") + " CAPACITY REMAINING";
+                fleetsRemainingCanSupport.enabled = true;
+                fleetsRemainingCanSupport.text = (pData.MerchantsAvailableForExport / Constants.Constant.MerchantsPerTradeFleet).ToString("N0") + " TRADE FLEETS AVAILABLE";
             }
         }      
     }
@@ -280,7 +273,7 @@ public class PlanetView : MonoBehaviour {
         starbaseText.enabled = false;
         starbaseValue.enabled = false;   
         tradeHubIndicator.enabled = false;
-        throughputRemaining.enabled = false;    
+        fleetsRemainingCanSupport.enabled = false;    
     }
 
     
@@ -569,7 +562,7 @@ public class PlanetView : MonoBehaviour {
         starbaseText.enabled = false;
         starbaseValue.enabled = false;
         tradeHubIndicator.enabled = false;
-        throughputRemaining.enabled = false;
+        fleetsRemainingCanSupport.enabled = false;
         tileMapGenerated = false;
         industryDisplayMode = false;
         economicDisplayMode = false;
@@ -592,13 +585,13 @@ public class PlanetView : MonoBehaviour {
                    
     }
 
-    void ShowEdictPanel()
+    void ShowChainOfCommandPanel()
     {
         Vector3 boxLocation;
         
-        boxLocation = new Vector3((Screen.width / 2) - 10, 300 * screenHeightRatio, 0); // where the edict box is located, test       
+        boxLocation = new Vector3(-(Screen.width / 2) + (15 * screenWidthRatio), 492 * screenHeightRatio, 0); // where the edict box is located, test       
         edictPanel.SetActive(true);
-        edictPanel.GetComponent<RectTransform>().pivot = new Vector2(1, 1); // set pivot to upper-right
+        edictPanel.GetComponent<RectTransform>().pivot = new Vector2(0, 1); // set pivot to upper-right
         edictPanel.transform.localPosition = boxLocation;
         edictPanel.transform.localScale = new Vector2(1 * screenWidthRatio, 1 * screenWidthRatio);
 
@@ -619,7 +612,7 @@ public class PlanetView : MonoBehaviour {
             
             if (pData.IsInhabited)
             {
-                ShowEdictPanel();
+                ShowChainOfCommandPanel();
             }
           
             if (!planetDataBoxGenerated) // show planet data if generated
@@ -813,7 +806,7 @@ public class PlanetView : MonoBehaviour {
         }
 
         // set viceroy image
-        if (HelperFunctions.DataRetrivalFunctions.GetPlanetViceroyID(pData.ID) != "none")
+        if (DataRetrivalFunctions.GetPlanetViceroyID(pData.ID) != "none")
         {
             viceroyInfo.gameObject.SetActive(true);
             string vID = HelperFunctions.DataRetrivalFunctions.GetPlanetViceroyID(pData.ID);
@@ -851,10 +844,10 @@ public class PlanetView : MonoBehaviour {
         PlanetData planetData = pData; // ref for planet's data
                     
         // set the planet data box position relative to the planet's world location
-        boxLocation = new Vector3(0, 300 * screenHeightRatio, 0); // where the text box is located, test
+        boxLocation = new Vector3(0, 280 * screenHeightRatio, 0); // where the text box is located, test
         GameObject pPanel = Instantiate(planetSummaryPanel, boxLocation, Quaternion.identity) as GameObject; // draw the panel
         pPanel.transform.SetParent(planetCanvas.transform);
-        boxLocation = new Vector3(boxLocation.x - (Screen.width / 2) + (25 * screenWidthRatio), boxLocation.y, -10);
+        boxLocation = new Vector3(boxLocation.x - (Screen.width / 2) + (15 * screenWidthRatio), boxLocation.y, 0);
         pPanel.GetComponent<RectTransform>().pivot = new Vector2(0, 1); // sets the pivot point      
         pPanel.transform.localPosition = boxLocation; //  new Vector3(-470 + (x * 325), -160, 0); //x = 435; y = 245                    
 

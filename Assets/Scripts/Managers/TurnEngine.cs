@@ -58,8 +58,9 @@ public class TurnEngine : MonoBehaviour {
 
     public void NewTurnRequest()
     {
-        TurnGenerationActive = true;
+        TurnGenerationActive = true;     
         StartCoroutine(GenerateNewTurn());
+        
     }
 
     IEnumerator ExecuteNewTurn() // this is the master turn execution function
@@ -77,6 +78,7 @@ public class TurnEngine : MonoBehaviour {
             yield return StartCoroutine(tManagerRef.UpdateActiveTradeFleets()); // this will update the location and status of all active trade fleets, probably should move to a 'move all fleet objects' coroutine
         }
         yield return StartCoroutine(UpdateAllCivs());
+        
         UpdateEmperor();
         gDataRef.UpdateGameDate(); // advance the year
         gDataRef.RequestGraphicRefresh = true;
@@ -100,10 +102,12 @@ public class TurnEngine : MonoBehaviour {
             //{
                 InitializationStatus = "GENERATING TRADES BETWEEN " + civ.Name.ToUpper() + " WORLDS...";
                 yield return StartCoroutine(UpdateTrades(civ));
+                
             //}
             //CheckForMigration(civ); // check for intraplanet migration                     
             //MigratePopsBetweenPlanets(civ); // and if there are any pops who want to leave, check for where                     
         }
+        tManagerRef.RemoveCompletedTradeRuns();
         yield return 0;
     }
 
@@ -167,6 +171,7 @@ public class TurnEngine : MonoBehaviour {
             if (gDataRef.GameMonth == 0) // on the first month of every year, do this
             {
                 pData.SendTaxUpward(); // determine taxes and send up the chute
+                pData.YearlyImportExpenses = 0;
                 PlanetDevelopmentAI.AdjustViceroyBuildPlan(pData, true); // look at adjusting the build plan for each planet, force every year or when game starts
             }
             else
