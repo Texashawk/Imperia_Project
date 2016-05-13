@@ -12,6 +12,7 @@ TagManager:
   - StellarObject
   - Region Tile
   - Exploration Callout
+  - 3D Star
   layers:
   - Default
   - TransparentFX

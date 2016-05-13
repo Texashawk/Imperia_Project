@@ -451,7 +451,7 @@ namespace ConversationAI
                 {
                     genderVariation = "Emperor";
                 }
-                newString = activeString.Replace("[EMPEROR]", genderVariation + " " + HelperFunctions.DataRetrivalFunctions.GetCivLeader(cData.CivID).Name);
+                newString = activeString.Replace("[EMPEROR]", genderVariation + " " + DataRetrivalFunctions.GetCivilization(cData.CivID).PlayerEmperor.Name);
                 activeString = newString;
             }
 

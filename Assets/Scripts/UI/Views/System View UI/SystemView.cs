@@ -62,7 +62,7 @@ public class SystemView : MonoBehaviour {
         if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.System)
         {
             ShowSystemView();
-            if (DrawPanelSummary)
+            if (DrawPanelSummary && alphaValue < 250f)
                 FadePlanetSummaryPanels();
 
             if (gameDataRef.RequestGraphicRefresh)

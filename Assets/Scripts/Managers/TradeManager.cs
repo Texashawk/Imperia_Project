@@ -85,9 +85,10 @@ namespace Managers
             {
                 if (pData.ActiveTradesList.Count > 0)
                 {
-                    foreach(Trade tData in pData.ActiveTradesList)
+                    int FleetsCanSendThisMonth = pData.StarbaseLevel; // limit the number of fleets that are sent per month to the starbase level
+                    foreach(Trade tData in pData.ActiveTradesList) 
                     {
-                        if (tData.Status == Trade.eTradeStatus.Accepted && DataRetrivalFunctions.GetPlanet(tData.ExportingPlanetID).MerchantsAvailableForExport >= Constant.MerchantsPerTradeFleet)
+                        if (tData.Status == Trade.eTradeStatus.Accepted && DataRetrivalFunctions.GetPlanet(tData.ExportingPlanetID).MerchantsAvailableForExport >= Constant.MerchantsPerTradeFleet && FleetsCanSendThisMonth > 0)
                         {
                             tData.Status = Trade.eTradeStatus.Active; // change status to active
                             tData.TradeID = "TID" + UnityEngine.Random.Range(0, 1000000);
@@ -112,6 +113,7 @@ namespace Managers
                             if ((DataRetrivalFunctions.GetPlanet(tData.ExportingPlanetID).System != DataRetrivalFunctions.GetPlanet(tData.ImportingPlanetID).System))
                             {
                                 CreateTradeFleetObject(tData, pData);
+                                FleetsCanSendThisMonth -= 1;
                                 tFleet.IsSystemTrade = false;
                             }
                             else

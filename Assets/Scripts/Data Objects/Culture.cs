@@ -19,10 +19,6 @@ public class Culture
     public List<string> LastNameList { get; set; }
     public List<string> PlanetNameList { get; set; }
     public List<string> CustomPlanetNames { get; set; }
-
-	void Start ()
-    {
-	
-	}	
+    public Dictionary<Idea, int> IdeaLevels = new Dictionary<Idea, int>();
 	
 }

@@ -47,7 +47,7 @@ public class DynamicResourcesZone : MonoBehaviour
 
         empireTreasuryRevenues.text = StringConversions.ConvertFloatDollarToText(gameDataRef.CivList[0].Revenues);//.ToString("N2") + " M";
         empireTreasuryExpenses.text = StringConversions.ConvertFloatDollarToText(gameDataRef.CivList[0].Expenses); //.ToString("N2") + " M";
-        emperorAP.text = DataRetrivalFunctions.GetCivLeader("CIV0").ActionPoints.ToString("N0"); // get human leader
+        emperorAP.text = DataRetrivalFunctions.GetCivilization("CIV0").PlayerEmperor.ActionPoints.ToString("N0"); // get human leader
         energyStock.text = energyAmount.ToString("N1") + "K";
         basicStock.text = basicAmount.ToString("N1") + "K";
         heavyStock.text = heavyAmount.ToString("N1") + "K";

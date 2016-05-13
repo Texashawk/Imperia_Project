@@ -114,7 +114,7 @@ public class TurnEngine : MonoBehaviour {
     private void UpdateEmperor()
     {
         int AP = 0;
-        AP = gDataRef.CivList[0].Leader.BaseActionPoints;
+        AP = gDataRef.CivList[0].PlayerEmperor.BaseActionPoints;
         AP = UnityEngine.Random.Range(2, AP + 3) + gDataRef.CivList[0].Leader.ActionPoints;
         if (AP > 10)
             AP = 10;

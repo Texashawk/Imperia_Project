@@ -45,11 +45,15 @@ namespace CivObjects
         public float Revenues { get; set; }
         public float Expenses { get; set; }
         public Vector2 Range { get; set; }
+        public Emperor PlayerEmperor { get; set; }
         public Character Leader
         {
             get
             {
-                return HelperFunctions.DataRetrivalFunctions.GetCharacter(LeaderID);
+                if (!HumanCiv)
+                    return DataRetrivalFunctions.GetCharacter(LeaderID);
+                else
+                    return PlayerEmperor;
             }
         }
         public string LeaderID { get; set; }
@@ -193,7 +197,7 @@ namespace CivObjects
                 List<House> hList = new List<House>();
                 foreach (House hData in DataRetrivalFunctions.GetHouseList())
                 {
-                    if (hData.AffiliatedCivID == ID)
+                    if (hData.SwornFealtyCivID == ID)
                     {
                         hList.Add(hData);
                     }
@@ -201,6 +205,24 @@ namespace CivObjects
 
                 return hList;
             }           
+        }
+
+        public string RulingHouseID
+        {
+            get
+            {
+                foreach (House hData in DataRetrivalFunctions.GetHouseList())
+                {
+                    if (hData.SwornFealtyCivID == ID)
+                    {
+                        if (hData.IsRulingHouse)
+                            return hData.ID;
+                    }
+                }
+                return null; // error or no ruling house
+            }
+
+            
         }
 
         public List<Pops> PopList // dynamic depending on pops in regions (not all pops in all regions are loyal!)

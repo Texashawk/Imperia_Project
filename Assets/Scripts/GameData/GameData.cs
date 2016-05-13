@@ -29,7 +29,7 @@ public class GameData : MonoBehaviour
     public string CharacterTooltipIDActive;
     public GameObject activeTooltip = null;
     public bool StarSelected = false; // checks to see whether there is a star selected
-    public bool modalIsActive = false; // checks for modal window active
+    // public bool modalIsActive = false; // checks for modal window active
     public Character SelectedCharacter = null; // selected character ID
 
     public bool DebugMode = false; // allows to see all values during testing (remove for play builds)

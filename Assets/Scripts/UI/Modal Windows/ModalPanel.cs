@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using Managers;
 using UnityEngine.Events;
-using System.Collections;
 
 public class ModalPanel : MonoBehaviour {
 
@@ -12,6 +12,7 @@ public class ModalPanel : MonoBehaviour {
     public Button cancelButton;
     public GameObject modalPanelObject;
     private static GameData gGameData;
+    private static UIManager uiManagerRef;
 
     private static ModalPanel modalPanel;
 
@@ -20,7 +21,7 @@ public class ModalPanel : MonoBehaviour {
         if (!modalPanel)
         {
             gGameData = GameObject.Find("GameManager").GetComponent<GameData>();
-            //modalPanel = new ModalPanel();
+            uiManagerRef = GameObject.Find("GameManager").GetComponent<UIManager>();
             modalPanel = FindObjectOfType(typeof(ModalPanel)) as ModalPanel;
             if (!modalPanel)
                 Debug.LogError("There needs to be one active ModalPanel script on a GameObject in your scene.");
@@ -32,7 +33,7 @@ public class ModalPanel : MonoBehaviour {
     public void Choice (string question, UnityAction yesEvent, UnityAction noEvent, UnityAction cancelEvent)
     {
         modalPanelObject.SetActive(true); // open the panel
-        gGameData.modalIsActive = true;
+        uiManagerRef.ModalIsActive = true;
 
         // set up the event calls for each button
         yesButton.onClick.RemoveAllListeners(); // remove all listeners from the event window
@@ -59,7 +60,7 @@ public class ModalPanel : MonoBehaviour {
 
     void ClosePanel()
     {
-        gGameData.modalIsActive = false;
+        uiManagerRef.ModalIsActive = false;
         modalPanelObject.SetActive(false); // sets the panel to false
     }
 }

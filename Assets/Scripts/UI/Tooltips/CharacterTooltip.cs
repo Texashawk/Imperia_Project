@@ -143,7 +143,7 @@ namespace Tooltips
                 charismaColor = HelperFunctions.StringConversions.GetTextValueColor((int)cData.Charm);
                 willColor = HelperFunctions.StringConversions.GetTextValueColor((int)cData.Passion);              
                 ambitionRatingColor = HelperFunctions.StringConversions.GetTextValueColor((int)cData.Drive);
-                influenceColor = HelperFunctions.StringConversions.GetTextValueColor((int)cData.Influence);
+                influenceColor = HelperFunctions.StringConversions.GetTextValueColor((int)cData.Power);
                 specialtyColor = Color.white;
             }
             else
@@ -259,7 +259,7 @@ namespace Tooltips
                     tooltipObject.transform.Find("Character Charisma").GetComponent<Text>().text = HelperFunctions.StringConversions.ConvertCharacterValueToDescription((int)cData.Charm, cData.IntelLevel);                 
                     tooltipObject.transform.Find("Character Will").GetComponent<Text>().text = HelperFunctions.StringConversions.ConvertCharacterValueToDescription((int)cData.Passion, cData.IntelLevel);
                     tooltipObject.transform.Find("Character Ambition").GetComponent<Text>().text = HelperFunctions.StringConversions.ConvertCharacterValueToDescription((int)cData.Drive, cData.IntelLevel);
-                    tooltipObject.transform.Find("Character Influence").GetComponent<Text>().text = HelperFunctions.StringConversions.ConvertCharacterValueToDescription(cData.Influence, cData.IntelLevel);            
+                    tooltipObject.transform.Find("Character Influence").GetComponent<Text>().text = HelperFunctions.StringConversions.ConvertCharacterValueToDescription(cData.Power, cData.IntelLevel);            
                 }
                 gDataRef.activeTooltip = tooltipObject; // assign the active tooltip
                 toolTipCreated = true;

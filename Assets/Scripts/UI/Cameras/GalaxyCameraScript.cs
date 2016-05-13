@@ -40,13 +40,13 @@ namespace CameraScripts
         private float tiltYOffset = 0f; // this is the offsetY that is used to counteract the tilt of the camera
         public int galaxyHeight;
         public int galaxyWidth;
-        public const int galaxyZValue = 8000; // how far away the camera is from the galaxy map on a Z axis
+        public const int galaxyZValue = 16000; // how far away the camera is from the galaxy map on a Z axis (8000 normal)
         private const int systemZValue = 2000; // how far the camera is away from the system planet views
 
-        public const int galaxyMinZoomLevel = 30;
+        public const int galaxyMinZoomLevel = 15;
         public const int systemMinZoomLevel = 12;
         public const int planetMinZoomLevel = 2;
-        public const int maxZoomLevel = 60;
+        public const int maxZoomLevel = 40; // 60 normal
         public const int minZoomLevel = 15;
 
         public float zoom;
@@ -72,7 +72,7 @@ namespace CameraScripts
         {
             scaleRatio = (Screen.height / 1920f) * (Screen.width / 1080f);
        
-            if (gDataRef.uiSubMode == GameData.eSubMode.None && !gDataRef.modalIsActive)  // only work in no submode
+            if (gDataRef.uiSubMode == GameData.eSubMode.None && !uiManagerRef.ModalIsActive)  // only work in no submode
             {
                 // run movement/zoom functions
                 CheckForMapPan();
@@ -118,6 +118,7 @@ namespace CameraScripts
                         provinceTarget = null;
                         zoom = maxZoomLevel;
                         uiManagerRef.SetActiveViewLevel(ViewManager.eViewLevel.Galaxy); // resets view level to galaxy
+                        uiManagerRef.RequestGraphicRefresh();
                     }
             
                 if (systemZoomActive)
@@ -132,6 +133,7 @@ namespace CameraScripts
                         zoom = maxZoomLevel;                                            
                         transform.position = new Vector3(transform.position.x, transform.position.y, galaxyZValue); // now set the height of the camera in a separate step
                         uiManagerRef.SetActiveViewLevel(ViewManager.eViewLevel.Galaxy); // resets view level to the galaxy
+                        uiManagerRef.RequestGraphicRefresh(); // reset settings when coming back to galaxy view
                         //starTarget = null;  
                     }
 
@@ -299,11 +301,11 @@ namespace CameraScripts
             int leftCameraMove = 0;
 
             if (Screen.width >= 1600)
-                leftCameraMove = 420;
+                leftCameraMove = 380;
             else if (Screen.width >= 1280)
-                leftCameraMove = 460;
+                leftCameraMove = 410;
             else
-                leftCameraMove = 490;
+                leftCameraMove = 430;
 
             if (!systemZoomComplete)
             {

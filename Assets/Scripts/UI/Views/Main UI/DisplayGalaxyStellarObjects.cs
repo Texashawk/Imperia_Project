@@ -18,7 +18,7 @@ public class DisplayGalaxyStellarObjects : MonoBehaviour {
         DrawNebulas();
 	}
 
-    void DrawStars()
+    public void DrawStars()
     {
         var i = 0;
         var x = 0;
@@ -29,28 +29,28 @@ public class DisplayGalaxyStellarObjects : MonoBehaviour {
 
             GameObject writtenStar;
             writtenStar = Instantiate(starList[x], star.WorldLocation, Quaternion.identity) as GameObject;
-            writtenStar.transform.localScale = new Vector2(8f, 8f);
+            writtenStar.transform.localScale = new Vector3(8f, 8f, 8f);
 
-            // draw secondary star if duplex star
-            if (star.starMultipleType == StarData.eStarMultiple.Binary)
-            {
-                var y = 0;
-                Vector3 secondLoc = new Vector3(star.WorldLocation.x - 20, star.WorldLocation.y - 20, star.WorldLocation.z);
-                y = (int)star.compSpectralClass - 1; // convert spectral class to list
-                GameObject secondaryStar = Instantiate(starList[y], secondLoc, Quaternion.identity) as GameObject;
-                //secondaryStar.transform.Rotate(0f, GalaxyCameraScript.cameraTilt, 0f); // tilt each star to compensate for the camera tilt
-                secondaryStar.AddComponent<Star>();
-                secondaryStar.GetComponent<Star>().starData.compSecondarySpectralClass = star.SecondarySpectralClass;
-                secondaryStar.GetComponent<Star>().starData.compSpectralClass = star.compSpectralClass;
-                secondaryStar.GetComponent<Star>().starData.Size = 5; // placeholder
-                secondaryStar.name = star.Name + " B";
-                secondaryStar.GetComponent<CircleCollider2D>().enabled = false; // do not enable the second collider since it is just visual!
-                secondaryStar.tag = "Companion Star";
-                secondaryStar.transform.SetParent(writtenStar.transform); // set as parent of star
-                secondaryStar.transform.localPosition = new Vector3(5, -5, 0); // offset by parent
-                secondaryStar.transform.localScale = new Vector2(3f, 3f);
-                gData.AddStarObjectToList(secondaryStar);
-            }
+            //draw secondary star if duplex star
+            //if (star.starMultipleType == StarData.eStarMultiple.Binary)
+            //{
+            //    var y = 0;
+            //    Vector3 secondLoc = new Vector3(star.WorldLocation.x - 20, star.WorldLocation.y - 20, star.WorldLocation.z);
+            //    y = (int)star.compSpectralClass - 1; // convert spectral class to list
+            //    GameObject secondaryStar = Instantiate(starList[y], secondLoc, Quaternion.identity) as GameObject;
+            //    //secondaryStar.transform.Rotate(0f, GalaxyCameraScript.cameraTilt, 0f); // tilt each star to compensate for the camera tilt
+            //    secondaryStar.AddComponent<Star>();
+            //    secondaryStar.GetComponent<Star>().starData.compSecondarySpectralClass = star.SecondarySpectralClass;
+            //    secondaryStar.GetComponent<Star>().starData.compSpectralClass = star.compSpectralClass;
+            //    secondaryStar.GetComponent<Star>().starData.Size = 5; // placeholder
+            //    secondaryStar.name = star.Name + " B";
+            //    //secondaryStar.GetComponent<CircleCollider2D>().enabled = false; // do not enable the second collider since it is just visual! (temp)
+            //    secondaryStar.tag = "Companion Star";
+            //    secondaryStar.transform.SetParent(writtenStar.transform); // set as parent of star
+            //    secondaryStar.transform.localPosition = new Vector3(5, -5, 0); // offset by parent
+            //    secondaryStar.transform.localScale = new Vector3(3f, 3f, 3f);
+            //    gData.AddStarObjectToList(secondaryStar);
+            //}
 
             //writtenStar.transform.Rotate(-GalaxyCameraScript.cameraTilt, 0f, 0f); // tilt each star to compensate for the camera tilt
             writtenStar.AddComponent<Star>();

@@ -84,7 +84,7 @@ namespace Screens.Galaxy
         private bool systemTrailCreated = false; // is background trail created?
         private bool mapInOverviewMode = false; // is the map in province or galaxy mode?
         public bool EventPanelActive = true; // set visibilty
-        private GameObject smallSystemGrid;
+        //private GameObject smallSystemGrid;
         private GameObject sysTrail; // the local copy of the system trail
         private GameObject systemUICanvas;
         private GameObject selectedUnitInfoCanvas;
@@ -349,12 +349,13 @@ namespace Screens.Galaxy
            
             fov = mainCamera.GetComponent<Camera>().fieldOfView; // field of view
 
-            if (zoomLevel < ViewManager.eViewLevel.System && gameDataRef.uiSubMode == GameData.eSubMode.None && !gameDataRef.modalIsActive) // must be in no submode (astrographic)
+            if (zoomLevel < ViewManager.eViewLevel.System && gameDataRef.uiSubMode == GameData.eSubMode.None && !uiManagerRef.ModalIsActive) // must be in no submode (astrographic)
                 CheckForStarSelection();
-            if (zoomLevel == ViewManager.eViewLevel.System && gameDataRef.uiSubMode == GameData.eSubMode.None && !gameDataRef.modalIsActive)
+            if (zoomLevel == ViewManager.eViewLevel.System && gameDataRef.uiSubMode == GameData.eSubMode.None && !uiManagerRef.ModalIsActive)
             {
-                GetSelectedStar().GetComponent<SpriteRenderer>().enabled = true; // show the stars
-                GetSelectedStar().GetComponent<Light>().enabled = true; // show the lights
+                
+                //GetSelectedStar().GetComponent<SpriteRenderer>().enabled = true; // show the stars
+                //GetSelectedStar().GetComponent<Light>().enabled = true; // show the lights
                 ClearSelectedPlanet(); // reset all selections
                 ShowAllPlanets();
                 CheckForPlanetSelection();
@@ -378,54 +379,78 @@ namespace Screens.Galaxy
         void ScaleStars()
         {
 
-            float mainStarScale = 20f;
+            float mainStarScale;
 
             foreach (GameObject star in galaxyDataRef.GalaxyStarList)
             {
+
+                if (star.CompareTag("3D Star"))
+                {
+                    mainStarScale = 2f;
+                }
+                else
+                {
+                    mainStarScale = 20f;
+                }
+
                 float scaleFactor = star.GetComponent<Star>().starData.Size / mainStarScale;
                 float zoomScaleFactor = star.GetComponent<Star>().starData.Size / 40f;
                 float screenFactor = Screen.width / 1920f;
 
-                // normalize the scale
-                if (scaleFactor < 1.5f)
-                    scaleFactor = 1.5f;
+                if (star.CompareTag("Star"))
+                {
+                    // normalize the scale
+                    if (scaleFactor < 1.5f)
+                        scaleFactor = 1.5f;
 
-                if (scaleFactor > 4.5f)
-                    scaleFactor = 4.5f;
+                    if (scaleFactor > 4.5f)
+                        scaleFactor = 4.5f;
+                }
 
                 if (star.tag == "Selected") // zoomed star is bigger
                 {
-                    star.transform.localScale = new Vector2((16f * scaleFactor) * screenFactor, ((16f * scaleFactor) * screenFactor));
+                    if (star.GetComponent<CircleCollider2D>() != null)
+                    {
+                        star.transform.localScale = new Vector3((16f * scaleFactor) * screenFactor, ((16f * scaleFactor) * screenFactor), ((16f * scaleFactor) * screenFactor));
+                        star.transform.eulerAngles = new Vector3(0, 0, 0); // flatten out the tilt
+                    }
+                    else
+                        star.transform.localScale = new Vector3((64f * scaleFactor) * screenFactor, ((64f * scaleFactor) * screenFactor), ((64f * scaleFactor) * screenFactor));
 
                     // scale the binary/trinary children properly
-                    foreach (Transform child in star.transform)
-                    {
-                        scaleFactor = child.GetComponent<Star>().starData.Size / 25f;
-                        // normalize the scale
-                        if (scaleFactor < .75f)
-                            scaleFactor = .75f;
-                        child.localScale = new Vector2(.5f * zoomScaleFactor, .5f * zoomScaleFactor);
-                        child.GetComponent<Light>().range = 1.05f * child.GetComponent<SpriteRenderer>().bounds.size.x;
-                    }
-                    star.transform.eulerAngles = new Vector3(0, 0, 0); // flatten out the tilt
+                    //foreach (Transform child in star.transform)
+                    //{
+                    //    scaleFactor = child.GetComponent<Star>().starData.Size / 25f;
+                    //    // normalize the scale
+                    //    if (scaleFactor < .75f)
+                    //        scaleFactor = .75f;
+                    //    child.localScale = new Vector2(.5f * zoomScaleFactor, .5f * zoomScaleFactor);
+                    //    child.GetComponent<Light>().range = 1.05f * child.GetComponent<SpriteRenderer>().bounds.size.x;
+                    //}
+                    
                 }
                 else
                 {
-                    star.transform.localScale = new Vector2(6f * scaleFactor, 6f * scaleFactor);
+                    star.transform.localScale = new Vector3(6f * scaleFactor, 6f * scaleFactor, 6f * scaleFactor);
 
                     // scale the binary/trinary children properly
-                    foreach (Transform child in star.transform)
+                    if (star.CompareTag("Star"))
                     {
-                        scaleFactor = child.GetComponent<Star>().starData.Size / 25f;
+                        foreach (Transform child in star.transform)
+                        {
+                            scaleFactor = child.GetComponent<Star>().starData.Size / 25f;
 
-                        // normalize the scale
-                        if (scaleFactor < .75f)
-                            scaleFactor = .75f;
-                        child.localScale = new Vector2(.5f * scaleFactor, .5f * scaleFactor);
-                        child.GetComponent<Light>().range = 1.5f * child.GetComponent<SpriteRenderer>().bounds.size.x;
+                            // normalize the scale
+                            if (scaleFactor < .75f)
+                                scaleFactor = .75f;
+                            child.localScale = new Vector3(.5f * scaleFactor, .5f * scaleFactor, .5f * scaleFactor);
+                            //child.GetComponent<Light>().range = 1.5f * child.GetComponent<SpriteRenderer>().bounds.size.x;
+                        }
+
+                        star.transform.eulerAngles = new Vector3(-GalaxyCameraScript.cameraTilt, 0, 0); // tilt the star
+                        //star.GetComponent<Light>().range = 1.2f * star.GetComponent<SpriteRenderer>().bounds.size.x;
                     }
-                    star.transform.eulerAngles = new Vector3(-GalaxyCameraScript.cameraTilt, 0, 0); // tilt the star
-                    star.GetComponent<Light>().range = 1.2f * star.GetComponent<SpriteRenderer>().bounds.size.x;
+                   
                 }
             }
         }
@@ -440,8 +465,8 @@ namespace Screens.Galaxy
             ClearSelectedStar();
             ShowStellarObjects();        
             backingSphere.SetActive(false); // turn off the sphere
-            GameObject.DestroyObject(smallSystemGrid);
-            GameObject.DestroyObject(sysTrail);
+            //GameObject.DestroyObject(smallSystemGrid);
+            DestroyObject(sysTrail);
             systemGridCreated = false;
             systemTrailCreated = false;
             systemUICanvas.SetActive(false); // don't show panel
@@ -483,9 +508,22 @@ namespace Screens.Galaxy
             if (Input.GetMouseButtonDown(0) && gameDataRef.StarSelected != true)
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit2D hit = Physics2D.GetRayIntersection(ray, 15000); // test
+                RaycastHit2D hit = Physics2D.GetRayIntersection(ray, 30000); // test
+                RaycastHit hit3D;
 
-                if ((hit.collider != null))
+                if (Physics.Raycast(ray, out hit3D)) // check the 3D objects first
+                {
+                    if (hit3D.transform.tag == "3D Star")
+                    {
+                        ClearSelectedStar(); // reset all selections
+                        hit3D.transform.GetComponent<Star>().tag = "Selected"; // select the star
+
+                        //invoke zoom sequence
+                        StartSystemZoom(hit3D.transform);
+                    }
+                }
+
+                if ((hit.collider != null)) // then the 2D (will be obsolete once all 3D stars are in)
                 {
                     if (hit.transform.tag == "Star")
                     {
@@ -549,8 +587,11 @@ namespace Screens.Galaxy
                     Camera.main.GetComponent<GalaxyCameraScript>().planetTarget = hit.transform;
                     Camera.main.GetComponent<GalaxyCameraScript>().planetZoomActive = true;
                     Camera.main.GetComponent<GalaxyCameraScript>().provinceZoomActive = false;
-                    GetSelectedStar().GetComponent<SpriteRenderer>().enabled = false; // hide the stars
-                    GetSelectedStar().GetComponent<Light>().enabled = false; // hide the light halo
+                    if (GetSelectedStar().GetComponent<CircleCollider2D>() != null)
+                    {
+                        GetSelectedStar().GetComponent<SpriteRenderer>().enabled = false; // hide the stars
+                        GetSelectedStar().GetComponent<Light>().enabled = false; // hide the light halo
+                    }
                     uiManagerRef.SetActiveViewLevel(ViewManager.eViewLevel.Planet);                   
                     uiManagerRef.selectedPlanet = hit.transform.GetComponent<Planet>().planetData;
                     planetSelected = true;
@@ -576,7 +617,7 @@ namespace Screens.Galaxy
 
         void FadeOutStarMapOnZoom()
         {
-            float fadeIntensity = 10.5f;
+            float fadeIntensity = 7.5f;
 
             if (fov <= GalaxyCameraScript.maxZoomLevel && fov > GalaxyCameraScript.minZoomLevel)
             {
@@ -595,8 +636,15 @@ namespace Screens.Galaxy
             //reset the selected star by changing all tags to 'Star'
             foreach (GameObject star in galaxyDataRef.GalaxyStarList)
             {
-                if (star.tag != "Companion Star")
+                if (star.GetComponent<Collider>() != null)
+                {
+                    star.tag = "3D Star";
+                }
+                else
+                {
                     star.tag = "Star";
+                }
+                
             }
         }
 
@@ -796,10 +844,14 @@ namespace Screens.Galaxy
             {
                 if (star != null)
                 {
-                    if (star.tag == "Star")
+                    if (star.CompareTag("Star"))
                     {
-                        star.GetComponent<SpriteRenderer>().enabled = true;
-                        star.GetComponent<Light>().enabled = true;
+                        if (star.CompareTag("Star"))
+                        {
+                            star.GetComponent<SpriteRenderer>().enabled = true;
+                            star.GetComponent<Light>().enabled = true;
+                        }
+
                         if (provinceLinesDrawn)
                         {
                             if (star.GetComponent<LineRenderer>() != null)
@@ -809,18 +861,22 @@ namespace Screens.Galaxy
                         }
                         foreach (Transform child in star.transform)
                         {
-                            child.GetComponent<SpriteRenderer>().enabled = true;
-                            child.GetComponent<Light>().enabled = true;
-                        }
-                        StarData starDat = star.GetComponent<Star>().starData;
-
-                        if (!planetsDrawn)
-                        {
-                            // draw planets in system view if not yet created
-                            if ((starDat.IntelLevel > eStellarIntelLevel.Low || gameDataRef.DebugMode))
+                            if (child.CompareTag("Star"))
                             {
-                                DrawPlanets(starDat, star);
+                                child.GetComponent<SpriteRenderer>().enabled = true;
+                                child.GetComponent<Light>().enabled = true;
                             }
+                        }
+                                         
+                    }
+
+                    StarData starDat = star.GetComponent<Star>().starData;
+                    if (!planetsDrawn)
+                    {
+                        // draw planets in system view if not yet created
+                        if ((starDat.IntelLevel > eStellarIntelLevel.Low || gameDataRef.DebugMode))
+                        {
+                            DrawPlanets(starDat, star);
                         }
                     }
                 }
@@ -878,7 +934,7 @@ namespace Screens.Galaxy
         void DisplayPlanetData() // This and the display system data functions will need to move to their respective view classes for continuity purposes.
         {
             HideUnselectedPlanets();
-            smallSystemGrid.SetActive(false); // hides the grid
+            //smallSystemGrid.SetActive(false); // hides the grid
             sysTrail.SetActive(false); // hides the trail        
         }
 
@@ -890,7 +946,7 @@ namespace Screens.Galaxy
 
             if (fov < 80)  // hide stars during zoom in
             {
-                GetSelectedStar().GetComponent<Light>().enabled = false; // cut the light
+                //GetSelectedStar().GetComponent<Light>().enabled = false; // cut the light
                 gStyle.normal.textColor = new Color(1, 1, 1, ((30 - fov) * 10) / 255); // fade in the text color
 
                 if (fov < 60)
@@ -908,14 +964,14 @@ namespace Screens.Galaxy
                 {
                     Vector3 position = new Vector3(GetSelectedStar().transform.position.x - 50, GetSelectedStar().transform.position.y, GetSelectedStar().transform.position.z);
 
-                    smallSystemGrid = Instantiate(systemGrid, position, Quaternion.Euler(279, 180, 180)) as GameObject; // was 90,0,0, with top-down turn
-                    smallSystemGrid.transform.localScale = new Vector3(smallSystemGrid.transform.localScale.x * ((float)Screen.width / 1920f), smallSystemGrid.transform.localScale.y * ((float)Screen.width / 1920f),
-                        smallSystemGrid.transform.localScale.z * ((float)Screen.width / 1920f));
+                    //smallSystemGrid = Instantiate(systemGrid, position, Quaternion.Euler(279, 180, 180)) as GameObject; // was 90,0,0, with top-down turn
+                    //smallSystemGrid.transform.localScale = new Vector3(smallSystemGrid.transform.localScale.x * ((float)Screen.width / 1920f), smallSystemGrid.transform.localScale.y * ((float)Screen.width / 1920f),
+                        //smallSystemGrid.transform.localScale.z * ((float)Screen.width / 1920f));
                     systemGridCreated = true;
                 }
                 else
                 {
-                    smallSystemGrid.SetActive(true);
+                    //smallSystemGrid.SetActive(true);
                 }
 
                 // create system trail if not yet created
@@ -937,7 +993,7 @@ namespace Screens.Galaxy
                     //DrawPlanets(starDat);
                 }
 
-                smallSystemGrid.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, ((30 - fov) * 8) / 255);  // fade in the grid
+                //smallSystemGrid.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, ((30 - fov) * 8) / 255);  // fade in the grid
                 systemUICanvas.SetActive(true); // show the display
                 selectedUnitInfoCanvas.SetActive(true); // show information panel  
             }

@@ -20,8 +20,9 @@ public class SovereignityGalaxyView : MonoBehaviour {
     private UIManager uiManagerRef; // UI Manager reference
     private bool rangeCirclesGenerated;
     private Canvas galaxyPlanetInfoCanvas; // where the trade info is drawn (not the 3D objects)
-    private GraphicAssets graphicAssets;
+    private GraphicAssets graphicAssets; // pulled graphic assets into the scene
     private bool sovInfoDrawn = false;
+    private bool showRangeCircles = false;
 
     void Awake()
     {
@@ -39,7 +40,11 @@ public class SovereignityGalaxyView : MonoBehaviour {
         // check whether the mode is active and if so, show what needs to be shown
         if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.Galaxy)
         {
-            UpdateSovereignityView();
+            if (uiManagerRef.RequestSovViewGraphicRefresh)
+            {
+                UpdateSovereignityView();
+                uiManagerRef.RequestSovViewGraphicRefresh = false;
+            }
             UpdateSovDataBlocks();
         }
         else
@@ -60,22 +65,22 @@ public class SovereignityGalaxyView : MonoBehaviour {
 
         ShowCivilizationRangeCircles();
 
-        if (uiManagerRef.SecondaryViewMode == ViewManager.eSecondaryView.Sovereignity)
+        if (uiManagerRef.SecondaryViewMode == ViewManager.eSecondaryView.Sovereignity)           
             ShowSovDataBlocks();
         else
-        {
+        {          
             DimCivilizationRangeCircles();
-            ShowSovDataBlocks();
+            ShowSovDataBlocks();          
         }
                    
         if (uiManagerRef.PrimaryViewMode != ViewManager.ePrimaryView.Political) // show as an underlay for trade
         {
             ShowCivilizationRangeCircles();
-            DimCivilizationRangeCircles();             
+            DimCivilizationRangeCircles();              
         }
         
-        if (uiManagerRef.PrimaryViewMode == ViewManager.ePrimaryView.Economic)
-            HideSovDataBlocks(); // they get in the way of the trade blocks
+        if (uiManagerRef.PrimaryViewMode == ViewManager.ePrimaryView.Economic)          
+            HideSovDataBlocks(); // they get in the way of the trade blocks     
     }
 
     void ClearView()

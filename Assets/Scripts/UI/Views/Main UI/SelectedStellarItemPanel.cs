@@ -41,12 +41,12 @@ namespace Assets.Scripts.UI
                 selectedItemName.text = uiManagerRef.selectedSystem.Name.ToUpper() + " SYSTEM";  //show text
                 string starType = "";
                 if (starDat.starMultipleType == StarData.eStarMultiple.Binary)
-                    starType = "BINARY ";
+                    starType = "Binary ";
                 if (starDat.starMultipleType == StarData.eStarMultiple.Trinary)
-                    starType = "TRINARY ";
-                selectedItemSecondaryInfo.text = "CLASS " + starDat.SpectralClass.ToString().ToUpper() + starDat.SecondarySpectralClass.ToString("N0") + " " + starType + "STAR";
+                    starType = "Trinary ";
+                selectedItemSecondaryInfo.text = "Class " + starDat.SpectralClass.ToString() + starDat.SecondarySpectralClass.ToString("N0") + " " + starType + "Star";
 
-                string owner = "NO";
+                string owner = "No";
                 foreach (Civilization civ in gDataRef.CivList)
                 {
                     List<StarData> civSystemList = DataRetrivalFunctions.GetCivSystemList(civ);
@@ -55,7 +55,7 @@ namespace Assets.Scripts.UI
                     {
                         owner = civ.Name.ToUpper();
                         if (starDat.AssignedProvinceID != "")
-                            selectedItemSecondaryInfo.text += " | " + DataRetrivalFunctions.GetProvince(starDat.AssignedProvinceID).Name.ToUpper() + " PROVINCE";
+                            selectedItemSecondaryInfo.text += " | " + DataRetrivalFunctions.GetProvince(starDat.AssignedProvinceID).Name + " Province";
                     }
                 }
             }
@@ -63,10 +63,10 @@ namespace Assets.Scripts.UI
             else if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.Planet && uiManagerRef.selectedPlanet != null)
             {
                 selectedItemName.text = uiManagerRef.selectedPlanet.Name.ToUpper();  //show text
-                selectedItemSecondaryInfo.text = "CLASS " + StringConversions.ConvertToRomanNumeral((int)(uiManagerRef.selectedPlanet.Size / 10)) + " " + HelperFunctions.StringConversions.ConvertPlanetEnum(uiManagerRef.selectedPlanet.Type).ToUpper();
-                selectedItemSecondaryInfo.text += " | " + DataRetrivalFunctions.GetSystem(uiManagerRef.selectedPlanet.SystemID).Name.ToUpper() + " SYSTEM";
+                selectedItemSecondaryInfo.text = "Class " + StringConversions.ConvertToRomanNumeral((int)(uiManagerRef.selectedPlanet.Size / 10)) + " " + HelperFunctions.StringConversions.ConvertPlanetEnum(uiManagerRef.selectedPlanet.Type);
+                selectedItemSecondaryInfo.text += " | " + DataRetrivalFunctions.GetSystem(uiManagerRef.selectedPlanet.SystemID).Name + " System";
                 if (uiManagerRef.selectedSystem.AssignedProvinceID != "")
-                    selectedItemSecondaryInfo.text += " | " + DataRetrivalFunctions.GetProvince(DataRetrivalFunctions.GetSystem(uiManagerRef.selectedPlanet.SystemID).AssignedProvinceID).Name.ToUpper() + " PROVINCE";
+                    selectedItemSecondaryInfo.text += " | " + DataRetrivalFunctions.GetProvince(DataRetrivalFunctions.GetSystem(uiManagerRef.selectedPlanet.SystemID).AssignedProvinceID).Name + " Province";
             }
         }
     }

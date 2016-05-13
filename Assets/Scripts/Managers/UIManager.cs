@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using StellarObjects;
+using Managers;
 using CameraScripts;
 
 namespace Managers  
@@ -13,11 +14,17 @@ namespace Managers
         public bool RequestTradeViewGraphicRefresh { get; set; } // the game is asking for a graphic request throughout the UI
         public bool RequestPoliticalViewGraphicRefresh { get; set; }
         public bool RequestProjectBarGraphicRefresh { get; set; }
+        public bool RequestSovViewGraphicRefresh { get; set; }
+        public bool ModalIsActive { get; set; }
 
         public Transform SelectedStellarObject; // what current stellar object is active
         public PlanetData selectedPlanet; // if a planet is selected, what kind
         public StarData selectedSystem; // if a system is selected, what kind
         public ViewManager viewManagerRef; // reference to the ViewManager
+        public GameData gDataRef;
+        public UIManager uiManagerRef;
+
+        public GameObject ProjectScreen; // the Project Screen Prefab goes here
 
         // constants for zoom levels 
         public const int galaxyMinZoomLevel = 120;
@@ -35,9 +42,12 @@ namespace Managers
         void Awake()
         {
             viewManagerRef = GameObject.Find("GameManager").GetComponent<ViewManager>();
+            uiManagerRef = GameObject.Find("GameManager").GetComponent<UIManager>();
+            gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
             RequestProjectBarGraphicRefresh = false;
             RequestTradeViewGraphicRefresh = false;
-            RequestPoliticalViewGraphicRefresh = false; 
+            RequestPoliticalViewGraphicRefresh = false;
+            RequestSovViewGraphicRefresh = true; // first mode
         }
 
         void Start()
@@ -63,6 +73,7 @@ namespace Managers
             SetActiveSecondaryMode(ViewManager.eSecondaryView.Sovereignity); // for testing
             RequestGraphicRefresh();
             RequestProjectBarRefresh();
+            
         }
 
         public void SetPrimaryModeToEconomic()
@@ -71,6 +82,7 @@ namespace Managers
             SetActiveSecondaryMode(ViewManager.eSecondaryView.Trade); // for testing
             RequestGraphicRefresh();
             RequestProjectBarRefresh();
+            
         }
 
         public void SetPrimaryModeToMilitary()
@@ -83,7 +95,7 @@ namespace Managers
 
         public void SetPrimaryModeToPops()
         {
-            SetActivePrimaryMode(ViewManager.ePrimaryView.Pops);
+            SetActivePrimaryMode(ViewManager.ePrimaryView.Demographic);
             SetActiveSecondaryMode(ViewManager.eSecondaryView.Sovereignity); // for testing
             RequestGraphicRefresh();
             RequestProjectBarRefresh();
@@ -98,6 +110,11 @@ namespace Managers
         public void ActivateProjectScreen(string pID)
         {
             Debug.Log("Project ID " + pID + " clicked! Drawing project screen here...");
+            GameObject pScreen = Instantiate(ProjectScreen, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;         
+            Canvas canvasRef = GameObject.Find("Main UI Overlay").GetComponent<Canvas>();         
+            uiManagerRef.ModalIsActive = true; // set modal
+            pScreen.transform.SetParent(canvasRef.transform);
+            pScreen.transform.localScale = new Vector3(.6f, .6f, .6f);           
         }
 
         public void SetActivePrimaryMode(ViewManager.ePrimaryView subView)
@@ -118,8 +135,9 @@ namespace Managers
         public void RequestGraphicRefresh()
         {
             RequestPoliticalViewGraphicRefresh = true;
+            RequestSovViewGraphicRefresh = true;
             RequestTradeViewGraphicRefresh = true;
-            
+            gDataRef.RequestGraphicRefresh = true;
         }
 
         void LateUpdate()

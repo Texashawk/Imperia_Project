@@ -8,6 +8,32 @@ using CivObjects;
 
 namespace CharacterObjects
 {
+    public class Emperor : Character
+    {
+        // leader/emperor variables
+        public float BenevolentInfluence { get; set; }
+        public float PragmaticInfluence { get; set; }
+        public float TyrannicalInfluence { get; set; }
+        public string EmperorModelID { get; set; }
+        public string EmperorSuffix { get; set; } // what letter of the line the leader is
+
+        public float Sanity { get; set; }
+        public float EmperorPower { get; set; }
+        public float PsyEXP { get; set; }
+        public float StressLevel { get; set; }
+        public float HuntingScore { get; set; } // may not use
+        public float SkillEXP { get; set; }
+
+        // need to create a Emperor Skill object and a list of those here
+
+        // need to create a Psy Skill object and a list of those here
+
+        // need to create a Status Effect object and a list of active ones here
+
+        public List<string> FriendsList = new List<string>(); // pulls 5 best friends (may need to be get accessor)
+        public List<string> EnemiesList = new List<string>(); // pulls 5 greatest enemies (may need to be get accessor)
+    }
+
     public class Character
     {
         public enum eSex : int
@@ -20,6 +46,7 @@ namespace CharacterObjects
         public enum eRole : int
         {
             Emperor,
+            Leader,
             Viceroy,
             ProvinceGovernor,
             SystemGovernor,
@@ -83,10 +110,7 @@ namespace CharacterObjects
         }
 
         public string Name { get; set; }
-        public string ID { get; set; }
-
-        
-
+        public string ID { get; set; }       
         public Dictionary<string, Relationship> Relationships = new Dictionary<string, Relationship>(); // dictionary with the advanced relationship variables
         public string HouseID { get; set; }
         public eHouseRole HouseRole { get; set; }
@@ -95,7 +119,7 @@ namespace CharacterObjects
         {
             get
             {
-                return HelperFunctions.DataRetrivalFunctions.GetCivilization(CivID);
+                return DataRetrivalFunctions.GetCivilization(CivID);
             }
         }
         public string PlanetLocationID { get; set; }
@@ -108,7 +132,7 @@ namespace CharacterObjects
         {
             get
             {
-                return HelperFunctions.DataRetrivalFunctions.GetPlanet(PlanetAssignedID);
+                return DataRetrivalFunctions.GetPlanet(PlanetAssignedID);
             }
         }
 
@@ -117,7 +141,7 @@ namespace CharacterObjects
         {
             get
             {
-                return HelperFunctions.DataRetrivalFunctions.GetSystem(SystemAssignedID);
+                return DataRetrivalFunctions.GetSystem(SystemAssignedID);
             }
         }
 
@@ -126,7 +150,7 @@ namespace CharacterObjects
         {
             get
             {
-                return HelperFunctions.DataRetrivalFunctions.GetProvince(ProvinceAssignedID);
+                return DataRetrivalFunctions.GetProvince(ProvinceAssignedID);
             }
         }
 
@@ -143,10 +167,7 @@ namespace CharacterObjects
         public int BaseInfluence { get; set; }
         public int Admin { get; set; }
 
-        // primary character attributes (will change over the game)
-        
-        
-        
+        // primary character attributes (will change over the game)     
         // the motive attributes
         public float Piety { get; set; }
         public float Honor { get; set; }
@@ -176,7 +197,7 @@ namespace CharacterObjects
                     return "It";
             }
         }
-        public int Influence // this is pretty basic, and deterministic by current role and house. Will probably completely rewrite.
+        public int Power // this is pretty basic, and deterministic by current role and house. Will probably completely rewrite.
         {
             get
             {
@@ -265,18 +286,10 @@ namespace CharacterObjects
         // traits
         public List<CharacterTrait> Traits = new List<CharacterTrait>();
 
-        // leader/emperor variables
-        public float BenevolentInfluence { get; set; }
-        public float PragmaticInfluence { get; set; }
-        public float TyrannicalInfluence { get; set; }
-        public string EmperorModelID { get; set; }
-        public string EmperorSuffix { get; set; } // what letter of the line the leader is
-
         public House AssignedHouse
         {
             get
-            {
-              
+            {          
                 GameData gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
                 if (gameDataRef.HouseList.Exists(p => p.ID == HouseID))
                 {
@@ -498,15 +511,24 @@ namespace CharacterObjects
         // basic stats common to all Houses
         public string Name { get; set; }
         public string ID { get; set; }
-        public string AffiliatedCivID { get; set; }
+        public string SwornFealtyCivID { get; set; }
         public eHouseRank Rank { get; set; }
         public eHouseSpecialty Specialty { get; set; }
         public eHousePersonality Personality { get; set; }
         public eHouseStability Stability { get; set; }
         public eHouseWealth Wealth { get; set; }
         public eHouseAmbition Ambition { get; set; }
+        public Culture Culture { get; set; }
         public bool IsRulingHouse { get; set; }
-        public bool IsPlayerHouse { get; set; } 
+        public bool IsPlayerHouse { get; set; }
+        private List<string> planetHoldingIDs = new List<string>();
+        public List<string>PlanetHoldingIDs
+        {
+            get
+            {
+                return null;
+            }
+        } 
 
         // Traditions are values from 1-100 that determine how much a particular sector of activity has been learned and passed through the House for generations.
         // Great Houses might have values near 80, Minor Houses might have values near 40, and common Houses will have values around 5-10 (small and diffuse Houses don't accrue tradition)

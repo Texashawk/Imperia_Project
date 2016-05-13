@@ -23,7 +23,7 @@ namespace Managers
             Economic,
             Political,
             Military,
-            Pops
+            Demographic
         }
 
         public enum eViewLevel : int

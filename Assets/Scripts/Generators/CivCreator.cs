@@ -272,9 +272,9 @@ namespace CivCreator
                             {
                                 int chance = Random.Range(0, 6) - (int)(baseTrust / 10);
                                 if (chance == 0)
-                                    if (cData.Influence < (otherCData.Influence * 1.5f))
+                                    if (cData.Power < (otherCData.Power * 1.5f))
                                         newRelationship.RelationshipState = Relationship.eRelationshipState.Predator;
-                                    else if (cData.Influence > (otherCData.Influence * 1.5f))
+                                    else if (cData.Power > (otherCData.Power * 1.5f))
                                         newRelationship.RelationshipState = Relationship.eRelationshipState.Prey;
                                     else
                                         newRelationship.RelationshipState = Relationship.eRelationshipState.Rival;
@@ -299,15 +299,17 @@ namespace CivCreator
             }
         }
 
-        void CreatePlayerHouse()
+        House CreatePlayerHouse()
         {
             House pHouse = new House();
             pHouse.Name = "Orthos"; // temp name
+            pHouse.SwornFealtyCivID = "CIV0";
             pHouse.IsPlayerHouse = true;
             pHouse.IsRulingHouse = true;
             pHouse.Loyalty = 100; // your House is loyal to you to start
             pHouse.Power = 100; // the ruling House starts out with full Power
             pHouse.BannerID = "HOUSE001";
+            return pHouse;
         }
        
 
@@ -322,15 +324,12 @@ namespace CivCreator
                 int choice = Random.Range(0, civCharList.Count);
                 if (civCharList[choice].Role == Character.eRole.Pool)
                 {
-                    civCharList[choice].Role = Character.eRole.Emperor;
-                    civCharList[choice].BaseActionPoints = Random.Range(3, 7); // temporary
+                    civCharList[choice].Role = Character.eRole.Leader;
+                    civCharList[choice].BaseActionPoints = Random.Range(1, 3); // temporary
                     if (civ.HumanCiv)
                     {
-                        civCharList[choice].BenevolentInfluence = Random.Range(1f, 5f);
-                        civCharList[choice].PragmaticInfluence = Random.Range(5f, 10f);
-                        civCharList[choice].TyrannicalInfluence = Random.Range(1f, 5f);
-                        civCharList[choice].Name = "STEVE I";
-                        //civCharList[choice].HouseID = 
+                        CreatePlayerEmperor(civCharList[choice]);
+                        continue;
                     }
                     civCharList[choice].PlanetLocationID = civ.CapitalPlanetID;
                     civ.LeaderID = civCharList[choice].ID;
@@ -340,6 +339,40 @@ namespace CivCreator
                     goto tryAssignLeader;
                 }
             }
+        }
+
+        void CreatePlayerEmperor(Character choice)
+        {
+            House playerHouse = CreatePlayerHouse();
+            gameDataRef.HouseList.Add(playerHouse);
+            Emperor newEmp = new Emperor();
+            newEmp.Charm = choice.Charm;
+            newEmp.Discretion = choice.Discretion;
+            newEmp.Drive = choice.Drive;
+            newEmp.Humanity = choice.Humanity;
+            newEmp.Intelligence = choice.Intelligence;
+            newEmp.Passion = choice.Passion;
+            newEmp.Piety = choice.Piety;
+            newEmp.Caution = choice.Caution;
+            newEmp.BaseActionPoints = Random.Range(3, 7); // temporary
+            newEmp.BenevolentInfluence = Random.Range(1f, 5f);
+            newEmp.PragmaticInfluence = Random.Range(5f, 10f);
+            newEmp.TyrannicalInfluence = Random.Range(1f, 5f);
+            newEmp.Name = "STEVE I"; // temporary
+            newEmp.Health = Character.eHealth.Perfect;
+            newEmp.Age = 18;
+            newEmp.ID = "EMP001";
+            newEmp.CivID = gameDataRef.CivList[0].ID;
+            newEmp.Gender = Character.eSex.Male;
+            newEmp.EmperorPower = Random.Range(5f, 10f); // will need to be an algorithm to show increase in power through Holdings, etc.
+            newEmp.HouseID = gameDataRef.CivList[0].RulingHouseID;
+            newEmp.HouseRole = Character.eHouseRole.Leader;
+            newEmp.EmperorModelID = "EMP0"; // will be assigned later
+            newEmp.PlanetLocationID = gameDataRef.CivList[0].CapitalPlanetID;
+            gameDataRef.CivList[0].LeaderID = newEmp.ID;
+            gameDataRef.CivList[0].PlayerEmperor = newEmp;
+            gameDataRef.CharacterList.Remove(choice);
+            gameDataRef.CharacterList.Add(newEmp);
         }
 
         void GenerateCommonHouses()

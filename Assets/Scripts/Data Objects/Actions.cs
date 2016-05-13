@@ -153,7 +153,7 @@ namespace Actions
         public static string GivePraisingSpeech(Character cData)
         {
             GameData gDataRef = GameObject.Find("GameManager").GetComponent<GameData>(); 
-            Character eData = gDataRef.CivList[0].Leader; // you
+            Character eData = gDataRef.CivList[0].PlayerEmperor; // you
             CharacterAction aData = gDataRef.CharacterActionList.Find(p => p.ID == "A1");
             
             int speechEffectiveness = 0;
@@ -175,24 +175,24 @@ namespace Actions
             // now determine effect of characters around them, checking each character individually
             foreach (string cID in cData.Relationships.Keys)
             {
-                if (cData.Relationships.ContainsKey(cID))
+                if (cData.Relationships.ContainsKey(cID)) // need a check here for the emperor
                 {
                     if (cData.Relationships[cID].RelationshipState == Relationship.eRelationshipState.Friends || cData.Relationships[cID].RelationshipState == Relationship.eRelationshipState.Allies)
                     {
                         cData.Relationships[cID].Trust += Random.Range(0, (speechEffectiveness / 8));
-                        HelperFunctions.DataRetrivalFunctions.GetCharacter(cID).Relationships[eData.ID].Trust += Random.Range(0, (speechEffectiveness / 10)); // improve trust slightly with the emperor
+                       // DataRetrivalFunctions.GetCharacter(cID).Relationships[eData.ID].Trust += Random.Range(0, (speechEffectiveness / 10)); // improve trust slightly with the emperor
                     }
 
                     if (cData.Relationships[cID].RelationshipState == Relationship.eRelationshipState.Rival || cData.Relationships[cID].RelationshipState == Relationship.eRelationshipState.Vendetta)
                     {
                         cData.Relationships[cID].Trust -= Random.Range(0, (speechEffectiveness / 8));
-                        HelperFunctions.DataRetrivalFunctions.GetCharacter(cID).Relationships[eData.ID].Trust -= Random.Range(0, (speechEffectiveness / 10)); // distrusts slightly with the emperor
+                       // DataRetrivalFunctions.GetCharacter(cID).Relationships[eData.ID].Trust -= Random.Range(0, (speechEffectiveness / 10)); // distrusts slightly with the emperor
                     }
 
                     if (cData.Relationships[cID].RelationshipState == Relationship.eRelationshipState.SwornVengeance)
                     {
                         cData.Relationships[cID].Trust -= Random.Range(0, (speechEffectiveness / 6));
-                        HelperFunctions.DataRetrivalFunctions.GetCharacter(cID).Relationships[eData.ID].Trust -= Random.Range(0, (speechEffectiveness / 6)); // distrusts a lot with the emperor
+                       // DataRetrivalFunctions.GetCharacter(cID).Relationships[eData.ID].Trust -= Random.Range(0, (speechEffectiveness / 6)); // distrusts a lot with the emperor
                     }
                 }
             }         
@@ -261,7 +261,7 @@ namespace Actions
         public static string OrderToChangeExport(Character target, Character initiator, Trade.eTradeGood currentExport, Trade.eTradeGood desiredExport)
         {
             GameData gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
-            Character eData = gDataRef.CivList[0].Leader; // you
+            Character eData = gDataRef.CivList[0].PlayerEmperor; // you
             CharacterAction aData = gDataRef.CharacterActionList.Find(p => p.ID == "A6"); // pull the action data from the data list
             string actionResult = "";
             string conversationFlags = ""; // flags to send along for the 
@@ -349,7 +349,7 @@ namespace Actions
         public static string IssueInsultToCharacter(Character challengingChar, Character insultedChar)
         {
             GameData gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
-            Character eData = gDataRef.CivList[0].Leader; // you
+            Character eData = gDataRef.CivList[0].PlayerEmperor; // you
             CharacterAction aData = gDataRef.CharacterActionList.Find(p => p.ID == "A3");
             Relationship firstCharacterInitialState = insultedChar.Relationships[challengingChar.ID];
             Relationship secondCharacterInitialState = challengingChar.Relationships[insultedChar.ID];
@@ -360,7 +360,7 @@ namespace Actions
             if ((firstCharacterInitialState.RelationshipState != Relationship.eRelationshipState.Vendetta) && (firstCharacterInitialState.RelationshipState != Relationship.eRelationshipState.Predator))
             {
                 // create a challenge!               
-                activeChallengeID = CreateChallenge(challengingChar.ID, insultedChar.ID, Random.Range(0, challengingChar.Influence / 10));
+                activeChallengeID = CreateChallenge(challengingChar.ID, insultedChar.ID, Random.Range(0, challengingChar.Power / 10));
                 secondCharacterInitialState.GrudgeLevel += .1f; // increase the grudge level
                 actionResult += "CHALLENGE ISSUED!";
                 conversationFlags += "[HATE]";

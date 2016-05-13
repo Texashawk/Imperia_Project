@@ -134,6 +134,10 @@ namespace Constants
         public const int MinorHouseChance = 20;
         public const int GreatHouseChance = 70;
 
+        // culture ring ranges
+        public const int InnerRingCultureRange = 4000; // range from the center of the Empire (Neo-Sirius)
+        public const int MiddleRingCultureRange = 3000; // additional range and width from the inner ring
+
         // leader chance that they are in a certain house for different jobs
         public const int ChanceProvinceGovernorGreat = 90;
         public const int ChanceProvinceGovernorMinor = 10;

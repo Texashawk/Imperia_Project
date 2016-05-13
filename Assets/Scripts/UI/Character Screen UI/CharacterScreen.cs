@@ -5,10 +5,12 @@ using CharacterObjects;
 using HelperFunctions;
 using Tooltips;
 using ConversationAI;
+using Managers;
 
 public class CharacterScreen : MonoBehaviour, IPointerClickHandler
 {
     GameData gDataRef;
+    UIManager uiManagerRef;
     GraphicAssets graphicsDataRef;
     Character cData;
     GameObject characterWindow;
@@ -47,6 +49,7 @@ public class CharacterScreen : MonoBehaviour, IPointerClickHandler
     void Awake()
     {
         gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
+        uiManagerRef = GameObject.Find("GameManager").GetComponent<UIManager>();
         graphicsDataRef = GameObject.Find("GameManager").GetComponent<GraphicAssets>(); // get graphics
         characterWindow = GameObject.Find("Character Window Panel");
         blockingPanel = GameObject.Find("Blocking Panel");
@@ -99,7 +102,7 @@ public class CharacterScreen : MonoBehaviour, IPointerClickHandler
                 rView.ClearList();
                 CharacterDataLoaded = false;
                 gDataRef.CharacterWindowActive = false;
-                gDataRef.modalIsActive = false;
+                uiManagerRef.ModalIsActive = false;
                 gDataRef.SelectedCharacter = null; 
                 exitRequested = false;
                 CommTextGenerated = false; // resets conversation engine generation request
@@ -167,7 +170,7 @@ public class CharacterScreen : MonoBehaviour, IPointerClickHandler
             health.text = cData.Health.ToString().ToUpper();
             drive.text = StringConversions.ConvertCharacterValueToDescription((int)cData.Passion, cData.IntelLevel);
             intelligence.text = StringConversions.ConvertCharacterValueToDescription((int)cData.Intelligence, cData.IntelLevel);
-            influence.text = StringConversions.ConvertCharacterValueToDescription(cData.Influence, cData.IntelLevel);
+            influence.text = StringConversions.ConvertCharacterValueToDescription(cData.Power, cData.IntelLevel);
             charm.text = StringConversions.ConvertCharacterValueToDescription((int)cData.Charm, cData.IntelLevel);
             honor.text = StringConversions.ConvertCharacterValueToDescription((int)cData.Honor, cData.IntelLevel);
             passion.text = StringConversions.ConvertCharacterValueToDescription((int)cData.Passion, cData.IntelLevel);

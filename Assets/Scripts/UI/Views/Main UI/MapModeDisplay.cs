@@ -32,39 +32,39 @@ namespace Assets.Scripts.UI.Views.Galaxy_View_UI
             switch (uiManagerRef.SecondaryViewMode)
             {
                 case ViewManager.eSecondaryView.Diplomatic:
-                    galaxyMapSubModeInfo.text = "DIPLOMATIC";
+                    galaxyMapSubModeInfo.text = "Diplomatic";
                     break;
 
                 case ViewManager.eSecondaryView.Financial:
-                    galaxyMapSubModeInfo.text = "FINANCIAL";
+                    galaxyMapSubModeInfo.text = "Financial";
                     break;
 
                 case ViewManager.eSecondaryView.Sovereignity:
-                    galaxyMapSubModeInfo.text = "SOVEREIGNITY";
+                    galaxyMapSubModeInfo.text = "Sovereignity";
                     break;
 
                 case ViewManager.eSecondaryView.Intel:
-                    galaxyMapSubModeInfo.text = "INTEL";
+                    galaxyMapSubModeInfo.text = "Intel";
                     break;
 
                 case ViewManager.eSecondaryView.Morale:
-                    galaxyMapSubModeInfo.text = "MORALE";
+                    galaxyMapSubModeInfo.text = "Morale";
                     break;
 
                 case ViewManager.eSecondaryView.Military:
-                    galaxyMapSubModeInfo.text = "MILITARY";
+                    galaxyMapSubModeInfo.text = "Military";
                     break;
 
                 case ViewManager.eSecondaryView.Trade:
-                    galaxyMapSubModeInfo.text = "TRADE";
+                    galaxyMapSubModeInfo.text = "Trade";
                     break;
 
                 default:
-                    galaxyMapSubModeInfo.text = "NO";
+                    galaxyMapSubModeInfo.text = "No";
                     break;
             }
 
-            galaxyMapSubModeInfo.text += " FOCUS";
+            galaxyMapSubModeInfo.text += " focus";
         }
 
         void CheckPrimaryViewMode()
@@ -72,16 +72,16 @@ namespace Assets.Scripts.UI.Views.Galaxy_View_UI
             switch (uiManagerRef.PrimaryViewMode)
             {
                 case ViewManager.ePrimaryView.Economic:
-                    galaxyMapModeInfo.text = "ECONOMIC COMMAND MODE";
+                    galaxyMapModeInfo.text = "Economic Command Mode";
                     break;
                 case ViewManager.ePrimaryView.Political:
-                    galaxyMapModeInfo.text = "POLITICAL COMMAND MODE";
+                    galaxyMapModeInfo.text = "Political Command Mode";
                     break;
                 case ViewManager.ePrimaryView.Military:
-                    galaxyMapModeInfo.text = "MILITARY COMMAND MODE";
+                    galaxyMapModeInfo.text = "Military Command Mode";
                     break;
-                case ViewManager.ePrimaryView.Pops:
-                    galaxyMapModeInfo.text = "DEMOGRAPHIC COMMAND MODE";
+                case ViewManager.ePrimaryView.Demographic:
+                    galaxyMapModeInfo.text = "Demographic Command Mode";
                     break;
                 default:
                     break;

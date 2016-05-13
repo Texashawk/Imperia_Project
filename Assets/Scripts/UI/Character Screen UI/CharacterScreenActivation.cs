@@ -3,18 +3,21 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
 using CharacterObjects;
+using Managers;
 
 
 public class CharacterScreenActivation : MonoBehaviour, IPointerClickHandler
 {
     GameData gDataRef;
+    UIManager uiManagerRef;
     CharacterScreen cScreen;
     Character cData;
    
 
     void Awake()
-    {    
+    {
         gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
+        uiManagerRef = GameObject.Find("GameManager").GetComponent<UIManager>();
         cScreen = GameObject.Find("Character Window Canvas").GetComponent<CharacterScreen>();
     }
 
@@ -27,7 +30,7 @@ public class CharacterScreenActivation : MonoBehaviour, IPointerClickHandler
     {
         gDataRef.CharacterWindowActive = true;
         gDataRef.SelectedCharacter = cData;
-        gDataRef.modalIsActive = true;
+        uiManagerRef.ModalIsActive = true;
         cScreen.CharacterDataLoaded = false;
         cScreen.InitializeData(cData);
     }

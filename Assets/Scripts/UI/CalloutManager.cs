@@ -44,8 +44,8 @@ namespace Managers
             else
                 ClearView(); // destroy all objects so that they can be rebuilt on new view      
 
-            if (uiManagerRef.RequestPoliticalViewGraphicRefresh)
-                uiManagerRef.RequestPoliticalViewGraphicRefresh = false;
+            //if (uiManagerRef.RequestPoliticalViewGraphicRefresh)
+            //    uiManagerRef.RequestPoliticalViewGraphicRefresh = false;
         }
 
         void UpdateCalloutView()
@@ -97,7 +97,7 @@ namespace Managers
                         else
                             callout.SetActive(false);
                         break;
-                    case ViewManager.ePrimaryView.Pops:
+                    case ViewManager.ePrimaryView.Demographic:
                         callout.SetActive(false); // no pops one yet
                         break;
                     default:

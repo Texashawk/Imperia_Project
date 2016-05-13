@@ -31,9 +31,9 @@ public class VitalStatisticsZone : MonoBehaviour {
     void UpdateVitalStatisticsZone()
     {       
         gameDate.text = gameDataRef.GameDate.ToString("F1"); // display date     
-        emperorPoSup.text = (HelperFunctions.DataRetrivalFunctions.GetCivLeader("CIV0").EmperorPoSup * 100).ToString("N0") + "%";
-        emperorBenevolentInfluence.text = HelperFunctions.DataRetrivalFunctions.GetCivLeader("CIV0").BenevolentInfluence.ToString("N0");
-        emperorPower.text = HelperFunctions.DataRetrivalFunctions.GetCivLeader("CIV0").Influence.ToString("N0");
-        emperorTyrannicalInfluence.text = HelperFunctions.DataRetrivalFunctions.GetCivLeader("CIV0").TyrannicalInfluence.ToString("N0");    
+        emperorPoSup.text = (HelperFunctions.DataRetrivalFunctions.GetCivilization("CIV0").PlayerEmperor.EmperorPoSup * 100).ToString("N0") + "%";
+        emperorBenevolentInfluence.text = HelperFunctions.DataRetrivalFunctions.GetCivilization("CIV0").PlayerEmperor.BenevolentInfluence.ToString("N0");
+        emperorPower.text = HelperFunctions.DataRetrivalFunctions.GetCivilization("CIV0").PlayerEmperor.EmperorPower.ToString("N0");
+        emperorTyrannicalInfluence.text = HelperFunctions.DataRetrivalFunctions.GetCivilization("CIV0").PlayerEmperor.TyrannicalInfluence.ToString("N0");    
     }
 }
