@@ -61,7 +61,7 @@ namespace Assets.Scripts.States
 
         }
 
-        void Switch()
+        public void Switch()
         {
             if (!valuesLoaded)
             {

@@ -6,5 +6,6 @@ namespace Assets.Scripts.Interfaces
         void StateUpdate();
         void ShowIt();
         void StateFixedUpdate();
+        void Switch();
     }
 }

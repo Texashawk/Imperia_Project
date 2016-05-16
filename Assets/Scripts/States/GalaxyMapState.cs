@@ -42,6 +42,10 @@ namespace Assets.Scripts.States
  
         }
 
+        public void Switch()
+        {
+
+        }
         public void StateFixedUpdate()
         {
 

@@ -5,7 +5,7 @@ using Assets.Scripts.Interfaces;
 
 public class StateManager : MonoBehaviour
    {
-    private IStateBase activeState;
+    public IStateBase activeState;
     [HideInInspector] public GalaxyData galaxyDataRef; //reference (link) to all galaxy data
     private static StateManager instanceRef;
     public GameData gameDataRef;

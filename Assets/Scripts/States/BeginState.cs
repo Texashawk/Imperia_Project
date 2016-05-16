@@ -9,6 +9,8 @@ namespace Assets.Scripts.States
     {
         private StateManager manager;
         private Button newGameButton;
+        private Button exitGameButton;
+        private Button nextStepButton;
         private PointerEventData p;
 
         public BeginState(StateManager managerRef)   //constructor
@@ -16,7 +18,9 @@ namespace Assets.Scripts.States
             manager = managerRef;
             Debug.Log("Constructing NewGame");
             newGameButton = GameObject.Find("New Game Button").GetComponent<Button>();
-            newGameButton.onClick.AddListener(delegate { OnClick(); });
+            exitGameButton = GameObject.Find("Exit Game Button").GetComponent<Button>();
+            newGameButton.onClick.AddListener(delegate { StartNewGame(); });
+            exitGameButton.onClick.AddListener(delegate { ExitGame(); });
         }
 
         public void StateUpdate()
@@ -33,9 +37,16 @@ namespace Assets.Scripts.States
            
         }
 
-        void OnClick()
+        void StartNewGame()
         {
-            Switch();
+            //nextStepButton = GameObject.Find("Move to Next Step Button").GetComponent<Button>();
+            //nextStepButton.onClick.AddListener(delegate { Switch(); });
+            // Switch(); // temporarily leave out while testing UI movement
+        }
+
+        void ExitGame()
+        {
+            Application.Quit(); // Get Out
         }
 
         public void StateFixedUpdate()
