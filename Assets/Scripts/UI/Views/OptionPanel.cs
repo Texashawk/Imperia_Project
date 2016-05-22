@@ -44,7 +44,7 @@ public class OptionPanel : MonoBehaviour {
         currentPos = initialPos;
         panelExpanded = false;
         panelWidthAfterOpen = (int)(Screen.width * .9f);
-        panelHeightAfterOpen = (int)(Screen.height * .85f);
+        panelHeightAfterOpen = (int)(Screen.height * .9f);
         panelInitialHeight = gameObject.transform.localScale.y;
         panelInitialWidth = gameObject.transform.localScale.x;
         panelRect = gameObject.GetComponent<Transform>();

@@ -26,7 +26,7 @@ public class PlanetView : MonoBehaviour {
     public GameObject economicPanel;
     public GameObject planetSummaryPanel; // place to stick the summary panel
     private GameObject tileMapPanel;
-    private Light tileMapLight;
+    //private Light tileMapLight;
 
     private PlanetData pData;
     private GameObject planetButtonBarBackground;
@@ -94,7 +94,7 @@ public class PlanetView : MonoBehaviour {
         starbaseDataPanel = GameObject.Find("Starbase Data Panel").GetComponent<Image>();
         tradeHubIndicator = GameObject.Find("Trade Hub Indicator").GetComponent<Text>();
         fleetsRemainingCanSupport = GameObject.Find("Capacity Remaining").GetComponent<Text>();
-        tileMapLight = GameObject.Find("Region UI Light").GetComponent<Light>();
+        //tileMapLight = GameObject.Find("Region UI Light").GetComponent<Light>();
         edictPanel = GameObject.Find("Edict Panel");
         wireFrameOverlay = GameObject.Find("Wireframe Planet Overlay");
         planetButtonBarBackground = GameObject.Find("Planet Button Bar Background");
@@ -113,7 +113,7 @@ public class PlanetView : MonoBehaviour {
         tileMapPanel.SetActive(false);
         stellarographyPanel.SetActive(false);
         edictPanel.SetActive(false);
-        tileMapLight.enabled = false;
+        //tileMapLight.enabled = false;
         tilePanelOriginalRotation = tileMapPanel.transform.rotation;
 	}
 
@@ -138,7 +138,7 @@ public class PlanetView : MonoBehaviour {
                 planetTargetScale = new Vector3(planetCurrentScale.x * .5f, planetCurrentScale.y * .5f, planetCurrentScale.z * .5f);       
                 planetTargetPosition = new Vector3(planetCurrentPosition.x - (18 * screenWidthRatio), planetCurrentPosition.y - 23, planetCurrentPosition.z);
                 wireframeTargetPosition = new Vector3(wireframeCurrentPosition.x - 20.2f, wireframeCurrentPosition.y + 20.3f, wireframeCurrentPosition.z);
-                planetColor = gScreen.GetSelectedPlanet().GetComponent<Planet>().GetComponent<SpriteRenderer>().color;
+                //planetColor = gScreen.GetSelectedPlanet().GetComponent<Planet>().GetComponent<SpriteRenderer>().color;
                 planetDataLoaded = true;             
                 planetInfoInitialized = true;
 
@@ -190,13 +190,13 @@ public class PlanetView : MonoBehaviour {
         }
         if (!regionDisplayMode)
         {
-            tileMapLight.enabled = false;
+            //tileMapLight.enabled = false;
             tileMapPanel.SetActive(false);
             tileMapPanel.transform.rotation = tilePanelOriginalRotation;
         }
         else
         {
-            tileMapLight.enabled = true;
+            //tileMapLight.enabled = true;
             tileMapPanel.SetActive(true);
                    
             // flatten the panel if desired
@@ -228,7 +228,7 @@ public class PlanetView : MonoBehaviour {
         else
         {
             ResetPlanetOverlay();
-            EnableStarbaseData();
+            //EnableStarbaseData();
         }
 
         if (!planetInfoInitialized)
@@ -512,7 +512,7 @@ public class PlanetView : MonoBehaviour {
         float wireFrameFadeValue = 0f;
 
         StartCoroutine(FadeInPlanet(planetFadeValue));
-        selectedPlanet.GetComponent<Planet>().GetComponent<SpriteRenderer>().color = planetColor;
+        //selectedPlanet.GetComponent<Planet>().GetComponent<SpriteRenderer>().color = planetColor;
 
         StartCoroutine(FadeOutWireframe(wireFrameFadeValue));
         wireFrameOverlay.GetComponent<SpriteRenderer>().color = wireframeColor;
@@ -542,8 +542,8 @@ public class PlanetView : MonoBehaviour {
         wireAlphaValue = 0f;
         if (selectedPlanet != null)
         {
-            selectedPlanet.GetComponent<Planet>().GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f); // reset the planet sprite on the system display
-            selectedPlanet.transform.localScale = new Vector3(selectedPlanet.GetComponent<Planet>().planetData.PlanetSystemScaleSize, selectedPlanet.GetComponent<Planet>().planetData.PlanetSystemScaleSize, 1);
+            //selectedPlanet.GetComponent<Planet>().GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f); // reset the planet sprite on the system display
+            selectedPlanet.transform.localScale = new Vector3(selectedPlanet.GetComponent<Planet>().planetData.PlanetSystemScaleSize, selectedPlanet.GetComponent<Planet>().planetData.PlanetSystemScaleSize, selectedPlanet.GetComponent<Planet>().planetData.PlanetSystemScaleSize);
             selectedPlanet.transform.localPosition = planetCurrentPosition; // reset the planet's position
         }
         
@@ -606,8 +606,8 @@ public class PlanetView : MonoBehaviour {
     {
         if (DataRetrivalFunctions.GetSystem(pData.SystemID).IntelValue >= 5 || gameDataRef.DebugMode)
         {            
-            planetButtonBarBackground.SetActive(true); // turn on background;
-            stellarographyPanel.SetActive(true);
+            //planetButtonBarBackground.SetActive(true); // turn on background;
+            //stellarographyPanel.SetActive(true);
             UpdateStellarData(); // updates any changes to stellar data panels
             
             if (pData.IsInhabited)
@@ -617,7 +617,7 @@ public class PlanetView : MonoBehaviour {
           
             if (!planetDataBoxGenerated) // show planet data if generated
             {
-                ShowPlanetDataBox();
+                //ShowPlanetDataBox();
             }
         }
         

@@ -25,6 +25,7 @@ namespace Actions
         public string ID { get; set; }
         public eType Category { get; set; }
         public string Description { get; set; }
+        public List<Relationship.eRelationshipState> ValidRelationshipStates = new List<Relationship.eRelationshipState>(); // which relationship states are valid for this Action?
         public bool ViceroyValid { get; set; }
         public bool SysGovValid { get; set; }
         public bool ProvGovValid { get; set; }
@@ -345,6 +346,25 @@ namespace Actions
 
             return response;
         }
+
+        public static string PeaceOfferingToCharacter(Character target, Character initiator)
+        {
+            GameData gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
+            Character eData = gDataRef.CivList[0].PlayerEmperor; // you
+            CharacterAction aData = gDataRef.CharacterActionList.Find(p => p.ID == "A6"); // pull the action data from the data list
+            string actionResult = "";
+            string conversationFlags = ""; // flags to send along for the 
+            string response = ""; // the response.
+
+            // STEP 1: Who is eligible?
+
+
+
+
+
+            // UNDER CONSTRUCTION
+            return response;
+        }
   
         public static string IssueInsultToCharacter(Character challengingChar, Character insultedChar)
         {
@@ -466,9 +486,11 @@ namespace Actions
             if (activeChallengeID != "")
                 secondCharacterInitialState.RelationshipState = Relationship.eRelationshipState.Challenged;
 
-            string response = "NEW RELSTATE: " + secondCharacterInitialState.RelationshipState.ToString() + " " + actionResult + " " + ConversationEngine.GenerateResponse(insultedChar, aData, 0f, false, conversationFlags);
+            string response = "New Relationship State: " + secondCharacterInitialState.RelationshipState.ToString() + " " + actionResult + " " + ConversationEngine.GenerateResponse(insultedChar, aData, 0f, false, conversationFlags);
             return response;
         }
+
+
     }
 
 

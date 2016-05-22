@@ -34,8 +34,8 @@ public class EventScrollView : MonoBehaviour, IPointerEnterHandler, IPointerExit
         GameObject go = Instantiate(Button_Template) as GameObject;
         go.SetActive(true);
         go.name = gEvent.CivID + buttonList.Count.ToString();
-        EventButton TB = go.GetComponent<EventButton>();
-        TB.SetName(gEvent.Date.ToString("F1") + ": " + gEvent.Description.ToUpper());
+        EventButton TB = go.transform.FindChild("Pattern").GetComponent<EventButton>();
+        TB.SetAlertText(gEvent.Date.ToString("F1") + ": " + gEvent.Description);
         TB.SetAlertLevel(gEvent.Level);
         TB.SetLocation(gEvent.SystemLocationID, gEvent.PlanetLocationID);
         TB.SetID(go.name);

@@ -296,10 +296,10 @@ namespace ConversationAI
             string completeString = "";
 
             // get initial sentence first
-            activeString = "You dare attempt to " + aData.Name + "?";
+            activeString = "You dare " + aData.Name.ToLower() + " to ME?";
             completeString += activeString + " ";
 
-            completeString = ParseResponseFlags(activeString, completeString, flags, cData, false);                    
+            completeString = ParseResponseFlags(activeString, completeString, flags, cData, true);                    
             return completeString;
 
         }
@@ -324,6 +324,8 @@ namespace ConversationAI
                     goto chooseSentence;
                 if (actionSuccess && !HateResponses[choice].Contains("[ACTIONSUCCESS]"))
                     goto chooseSentence;
+                else
+                     activeString = HateResponses[choice];
 
                 activeString = HateResponses[choice];
                 activeString = RemoveExcessSecondaryTags(activeString); // remove excess tags
@@ -342,6 +344,8 @@ namespace ConversationAI
                     goto chooseSentence;
                 if (cData.Lifeform == Character.eLifeformType.AI && !HateResponses[choice].Contains("[AI]") || (cData.Lifeform != Character.eLifeformType.AI && HateResponses[choice].Contains("[AI]"))) // AI lifeforms mush always choose an AI flag
                     goto chooseSentence;
+                else
+                    activeString = BetrayedResponses[choice];
 
                 activeString = BetrayedResponses[choice];
                 activeString = RemoveExcessSecondaryTags(activeString); // remove excess tags

@@ -578,6 +578,28 @@ namespace Screens.Galaxy
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit2D hit = Physics2D.GetRayIntersection(ray, maxZoomLevel + 20);
+                RaycastHit hit3D;
+
+                if (Physics.Raycast(ray, out hit3D)) // check the 3D objects first
+                {
+                    if (hit3D.transform.tag == "Planet")
+                    {
+                        hit3D.transform.GetComponent<Planet>().tag = "Selected"; // select the planet
+
+                        //invoke zoom sequence
+                        Camera.main.GetComponent<GalaxyCameraScript>().planetTarget = hit3D.transform;
+                        Camera.main.GetComponent<GalaxyCameraScript>().planetZoomActive = true;
+                        Camera.main.GetComponent<GalaxyCameraScript>().provinceZoomActive = false;
+                        if (GetSelectedStar().GetComponent<CircleCollider2D>() != null)
+                        {
+                            GetSelectedStar().GetComponent<SpriteRenderer>().enabled = false; // hide the stars
+                            GetSelectedStar().GetComponent<Light>().enabled = false; // hide the light halo
+                        }
+                        uiManagerRef.SetActiveViewLevel(ViewManager.eViewLevel.Planet);
+                        uiManagerRef.selectedPlanet = hit3D.transform.GetComponent<Planet>().planetData;
+                        planetSelected = true;
+                    }
+                }
 
                 if (hit.collider != null && hit.transform.tag == "Planet")
                 {
@@ -830,9 +852,17 @@ namespace Screens.Galaxy
                 {
                     if (planet.tag == "Planet")
                     {
-                        planet.GetComponent<SpriteRenderer>().enabled = false;
-                        foreach (Transform child in planet.transform)
-                            child.GetComponent<SpriteRenderer>().enabled = false;
+                        if (planet.GetComponent<SpriteRenderer>() != null)
+                        {
+                            planet.GetComponent<SpriteRenderer>().enabled = false;
+                            foreach (Transform child in planet.transform)
+                                child.GetComponent<SpriteRenderer>().enabled = false;
+                        }
+                        else
+                        {
+                            planet.GetComponent<MeshRenderer>().enabled = false;
+                        }
+
                     }
                 }
             }
@@ -906,9 +936,17 @@ namespace Screens.Galaxy
                 {
                     if (planet.tag == "Planet")
                     {
-                        planet.GetComponent<SpriteRenderer>().enabled = true;
-                        foreach (Transform child in planet.transform)
-                            child.GetComponent<SpriteRenderer>().enabled = true;
+                        if (planet.GetComponent<SpriteRenderer>() != null)
+                        {
+                            planet.GetComponent<SpriteRenderer>().enabled = true;
+                            foreach (Transform child in planet.transform)
+                                child.GetComponent<SpriteRenderer>().enabled = true;
+                        }
+                        else
+                        {
+                            planet.GetComponent<MeshRenderer>().enabled = true;
+                        }
+
                     }
                 }
             }
@@ -951,7 +989,7 @@ namespace Screens.Galaxy
 
                 if (fov < 60)
                 {
-                    HideStellarObjects(); // hide stars around the star when in close         
+                    //HideStellarObjects(); // hide stars around the star when in close         
                     starmapSprite.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0); // fade it to 0
                 }
 
@@ -978,7 +1016,7 @@ namespace Screens.Galaxy
                 if (!systemTrailCreated)
                 {
                     Vector3 starPosition = GetSelectedStar().GetComponent<Star>().transform.position;
-                    Vector3 trailLocation = new Vector3(starPosition.x - 35, starPosition.y, 0);
+                    Vector3 trailLocation = new Vector3(starPosition.x - 35, starPosition.y, -200);
                     sysTrail = Instantiate(systemTrail, trailLocation, Quaternion.identity) as GameObject;
                     systemTrailCreated = true;
                 }
@@ -1122,26 +1160,44 @@ namespace Screens.Galaxy
 
                     pData = sData.PlanetSpots[x];
 
-                    Vector3 position = new Vector3(starPosition.x + ((star.transform.localScale.x / 2) + (startingPlanetMargin * screenScaleFactor)) + ((x + 1) * ((float)Screen.width / screenWidthFactor)), starPosition.y, 10); // derive the planet position from the star
-                    //Vector3 position = new Vector3(starPosition.x + ((selectedStar.transform.localScale.x / 2) + (startingPlanetMargin * screenScaleFactor)) + ((x + 1) * ((float)Screen.width / screenWidthFactor)), starPosition.y, 10); // derive the planet position from the star
+                    Vector3 position = new Vector3(starPosition.x + ((star.transform.localScale.x / 2) + (startingPlanetMargin * screenScaleFactor)) + ((x + 1) * ((float)Screen.width / screenWidthFactor)), starPosition.y, -120); // derive the planet position from the star
+                   
                     GameObject planet = Instantiate(planetsToDraw[x], position, Quaternion.Euler(0, 180, 0)) as GameObject; // draw the planet
                     planet.AddComponent<Planet>(); // add the planet container
                     planet.GetComponent<Planet>().planetData = pData; // and attach the data
                     planet.name = pData.Name;
-                    planet.GetComponent<CircleCollider2D>().radius = 2.0f;
-                    int size = 0;
+                    if (planet.GetComponent<CircleCollider2D>() != null)
+                        planet.GetComponent<CircleCollider2D>().radius = 2.0f;
+                    float size = 0;
 
                     // normalize the size of the object
                     if (pData.Type == PlanetData.ePlanetType.IceBelt || pData.Type == PlanetData.ePlanetType.AsteroidBelt || pData.Type == PlanetData.ePlanetType.IceBelt)
                         size = 50;
                     else
-                        size = pData.Size;                        
-                    
-                    // size of the planet (need to increase)                                     
-                    pData.PlanetSystemScaleSize = size *.2f; // set the planet's size as it should be in the system view (will probably set with the gameobject)
+                        size = (pData.Size * 1.2f);
 
-                    planet.transform.localScale = new Vector2(pData.PlanetSystemScaleSize, pData.PlanetSystemScaleSize); // scale the sprite depending on size
-                    planet.transform.Rotate(180, 180, 0);
+                    // size of the planet (need to increase)
+                    if (planet.GetComponent<CircleCollider2D>() != null)
+                    {
+                        pData.PlanetSystemScaleSize = size * .2f; // set the planet's size as it should be in the system view (will probably set with the gameobject)
+                        planet.transform.Rotate(180, 180, 0);
+                    }
+
+                    else
+                    {
+                        pData.PlanetSystemScaleSize = size; // set the planet's size as it should be in the system view if it is 3D
+                        planet.GetComponent<F3DPlanet>().OrbitPoint = star.transform; // assign the orbit point
+
+                        if (star.GetComponent<MeshRenderer>() != null) // if 3D star
+                        {
+                            Light sunLight = star.transform.FindChild("Sun Light").GetComponent<Light>();
+                            planet.GetComponent<SgtAtmosphere>().Lights.Add(sunLight);
+                            star.GetComponent<F3DSun>().UpdatePlanets();
+                        }
+                    }
+
+                    planet.transform.localScale = new Vector3(pData.PlanetSystemScaleSize, pData.PlanetSystemScaleSize, pData.PlanetSystemScaleSize); // scale the sprite depending on size
+                    
                     listSystemPlanetsCreated.Add(planet); // add the planet to the drawn list (for destruction later as a group)
 
                     //draw rings if they exist

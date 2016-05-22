@@ -807,7 +807,7 @@ namespace CivCreator
             // create the human homeworld manually;
             pData.Name = "New Terra";
             pData.ID = "PLANEWT001";
-            pData.PlanetSpriteNumber = 43; // the city type
+            pData.PlanetSpriteNumber = 0; // the city type
             pData.Type = PlanetData.ePlanetType.Terran;
             pData.Rank = PlanetData.ePlanetRank.ImperialCapital;
             pData.Size = 60;

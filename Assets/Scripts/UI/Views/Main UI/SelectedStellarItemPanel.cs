@@ -38,7 +38,7 @@ namespace Assets.Scripts.UI
             if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.System && uiManagerRef.selectedSystem != null)
             {
                 StarData starDat = uiManagerRef.selectedSystem;
-                selectedItemName.text = uiManagerRef.selectedSystem.Name.ToUpper() + " SYSTEM";  //show text
+                selectedItemName.text = uiManagerRef.selectedSystem.Name + " System";  //show text
                 string starType = "";
                 if (starDat.starMultipleType == StarData.eStarMultiple.Binary)
                     starType = "Binary ";
@@ -62,7 +62,7 @@ namespace Assets.Scripts.UI
 
             else if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.Planet && uiManagerRef.selectedPlanet != null)
             {
-                selectedItemName.text = uiManagerRef.selectedPlanet.Name.ToUpper();  //show text
+                selectedItemName.text = uiManagerRef.selectedPlanet.Name;  //show text
                 selectedItemSecondaryInfo.text = "Class " + StringConversions.ConvertToRomanNumeral((int)(uiManagerRef.selectedPlanet.Size / 10)) + " " + HelperFunctions.StringConversions.ConvertPlanetEnum(uiManagerRef.selectedPlanet.Type);
                 selectedItemSecondaryInfo.text += " | " + DataRetrivalFunctions.GetSystem(uiManagerRef.selectedPlanet.SystemID).Name + " System";
                 if (uiManagerRef.selectedSystem.AssignedProvinceID != "")

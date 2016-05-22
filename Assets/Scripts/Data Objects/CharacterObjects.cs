@@ -364,28 +364,28 @@ namespace CharacterObjects
     {
         public enum eRelationshipState : int
         {
-            None,
-            Allies,
-            Friends,
-            Superior,
-            Inferior,
-            Challenger,
-            Challenged,
-            Rival,
-            Shunning,
-            Shunned,
-            SwornVengeance,
-            ObjectOfVengeance,
-            Vendetta,
-            Married,
-            Lovers,
-            HangerOn,
-            HungUpon,
-            Patron,
-            Protegee,
-            Predator,
-            Prey,
-            Spouse
+            None, // 0
+            Allies, // 1
+            Friends, // 2
+            Superior, // 3
+            Inferior, // 4
+            Challenger, // 5
+            Challenged, // 6
+            Rival, // 7
+            Shunning, // 8
+            Shunned, // 9
+            SwornVengeance, // 10
+            ObjectOfVengeance, // 11
+            Vendetta, // 12
+            Married, // 13
+            Lovers, // 14
+            HangerOn, // 15
+            HungUpon, // 16
+            Patron, // 17
+            Protegee, // 18
+            Predator, // 19
+            Prey, // 20
+            Spouse // 21
         }
 
         public enum eSecretRelationshipState : int

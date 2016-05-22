@@ -33,7 +33,7 @@ public class GenerateGameObject
     //public static List<PlanetTraits> planetTraitDataList = new List<PlanetTraits>();
    
     // consts for unit generation
-    private const int SpritesPerPlanetType = 43; // planet sprites per type
+    private const int SpritesPerPlanetType = 3; // planet sprites per type - normally 43, now just 1 while testing
     private const int SpritesPerNebulaType = 5; // as on the tin
     private const int SpritesPerRingType = 5; // for planet rings
     private const int SpritesPerBeltType = 5; // sprites for ice belts, dust rungs, etc
@@ -1380,11 +1380,11 @@ public class GenerateGameObject
         // Step 5: Determine industrial modifier of planet
         cPlan.IndustrialMultiplier = (pTable.indMult / 100);
 
-        // Step 6: Determine if planet has any rings
-        if (UnityEngine.Random.Range(0, 100) <= pTable.ringChance)
-            cPlan.Rings = true;
-        else
-            cPlan.Rings = false;
+        // Step 6: Determine if planet has any rings (temp. disabled for 3D test)
+        //if (UnityEngine.Random.Range(0, 100) <= pTable.ringChance)
+        //    cPlan.Rings = true;
+        //else
+        //    cPlan.Rings = false;
 
         // Step 7: Determine how many moons the planet has
         if (UnityEngine.Random.Range(0, 100) <= pTable.moonChance)
@@ -1453,12 +1453,12 @@ public class GenerateGameObject
 
         // Step 12: Generate sprite number (to show type of planet)
         if ((cPlan.Type != PlanetData.ePlanetType.DustRing) && (cPlan.Type != PlanetData.ePlanetType.IceBelt) && (cPlan.Type != PlanetData.ePlanetType.AsteroidBelt))
-            cPlan.PlanetSpriteNumber = UnityEngine.Random.Range(0, SpritesPerPlanetType - 1);
+            cPlan.PlanetSpriteNumber = UnityEngine.Random.Range(0, SpritesPerPlanetType);
         else
-            cPlan.PlanetSpriteNumber = UnityEngine.Random.Range(0, SpritesPerBeltType - 1);
+            cPlan.PlanetSpriteNumber = UnityEngine.Random.Range(0, SpritesPerBeltType);
 
         // Step 13: Generate ring sprite number if applicable
-        cPlan.PlanetRingSpriteNumber = UnityEngine.Random.Range(0, SpritesPerRingType - 1);
+        cPlan.PlanetRingSpriteNumber = UnityEngine.Random.Range(0, SpritesPerRingType);
         cPlan.PlanetRingTilt = UnityEngine.Random.Range(-10, 10);
 
         // Step 13: Determine planetary traits

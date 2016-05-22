@@ -86,9 +86,9 @@ public class GameData : MonoBehaviour
         MinSystems = 90;
         GameNumber = Random.Range(0, 100000);
         MaxSystems = 115;
-        TotalSystems = 50;
-        NumberOfAICivs = 8; // static number to test UnityEngine.Random.Range(4, 7); // test
-        PlayerEmpireName = "New Human Empire";
+        TotalSystems = 150;
+        NumberOfAICivs = 1; // static number to test UnityEngine.Random.Range(4, 7); // test
+        PlayerEmpireName = "Celestial Empire";
         gameVersion = gameVersionNumber + gameVersionSuffix;
         //DataManager.InitializeData(); // intialize data all in one place (test)
     }

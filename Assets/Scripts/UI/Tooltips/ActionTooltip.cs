@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using CharacterObjects;
+using TMPro;
 using System.Collections;
 using CameraScripts;
 
@@ -14,14 +14,14 @@ public class ActionTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public bool exitRequested = false;
     private GraphicAssets graphicDataRef;
     private GameData gDataRef;
-    private Canvas uiCanvas;
+    private Canvas charCanvas;
     private float alphaValue = 0f;
     private Color fadeColor;
     private float offsetAmount = 2.0f; // sets the distance away from the center of the tooltipped object
 
     void Awake()
     {
-        uiCanvas = GameObject.Find("Character Window Canvas").GetComponent<Canvas>();
+        charCanvas = GameObject.Find("Character Window Canvas").GetComponent<Canvas>();
         graphicDataRef = GameObject.Find("GameManager").GetComponent<GraphicAssets>();
         gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
     }
@@ -87,8 +87,8 @@ public class ActionTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         tooltipObject.GetComponent<Image>().color = fadeColor;
 
         // white colored data
-        tooltipObject.transform.Find("Name").GetComponent<Text>().color = fadeColor;
-        tooltipObject.transform.Find("Description").GetComponent<Text>().color = fadeColor;
+        tooltipObject.transform.Find("Name").GetComponent<TextMeshProUGUI>().color = fadeColor;
+        tooltipObject.transform.Find("Description").GetComponent<TextMeshProUGUI>().color = fadeColor;
     }
 
     private void DrawToolTip()
@@ -98,18 +98,24 @@ public class ActionTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         {
             string name = "";
             string desc = "";
-            Vector3 tooltipLocation = new Vector3(transform.position.x + offsetAmount, transform.position.y - 9, transform.position.z);
+            string type = "";
+
+            Vector3 tooltipLocation = new Vector3(transform.position.x, transform.position.y - 3f, transform.position.z);
 
             tooltipObject = Instantiate(tooltipPrefab, tooltipLocation, Quaternion.identity) as GameObject;
-            tooltipObject.transform.SetParent(uiCanvas.transform, true); // assign to canvas
-            tooltipObject.transform.localScale = new Vector3(.8f, .8f, .8f);
+            tooltipObject.transform.SetParent(charCanvas.transform,true); // assign to canvas
+
+            tooltipObject.transform.localScale = new Vector3(.7f, .7f, .7f);
+            //tooltipObject.transform.localPosition = tooltipLocation;
           
             name = gDataRef.CharacterActionList.Find(p => p.ID == transform.name).Name;
-            desc = "'" + gDataRef.CharacterActionList.Find(p => p.ID == transform.name).Description.ToUpper();
+            desc = "'" + gDataRef.CharacterActionList.Find(p => p.ID == transform.name).Description + "'";
+            type = gDataRef.CharacterActionList.Find(p => p.ID == transform.name).Category.ToString();
 
-            tooltipObject.transform.Find("Name").GetComponent<Text>().text = name.ToUpper();
-            tooltipObject.transform.Find("Description").GetComponent<Text>().text = desc.ToUpper();
-           
+            tooltipObject.transform.Find("Name").GetComponent<TextMeshProUGUI>().text = name;
+            tooltipObject.transform.Find("Description").GetComponent<TextMeshProUGUI>().text = desc;
+            tooltipObject.transform.Find("Action Type").GetComponent<TextMeshProUGUI>().text = type;
+
             gDataRef.activeTooltip = tooltipObject; // assign the active tooltip
             toolTipCreated = true;
         }

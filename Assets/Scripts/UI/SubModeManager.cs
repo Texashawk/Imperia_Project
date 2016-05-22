@@ -12,7 +12,7 @@ public class SubModeManager : MonoBehaviour { // only used to switch the sub mod
     void Awake()
     {
         gGameDataRef = GameObject.Find("GameManager").GetComponent<GameData>(); // tie the game camera script to the data
-        intelButton = GameObject.Find("Intel Button").GetComponent<Button>();
+        //intelButton = GameObject.Find("Intel Button").GetComponent<Button>();
     }
 
     public void SwitchSubModeIntel()

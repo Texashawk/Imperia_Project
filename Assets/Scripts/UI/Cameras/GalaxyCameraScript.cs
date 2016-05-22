@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using StellarObjects;
+using UnityEngine.UI;
 using Managers;
 
 namespace CameraScripts
@@ -46,8 +47,8 @@ namespace CameraScripts
         public const int galaxyMinZoomLevel = 15;
         public const int systemMinZoomLevel = 12;
         public const int planetMinZoomLevel = 2;
-        public const int maxZoomLevel = 40; // 60 normal
-        public const int minZoomLevel = 15;
+        public const int maxZoomLevel = 60; // 60 normal
+        public const int minZoomLevel = 12;
 
         public float zoom;
        
@@ -71,6 +72,8 @@ namespace CameraScripts
         void Update()
         {
             scaleRatio = (Screen.height / 1920f) * (Screen.width / 1080f);
+
+           
        
             if (gDataRef.uiSubMode == GameData.eSubMode.None && !uiManagerRef.ModalIsActive)  // only work in no submode
             {
@@ -130,8 +133,9 @@ namespace CameraScripts
                         provinceZoomActive = false;
                         provinceZoomComplete = false;
                         systemZoomComplete = true; // was false
-                        zoom = maxZoomLevel;                                            
-                        transform.position = new Vector3(transform.position.x, transform.position.y, galaxyZValue); // now set the height of the camera in a separate step
+                        zoom = maxZoomLevel;
+                        MoveCameraBack(new Vector3(transform.position.x, transform.position.y, galaxyZValue));                                      
+                        //transform.position = new Vector3(transform.position.x, transform.position.y, galaxyZValue); // now set the height of the camera in a separate step
                         uiManagerRef.SetActiveViewLevel(ViewManager.eViewLevel.Galaxy); // resets view level to the galaxy
                         uiManagerRef.RequestGraphicRefresh(); // reset settings when coming back to galaxy view
                         //starTarget = null;  
@@ -141,7 +145,10 @@ namespace CameraScripts
                     if ((Input.GetAxis("Mouse ScrollWheel") > mouseWheelValue) || Input.GetButtonDown("Right Mouse Button"))
                     {
                         planetTarget.transform.localScale = new Vector3(planetTarget.GetComponent<Planet>().planetData.PlanetSystemScaleSize,planetTarget.GetComponent<Planet>().planetData.PlanetSystemScaleSize,1); // reset the scale
-                        planetTarget.Rotate(0, 0, 90);
+                        if (planetTarget.GetComponent<SpriteRenderer>() != null)
+                        {
+                            planetTarget.Rotate(0, 0, 90);
+                        }
                         planetTarget = null;
                         planetZoomActive = false;
                         planetZoomComplete = false;
@@ -162,6 +169,14 @@ namespace CameraScripts
             }
         }
 
+        IEnumerator MoveCameraBack(Vector3 tgtPosition)
+        {         
+            while ((((int)transform.position.x != (int)tgtPosition.x | (int)transform.position.y != (int)tgtPosition.y) | (int)transform.position.z != (int)tgtPosition.z) && (!planetZoomActive) && (!provinceZoomActive) && (systemZoomActive))
+            {
+                transform.position = new Vector3(Mathf.Lerp(transform.position.x, tgtPosition.x, Time.deltaTime * (zoomSpeed + 3)), Mathf.Lerp(transform.position.y, tgtPosition.y, Time.deltaTime * (zoomSpeed + 3)), tgtPosition.z); // interpolate the movement
+                yield return null;
+            }           
+        }
         void CheckForMapZoom()
         {       
             if (!systemZoomActive && !planetZoomActive && !provinceZoomActive)
@@ -194,19 +209,19 @@ namespace CameraScripts
             if (ZoomLevel == ViewManager.eViewLevel.Galaxy) // don't pan the map if in system or planet view or if in province mode
             {
                 // check for map movement
-                if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+                if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow) || Input.mousePosition.y >= (Screen.height - 5))
                     moveMapUp = true;
                 else
                     moveMapUp = false;
-                if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+                if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow) || Input.mousePosition.x <= 5)
                     moveMapLeft = true;
                 else
                     moveMapLeft = false;
-                if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+                if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow) || Input.mousePosition.x >= (Screen.width - 5))
                     moveMapRight = true;
                 else
                     moveMapRight = false;
-                if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+                if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow) || Input.mousePosition.y <= 5)
                     moveMapDown = true;
                 else
                     moveMapDown = false;
@@ -335,10 +350,16 @@ namespace CameraScripts
             if (!planetZoomComplete)
             {                
                 Vector3 tgtPosition = new Vector3(planet.position.x, planet.position.y - (55f * scaleRatio), systemZValue);
-                planet.localScale = new Vector3(25 * scaleRatio, 25 * scaleRatio, 1); // then normalize the size of the planet to show close-up (number is the nominal scale)
+                if (planet.GetComponent<MeshRenderer>() != null)
+                    planet.localScale = new Vector3(120 * scaleRatio, 120 * scaleRatio, 120 * scaleRatio); // then normalize the size of the planet to show close-up (number is the nominal scale)
+                else
+                {
+                    planet.localScale = new Vector3(25 * scaleRatio, 25 * scaleRatio, 25 * scaleRatio); // then normalize the size of the planet to show close-up (number is the nominal scale)
+                    planet.Rotate(0, 0, -90);
+                }
                 zoom = planetMinZoomLevel; // set planet view zoom level
                 StartCoroutine(PlanetZoom(tgtPosition));
-                planet.Rotate(0, 0, -90);
+                
                 cameraPlanetPosition = transform.position;
                 planetZoomComplete = true; // set views as true
                 planetToSystemZoom = true;

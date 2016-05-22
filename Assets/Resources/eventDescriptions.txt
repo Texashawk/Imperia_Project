@@ -1,10 +1,10 @@
-PlanetGainedPopulation:Moar people! We gained [VALUE] million population on the planet [PLANET]!
-PlanetLostPopulation:I regret to inform you that we lost [VALUE] million population on the planet [PLANET].
-PlanetPoSupIncreased:Congratulations, Your Majesty! Your support increased on the planet [PLANET] by [VALUE]%!
-PlanetPoSupDecreased:Bad news, Your Majesty. Your support decreased on the planet [PLANET] by [VALUE]%!
-StarvationOnPlanet:[VALUE] million people are starving on [PLANET]! Deaths and unrest may occur soon if you don't do something!
-BlackoutsOnPlanet:Energy is low on planet [PLANET], and [VALUE] million people are starting to suffer. Find some more energy sources soon!
-NewFarmBuilt:We have created food on [PLANET]! [VALUE] farm(s) have been built there to provide more food for our people.
-NewHighTechBuilt:Energy is the lifeblood of our holdings, Your Majesty, and we have increased our ability to produce more on [PLANET]. [VALUE] high-tech facilities have been built.
-NewFactoryBuilt:Our mighty industrial engine on [PLANET] has expanded by [VALUE] factories, Your Majesty!
-NewMineBuilt:The sounds of great excavators can be heard ever lounder on [PLANET], Your Majesty! [VALUE] new mines were built.
+PlanetGainedPopulation:Population gain. [VALUE] million population on the planet [PLANET]!
+PlanetLostPopulation:Population lost. [VALUE] million population on the planet [PLANET].
+PlanetPoSupIncreased:PoSup increase. planet [PLANET] by [VALUE]%!
+PlanetPoSupDecreased:PoSup decrease. planet [PLANET] by [VALUE]%!
+StarvationOnPlanet:Starvation. [VALUE] million people are starving on [PLANET]!
+BlackoutsOnPlanet:Energy low. [PLANET] is short on energy and [VALUE] million people are starting to suffer.
+NewFarmBuilt:New farms. [VALUE] farm(s) have been built on [PLANET].
+NewHighTechBuilt:New high tech facilities. [VALUE] high-tech facilities have been built on [PLANET].
+NewFactoryBuilt:New factories. [VALUE] factories have been built on [PLANET].
+NewMineBuilt:New mines. [VALUE] new mines were built on [PLANET].

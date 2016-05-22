@@ -593,13 +593,22 @@ using ConversationAI;
                     {
                         currentAction.Name = action.InnerText;
                     }
-                    if (action.Name == "RANK")
+                    if (action.Name == "CATEGORY")
                     {
                         currentAction.Category = (CharacterAction.eType)int.Parse(action.InnerText);
                     }
                     if (action.Name == "DESCRIPTION")
                     {
                         currentAction.Description = action.InnerText;
+                    }
+                    if (action.Name == "RELSTATES")
+                    {
+                        string line = action.InnerText;
+                        string[] relStates = line.Split(new Char[] { ',' });
+                        for (int x = 0; x < relStates.Length; x++)
+                        {
+                        currentAction.ValidRelationshipStates.Add((Relationship.eRelationshipState)int.Parse(relStates[x]));
+                        }
                     }
                     if (action.Name == "VIC_E")
                     {
