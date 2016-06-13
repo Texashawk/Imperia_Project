@@ -54,8 +54,7 @@ namespace Managers
         {
             // set the initial views when game starts
             SetActiveViewLevel(ViewManager.eViewLevel.Galaxy);
-            SetActivePrimaryMode(ViewManager.ePrimaryView.Political);
-            SetActiveSecondaryMode(ViewManager.eSecondaryView.Sovereignity);
+            SetPrimaryModeToPolitical();
         }
 
         // Update is called once per frame
@@ -107,10 +106,12 @@ namespace Managers
             ViewLevel = viewManagerRef.ViewLevel;
         }
 
-        public void ActivateProjectScreen(string pID)
+        public void ActivateProjectScreen(string pID, string lID)
         {
             Debug.Log("Project ID " + pID + " clicked! Drawing project screen here...");
-            GameObject pScreen = Instantiate(ProjectScreen, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;         
+            GameObject pScreen = Instantiate(ProjectScreen, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+            pScreen.GetComponent<ProjectScreenScript>().ProjectID = pID;       // sends the project ID to the window to look up   
+            pScreen.GetComponent<ProjectScreenScript>().LocationID = lID;       // sends the location of the Project to the window to look up
             Canvas canvasRef = GameObject.Find("Main UI Overlay").GetComponent<Canvas>();         
             uiManagerRef.ModalIsActive = true; // set modal
             pScreen.transform.SetParent(canvasRef.transform);
@@ -135,6 +136,7 @@ namespace Managers
         public void RequestGraphicRefresh()
         {
             RequestPoliticalViewGraphicRefresh = true;
+            RequestProjectBarGraphicRefresh = true;
             RequestSovViewGraphicRefresh = true;
             RequestTradeViewGraphicRefresh = true;
             gDataRef.RequestGraphicRefresh = true;

@@ -4,6 +4,7 @@ using Managers;
 public class MainUI : MonoBehaviour {
 
     private GameObject selectedItemPanel; // reference for the selected item panel
+    private GameObject planetInfoPanel; // reference for the planet info panel
     private UIManager uiManagerRef; // UI Manager reference
     //private GameObject projectBar;
    // private ProjectScrollView pScroll;
@@ -12,7 +13,8 @@ public class MainUI : MonoBehaviour {
                    
     void Start ()
     {
-        selectedItemPanel = GameObject.Find("Selected Item Panel"); // selected item panel
+        selectedItemPanel = GameObject.Find("UI_SY_Planet_Name"); // selected item panel
+        planetInfoPanel = GameObject.Find("UI_PL_Planet_Name");
         uiManagerRef = GameObject.Find("GameManager").GetComponent<UIManager>();
         //projectBar = GameObject.Find("Project Bar");
         //pScroll = GameObject.Find("Project Selection View").GetComponent<ProjectScrollView>();
@@ -34,10 +36,17 @@ public class MainUI : MonoBehaviour {
         if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.Galaxy || uiManagerRef.ViewLevel == ViewManager.eViewLevel.Province)
         {
             selectedItemPanel.SetActive(false);
+            planetInfoPanel.SetActive(false);
         }
-        else
+        else if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.Planet)
+        {
+            selectedItemPanel.SetActive(false);
+            planetInfoPanel.SetActive(true);
+        }
+        else if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.System)
         {
             selectedItemPanel.SetActive(true);
+            planetInfoPanel.SetActive(false);
         }
     }
 

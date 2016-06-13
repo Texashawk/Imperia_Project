@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Constants;
 using System;
 
 // object namespaces
@@ -10,8 +11,7 @@ namespace GalaxyCreator
     {      
         private GalaxyData gData;
         private GameData gameDataRef;       
-        private int galaxySizeWidth;
-        private int galaxySizeHeight;
+        private int galaxySize;
         //private static readonly System.Random rand = new System.Random();
 
         private const int SpaceBetweenStars = 300; // the minimum space between star objects
@@ -21,8 +21,7 @@ namespace GalaxyCreator
             // data structure references
             gData = GameObject.Find("GameManager").GetComponent<GalaxyData>();
             gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
-            galaxySizeWidth = gameDataRef.GalaxySizeWidth; // these will be selected in new game screen
-            galaxySizeHeight = gameDataRef.GalaxySizeHeight;
+            galaxySize = 0;           
             GenerateNebulas();
             GenerateStars();
             GeneratePlanets();
@@ -32,7 +31,24 @@ namespace GalaxyCreator
         {
             GenerateHumanHomeStar(); // generate the human home system
 
-            int starCount = gameDataRef.TotalSystems;
+            int starCount = 0;
+            switch (gameDataRef.GameSetup.QuadrantSizeSelect)
+            {
+                case GameSetupFile.eQuadrantSize.Small:
+                    starCount = Constant.StarsInSmallQuadrant;
+                    galaxySize = Constant.QuadrantSizeInSmallQuadrant;
+                    break;
+                case GameSetupFile.eQuadrantSize.Medium:
+                    starCount = Constant.StarsInMediumQuadrant;
+                    galaxySize = Constant.QuadrantSizeInMediumQuadrant;
+                    break;
+                case GameSetupFile.eQuadrantSize.Large:
+                    starCount = Constant.StarsInLargeQuadrant;
+                    galaxySize = Constant.QuadrantSizeInLargeQuadrant;
+                    break;
+                default:
+                    break;
+            }
             for (int i = 0; i < starCount; i++)
             {
                 Vector3 starLoc = DetermineStarLocation(i);
@@ -102,8 +118,8 @@ namespace GalaxyCreator
         Vector3 GenerateLocation()
         {          
             Vector3 pLoc;
-            pLoc.x = HelperFunctions.Formulas.GetRandomInt(-galaxySizeWidth, galaxySizeWidth);
-            pLoc.y = HelperFunctions.Formulas.GetRandomInt(-galaxySizeHeight, galaxySizeHeight);
+            pLoc.x = HelperFunctions.Formulas.GetRandomInt(-galaxySize, galaxySize);
+            pLoc.y = HelperFunctions.Formulas.GetRandomInt(-galaxySize, galaxySize);
             pLoc.z = 0;
 
             return pLoc;

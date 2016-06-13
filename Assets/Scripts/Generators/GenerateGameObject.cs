@@ -336,6 +336,34 @@ public class GenerateGameObject
 
     public static void AddStockpilesToPlanet(PlanetData pData)
     {
+        float multiplier = 1f; // imperial capital resource multiplier
+
+        switch (pData.Rank)
+        {
+            case PlanetData.ePlanetRank.Uninhabited:
+                multiplier = 0;
+                break;
+            case PlanetData.ePlanetRank.Outpost:
+                multiplier = .5f;
+                break;
+            case PlanetData.ePlanetRank.NewColony:
+                multiplier = .75f;
+                break;
+            case PlanetData.ePlanetRank.EstablishedColony:
+                multiplier = 1f;
+                break;
+            case PlanetData.ePlanetRank.SystemCapital:
+                multiplier = 3f;
+                break;
+            case PlanetData.ePlanetRank.ProvinceCapital:
+                multiplier = 5f;
+                break;
+            case PlanetData.ePlanetRank.ImperialCapital:
+                multiplier = 20f;
+                break;
+            default:
+                break;
+        }
         if (pData.FoodDifference > 0)
         {
             pData.FoodStored = UnityEngine.Random.Range(4, 20) * pData.FoodDifference; // number of months of storage based on food flow
@@ -370,6 +398,13 @@ public class GenerateGameObject
         }
         else
             pData.EnergyStored = UnityEngine.Random.Range(0, 1000);
+
+        // adjust the final amounts by the multiplier
+        pData.FoodStored *= multiplier;
+        pData.EnergyStored *= multiplier;
+        pData.BasicStored *= multiplier;
+        pData.HeavyStored *= multiplier;
+        pData.RareStored *= multiplier;
 
     }
 

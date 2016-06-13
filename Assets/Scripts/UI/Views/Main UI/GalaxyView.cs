@@ -461,13 +461,13 @@ namespace Screens.Galaxy
             uiManagerRef.selectedPlanet = null;
             uiManagerRef.selectedSystem = null;
             RemoveSystemPlanets();
-            GetSelectedStar().transform.position = GetSelectedStar().GetComponent<Star>().starData.WorldLocation; // set star back to its correct position
+            //GetSelectedStar().transform.position = GetSelectedStar().GetComponent<Star>().starData.WorldLocation; // set star back to its correct position
             ClearSelectedStar();
             ShowStellarObjects();        
             backingSphere.SetActive(false); // turn off the sphere
             //GameObject.DestroyObject(smallSystemGrid);
             DestroyObject(sysTrail);
-            systemGridCreated = false;
+            //systemGridCreated = false;
             systemTrailCreated = false;
             systemUICanvas.SetActive(false); // don't show panel
             selectedUnitInfoCanvas.SetActive(false);
@@ -541,11 +541,14 @@ namespace Screens.Galaxy
         {
             Camera.main.GetComponent<GalaxyCameraScript>().starTarget = target;
             Camera.main.GetComponent<GalaxyCameraScript>().systemZoomActive = true;
+            Camera.main.GetComponent<GalaxyCameraScript>().systemZoomComplete = false;
             Camera.main.GetComponent<GalaxyCameraScript>().planetZoomActive = false;
             Camera.main.GetComponent<GalaxyCameraScript>().provinceZoomActive = false;
+            Camera.main.GetComponent<GalaxyCameraScript>().LastZoomValue = Camera.main.fieldOfView;
             gameDataRef.StarSelected = true; // probably need to move to a global UI manager
             uiManagerRef.selectedSystem = target.GetComponent<Star>().starData;
             uiManagerRef.SetActiveViewLevel(ViewManager.eViewLevel.System);
+            //uiManagerRef.RequestProjectBarRefresh();
         }
 
         //void GenerateProvinceNames()
@@ -597,6 +600,7 @@ namespace Screens.Galaxy
                         }
                         uiManagerRef.SetActiveViewLevel(ViewManager.eViewLevel.Planet);
                         uiManagerRef.selectedPlanet = hit3D.transform.GetComponent<Planet>().planetData;
+                        uiManagerRef.RequestGraphicRefresh();
                         planetSelected = true;
                     }
                 }
@@ -616,7 +620,9 @@ namespace Screens.Galaxy
                     }
                     uiManagerRef.SetActiveViewLevel(ViewManager.eViewLevel.Planet);                   
                     uiManagerRef.selectedPlanet = hit.transform.GetComponent<Planet>().planetData;
+                    uiManagerRef.RequestGraphicRefresh();
                     planetSelected = true;
+                    
                 }
             }
         }

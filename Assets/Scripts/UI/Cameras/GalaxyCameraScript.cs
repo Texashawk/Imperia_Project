@@ -13,11 +13,21 @@ namespace CameraScripts
 	    private bool moveMapDown = false;
 	    private bool moveMapRight = false;
 	    private bool moveMapLeft = false;
+        private bool panActive = false;
         [HideInInspector]public bool ScrollWheelIsValid { get; set; } // can the scrollwheel be used to manipulate the camera?
 	    private float zoomSpeed = 11f;
         private float zoomSensitivity = 60f;
         public const float cameraTilt = 25f; // was 20f
+        public float LastZoomValue = 0f; // saved zoom from when going into system
         private Camera mainC; // camera reference
+
+        // for late updates
+        private float targetCameraZPosition = 0f;
+        private float targetCameraYPosition = 0f;
+        private float targetCameraXPosition = 0f;
+        private float targetCameraXRotation = 0f;
+        public Vector3 TargetCameraPosition = new Vector3();
+
         private GameData gDataRef;
         private UIManager uiManagerRef;
 
@@ -53,7 +63,8 @@ namespace CameraScripts
         public float zoom;
        
 	    // Use this for initialization
-	    void Start () {
+	    void Start ()
+        {
             mainC = GameObject.Find("Main Camera").GetComponent<Camera>();
             gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
             uiManagerRef = GameObject.Find("GameManager").GetComponent<UIManager>();
@@ -66,48 +77,35 @@ namespace CameraScripts
             uiManagerRef.SetActiveSecondaryMode(ViewManager.eSecondaryView.Sovereignity);
             float tangent = Mathf.Tan(cameraTilt * Mathf.Deg2Rad);
             tiltYOffset = galaxyZValue * tangent; // move the camera initially
-            }
+
+            // initialize the main camera
+            mainC.transform.position = new Vector3(0, 0 + tiltYOffset, galaxyZValue);
+            mainC.transform.eulerAngles = new Vector3(180 - cameraTilt, 0, 0);
+            targetCameraXPosition = mainC.transform.position.x;
+            targetCameraYPosition = mainC.transform.position.y;
+            targetCameraZPosition = mainC.transform.position.z;
+        }
 	
 	    // Update is called once per frame
         void Update()
         {
             scaleRatio = (Screen.height / 1920f) * (Screen.width / 1080f);
+            TargetCameraPosition = new Vector3(targetCameraXPosition, targetCameraYPosition, targetCameraZPosition);
 
-           
-       
             if (gDataRef.uiSubMode == GameData.eSubMode.None && !uiManagerRef.ModalIsActive)  // only work in no submode
             {
-                // run movement/zoom functions
-                CheckForMapPan();
-                StartCoroutine(PanMap());
+                // run movement/zoom functions      
+                UpdateCamera();         
+                CheckForMapPan();         
+                PanMap();
                 CheckForMapZoom();
                 DetermineZoomLevel(); // update zoom level of camera
 
-                // check for RMB pan of map
-                if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.Galaxy && Input.GetMouseButton(1) && !systemZoomActive)
-                {
-                    Vector2 mousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-                    Vector3 newCameraPosition = mainC.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y - 200f, transform.position.z + 4000)); // adjust y pos 200f with normal z position
-                    transform.position = new Vector3(newCameraPosition.x, newCameraPosition.y + tiltYOffset, transform.position.z);
-                }
-
-                if (provinceZoomActive && !systemZoomActive && provinceTarget != null)
-                {
+                if (provinceZoomActive && !systemZoomActive && provinceTarget != null)         
                     ZoomToProvince(provinceTarget);
-                }
 
-                if (systemZoomActive && !planetZoomActive && starTarget != null)
-                {
-                    //transform.position = new Vector2(starTarget.position.x, starTarget.position.y);
-                    ZoomToSystem(starTarget);
-                }
-
-                //if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.Galaxy)  // normalize camera height in galaxy mode
-                //{
-                //    transform.position = new Vector3(transform.position.x, transform.position.y, galaxyZValue); // now set the height of the camera in a separate step
-                //    systemZoomActive = false;
-                //    planetZoomActive = false;
-                //}
+                if (systemZoomActive && !planetZoomActive && !systemZoomComplete && starTarget != null)
+                    ZoomToSystem(starTarget);                          
 
                 if (systemZoomActive && planetZoomActive && planetTarget != null)
                     ZoomToPlanet(planetTarget);
@@ -127,24 +125,27 @@ namespace CameraScripts
                 if (systemZoomActive)
                     if ((Input.GetAxis("Mouse ScrollWheel") > mouseWheelValue) || Input.GetButtonDown("Right Mouse Button"))
                     {
-                        //transform.position = new Vector3(starTarget.transform.position.x, starTarget.transform.position.y + tiltYOffset, transform.position.z); // first set the x/y position of the camera   
-                        transform.position = new Vector3(transform.position.x - 38 - (Screen.width / 10), transform.position.y + tiltYOffset, transform.position.z); // first set the x/y position of the camera
+                        Vector3 targetPosition = new Vector3();   
+                        //targetPosition = new Vector3(transform.position.x - 38 - (Screen.width / 10), transform.position.y + tiltYOffset, galaxyZValue); // first set the x/y position of the camera
+                        targetPosition = new Vector3(starTarget.position.x, starTarget.position.y + tiltYOffset, galaxyZValue);
                         systemZoomActive = false;
                         provinceZoomActive = false;
                         provinceZoomComplete = false;
-                        systemZoomComplete = true; // was false
-                        zoom = maxZoomLevel;
-                        MoveCameraBack(new Vector3(transform.position.x, transform.position.y, galaxyZValue));                                      
-                        //transform.position = new Vector3(transform.position.x, transform.position.y, galaxyZValue); // now set the height of the camera in a separate step
+                        zoom = LastZoomValue;
+
+                        targetCameraXPosition = targetPosition.x;
+                        targetCameraYPosition = targetPosition.y;
+                        targetCameraZPosition = targetPosition.z;                     
                         uiManagerRef.SetActiveViewLevel(ViewManager.eViewLevel.Galaxy); // resets view level to the galaxy
                         uiManagerRef.RequestGraphicRefresh(); // reset settings when coming back to galaxy view
-                        //starTarget = null;  
+                        systemZoomComplete = false;                      
                     }
 
                 if (planetZoomActive)
                     if ((Input.GetAxis("Mouse ScrollWheel") > mouseWheelValue) || Input.GetButtonDown("Right Mouse Button"))
                     {
-                        planetTarget.transform.localScale = new Vector3(planetTarget.GetComponent<Planet>().planetData.PlanetSystemScaleSize,planetTarget.GetComponent<Planet>().planetData.PlanetSystemScaleSize,1); // reset the scale
+                        planetTarget.transform.localScale = new Vector3(planetTarget.GetComponent<Planet>().planetData.PlanetSystemScaleSize,planetTarget.GetComponent<Planet>().planetData.PlanetSystemScaleSize, 
+                            planetTarget.GetComponent<Planet>().planetData.PlanetSystemScaleSize); // reset the scale
                         if (planetTarget.GetComponent<SpriteRenderer>() != null)
                         {
                             planetTarget.Rotate(0, 0, 90);
@@ -158,25 +159,11 @@ namespace CameraScripts
                         systemZoomComplete = false;
                         zoom = systemMinZoomLevel;
                         uiManagerRef.SetActiveViewLevel(ViewManager.eViewLevel.System);
+                        uiManagerRef.RequestGraphicRefresh();
                     }
-
-                // check each cycle for camera height lock
-                if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.Galaxy)
-                {
-                    transform.position = new Vector3(transform.position.x, transform.position.y, galaxyZValue);
-                    systemZoomComplete = false;
-                }
             }
         }
 
-        IEnumerator MoveCameraBack(Vector3 tgtPosition)
-        {         
-            while ((((int)transform.position.x != (int)tgtPosition.x | (int)transform.position.y != (int)tgtPosition.y) | (int)transform.position.z != (int)tgtPosition.z) && (!planetZoomActive) && (!provinceZoomActive) && (systemZoomActive))
-            {
-                transform.position = new Vector3(Mathf.Lerp(transform.position.x, tgtPosition.x, Time.deltaTime * (zoomSpeed + 3)), Mathf.Lerp(transform.position.y, tgtPosition.y, Time.deltaTime * (zoomSpeed + 3)), tgtPosition.z); // interpolate the movement
-                yield return null;
-            }           
-        }
         void CheckForMapZoom()
         {       
             if (!systemZoomActive && !planetZoomActive && !provinceZoomActive)
@@ -197,9 +184,14 @@ namespace CameraScripts
 
             // set normal angle of camera
             if (uiManagerRef.ViewLevel != ViewManager.eViewLevel.Galaxy && systemZoomActive)
+            {
+                //targetCameraXRotation = 180f;
                 transform.eulerAngles = new Vector3(180, 0, 0); // was 30,0,0
+            }
+
             else
             {
+                //targetCameraXRotation = (180f - cameraTilt);
                 transform.eulerAngles = new Vector3(180 - cameraTilt, 0, 0); // was 30,0,0
             }
         }
@@ -208,27 +200,40 @@ namespace CameraScripts
         {
             if (ZoomLevel == ViewManager.eViewLevel.Galaxy) // don't pan the map if in system or planet view or if in province mode
             {
+                panActive = false;
                 // check for map movement
                 if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow) || Input.mousePosition.y >= (Screen.height - 5))
+                {
                     moveMapUp = true;
+                    panActive = true;
+                }
                 else
                     moveMapUp = false;
                 if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow) || Input.mousePosition.x <= 5)
+                {
                     moveMapLeft = true;
+                    panActive = true;
+                }
                 else
                     moveMapLeft = false;
                 if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow) || Input.mousePosition.x >= (Screen.width - 5))
+                {
                     moveMapRight = true;
+                    panActive = true;
+                }
                 else
                     moveMapRight = false;
                 if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow) || Input.mousePosition.y <= 5)
+                {
                     moveMapDown = true;
+                    panActive = true;
+                }
                 else
                     moveMapDown = false;
             }
         }
 
-        IEnumerator PanMap()
+        void PanMap()
         {
             // scroll map (need to add bounds checks)          
             float yLocation = transform.position.y;
@@ -241,47 +246,58 @@ namespace CameraScripts
             
             if (ZoomLevel == ViewManager.eViewLevel.Galaxy) // don't pan map if in system or planet mode
             {
-                if (moveMapUp && ((yLocation <= galaxyHeight + Mathf.Round(tiltYOffset)) && (yLocation >= -galaxyHeight + Mathf.Round(tiltYOffset))))
-                {
-                    transform.position = new Vector3(transform.position.x, Mathf.Lerp(yLocation, moveUpVector, Time.deltaTime * 3), transform.position.z);
-                }
-
-                if (moveMapDown && ((yLocation <= galaxyHeight + tiltYOffset) && (yLocation >= -galaxyHeight + tiltYOffset)))
-                {
-                    transform.position = new Vector3(transform.position.x, Mathf.Lerp(yLocation, moveDownVector, Time.deltaTime * 3), transform.position.z);
-                }
+                if (moveMapUp && ((yLocation <= galaxyHeight + Mathf.Round(tiltYOffset)) && (yLocation >= -galaxyHeight + Mathf.Round(tiltYOffset))))     
+                    targetCameraYPosition = Mathf.Lerp(yLocation, moveUpVector, Time.deltaTime * 3);
                 
-                if (moveMapRight && ((xLocation <= galaxyWidth) && (xLocation >= -galaxyWidth)))
-                {
-                    transform.position = new Vector3(Mathf.Lerp(xLocation, moveRightVector, Time.deltaTime * 3), transform.position.y, transform.position.z);
-                }
+                if (moveMapDown && ((yLocation <= galaxyHeight + tiltYOffset) && (yLocation >= -galaxyHeight + tiltYOffset)))                               
+                    targetCameraYPosition = Mathf.Lerp(yLocation, moveDownVector, Time.deltaTime * 3);               
+                
+                if (moveMapRight && ((xLocation <= galaxyWidth) && (xLocation >= -galaxyWidth)))                            
+                    targetCameraXPosition = Mathf.Lerp(xLocation, moveRightVector, Time.deltaTime * 3);              
 
-                if (moveMapLeft && ((xLocation <= galaxyWidth) && (xLocation >= -galaxyWidth)))
-                {
-                    transform.position = new Vector3(Mathf.Lerp(xLocation, moveLeftVector, Time.deltaTime * 3), transform.position.y, transform.position.z);
-                }
+                if (moveMapLeft && ((xLocation <= galaxyWidth) && (xLocation >= -galaxyWidth)))                               
+                    targetCameraXPosition = Mathf.Lerp(xLocation, moveLeftVector, Time.deltaTime * 3);                
 
                 // normalize to prevent scrolling outside of map
                 if (transform.position.x > galaxyWidth)
-                    transform.position = new Vector3(galaxyWidth, transform.position.y, transform.position.z);
+                    targetCameraXPosition = galaxyWidth;
                 if (transform.position.x < -galaxyWidth)
-                    transform.position = new Vector3(-galaxyWidth, transform.position.y, transform.position.z);
-
+                    targetCameraXPosition = -galaxyWidth;
+               
                 if (transform.position.y > galaxyHeight + tiltYOffset)
-                    transform.position = new Vector3(transform.position.x, galaxyHeight + tiltYOffset, transform.position.z);
+                    targetCameraYPosition = galaxyHeight + tiltYOffset;
                 if (transform.position.y < -galaxyHeight + tiltYOffset)
-                    transform.position = new Vector3(transform.position.x, -galaxyHeight + tiltYOffset, transform.position.z);
-
-                yield return null;
+                    targetCameraYPosition = -galaxyHeight + tiltYOffset;
             }
         }
 
-        void LateUpdate()
+        void UpdateCamera()
         {
+            
+            float xCameraPosition = 0f;
+            float yCameraPosition = 0f;
+            float zCameraPosition = 0f;
+            float xCameraRotation = 0f;
+            float panSpeed = 0f;
+           
             mouseWheelValue = Input.GetAxis("Mouse ScrollWheel");
             mainC.fieldOfView = Mathf.Lerp(mainC.fieldOfView, zoom, Time.deltaTime * zoomSpeed);
 
-           
+            if (panActive)  // scrolling speed
+                panSpeed = 125f;
+            
+            else // zoom in speed
+                panSpeed = 12f;
+
+            // experimental - remove it this doesn't work (zooming and moving the camera by update instead of by coroutine)
+            xCameraPosition = Mathf.Lerp(mainC.transform.position.x, targetCameraXPosition, Time.deltaTime * panSpeed);
+            yCameraPosition = Mathf.Lerp(mainC.transform.position.y, targetCameraYPosition, Time.deltaTime * panSpeed);
+            zCameraPosition = Mathf.Lerp(mainC.transform.position.z, targetCameraZPosition, Time.deltaTime * (panSpeed / 1.5f));
+            //xCameraRotation = Mathf.Lerp(mainC.transform.eulerAngles.x, targetCameraXRotation, Time.deltaTime * 2f);
+
+            // now set the position/rotation gradually
+            mainC.transform.position = new Vector3(xCameraPosition, yCameraPosition, zCameraPosition);
+           // mainC.transform.eulerAngles = new Vector3(xCameraRotation, 0,0);          
         }
 
         void ZoomToProvince(Province target)
@@ -301,18 +317,15 @@ namespace CameraScripts
             {
                 Vector3 tgtPosition = target.ProvinceCenter;
                 zoom = 30 + constraintBound / 120; // test, will need to account for non-linear zoom
-                StartCoroutine(ProvinceZoom(tgtPosition));
             }
 
             provinceZoomComplete = true;
-
         }
 
 	    void ZoomToSystem(Transform target)
 	    {
             
             Vector3 tgtPosition;
-            
             int leftCameraMove = 0;
 
             if (Screen.width >= 1600)
@@ -328,20 +341,26 @@ namespace CameraScripts
                 {
                     tgtPosition = new Vector3(target.position.x + (leftCameraMove * (Screen.width / 1920f)) + (target.localScale.x / 2), target.position.y + 75 * (Screen.height / 1080f), systemZValue);
                     zoom = systemMinZoomLevel; // set system view zoom level
-                    StartCoroutine(SystemZoom(tgtPosition));
+                    targetCameraXPosition = tgtPosition.x;
+                    targetCameraYPosition = tgtPosition.y;
+                    targetCameraZPosition = tgtPosition.z;                
                 }            
                 else
                 {
                     tgtPosition = new Vector3(target.position.x + (leftCameraMove * (Screen.width / 1920f)) + (target.localScale.x / 2), target.position.y + 75 * (Screen.height / 1080f), systemZValue);
-                    transform.position = new Vector3 (cameraPlanetPosition.x,cameraPlanetPosition.y, systemZValue);
+                    transform.position = new Vector3 (cameraPlanetPosition.x,cameraPlanetPosition.y, cameraPlanetPosition.z);
                     
                     zoom = systemMinZoomLevel; // set system view zoom level
-                    StartCoroutine(SystemZoom(tgtPosition));
+                    targetCameraXPosition = tgtPosition.x;
+                    targetCameraYPosition = tgtPosition.y;
+                    targetCameraZPosition = tgtPosition.z;
+                    planetToSystemZoom = false;
                 }
 
-                target = null; // reset the target  
+                target = null; // reset the target
+                TargetCameraPosition = new Vector3(targetCameraXPosition, targetCameraYPosition, targetCameraZPosition); // for system view
                 systemZoomComplete = true;
-                planetToSystemZoom = false;       
+                       
             }   
 	    }
 
@@ -358,49 +377,14 @@ namespace CameraScripts
                     planet.Rotate(0, 0, -90);
                 }
                 zoom = planetMinZoomLevel; // set planet view zoom level
-                StartCoroutine(PlanetZoom(tgtPosition));
+                targetCameraXPosition = tgtPosition.x;
+                targetCameraYPosition = tgtPosition.y;
+                targetCameraZPosition = tgtPosition.z;
                 
-                cameraPlanetPosition = transform.position;
+                cameraPlanetPosition = new Vector3(targetCameraXPosition, targetCameraYPosition, targetCameraZPosition);
                 planetZoomComplete = true; // set views as true
                 planetToSystemZoom = true;
             }
-        }
-
-        IEnumerator PlanetZoom(Vector3 tgtPosition)
-        {
-            while ((((int)transform.position.x != (int)tgtPosition.x | (int)transform.position.y != (int)tgtPosition.y) | (int)transform.position.z != (int)tgtPosition.z) && (planetZoomActive))
-            {
-                transform.position = new Vector3(Mathf.Lerp(transform.position.x, tgtPosition.x, Time.deltaTime * (zoomSpeed + 5)), Mathf.Lerp(transform.position.y, tgtPosition.y, Time.deltaTime * (zoomSpeed + 5)), tgtPosition.z); // interpolate the movement
-                cameraPlanetPosition = transform.position;
-                planetToSystemZoom = true;
-                yield return null;          
-            }
-        }
- 
-        IEnumerator SystemZoom(Vector3 tgtPosition)
-        {
-        
-            while((((int)transform.position.x != (int)tgtPosition.x | (int)transform.position.y != (int)tgtPosition.y) | (int)transform.position.z != (int)tgtPosition.z) && (!planetZoomActive) && (!provinceZoomActive) && (systemZoomActive))
-            {      
-                transform.position = new Vector3(Mathf.Lerp(transform.position.x, tgtPosition.x, Time.deltaTime * (zoomSpeed + 3)), Mathf.Lerp(transform.position.y, tgtPosition.y, Time.deltaTime * (zoomSpeed + 3)), tgtPosition.z); // interpolate the movement
-                yield return null;        
-            }
-
-            cameraSystemPosition = transform.position; // assign the camera system position
-        
-        }
-
-        IEnumerator ProvinceZoom(Vector3 tgtPosition)
-        {
-
-            while (((int)transform.position.x != (int)tgtPosition.x | (int)transform.position.y != (int)tgtPosition.y) && (!systemZoomActive) && (!planetZoomActive) && (provinceZoomActive))
-            {
-                transform.position = new Vector3(Mathf.Lerp(transform.position.x, tgtPosition.x, Time.deltaTime * (zoomSpeed + 2)), Mathf.Lerp(transform.position.y, tgtPosition.y, Time.deltaTime * (zoomSpeed + 2)), tgtPosition.z); // interpolate the movement
-                yield return null;
-            }
-
-            //cameraSystemPosition = transform.position; // assign the camera system position
-
         }
 
         void DetermineZoomLevel()

@@ -45,10 +45,16 @@ public class SovereignityGalaxyView : MonoBehaviour {
                 UpdateSovereignityView();
                 uiManagerRef.RequestSovViewGraphicRefresh = false;
             }
+            //ShowCivilizationRangeCircles();
+            //ShowSovDataBlocks();
             UpdateSovDataBlocks();
         }
         else
-            ClearView(); // destroy all objects so that they can be rebuilt on new view                  
+        {
+            HideCivilizationRangeCircles();
+            HideSovDataBlocks();
+        }
+            //ClearView(); // destroy all objects so that they can be rebuilt on new view                  
     }
 
     void UpdateSovereignityView()
@@ -63,14 +69,17 @@ public class SovereignityGalaxyView : MonoBehaviour {
             GenerateSovDataBlocks();
         }
 
-        ShowCivilizationRangeCircles();
+        //ShowCivilizationRangeCircles();
 
-        if (uiManagerRef.SecondaryViewMode == ViewManager.eSecondaryView.Sovereignity)           
+        if (uiManagerRef.SecondaryViewMode == ViewManager.eSecondaryView.Sovereignity)
+        {
+            ShowCivilizationRangeCircles();
             ShowSovDataBlocks();
+        }
         else
-        {          
+        {
             DimCivilizationRangeCircles();
-            ShowSovDataBlocks();          
+            ShowSovDataBlocks();
         }
                    
         if (uiManagerRef.PrimaryViewMode != ViewManager.ePrimaryView.Political) // show as an underlay for trade

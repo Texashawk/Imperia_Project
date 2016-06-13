@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 8173ebb588c1f6d42bbf2acdbe2d281e
-timeCreated: 1430888899
+guid: 4c86c8c614ca39546bd5e06dc12c09b3
+timeCreated: 1463840409
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName: {}
@@ -29,7 +29,7 @@ TextureImporter:
   textureFormat: -1
   maxTextureSize: 2048
   textureSettings:
-    filterMode: 2
+    filterMode: -1
     aniso: 16
     mipBias: -1
     wrapMode: 1
@@ -37,6 +37,7 @@ TextureImporter:
   lightmap: 0
   rGBM: 0
   compressionQuality: 50
+  allowsAlphaSplitting: 0
   spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
@@ -51,5 +52,5 @@ TextureImporter:
     sprites: []
   spritePackingTag: 
   userData: 
-  assetBundleName: planet textures
+  assetBundleName: 
   assetBundleVariant: 

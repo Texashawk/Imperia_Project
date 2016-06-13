@@ -830,8 +830,8 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 281, y: 63}
-  m_SizeDelta: {x: 493, y: 85}
+  m_AnchoredPosition: {x: 440, y: 83.7999878}
+  m_SizeDelta: {x: 811, y: 88.4000015}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &265237302
 MonoBehaviour:
@@ -876,14 +876,14 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 56.6500015
+  m_fontSize: 75.9499969
   m_fontSizeBase: 72
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 144
   m_fontStyle: 0
   m_textAlignment: 5
-  m_characterSpacing: 70
+  m_characterSpacing: 90
   m_lineSpacing: 0
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
@@ -1545,7 +1545,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 5775e219b390c1d42807e18e01f2b82b, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 5110
+      value: 3800
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 5775e219b390c1d42807e18e01f2b82b, type: 2}
       propertyPath: m_LocalRotation.x
@@ -2701,7 +2701,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: ac4857344a704f34aa3db3f0658b1ea9, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -5365
+      value: -6021
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: ac4857344a704f34aa3db3f0658b1ea9, type: 2}
       propertyPath: m_LocalPosition.y
@@ -2709,7 +2709,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: ac4857344a704f34aa3db3f0658b1ea9, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 4692
+      value: 473
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: ac4857344a704f34aa3db3f0658b1ea9, type: 2}
       propertyPath: m_LocalRotation.x
@@ -3557,8 +3557,8 @@ RectTransform:
   m_RootOrder: 1
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 281, y: 24.1000004}
-  m_SizeDelta: {x: 493, y: 31}
+  m_AnchoredPosition: {x: 440, y: 24.1000061}
+  m_SizeDelta: {x: 811, y: 31}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &1542920723
 MonoBehaviour:
@@ -3603,14 +3603,14 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 22.8999996
+  m_fontSize: 23.9500008
   m_fontSizeBase: 72
   m_enableAutoSizing: 1
   m_fontSizeMin: 7
   m_fontSizeMax: 144
   m_fontStyle: 0
   m_textAlignment: 5
-  m_characterSpacing: 40
+  m_characterSpacing: 80
   m_lineSpacing: 0
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
@@ -3628,7 +3628,7 @@ MonoBehaviour:
   m_horizontalMapping: 0
   m_verticalMapping: 0
   m_pageToDisplay: 1
-  m_margin: {x: 2.88170505, y: 0, z: -.68973738, w: 0}
+  m_margin: {x: 25.3197098, y: 0, z: 18.0257683, w: 0}
   m_havePropertiesChanged: 0
   m_isInputParsingRequired: 0
   m_inputSource: 0
@@ -4390,7 +4390,7 @@ MonoBehaviour:
   createWorldGameScreen: {fileID: 2800000, guid: 9d34b5c3f9bfa4b44af7fd4bd07f57ea,
     type: 3}
   createEmperorScreen: {fileID: 2800000, guid: a258d86b9f4f07b49b33a7610932a6ba, type: 3}
-  gameVersionNumber: 0.3.1.0
+  gameVersionNumber: .3.3.0
   gameVersionSuffix: a
   gameVersion: 
   ActiveTradeFleetObjects: []
@@ -4504,7 +4504,7 @@ MonoBehaviour:
   viewManagerRef: {fileID: 0}
   gDataRef: {fileID: 0}
   uiManagerRef: {fileID: 0}
-  ProjectScreen: {fileID: 198884, guid: 121c3b0c33eebd643afe2090ce0d6158, type: 2}
+  ProjectScreen: {fileID: 101594, guid: df9b11bb3a1e24e43ad46ac88e5723ba, type: 2}
   ViewLevel: 0
   SecondaryViewMode: 0
   PrimaryViewMode: 0
@@ -4600,7 +4600,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 11491326, guid: d75f14a2b6f47044fb400c5fc076265e, type: 2}
       propertyPath: Planets.Array.size
-      value: 7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 477124, guid: d75f14a2b6f47044fb400c5fc076265e, type: 2}
       propertyPath: m_LocalPosition.x

@@ -21,11 +21,7 @@ class ProjectScrollView : MonoBehaviour
 
     void Update()
     {
-        if (uiManagerRef.RequestProjectBarGraphicRefresh)
-        {
-            InitializeList();
-            uiManagerRef.RequestProjectBarGraphicRefresh = false;
-        }
+       
     }
         
 
@@ -74,12 +70,12 @@ class ProjectScrollView : MonoBehaviour
         }
     }
 
-    public void ButtonClicked(string str)
-    {
-        Debug.Log(str + " button clicked.");
+    //public void ButtonClicked(string str)
+    //{
+    //    Debug.Log(str + " button clicked.");
             
-        // Action switch board
-        uiManagerRef.ActivateProjectScreen(str); // launch the project screen
-        listIsInitialized = false;
-    }
+    //    // Action switch board
+    //    uiManagerRef.ActivateProjectScreen(str); // launch the project screen
+    //    listIsInitialized = false;
+    //}
 }

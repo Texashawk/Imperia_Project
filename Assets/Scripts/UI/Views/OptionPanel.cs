@@ -23,8 +23,11 @@ public class OptionPanel : MonoBehaviour {
     Vector3 currentPos;
     Material cubeMaterial;
     GameObject mainGamePanel;
+
     Canvas panelCanvas;
     eSubModePanel subMode = eSubModePanel.None;
+    GameObject mainHeader;
+    GameObject subHeader;
     public GameObject setupNewGamePanel;
     public GameObject creditsPanel;
     List<GameObject> activePanels = new List<GameObject>();
@@ -49,6 +52,8 @@ public class OptionPanel : MonoBehaviour {
         panelInitialWidth = gameObject.transform.localScale.x;
         panelRect = gameObject.GetComponent<Transform>();
         mainGamePanel = GameObject.Find("Main Game Panel");
+        mainHeader = GameObject.Find("Imperia Game Heading");
+        subHeader = GameObject.Find("Imperia Game Sub Heading");
         panelCanvas = GameObject.Find("Panel UI Canvas").GetComponent<Canvas>();
         cubeMaterial = gameObject.GetComponent<MeshRenderer>().material;      
         newGameButton = GameObject.Find("New Game Button").GetComponent<Button>();
@@ -83,7 +88,12 @@ public class OptionPanel : MonoBehaviour {
         }
 
         if (panelExpanded && !subModePanelLoaded)
+        {
+            mainHeader.SetActive(false);
+            subHeader.SetActive(false);
             LoadSubmodePanel();
+        }
+
     }
 
     void CenterPanel()
@@ -148,9 +158,12 @@ public class OptionPanel : MonoBehaviour {
 
         // reset to the old position
         transform.localPosition = initialPos;
+        subMode = eSubModePanel.None;
         transform.localScale = new Vector3(panelInitialWidth, panelInitialHeight, 50);
         transform.localEulerAngles = new Vector3(0, 60, 0);
         mainGamePanel.SetActive(true);
+        mainHeader.SetActive(true);
+        subHeader.SetActive(true);
         gameObject.GetComponent<MeshRenderer>().enabled = true;
         openPanel = false;
         centerPanel = false;
@@ -174,6 +187,8 @@ public class OptionPanel : MonoBehaviour {
             case eSubModePanel.LoadGame:
                 break;
             case eSubModePanel.None:
+                mainHeader.SetActive(true);
+                subHeader.SetActive(true);
                 break;
             default:
                 break;

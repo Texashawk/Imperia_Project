@@ -47,7 +47,13 @@ public class TradeGalaxyView : MonoBehaviour
         // check whether the mode is active and if so, show what needs to be shown
         if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.Galaxy)
         {
-            UpdateTradeView();
+            if (uiManagerRef.RequestTradeViewGraphicRefresh)
+            {
+                UpdateTradeView();
+                uiManagerRef.RequestTradeViewGraphicRefresh = false;               
+            }
+            //ShowTradeDataBlocks();
+            //ShowTradeHubRanges();
             UpdateTradeDataBlocks();
         }
         else

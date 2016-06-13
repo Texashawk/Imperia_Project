@@ -20,8 +20,8 @@ namespace Assets.Scripts.UI
 
         void Awake()
         {
-            selectedItemName = GameObject.Find("Selected Item Line").GetComponent<TextMeshProUGUI>();
-            selectedItemSecondaryInfo = GameObject.Find("Secondary Header Line").GetComponent<TextMeshProUGUI>();
+            selectedItemName = transform.Find("Title_Bar/Title").GetComponent<TextMeshProUGUI>();
+            selectedItemSecondaryInfo = transform.Find("Subtitle").GetComponent<TextMeshProUGUI>();
             uiManagerRef = GameObject.Find("GameManager").GetComponent<UIManager>();
             gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
             selectedItemPanel = gameObject;
@@ -60,14 +60,14 @@ namespace Assets.Scripts.UI
                 }
             }
 
-            else if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.Planet && uiManagerRef.selectedPlanet != null)
-            {
-                selectedItemName.text = uiManagerRef.selectedPlanet.Name;  //show text
-                selectedItemSecondaryInfo.text = "Class " + StringConversions.ConvertToRomanNumeral((int)(uiManagerRef.selectedPlanet.Size / 10)) + " " + HelperFunctions.StringConversions.ConvertPlanetEnum(uiManagerRef.selectedPlanet.Type);
-                selectedItemSecondaryInfo.text += " | " + DataRetrivalFunctions.GetSystem(uiManagerRef.selectedPlanet.SystemID).Name + " System";
-                if (uiManagerRef.selectedSystem.AssignedProvinceID != "")
-                    selectedItemSecondaryInfo.text += " | " + DataRetrivalFunctions.GetProvince(DataRetrivalFunctions.GetSystem(uiManagerRef.selectedPlanet.SystemID).AssignedProvinceID).Name + " Province";
-            }
+            //else if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.Planet && uiManagerRef.selectedPlanet != null)
+            //{
+            //    selectedItemName.text = uiManagerRef.selectedPlanet.Name;  //show text
+            //    selectedItemSecondaryInfo.text = "Class " + StringConversions.ConvertToRomanNumeral((int)(uiManagerRef.selectedPlanet.Size / 10)) + " " + HelperFunctions.StringConversions.ConvertPlanetEnum(uiManagerRef.selectedPlanet.Type);
+            //    selectedItemSecondaryInfo.text += " | " + DataRetrivalFunctions.GetSystem(uiManagerRef.selectedPlanet.SystemID).Name + " System";
+            //    if (uiManagerRef.selectedSystem.AssignedProvinceID != "")
+            //        selectedItemSecondaryInfo.text += " | " + DataRetrivalFunctions.GetProvince(DataRetrivalFunctions.GetSystem(uiManagerRef.selectedPlanet.SystemID).AssignedProvinceID).Name + " Province";
+            //}
         }
     }
 }

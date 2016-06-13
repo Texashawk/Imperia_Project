@@ -31,7 +31,7 @@ public class PlanetView : MonoBehaviour {
     private PlanetData pData;
     private GameObject planetButtonBarBackground;
     private GameObject stellarographyPanel;
-    private GameObject edictPanel;
+    //private GameObject edictPanel;
     private GameObject wireFrameOverlay;
     private Text intelLevelText;
     private Text intelLevelValue;
@@ -95,7 +95,7 @@ public class PlanetView : MonoBehaviour {
         tradeHubIndicator = GameObject.Find("Trade Hub Indicator").GetComponent<Text>();
         fleetsRemainingCanSupport = GameObject.Find("Capacity Remaining").GetComponent<Text>();
         //tileMapLight = GameObject.Find("Region UI Light").GetComponent<Light>();
-        edictPanel = GameObject.Find("Edict Panel");
+        //edictPanel = GameObject.Find("Edict Panel");
         wireFrameOverlay = GameObject.Find("Wireframe Planet Overlay");
         planetButtonBarBackground = GameObject.Find("Planet Button Bar Background");
         gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
@@ -112,7 +112,7 @@ public class PlanetView : MonoBehaviour {
         planetButtonBarBackground.SetActive(false);     
         tileMapPanel.SetActive(false);
         stellarographyPanel.SetActive(false);
-        edictPanel.SetActive(false);
+        //edictPanel.SetActive(false);
         //tileMapLight.enabled = false;
         tilePanelOriginalRotation = tileMapPanel.transform.rotation;
 	}
@@ -352,7 +352,7 @@ public class PlanetView : MonoBehaviour {
         pPanel.transform.SetParent(planetCanvas.transform, false);
         pPanel.GetComponent<RectTransform>().pivot = new Vector2(.33f, 1f); // set pivot to the left
         pPanel.transform.localScale = new Vector3(1.1f * screenWidthRatio, 1.1f * screenWidthRatio, 1.1f);
-        pPanel.transform.localPosition = new Vector2(70, edictPanel.GetComponent<RectTransform>().localPosition.y);
+        //pPanel.transform.localPosition = new Vector2(70, edictPanel.GetComponent<RectTransform>().localPosition.y);
 
         pPanel.name = "Panel"; // give name to panel to find later for destruction
         planetObjectsDrawnList.Add(pPanel); // add to view object list
@@ -373,7 +373,7 @@ public class PlanetView : MonoBehaviour {
         pPanel.transform.SetParent(planetCanvas.transform, false);
         pPanel.GetComponent<RectTransform>().pivot = new Vector2(1f, 1f); // set pivot to the left
         pPanel.transform.localScale = new Vector3(1.1f * screenWidthRatio, 1.1f * screenWidthRatio, 1.1f);
-        pPanel.transform.localPosition = new Vector2(edictPanel.GetComponent<RectTransform>().localPosition.x - (edictPanel.GetComponent<RectTransform>().rect.width) - 20, edictPanel.GetComponent<RectTransform>().localPosition.y - (pPanel.GetComponent<RectTransform>().rect.height) - 11);
+        //pPanel.transform.localPosition = new Vector2(edictPanel.GetComponent<RectTransform>().localPosition.x - (edictPanel.GetComponent<RectTransform>().rect.width) - 20, edictPanel.GetComponent<RectTransform>().localPosition.y - (pPanel.GetComponent<RectTransform>().rect.height) - 11);
 
         pPanel.name = "Panel"; // give name to panel to find later for destruction
         planetObjectsDrawnList.Add(pPanel); // add to view object list
@@ -424,7 +424,7 @@ public class PlanetView : MonoBehaviour {
         pPanel.transform.SetParent(planetCanvas.transform, false);
         pPanel.GetComponent<RectTransform>().pivot = new Vector2(1f, 1f); // set pivot to the upper left
         pPanel.transform.localScale = new Vector3(1f * screenWidthRatio, 1f * screenWidthRatio, 1f);
-        pPanel.transform.localPosition = new Vector2(edictPanel.GetComponent<RectTransform>().localPosition.x - (edictPanel.GetComponent<RectTransform>().rect.width) - 20, edictPanel.GetComponent<RectTransform>().localPosition.y - (pPanel.GetComponent<RectTransform>().rect.height) - 150);
+       // pPanel.transform.localPosition = new Vector2(edictPanel.GetComponent<RectTransform>().localPosition.x - (edictPanel.GetComponent<RectTransform>().rect.width) - 20, edictPanel.GetComponent<RectTransform>().localPosition.y - (pPanel.GetComponent<RectTransform>().rect.height) - 150);
 
         pPanel.name = "Panel"; // give name to panel to find later for destruction
         planetObjectsDrawnList.Add(pPanel); // add to view object list
@@ -450,7 +450,7 @@ public class PlanetView : MonoBehaviour {
         pPanel.transform.SetParent(planetCanvas.transform, false);
         pPanel.GetComponent<RectTransform>().pivot = new Vector2(1f, 1f); // set pivot to the left
         pPanel.transform.localScale = new Vector3(1.2f * screenWidthRatio, 1.2f * screenWidthRatio, 1.1f);
-        pPanel.transform.localPosition = new Vector2(edictPanel.GetComponent<RectTransform>().localPosition.x - (edictPanel.GetComponent<RectTransform>().rect.width) - 20, edictPanel.GetComponent<RectTransform>().localPosition.y);
+       // pPanel.transform.localPosition = new Vector2(edictPanel.GetComponent<RectTransform>().localPosition.x - (edictPanel.GetComponent<RectTransform>().rect.width) - 20, edictPanel.GetComponent<RectTransform>().localPosition.y);
         
         pPanel.name = "Panel"; // give name to panel to find later for destruction
         planetObjectsDrawnList.Add(pPanel); // add to view object list
@@ -571,7 +571,7 @@ public class PlanetView : MonoBehaviour {
         planetTransitionComplete = false;
         tileMapPanel.SetActive(false);
         stellarographyPanel.SetActive(false);
-        edictPanel.SetActive(false);
+        //edictPanel.SetActive(false);
         wireFrameOverlay.transform.parent = null; // remove the wireframe from the planet object
         wireFrameOverlay.SetActive(false);
 
@@ -590,14 +590,14 @@ public class PlanetView : MonoBehaviour {
         Vector3 boxLocation;
         
         boxLocation = new Vector3(-(Screen.width / 2) + (15 * screenWidthRatio), 492 * screenHeightRatio, 0); // where the edict box is located, test       
-        edictPanel.SetActive(true);
-        edictPanel.GetComponent<RectTransform>().pivot = new Vector2(0, 1); // set pivot to upper-right
-        edictPanel.transform.localPosition = boxLocation;
-        edictPanel.transform.localScale = new Vector2(1 * screenWidthRatio, 1 * screenWidthRatio);
+       // edictPanel.SetActive(true);
+       // edictPanel.GetComponent<RectTransform>().pivot = new Vector2(0, 1); // set pivot to upper-right
+       // edictPanel.transform.localPosition = boxLocation;
+       // edictPanel.transform.localScale = new Vector2(1 * screenWidthRatio, 1 * screenWidthRatio);
 
         if (!leadershipPanelUpdated)
         {
-            UpdateLeadershipChain();
+           // UpdateLeadershipChain();
             leadershipPanelUpdated = true;
         }
     }
@@ -632,211 +632,211 @@ public class PlanetView : MonoBehaviour {
         }       
     }
 
-    void UpdateLeadershipChain()
-    {
-        StarData sData = HelperFunctions.DataRetrivalFunctions.GetSystem(pData.SystemID); // get system ID
+    //void UpdateLeadershipChain()
+    //{
+    //    StarData sData = HelperFunctions.DataRetrivalFunctions.GetSystem(pData.SystemID); // get system ID
     
-        // define the 4 groups of data
-        Transform domesticPrimeInfo = edictPanel.transform.Find("Domestic Prime Image");
-        Transform provinceGovernorInfo = edictPanel.transform.Find("Province Governor Image");
-        Transform systemGovernorInfo = edictPanel.transform.Find("System Governor Image");
-        Transform viceroyInfo = edictPanel.transform.Find("Viceroy Image");
+    //    // define the 4 groups of data
+    //  //  Transform domesticPrimeInfo = edictPanel.transform.Find("Domestic Prime Image");
+    //  //  Transform provinceGovernorInfo = edictPanel.transform.Find("Province Governor Image");
+    //  //  Transform systemGovernorInfo = edictPanel.transform.Find("System Governor Image");
+    //  //  Transform viceroyInfo = edictPanel.transform.Find("Viceroy Image");
 
-        if (pData.IsInhabited)
-        {
-            if (!gameDataRef.CivList[0].PlanetIDList.Exists(p => p == pData.ID)) // if the planet is not owned by your civ, disable the panels except for viceroy
-            {
-                domesticPrimeInfo.gameObject.SetActive(false);
-                provinceGovernorInfo.gameObject.SetActive(false);
-                systemGovernorInfo.gameObject.SetActive(false);
-                if (HelperFunctions.DataRetrivalFunctions.GetPlanetViceroyID(pData.ID) != "none")
-                {
-                    viceroyInfo.gameObject.SetActive(true);
-                    string vID = HelperFunctions.DataRetrivalFunctions.GetPlanetViceroyID(pData.ID);
-                    Character vGov = HelperFunctions.DataRetrivalFunctions.GetCharacter(vID);
-                    viceroyInfo.GetComponent<CharacterTooltip>().InitializeTooltipData(vGov, -21f); // set up the tooltip
-                    viceroyInfo.GetComponent<Image>().sprite = graphicsDataRef.CharacterList.Find(p => p.name == vGov.PictureID);
-                    string charName = vGov.Name.ToUpper();
-                    if (vGov.HouseID != null)
-                    {
-                        charName += " OF " + HelperFunctions.DataRetrivalFunctions.GetHouse(vGov.HouseID).Name.ToUpper();
-                    }
-                    viceroyInfo.Find("Viceroy Name").GetComponent<Text>().text = charName;
-                    if (HelperFunctions.DataRetrivalFunctions.GetPlanet(vGov.PlanetLocationID) != null)
-                    {
-                        viceroyInfo.Find("Viceroy Location").GetComponent<Text>().text = "LOCATED ON " + HelperFunctions.DataRetrivalFunctions.GetPlanet(vGov.PlanetLocationID).Name.ToUpper();
-                    }
-                }
-                else
-                {
-                    viceroyInfo.gameObject.SetActive(false);
-                }
-                return;
-            }
-        }
+    //    if (pData.IsInhabited)
+    //    {
+    //        if (!gameDataRef.CivList[0].PlanetIDList.Exists(p => p == pData.ID)) // if the planet is not owned by your civ, disable the panels except for viceroy
+    //        {
+    //            domesticPrimeInfo.gameObject.SetActive(false);
+    //            provinceGovernorInfo.gameObject.SetActive(false);
+    //            systemGovernorInfo.gameObject.SetActive(false);
+    //            if (HelperFunctions.DataRetrivalFunctions.GetPlanetViceroyID(pData.ID) != "none")
+    //            {
+    //                viceroyInfo.gameObject.SetActive(true);
+    //                string vID = HelperFunctions.DataRetrivalFunctions.GetPlanetViceroyID(pData.ID);
+    //                Character vGov = HelperFunctions.DataRetrivalFunctions.GetCharacter(vID);
+    //                viceroyInfo.GetComponent<CharacterTooltip>().InitializeTooltipData(vGov, -21f); // set up the tooltip
+    //                viceroyInfo.GetComponent<Image>().sprite = graphicsDataRef.CharacterList.Find(p => p.name == vGov.PictureID);
+    //                string charName = vGov.Name.ToUpper();
+    //                if (vGov.HouseID != null)
+    //                {
+    //                    charName += " OF " + HelperFunctions.DataRetrivalFunctions.GetHouse(vGov.HouseID).Name.ToUpper();
+    //                }
+    //                viceroyInfo.Find("Viceroy Name").GetComponent<Text>().text = charName;
+    //                if (HelperFunctions.DataRetrivalFunctions.GetPlanet(vGov.PlanetLocationID) != null)
+    //                {
+    //                    viceroyInfo.Find("Viceroy Location").GetComponent<Text>().text = "LOCATED ON " + HelperFunctions.DataRetrivalFunctions.GetPlanet(vGov.PlanetLocationID).Name.ToUpper();
+    //                }
+    //            }
+    //            else
+    //            {
+    //                viceroyInfo.gameObject.SetActive(false);
+    //            }
+    //            return;
+    //        }
+    //    }
 
-        // set domestic prime image
-        if (DataRetrivalFunctions.GetPrime(Character.eRole.DomesticPrime) != "none")
-        {
-            domesticPrimeInfo.gameObject.SetActive(true);
-            string pID = DataRetrivalFunctions.GetPrime(Character.eRole.DomesticPrime);
-            Character pGov = DataRetrivalFunctions.GetCharacter(pID);
-            domesticPrimeInfo.GetComponent<CharacterTooltip>().InitializeTooltipData(pGov, -25f);
-            domesticPrimeInfo.GetComponent<CharacterScreenActivation>().InitializeData(pGov);
-            domesticPrimeInfo.GetComponent<Image>().sprite = graphicsDataRef.CharacterList.Find(p => p.name == pGov.PictureID);
-            domesticPrimeInfo.Find("Domestic Prime Name").GetComponent<Text>().text = pGov.Name.ToUpper() + " OF " + HelperFunctions.DataRetrivalFunctions.GetHouse(pGov.HouseID).Name.ToUpper();
+    //    // set domestic prime image
+    //    if (DataRetrivalFunctions.GetPrime(Character.eRole.DomesticPrime) != "none")
+    //    {
+    //        domesticPrimeInfo.gameObject.SetActive(true);
+    //        string pID = DataRetrivalFunctions.GetPrime(Character.eRole.DomesticPrime);
+    //        Character pGov = DataRetrivalFunctions.GetCharacter(pID);
+    //        domesticPrimeInfo.GetComponent<CharacterTooltip>().InitializeTooltipData(pGov, -25f);
+    //        domesticPrimeInfo.GetComponent<CharacterScreenActivation>().InitializeData(pGov);
+    //        domesticPrimeInfo.GetComponent<Image>().sprite = graphicsDataRef.CharacterList.Find(p => p.name == pGov.PictureID);
+    //        domesticPrimeInfo.Find("Domestic Prime Name").GetComponent<Text>().text = pGov.Name.ToUpper() + " OF " + HelperFunctions.DataRetrivalFunctions.GetHouse(pGov.HouseID).Name.ToUpper();
 
-            if (pGov.AssignedHouse.Rank == House.eHouseRank.Great)
-            {
-                domesticPrimeInfo.Find("Domestic Prime Name").GetComponent<Text>().color = Color.yellow; // if great house, change color
-            }
-            else if (pGov.AssignedHouse.Rank == House.eHouseRank.Minor)
-            {
-                domesticPrimeInfo.Find("Domestic Prime Name").GetComponent<Text>().color = Color.green; // if great house, change color
-            }
-            else
-            {
-                domesticPrimeInfo.Find("Domestic Prime Name").GetComponent<Text>().color = Color.white; // if great house, change color
-            }
+    //        if (pGov.AssignedHouse.Rank == House.eHouseRank.Great)
+    //        {
+    //            domesticPrimeInfo.Find("Domestic Prime Name").GetComponent<Text>().color = Color.yellow; // if great house, change color
+    //        }
+    //        else if (pGov.AssignedHouse.Rank == House.eHouseRank.Minor)
+    //        {
+    //            domesticPrimeInfo.Find("Domestic Prime Name").GetComponent<Text>().color = Color.green; // if great house, change color
+    //        }
+    //        else
+    //        {
+    //            domesticPrimeInfo.Find("Domestic Prime Name").GetComponent<Text>().color = Color.white; // if great house, change color
+    //        }
 
-            if (DataRetrivalFunctions.GetPlanet(pGov.PlanetLocationID) != null)
-            {
-                domesticPrimeInfo.Find("Domestic Prime Location").GetComponent<Text>().text = "LOCATED ON " + HelperFunctions.DataRetrivalFunctions.GetPlanet(pGov.PlanetLocationID).Name.ToUpper();
-            }
-        }
-        else
-        {
-            domesticPrimeInfo.gameObject.SetActive(false);
-        }
+    //        if (DataRetrivalFunctions.GetPlanet(pGov.PlanetLocationID) != null)
+    //        {
+    //            domesticPrimeInfo.Find("Domestic Prime Location").GetComponent<Text>().text = "LOCATED ON " + HelperFunctions.DataRetrivalFunctions.GetPlanet(pGov.PlanetLocationID).Name.ToUpper();
+    //        }
+    //    }
+    //    else
+    //    {
+    //        domesticPrimeInfo.gameObject.SetActive(false);
+    //    }
         
-        // set province governor image  
-        if (DataRetrivalFunctions.GetProvinceGovernorID(sData.AssignedProvinceID) != "none")
-        {
-            provinceGovernorInfo.gameObject.SetActive(true);         
-            string pID = DataRetrivalFunctions.GetProvinceGovernorID(sData.AssignedProvinceID);
-            Character pGov = DataRetrivalFunctions.GetCharacter(pID);
-            provinceGovernorInfo.GetComponent<CharacterTooltip>().InitializeTooltipData(pGov, -23f);
-            provinceGovernorInfo.GetComponent<CharacterScreenActivation>().InitializeData(pGov);
-            provinceGovernorInfo.GetComponent<Image>().sprite = graphicsDataRef.CharacterList.Find(p => p.name == pGov.PictureID);
-            provinceGovernorInfo.Find("Province Governor Name").GetComponent<Text>().text = pGov.Name.ToUpper() + " OF " + HelperFunctions.DataRetrivalFunctions.GetHouse(pGov.HouseID).Name.ToUpper();
-            if (pGov.AssignedHouse.Rank == House.eHouseRank.Great)
-            {
-                provinceGovernorInfo.Find("Province Governor Name").GetComponent<Text>().color = Color.yellow; // if great house, change color
-            }
-            else if (pGov.AssignedHouse.Rank == House.eHouseRank.Minor)
-            {
-                provinceGovernorInfo.Find("Province Governor Name").GetComponent<Text>().color = Color.green; // if great house, change color
-            }
-            else
-            {
-                provinceGovernorInfo.Find("Province Governor Name").GetComponent<Text>().color = Color.white; // if great house, change color
-            }
-            if (DataRetrivalFunctions.GetPlanet(pGov.PlanetLocationID) != null)
-            {
-                provinceGovernorInfo.Find("Province Governor Location").GetComponent<Text>().text = "LOCATED ON " + HelperFunctions.DataRetrivalFunctions.GetPlanet(pGov.PlanetLocationID).Name.ToUpper();
-            }
+    //    // set province governor image  
+    //    if (DataRetrivalFunctions.GetProvinceGovernorID(sData.AssignedProvinceID) != "none")
+    //    {
+    //        provinceGovernorInfo.gameObject.SetActive(true);         
+    //        string pID = DataRetrivalFunctions.GetProvinceGovernorID(sData.AssignedProvinceID);
+    //        Character pGov = DataRetrivalFunctions.GetCharacter(pID);
+    //        provinceGovernorInfo.GetComponent<CharacterTooltip>().InitializeTooltipData(pGov, -23f);
+    //        provinceGovernorInfo.GetComponent<CharacterScreenActivation>().InitializeData(pGov);
+    //        provinceGovernorInfo.GetComponent<Image>().sprite = graphicsDataRef.CharacterList.Find(p => p.name == pGov.PictureID);
+    //        provinceGovernorInfo.Find("Province Governor Name").GetComponent<Text>().text = pGov.Name.ToUpper() + " OF " + HelperFunctions.DataRetrivalFunctions.GetHouse(pGov.HouseID).Name.ToUpper();
+    //        if (pGov.AssignedHouse.Rank == House.eHouseRank.Great)
+    //        {
+    //            provinceGovernorInfo.Find("Province Governor Name").GetComponent<Text>().color = Color.yellow; // if great house, change color
+    //        }
+    //        else if (pGov.AssignedHouse.Rank == House.eHouseRank.Minor)
+    //        {
+    //            provinceGovernorInfo.Find("Province Governor Name").GetComponent<Text>().color = Color.green; // if great house, change color
+    //        }
+    //        else
+    //        {
+    //            provinceGovernorInfo.Find("Province Governor Name").GetComponent<Text>().color = Color.white; // if great house, change color
+    //        }
+    //        if (DataRetrivalFunctions.GetPlanet(pGov.PlanetLocationID) != null)
+    //        {
+    //            provinceGovernorInfo.Find("Province Governor Location").GetComponent<Text>().text = "LOCATED ON " + HelperFunctions.DataRetrivalFunctions.GetPlanet(pGov.PlanetLocationID).Name.ToUpper();
+    //        }
 
-            // set color of label for support
-            Color supportColor;
-            if (pData.ProvGovSupport == eSupportLevel.Full)
-            {
-                supportColor = Color.green;
-            }
-            else if (pData.ProvGovSupport == eSupportLevel.Partial)
-            {
-                supportColor = Color.yellow;
-            }
-            else
-            {
-                supportColor = Color.red;
-            }
-            provinceGovernorInfo.Find("Province Governor Label").GetComponent<Text>().color = supportColor;
-        }
-        else
-        {
-            provinceGovernorInfo.gameObject.SetActive(false);
-        }
+    //        // set color of label for support
+    //        Color supportColor;
+    //        if (pData.ProvGovSupport == eSupportLevel.Full)
+    //        {
+    //            supportColor = Color.green;
+    //        }
+    //        else if (pData.ProvGovSupport == eSupportLevel.Partial)
+    //        {
+    //            supportColor = Color.yellow;
+    //        }
+    //        else
+    //        {
+    //            supportColor = Color.red;
+    //        }
+    //        provinceGovernorInfo.Find("Province Governor Label").GetComponent<Text>().color = supportColor;
+    //    }
+    //    else
+    //    {
+    //        provinceGovernorInfo.gameObject.SetActive(false);
+    //    }
 
-        // set system governor image
-        if (DataRetrivalFunctions.GetSystemGovernorID(sData.ID) != "none")
-        {
-            systemGovernorInfo.gameObject.SetActive(true);
-            string sID = DataRetrivalFunctions.GetSystemGovernorID(sData.ID);
-            Character sGov = DataRetrivalFunctions.GetCharacter(sID);
-            systemGovernorInfo.GetComponent<CharacterTooltip>().InitializeTooltipData(sGov, -22f);
-            systemGovernorInfo.GetComponent<CharacterScreenActivation>().InitializeData(sGov);
-            systemGovernorInfo.GetComponent<Image>().sprite = graphicsDataRef.CharacterList.Find(p => p.name == sGov.PictureID);
-            systemGovernorInfo.Find("System Governor Name").GetComponent<Text>().text = sGov.Name.ToUpper() + " OF " + HelperFunctions.DataRetrivalFunctions.GetHouse(sGov.HouseID).Name.ToUpper();
-            if (sGov.AssignedHouse.Rank == House.eHouseRank.Great)
-            {
-                systemGovernorInfo.Find("System Governor Name").GetComponent<Text>().color = Color.yellow; // if great house, change color
-            }
-            else if (sGov.AssignedHouse.Rank == House.eHouseRank.Minor)
-            {
-                systemGovernorInfo.Find("System Governor Name").GetComponent<Text>().color = Color.green; // if great house, change color
-            }
-            else
-            {
-                systemGovernorInfo.Find("System Governor Name").GetComponent<Text>().color = Color.white; // if great house, change color
-            }
-            if (HelperFunctions.DataRetrivalFunctions.GetPlanet(sGov.PlanetLocationID) != null)
-            {
-                systemGovernorInfo.Find("System Governor Location").GetComponent<Text>().text = "LOCATED ON " + HelperFunctions.DataRetrivalFunctions.GetPlanet(sGov.PlanetLocationID).Name.ToUpper();
-            }
+    //    // set system governor image
+    //    if (DataRetrivalFunctions.GetSystemGovernorID(sData.ID) != "none")
+    //    {
+    //        systemGovernorInfo.gameObject.SetActive(true);
+    //        string sID = DataRetrivalFunctions.GetSystemGovernorID(sData.ID);
+    //        Character sGov = DataRetrivalFunctions.GetCharacter(sID);
+    //        systemGovernorInfo.GetComponent<CharacterTooltip>().InitializeTooltipData(sGov, -22f);
+    //        systemGovernorInfo.GetComponent<CharacterScreenActivation>().InitializeData(sGov);
+    //        systemGovernorInfo.GetComponent<Image>().sprite = graphicsDataRef.CharacterList.Find(p => p.name == sGov.PictureID);
+    //        systemGovernorInfo.Find("System Governor Name").GetComponent<Text>().text = sGov.Name.ToUpper() + " OF " + HelperFunctions.DataRetrivalFunctions.GetHouse(sGov.HouseID).Name.ToUpper();
+    //        if (sGov.AssignedHouse.Rank == House.eHouseRank.Great)
+    //        {
+    //            systemGovernorInfo.Find("System Governor Name").GetComponent<Text>().color = Color.yellow; // if great house, change color
+    //        }
+    //        else if (sGov.AssignedHouse.Rank == House.eHouseRank.Minor)
+    //        {
+    //            systemGovernorInfo.Find("System Governor Name").GetComponent<Text>().color = Color.green; // if great house, change color
+    //        }
+    //        else
+    //        {
+    //            systemGovernorInfo.Find("System Governor Name").GetComponent<Text>().color = Color.white; // if great house, change color
+    //        }
+    //        if (HelperFunctions.DataRetrivalFunctions.GetPlanet(sGov.PlanetLocationID) != null)
+    //        {
+    //            systemGovernorInfo.Find("System Governor Location").GetComponent<Text>().text = "LOCATED ON " + HelperFunctions.DataRetrivalFunctions.GetPlanet(sGov.PlanetLocationID).Name.ToUpper();
+    //        }
 
-            // set color of label for support
-            Color supportColor;
-            if (pData.SysGovSupport == eSupportLevel.Full)
-            {
-                supportColor = Color.green;
-            }
-            else if (pData.SysGovSupport == eSupportLevel.Partial)
-            {
-                supportColor = Color.yellow;
-            }
-            else
-            {
-                supportColor = Color.red;
-            }
-            systemGovernorInfo.Find("System Governor Label").GetComponent<Text>().color = supportColor;
-        }
-        else
-        {
-            systemGovernorInfo.gameObject.SetActive(false);
-        }
+    //        // set color of label for support
+    //        Color supportColor;
+    //        if (pData.SysGovSupport == eSupportLevel.Full)
+    //        {
+    //            supportColor = Color.green;
+    //        }
+    //        else if (pData.SysGovSupport == eSupportLevel.Partial)
+    //        {
+    //            supportColor = Color.yellow;
+    //        }
+    //        else
+    //        {
+    //            supportColor = Color.red;
+    //        }
+    //        systemGovernorInfo.Find("System Governor Label").GetComponent<Text>().color = supportColor;
+    //    }
+    //    else
+    //    {
+    //        systemGovernorInfo.gameObject.SetActive(false);
+    //    }
 
-        // set viceroy image
-        if (DataRetrivalFunctions.GetPlanetViceroyID(pData.ID) != "none")
-        {
-            viceroyInfo.gameObject.SetActive(true);
-            string vID = HelperFunctions.DataRetrivalFunctions.GetPlanetViceroyID(pData.ID);
-            Character vGov = HelperFunctions.DataRetrivalFunctions.GetCharacter(vID);
-            viceroyInfo.GetComponent<CharacterTooltip>().InitializeTooltipData(vGov, -21f); // set up the tooltip
-            viceroyInfo.GetComponent<CharacterScreenActivation>().InitializeData(vGov); // set up data for character screen
-            viceroyInfo.GetComponent<Image>().sprite = graphicsDataRef.CharacterList.Find(p => p.name == vGov.PictureID);
-            viceroyInfo.Find("Viceroy Name").GetComponent<Text>().text = vGov.Name.ToUpper() + " OF " + HelperFunctions.DataRetrivalFunctions.GetHouse(vGov.HouseID).Name.ToUpper();
-            if (vGov.AssignedHouse.Rank == House.eHouseRank.Great)
-            {
-                viceroyInfo.Find("Viceroy Name").GetComponent<Text>().color = Color.yellow; // if great house, change color
-            }
-            else if (vGov.AssignedHouse.Rank == House.eHouseRank.Minor)
-            {
-                viceroyInfo.Find("Viceroy Name").GetComponent<Text>().color = Color.green; // if great house, change color
-            }
-            else
-            {
-                viceroyInfo.Find("Viceroy Name").GetComponent<Text>().color = Color.white; // if great house, change color
-            }
-            if (HelperFunctions.DataRetrivalFunctions.GetPlanet(vGov.PlanetLocationID) != null)
-            {
-                viceroyInfo.Find("Viceroy Location").GetComponent<Text>().text = "LOCATED ON " + HelperFunctions.DataRetrivalFunctions.GetPlanet(vGov.PlanetLocationID).Name.ToUpper();
-            }
-        }
-        else
-        {
-            viceroyInfo.gameObject.SetActive(false);
-        }
-    }
+    //    // set viceroy image
+    //    if (DataRetrivalFunctions.GetPlanetViceroyID(pData.ID) != "none")
+    //    {
+    //        viceroyInfo.gameObject.SetActive(true);
+    //        string vID = HelperFunctions.DataRetrivalFunctions.GetPlanetViceroyID(pData.ID);
+    //        Character vGov = HelperFunctions.DataRetrivalFunctions.GetCharacter(vID);
+    //        viceroyInfo.GetComponent<CharacterTooltip>().InitializeTooltipData(vGov, -21f); // set up the tooltip
+    //        viceroyInfo.GetComponent<CharacterScreenActivation>().InitializeData(vGov); // set up data for character screen
+    //        viceroyInfo.GetComponent<Image>().sprite = graphicsDataRef.CharacterList.Find(p => p.name == vGov.PictureID);
+    //        viceroyInfo.Find("Viceroy Name").GetComponent<Text>().text = vGov.Name.ToUpper() + " OF " + HelperFunctions.DataRetrivalFunctions.GetHouse(vGov.HouseID).Name.ToUpper();
+    //        if (vGov.AssignedHouse.Rank == House.eHouseRank.Great)
+    //        {
+    //            viceroyInfo.Find("Viceroy Name").GetComponent<Text>().color = Color.yellow; // if great house, change color
+    //        }
+    //        else if (vGov.AssignedHouse.Rank == House.eHouseRank.Minor)
+    //        {
+    //            viceroyInfo.Find("Viceroy Name").GetComponent<Text>().color = Color.green; // if great house, change color
+    //        }
+    //        else
+    //        {
+    //            viceroyInfo.Find("Viceroy Name").GetComponent<Text>().color = Color.white; // if great house, change color
+    //        }
+    //        if (HelperFunctions.DataRetrivalFunctions.GetPlanet(vGov.PlanetLocationID) != null)
+    //        {
+    //            viceroyInfo.Find("Viceroy Location").GetComponent<Text>().text = "LOCATED ON " + HelperFunctions.DataRetrivalFunctions.GetPlanet(vGov.PlanetLocationID).Name.ToUpper();
+    //        }
+    //    }
+    //    else
+    //    {
+    //        viceroyInfo.gameObject.SetActive(false);
+    //    }
+    //}
 
     void ShowPlanetDataBox()
     {
@@ -1029,12 +1029,12 @@ public class PlanetView : MonoBehaviour {
             stellarographyPanel.GetComponent<Image>().color = fadeColor;
         }
 
-        if (edictPanel.activeSelf)
-        {
-            Color edictPanelColor = edictPanel.GetComponent<Image>().color;
-            StartCoroutine(FadeInAlpha(255f));
-            edictPanel.GetComponent<Image>().color = fadeColor;
-        }
+        //if (edictPanel.activeSelf)
+        //{
+        //    Color edictPanelColor = edictPanel.GetComponent<Image>().color;
+        //    StartCoroutine(FadeInAlpha(255f));
+        //    edictPanel.GetComponent<Image>().color = fadeColor;
+        //}
 
     }
 

@@ -37,6 +37,7 @@ namespace Projects
         public float BaseHeavyReq { get; set; }
         public float BaseRareReq { get; set; }
         public float BaseCostReq { get; set; } // base total cost of the Project that must be contributed
+        public float BasePrestige { get; set; } // how prestigious this project is; translates to power gain
         public float TyrannicalEffect { get; set; }
         public float BenevolentEffect { get; set; }
         public Dictionary<string, float> CharactersInProject = new Dictionary<string, float>();

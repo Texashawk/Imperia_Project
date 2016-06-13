@@ -322,8 +322,6 @@ namespace ConversationAI
                     goto chooseSentence;
                 if (!actionSuccess && !HateResponses[choice].Contains("[ACTIONFAIL]"))
                     goto chooseSentence;
-                if (actionSuccess && !HateResponses[choice].Contains("[ACTIONSUCCESS]"))
-                    goto chooseSentence;
                 else
                      activeString = HateResponses[choice];
 

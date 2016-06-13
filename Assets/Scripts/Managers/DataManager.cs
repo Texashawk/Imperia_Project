@@ -253,11 +253,11 @@ using ConversationAI;
             {
                 if (project.Name == "ID")
                 {
-                    currentProject.ID = project.InnerText.ToUpper();
+                    currentProject.ID = project.InnerText;
                 }
                 if (project.Name == "Name")
                 {
-                    currentProject.Name = project.InnerText.ToUpper();
+                    currentProject.Name = project.InnerText;
                 }
                 if (project.Name == "TYPE")
                 {
@@ -283,7 +283,7 @@ using ConversationAI;
                 }
                 if (project.Name == "DESCRIPTION")
                 {
-                    currentProject.Description = project.InnerText.ToUpper();
+                    currentProject.Description = project.InnerText;
                 }
                 if (project.Name == "ICON_NAME")
                 {
@@ -333,6 +333,10 @@ using ConversationAI;
                 if (project.Name == "BASE_COST")
                 {
                     currentProject.BaseCostReq = float.Parse(project.InnerText);
+                }
+                if (project.Name == "BASE_PRESTIGE")
+                {
+                    currentProject.BasePrestige = float.Parse(project.InnerText);
                 }
                 if (project.Name == "TYRANNICAL_EFFECT")
                 {

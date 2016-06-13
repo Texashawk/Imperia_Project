@@ -3371,6 +3371,8 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 float governmentDevelopmentLevel = TotalAdmin * Constants.Constant.GovernmentDevelopmentModifier;
 
                 int developedRegions = RegionList.FindAll(p => p.PopsInTile.Count > 0).Count;
+                if (developedRegions == 0) // if not developed, return 0
+                    return 0;
 
                 return (farmingDevelopmentLevel + miningDevelopmentLevel + highTechDevelopmentLevel + scienceDevelopmentLevel + manufacturingDevelopmentLevel + governmentDevelopmentLevel) / developedRegions;
             }

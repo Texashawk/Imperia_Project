@@ -8,6 +8,9 @@ namespace Constants
         public const int MediumIntelLevelMax = 6;
         public const int HighIntelMax = 10;
 
+        // AP costs
+        public const int APsRequiredForProject = 2;
+
         // resource needs constants (to start)
         public const float FarmingBaseAlphaUsage = .03f;
         public const float FarmingBaseHeavyUsage = .02f;
@@ -137,6 +140,20 @@ namespace Constants
         // culture ring ranges
         public const int InnerRingCultureRange = 4000; // range from the center of the Empire (Neo-Sirius)
         public const int MiddleRingCultureRange = 3000; // additional range and width from the inner ring
+
+        // quadrant setup constants        
+        public const int StarsInSmallQuadrant = 60;
+        public const int QuadrantSizeInSmallQuadrant = 8000;
+        public const int MinEmpireSizeInSmallQuadrant = 2000;
+        public const int MaxEmpireSizeInSmallQuadrant = 3000;
+        public const int StarsInMediumQuadrant = 100;
+        public const int QuadrantSizeInMediumQuadrant = 12000;
+        public const int MinEmpireSizeInMediumQuadrant = 2500;
+        public const int MaxEmpireSizeInMediumQuadrant = 4500;
+        public const int StarsInLargeQuadrant = 150;
+        public const int QuadrantSizeInLargeQuadrant = 20000;
+        public const int MinEmpireSizeInLargeQuadrant = 3000;
+        public const int MaxEmpireSizeInLargeQuadrant = 6000;
 
         // leader chance that they are in a certain house for different jobs
         public const int ChanceProvinceGovernorGreat = 90;

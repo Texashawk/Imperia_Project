@@ -69,6 +69,7 @@ public class GameData : MonoBehaviour
 
     // empire setup variables
     public string PlayerEmpireName { get; set; }
+    public GameSetupFile GameSetup { get; set; }
 
     // game setup variables
     public int NumberOfAICivs { get; set; }
