@@ -654,7 +654,7 @@ namespace Managers
                 // Step 2: determine Importance of each good on each planet
                 pData.FoodImportance = (((50f - (pData.FoodStored / pData.TotalFoodConsumed)) / 5f) -( pData.FoodDifference * 4)) * Constant.FoodPriority;
                 pData.EnergyImportance = (((50f - (pData.EnergyStored / pData.TotalEnergyConsumed)) / 5f) - (pData.EnergyDifference * 4)) * Constant.EnergyPriority;
-                pData.BasicImportance = (((50f - (pData.BasicStored / pData.TotalAlphaMaterialsConsumed)) / 5f) - (pData.AlphaTotalDifference * 2)) * Constant.BasicPriority;
+                pData.BasicImportance = (((50f - (pData.BasicStored / pData.TotalAlphaMaterialsConsumed)) / 5f) - (pData.BasicTotalDifference * 2)) * Constant.BasicPriority;
                 pData.HeavyImportance = (((50f - (pData.HeavyStored / pData.TotalHeavyMaterialsConsumed)) / 5f) - (pData.HeavyTotalDifference * 2)) * Constant.HeavyPriority;
                 pData.RareImportance = (((50f - (pData.RareStored / pData.TotalRareMaterialsConsumed)) / 5f) - (pData.RareTotalDifference * 1)) * Constant.RarePriority;
             }
@@ -756,10 +756,10 @@ namespace Managers
                 energyUnitsDesired = 0;
             Logging.Logger.LogThis("With a monthly shortfall of " + (-1 * pData.EnergyDifference).ToString("N1") + ", " + energyUnitsDesired.ToString("N1") + " energy units are requested from the viceroy this month.");
 
-            basicUnitsDesired = (-1 * pData.AlphaTotalDifference) * (50f / pData.Viceroy.Humanity) * (pData.Viceroy.Intelligence / 50f); // materials are based on low humanity and high intelligence
+            basicUnitsDesired = (-1 * pData.BasicTotalDifference) * (50f / pData.Viceroy.Humanity) * (pData.Viceroy.Intelligence / 50f); // materials are based on low humanity and high intelligence
             if (basicUnitsDesired < 0)
                 basicUnitsDesired = 0;
-            Logging.Logger.LogThis("With a monthly shortfall of " + (-1 * pData.AlphaTotalDifference).ToString("N1") + ", " + basicUnitsDesired.ToString("N1") + " basic units are requested from the viceroy this month.");
+            Logging.Logger.LogThis("With a monthly shortfall of " + (-1 * pData.BasicTotalDifference).ToString("N1") + ", " + basicUnitsDesired.ToString("N1") + " basic units are requested from the viceroy this month.");
 
             heavyUnitsDesired = (-1 * pData.HeavyTotalDifference) * (50f / pData.Viceroy.Humanity) * (pData.Viceroy.Intelligence / 50f);
             if (heavyUnitsDesired < 0)
@@ -1184,7 +1184,7 @@ namespace Managers
             {
                 pData.FoodStored += pData.FoodDifference;
                 pData.EnergyStored += pData.EnergyDifference;
-                pData.BasicStored += pData.AlphaTotalDifference;
+                pData.BasicStored += pData.BasicTotalDifference;
                 pData.HeavyStored += pData.HeavyPreProductionDifference;
                 pData.RareStored += pData.RarePreProductionDifference;
             }

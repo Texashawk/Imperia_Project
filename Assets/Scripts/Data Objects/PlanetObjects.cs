@@ -683,7 +683,7 @@ namespace PlanetObjects
                 int totalScientists = 0;
                 foreach (Pops pop in PopsInTile)
                 {
-                    if (pop.PopClass == Pops.ePopClass.Scientist)
+                    if (pop.PopClass == Pops.ePopClass.Academics)
                     {
                         totalScientists += 1;
                     }
@@ -839,7 +839,7 @@ namespace PlanetObjects
                 {
                     foreach (Pops pop in PopsInTile)
                     {
-                        total += pop.ScienceSkill;
+                        total += pop.AcademicSkill;
                     }
                     sciencePopRating = total / PopsInTile.Count;
                 }
@@ -1354,7 +1354,7 @@ namespace PlanetObjects
                     //pop.Employment = Pops.ePopEmployment.Unemployed; // reset employment status
                     switch (pop.PopClass)
                     {                      
-                        case Pops.ePopClass.Scientist:
+                        case Pops.ePopClass.Academics:
                             if (LabsStaffed < ScienceLevel)
                             {
                                 pop.Employment = Pops.ePopEmployment.FullyEmployed;
@@ -1474,7 +1474,7 @@ namespace PlanetObjects
             {
                 switch (pop.PopClass)
                 {
-                    case Pops.ePopClass.Scientist:
+                    case Pops.ePopClass.Academics:
                         if (pop.Employment == Pops.ePopEmployment.FullyEmployed)
                             LabsStaffed += 1;
                         if (pop.Employment == Pops.ePopEmployment.PartiallyEmployed)
@@ -1544,7 +1544,7 @@ namespace PlanetObjects
 
         public enum ePopClass : int
         {
-            Scientist,
+            Academics,
             Farmer,
             Miner,
             Engineer,
@@ -1558,7 +1558,7 @@ namespace PlanetObjects
         {
             get
             {
-                int[,] Value_Skill = new int[8,2]{{FarmingSkill,1},{ScienceSkill,0},{ManufacturingSkill,3},{MiningSkill,2},{HighTechSkill,4}, {MerchantSkill,5},{FluxSkill,4}, {AdminSkill, 6}};
+                int[,] Value_Skill = new int[8,2]{{FarmingSkill,1},{AcademicSkill,0},{ManufacturingSkill,3},{MiningSkill,2},{HighTechSkill,4}, {MerchantSkill,5},{FluxSkill,4}, {AdminSkill, 6}};
                 ePopClass highestValue = ePopClass.Administrators; // initialize
                 int highestSkillValue = 0;
 
@@ -1625,7 +1625,7 @@ namespace PlanetObjects
             }
         }
         private int _pScienceSkill;
-        public int ScienceSkill
+        public int AcademicSkill
         {
             get
             {
@@ -1834,9 +1834,9 @@ namespace PlanetObjects
         public float FactoryAllocation { get; set; }
         public float MineAllocation { get; set; }
         public float AdminAllocation { get; set; }
-        public float LabsAllocation { get; set; }
+        public float AcademyAllocation { get; set; }
         public float GroundMilitaryAllocation { get; set; }
-        public float StarshipAllocation { get; set; }
+        public float ShipyardAllocation { get; set; }
         public float InfraAllocation { get; set; }
         public float TotalEdictAllocation { get; set; }
         public Region TargetRegion { get; set; } // sets a targeted region of the planet to develop

@@ -151,6 +151,7 @@ namespace Actions
                 relStateY = Relationship.eRelationshipState.Superior;
             }
         }
+
         public static string GivePraisingSpeech(Character cData)
         {
             GameData gDataRef = GameObject.Find("GameManager").GetComponent<GameData>(); 
@@ -164,17 +165,25 @@ namespace Actions
             // now determine effect of character          
             conversationFlags += "[PLEASED]";
 
-            if (cData.Relationships[eData.ID].Trust > 50)
+            if (cData.Relationships[eData.ID].Trust >= 50)
             {
-                cData.Relationships[eData.ID].Trust += Random.Range(0, (speechEffectiveness / 5));
+                cData.Relationships[eData.ID].Trust += Random.Range(5, 15);
             }
             else
             {
-                cData.Relationships[eData.ID].Trust += Random.Range(0, (speechEffectiveness / 8)); // less effective when more hated
+                cData.Relationships[eData.ID].Trust += Random.Range(2, 10); // less effective when more hated
             }
 
-            // now determine effect of characters around them, checking each character individually
-            foreach (string cID in cData.Relationships.Keys)
+            if (cData.Relationships[eData.ID].Trust >= 60)
+            {
+                if (cData.Relationships[eData.ID].RelationshipState == Relationship.eRelationshipState.None)
+                    cData.Relationships[eData.ID].RelationshipState = Relationship.eRelationshipState.Allies; // changes to allies if trust is high enough
+                else if (cData.Relationships[eData.ID].RelationshipState == Relationship.eRelationshipState.Allies)
+                        cData.Relationships[eData.ID].RelationshipState = Relationship.eRelationshipState.Friends; // changes to friends if trust is high enough
+            }
+
+                // now determine effect of characters around them, checking each character individually
+                foreach (string cID in cData.Relationships.Keys)
             {
                 if (cData.Relationships.ContainsKey(cID)) // need a check here for the emperor
                 {
@@ -200,7 +209,7 @@ namespace Actions
 
             // now send to speech engine to create response and return response
             UnityEngine.Debug.Log("Give Praising Speech executed. Speech was " + speechSuccess); // debug code
-            string response = "ACTION CHECK VALUE: " + speechEffectiveness.ToString("N0") + " " + ConversationEngine.GenerateResponse(cData, aData, 100, false, conversationFlags);
+            string response = "NEW RELATIONSHIP STATUS: " + cData.Relationships[eData.ID].RelationshipState.ToString() + "! " + ConversationEngine.GenerateResponse(cData, aData, 100, false, conversationFlags);
 
             return response;
         }

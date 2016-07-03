@@ -15,9 +15,13 @@ class ProjectBar : MonoBehaviour
     private Button createButton;
     private Button stretchedCreateButton;
     private GridLayoutGroup newProjectButtonGrid;
+    private GridLayoutGroup activeProjectButtonGrid;
     public GameObject ProjectButton;
+    public GameObject ActiveProjectButton;
+    public GameObject NoActiveProjectAlert;
     private TextMeshProUGUI projectCreateButtonText; 
     private List<GameObject> projectButtonList = new List<GameObject>();
+    private List<GameObject> activeProjectButtonList = new List<GameObject>();
     public bool listIsInitialized = false;
     private bool buttonIsExpanded = false;
 
@@ -30,10 +34,11 @@ class ProjectBar : MonoBehaviour
         gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
         createUI = GameObject.Find("UI_ProjectScreen/Create_pressed_Types");
         projectBarRect = gameObject.GetComponent<RectTransform>();
-        createButton = transform.Find("Container_Grid/Create").GetComponent<Button>();
+        createButton = transform.Find("Active_Project_Container_Grid/Create").GetComponent<Button>();
         stretchedCreateButton = transform.Find("Create_pressed_Types/Create_Stretched").GetComponent<Button>();
-        projectCreateButtonText = transform.Find("Container_Grid/Create/Text").GetComponent<TextMeshProUGUI>();
+        projectCreateButtonText = transform.Find("Active_Project_Container_Grid/Create/Text").GetComponent<TextMeshProUGUI>();
         newProjectButtonGrid = GameObject.Find("Create_pressed_Types_Grid").GetComponent<GridLayoutGroup>();
+        activeProjectButtonGrid = GameObject.Find("Active_Project_Container_Grid").GetComponent<GridLayoutGroup>();
 
         // set up delegates for the buttons
         createButton.onClick.AddListener(delegate { UpdateProjectBarMode(); }); // initiate new game setup screen
@@ -46,7 +51,8 @@ class ProjectBar : MonoBehaviour
     {
         if (uiManagerRef.RequestProjectBarGraphicRefresh)
         {
-            InitializeList();
+            InitializeNewProjectList();
+            InitializeActiveProjectList();
             uiManagerRef.RequestProjectBarGraphicRefresh = false;
         }
 
@@ -68,7 +74,7 @@ class ProjectBar : MonoBehaviour
             else
                 projectCreateButtonText.text = "Galaxy View";
 
-            ClearList();
+            ClearNewProjectList();
         }
         else
         {
@@ -98,22 +104,39 @@ class ProjectBar : MonoBehaviour
             {
                 createMode = false;
                 createUI.SetActive(false);
-                ClearList();
+                ClearNewProjectList();
                 newProjectButtonGrid.enabled = true;
             }
-        }
-        
+        }      
     }
 
     private void PopulateProjectBar()
     {
-        InitializeList();
+        InitializeNewProjectList();
+        InitializeActiveProjectList();
     }
 
-    public void InitializeList()
+    public void InitializeActiveProjectList()
+    {
+        ClearActiveProjectList(); // clear out the list
+        activeProjectButtonGrid.enabled = true;
+        if (gameDataRef.CivList[0].ActiveProjects.Count > 0)
+        {
+            NoActiveProjectAlert.SetActive(false);
+            List<Project> activeProjectList = gameDataRef.CivList[0].ActiveProjects;
+            foreach (Project pData in activeProjectList)
+            {
+                AddActiveProjectButton(pData);
+            }
+        }
+        else
+            NoActiveProjectAlert.SetActive(true);
+    }
+
+    public void InitializeNewProjectList()
     {
 
-        ClearList(); // clear out the list
+        ClearNewProjectList(); // clear out the list
         newProjectButtonGrid.enabled = true; // to properly set the buttons
         if (gameDataRef.CivList[0].Leader.ActionPoints > 0)
         {
@@ -126,14 +149,14 @@ class ProjectBar : MonoBehaviour
                     string level = uiManagerRef.PrimaryViewMode.ToString().ToUpper();
 
                     if (type == level)
-                        AddProjectButton(pData);
+                        AddNewProjectButton(pData);
                 }
             }
         }
         listIsInitialized = true;
     }
 
-    private void AddProjectButton(Project pData)
+    private void AddNewProjectButton(Project pData)
     {
         GameObject go = Instantiate(ProjectButton) as GameObject;
         go.SetActive(true);
@@ -149,13 +172,37 @@ class ProjectBar : MonoBehaviour
         projectButtonList.Add(go);
     }
 
-    public void ClearList()
+    private void AddActiveProjectButton(Project pData)
+    {
+        GameObject go = Instantiate(ActiveProjectButton) as GameObject;
+        go.SetActive(true);
+        go.name = pData.ID;
+        ActiveProjectButton PB = go.GetComponent<ActiveProjectButton>();
+        PB.SetName(pData.Name);
+        PB.SetID(pData.ID);
+        PB.SetIcon(pData.IconName);
+        PB.SetDescription(pData.Description);
+        go.transform.SetParent(ActiveProjectButton.transform.parent);
+        go.transform.localScale = new Vector3(1, 1, 1); // to offset canvas scaling
+        go.transform.localPosition = new Vector3(go.transform.localPosition.x, go.transform.localPosition.y, 0);
+        activeProjectButtonList.Add(go);
+    }
+
+    public void ClearActiveProjectList()
+    {
+        foreach (GameObject go in activeProjectButtonList)
+        {
+            Destroy(go);
+        }
+        activeProjectButtonList.Clear();
+    }
+
+    public void ClearNewProjectList()
     {
         foreach (GameObject go in projectButtonList)
         {
             Destroy(go);
         }
-
         projectButtonList.Clear();
     }
 

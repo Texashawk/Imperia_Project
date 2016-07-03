@@ -303,7 +303,7 @@ public class TurnEngine : MonoBehaviour {
 
         switch (pop.PopClass)
 	    {
-		case Pops.ePopClass.Scientist:
+		case Pops.ePopClass.Academics:
             releventJobsOnPlanet = ScientistJobsOnPlanet;
             break;
         case Pops.ePopClass.Farmer:

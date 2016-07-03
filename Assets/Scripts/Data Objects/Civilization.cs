@@ -6,6 +6,7 @@ using PlanetObjects;
 using CharacterObjects;
 using HelperFunctions;
 using Constants;
+using Projects;
 using GameEvents;
 
 namespace CivObjects
@@ -46,6 +47,7 @@ namespace CivObjects
         public float Expenses { get; set; }
         public Vector2 Range { get; set; }
         public Emperor PlayerEmperor { get; set; }
+        public List<Project> ActiveProjects = new List<Project>();
         public Character Leader
         {
             get

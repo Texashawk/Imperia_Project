@@ -18,8 +18,10 @@ public class SystemView : MonoBehaviour {
     private UIManager uiManagerRef;
     private Canvas canvasRef;
     private GalaxyView gScreenRef;
-    public GameObject systemPlanetSummaryPanel;
+    public GameObject EconomicPlanetSummaryPanel;
     //public GameObject houseShieldsPanel;
+    public GameObject SystemResourcesPanel;
+    public GameObject UninhabitedPlanetPanel;
     private List<GameObject> systemObjectsDrawnList = new List<GameObject>();
     private float alphaValue = 0f; // change back to 0 when fix the issue with corouting and vars taking too much CPU
     private bool DrawPanelSummary = false;
@@ -49,6 +51,7 @@ public class SystemView : MonoBehaviour {
         noIntelLevelPlanetData = GameObject.Find("No Intel Level Text").GetComponent<Text>();
         noStellarObjectText = GameObject.Find("No Stellar Object Text").GetComponent<Text>();
         lowIntelLevelPlanetData.enabled = false;
+        SystemResourcesPanel.SetActive(false); // initially off
     }
 
     void OnGUI()
@@ -63,7 +66,7 @@ public class SystemView : MonoBehaviour {
         {
             ShowSystemView();
             if (DrawPanelSummary && alphaValue < 250f)
-                FadePlanetSummaryPanels();
+                
 
             if (gameDataRef.RequestGraphicRefresh)
             {
@@ -174,6 +177,7 @@ public class SystemView : MonoBehaviour {
     {     
         GameObject selectedStar = gScreenRef.GetSelectedStar();
         StarData selectedStarData = selectedStar.GetComponent<Star>().starData;
+        SystemResourcesPanel.SetActive(true);
     }
 
     void DrawPlanetSummaryPanels()
@@ -189,15 +193,24 @@ public class SystemView : MonoBehaviour {
                 {
                     Vector3 boxLocation;
                     PlanetData planetData = selectedStarData.PlanetSpots[x]; // ref for planet's data
-      
-                    Vector3 nameVector = Camera.main.WorldToScreenPoint(gScreenRef.listSystemPlanetsCreated.Find(p => p.name == selectedStarData.PlanetSpots[x].Name).transform.position); // gets the screen point of the planet's transform position
-                    // set the planet data box position relative to the planet's world location
-                    boxLocation = new Vector3(nameVector.x, nameVector.y - 120, 0); // where the text box is located
-                    GameObject pPanel = Instantiate(systemPlanetSummaryPanel, boxLocation, Quaternion.identity) as GameObject; // draw the panel
+                    GameObject pPanel;
+                    Vector3 nameVector = Camera.main.WorldToScreenPoint(gScreenRef.listSystemPlanetsCreated.Find(p => p.name == selectedStarData.PlanetSpots[x].Name).transform.position); // gets the screen point of the planet's transform position                                                                                                                                                                                        // set the planet data box position relative to the planet's world location
+                    boxLocation = new Vector3(nameVector.x, nameVector.y - 125, 0); // where the text box is located
+                    if (planetData.IsInhabited)
+                    {
+                        pPanel = Instantiate(EconomicPlanetSummaryPanel, boxLocation, Quaternion.identity) as GameObject; // draw the panel
+                        pPanel.GetComponent<PlanetEconomicDataBox>().PopulateDataBox(planetData.ID); // populate the panel
+                    }
+                    else
+                    {
+                        pPanel = Instantiate(UninhabitedPlanetPanel, boxLocation, Quaternion.identity) as GameObject; // draw the panel
+                        pPanel.GetComponent<PlanetUnownedDataBox>().PopulateDataBox(planetData.ID); // populate the panel
+                    }
+
                     pPanel.transform.SetParent(canvasRef.transform);
-                    pPanel.transform.localScale = new Vector3(1f, 1f, 1f);
-                    pPanel.transform.localPosition = new Vector3(boxLocation.x - (Screen.width / 2), boxLocation.y - (Screen.height / 2), -10);                  
-                    pPanel.GetComponent<PlanetDataBox>().PopulateDataBox(planetData.ID); // populate the panel             
+                    pPanel.transform.localScale = new Vector3(.9f, .9f, .9f);
+                    pPanel.transform.localPosition = new Vector3(boxLocation.x - (Screen.width / 2), boxLocation.y - (Screen.height / 2));
+                                     
                     pPanel.GetComponent<Image>().color = new Color(1, 1, 1, 0); // dim out the color
                     systemObjectsDrawnList.Add(pPanel);
 
@@ -209,57 +222,14 @@ public class SystemView : MonoBehaviour {
                         usedRatio = widthScaleRatio;
                     else
                         usedRatio = heightScaleRatio;
-                    pPanel.transform.localScale = new Vector3(usedRatio, usedRatio, 1);
+                    pPanel.transform.localScale = new Vector3(.9f * usedRatio, .9f * usedRatio, 1);
 
-                    // increase the count
+                    // increase the count                  
                     planetCount += 1;
                 }
-            }        
+            }
+                    
         DrawPanelSummary = true;
-    }
-
-    void FadePlanetSummaryPanels()
-    {
-        StartCoroutine(FadeInAlpha());
-        Color baseColor = new Color();        
-        Color fadeColor = new Color(1, 1, 1, alphaValue / 255f);
-
-        for (int y = 0; y < systemObjectsDrawnList.Count; y++)
-        {
-           GameObject pPanel = systemObjectsDrawnList[y];
-           systemObjectsDrawnList[y].GetComponent<Image>().color = fadeColor;
-           baseColor = pPanel.transform.Find("Planet Name").GetComponent<Text>().color;
-           pPanel.transform.Find("Planet Name").GetComponent<Text>().color = new Color(baseColor.r,baseColor.g,baseColor.b,fadeColor.a);
-           pPanel.transform.Find("Planet Type").GetComponent<Text>().color = fadeColor;
-
-           baseColor = pPanel.transform.Find("Planet Status").GetComponent<Text>().color;
-           pPanel.transform.Find("Planet Status").GetComponent<Text>().color = new Color(baseColor.r, baseColor.g, baseColor.b, fadeColor.a);
-
-           baseColor = pPanel.transform.Find("Planet Size").GetComponent<Text>().color; // get the original color
-           pPanel.transform.Find("Planet Size").GetComponent<Text>().color = new Color(baseColor.r, baseColor.g, baseColor.b, fadeColor.a); // and then add the fade alpha
-
-           baseColor = pPanel.transform.Find("Energy Level").GetComponent<Text>().color; // get the original color
-           pPanel.transform.Find("Energy Level").GetComponent<Text>().color = new Color(baseColor.r, baseColor.g, baseColor.b, fadeColor.a); // assign the name to the text object child
-
-           baseColor = pPanel.transform.Find("Bio Level").GetComponent<Text>().color; // get the original color
-           pPanel.transform.Find("Bio Level").GetComponent<Text>().color = new Color(baseColor.r, baseColor.g, baseColor.b, fadeColor.a); // assign the name to the text object child
-
-           baseColor = pPanel.transform.Find("Rare Materials Level").GetComponent<Text>().color; // get the original color
-           pPanel.transform.Find("Rare Materials Level").GetComponent<Text>().color = new Color(baseColor.r, baseColor.g, baseColor.b, fadeColor.a); // assign the name to the text object child
-
-           baseColor = pPanel.transform.Find("Alpha Materials Level").GetComponent<Text>().color; // get the original color
-           pPanel.transform.Find("Alpha Materials Level").GetComponent<Text>().color = new Color(baseColor.r, baseColor.g, baseColor.b, fadeColor.a); // assign the name to the text object child
-
-           baseColor = pPanel.transform.Find("Heavy Materials Level").GetComponent<Text>().color; // get the original color
-           pPanel.transform.Find("Heavy Materials Level").GetComponent<Text>().color = new Color(baseColor.r, baseColor.g, baseColor.b, fadeColor.a); // assign the name to the text object child
-
-           pPanel.transform.Find("Scan Level").GetComponent<Text>().color = fadeColor;
-
-           baseColor = pPanel.transform.Find("Planet Trait 1").GetComponent<Text>().color;
-           pPanel.transform.Find("Planet Trait 1").GetComponent<Text>().color = new Color(baseColor.r, baseColor.g, baseColor.b, fadeColor.a); // assign the name to the text object child
-
-           pPanel.transform.Find("Planet Trait 2").GetComponent<Text>().color = fadeColor;
-        }
     }
 
     void ResetDrawStates()
@@ -268,6 +238,7 @@ public class SystemView : MonoBehaviour {
         lowIntelLevelPlanetData.enabled = false;
         noIntelLevelPlanetData.enabled = false;
         noStellarObjectText.enabled = false;
+        SystemResourcesPanel.SetActive(false);
         DrawPanelSummary = false; // reset all 'draw flags'
         
         for (int x = 0; x < systemObjectsDrawnList.Count; x++)

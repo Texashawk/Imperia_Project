@@ -23,7 +23,8 @@ public class CharacterScreenActivation : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        ActivateWindow();
+        if (eventData.button == PointerEventData.InputButton.Left)
+            ActivateWindow();
     }
 
     public void ActivateWindow()

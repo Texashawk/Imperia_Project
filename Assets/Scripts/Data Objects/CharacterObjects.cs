@@ -123,8 +123,8 @@ namespace CharacterObjects
             }
         }
         public string PlanetLocationID { get; set; }
-
         public string PlanetAssignedID { get; set; }
+
         public BuildPlan PlanetBuildPlan = new BuildPlan(); // add the build plan to the character; only active if they are a viceroy
         public float TimeInPosition { get; set; } // how long has the character been in the position?
        
@@ -132,7 +132,32 @@ namespace CharacterObjects
         {
             get
             {
-                return DataRetrivalFunctions.GetPlanet(PlanetAssignedID);
+                if (DataRetrivalFunctions.GetPlanet(PlanetLocationID) != null)
+                    return DataRetrivalFunctions.GetPlanet(PlanetLocationID);
+                else
+                    return null;
+            }
+        }
+
+        public string SystemLocationID
+        {
+            get
+            {
+                if (DataRetrivalFunctions.GetPlanet(PlanetLocationID) != null)
+                    return DataRetrivalFunctions.GetPlanet(PlanetLocationID).System.ID;
+                else
+                    return null;
+            }
+        }
+
+        public string ProvinceLocationID
+        {
+            get
+            {
+                if (DataRetrivalFunctions.GetPlanet(PlanetLocationID) != null)
+                    return DataRetrivalFunctions.GetSystem(SystemLocationID).AssignedProvinceID;
+                else
+                    return null;
             }
         }
 
@@ -162,10 +187,13 @@ namespace CharacterObjects
         public int Age { get; set; }
         public string History { get; set; }
 
+        // Project variables
+        public bool HasActiveProject = false;
+
         // power stats
-        public int Wealth { get; set; }
+        public float Wealth { get; set; }
         public int BaseInfluence { get; set; }
-        public int Admin { get; set; }
+        public int ADM { get; set; }
 
         // primary character attributes (will change over the game)     
         // the motive attributes
@@ -182,9 +210,7 @@ namespace CharacterObjects
         public float Intelligence { get; set; }
         public float Charm { get; set; }  
         public float Discretion { get; set; }
-       
-        
-        
+            
         public string GenderPronoun
         {
             get

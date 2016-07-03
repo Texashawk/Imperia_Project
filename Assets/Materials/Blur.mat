@@ -37,7 +37,7 @@ Material:
       data:
         first:
           name: _blurSizeXY
-        second: 1.20000005
+        second: .769999981
       data:
         first:
           name: blurSizeXY

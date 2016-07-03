@@ -1294,19 +1294,22 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
 
             if (Viceroy != null)
             {
-                Viceroy.Wealth += (int)viceroyGPPTax;
+                if (viceroyGPPTax > 0f)
+                    Viceroy.Wealth += (int)viceroyGPPTax;
             }
 
             if (System.Governor != null)
             {
-                System.Governor.Wealth += (int)sysGovGPPTax;
+                if (sysGovGPPTax > 0f)
+                 System.Governor.Wealth += (int)sysGovGPPTax;
             }
 
             if (System.Province != null)
             {
                 if (System.Province.Governor != null)
                 {
-                    System.Province.Governor.Wealth += (int)provGovGPPTax;
+                    if (provGovGPPTax > 0)
+                        System.Province.Governor.Wealth += (int)provGovGPPTax;
                 }               
             }
 
@@ -1354,7 +1357,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         {
             get
             {
-                float exportAvailable = AlphaTotalDifference * BasicExportPercentHold + (BasicStored * BasicStockpilePercentAvailable);
+                float exportAvailable = BasicTotalDifference * BasicExportPercentHold + (BasicStored * BasicStockpilePercentAvailable);
                 return exportAvailable;
             }
         }
@@ -1588,7 +1591,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                     {
                         switch (p.PopClass)
                         {
-                            case Pops.ePopClass.Scientist:
+                            case Pops.ePopClass.Academics:
                                 break;
                             case Pops.ePopClass.Farmer:
                                 foreach (Region reg in RegionList)
@@ -2497,7 +2500,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
             }
         }
 
-        public int TotalScientists
+        public int TotalAcademics
         {
             get
             {
@@ -2506,7 +2509,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 {
                     foreach (Pops p in r.PopsInTile)
                     {
-                        if (p.PopClass == Pops.ePopClass.Scientist)
+                        if (p.PopClass == Pops.ePopClass.Academics)
                         {
                             _pScientists += 1;
                         }
@@ -2537,6 +2540,26 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
             }
         }
 
+        public int TotalAdministrators
+        {
+            get
+            {
+                int _pAdministrators = 0;
+                foreach (Region r in RegionList)
+                {
+                    foreach (Pops p in r.PopsInTile)
+                    {
+                        if (p.PopClass == Pops.ePopClass.Administrators)
+                        {
+                            _pAdministrators += 1;
+                        }
+                    }
+                }
+
+                return _pAdministrators;
+            }
+        }
+
         public int AverageMerchantSkill
         {
             get
@@ -2555,6 +2578,121 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
 
                 if (TotalMerchants > 0)
                     return _pSkill / TotalMerchants;
+                else
+                    return 0;
+            }
+        }
+
+        public int AverageFarmerSkill
+        {
+            get
+            {
+                int _pSkill = 0;
+                foreach (Region r in RegionList)
+                {
+                    foreach (Pops p in r.PopsInTile)
+                    {
+                        if (p.PopClass == Pops.ePopClass.Farmer)
+                        {
+                            _pSkill += p.FarmingSkill;
+                        }
+                    }
+                }
+
+                if (TotalFarmers > 0)
+                    return _pSkill / TotalFarmers;
+                else
+                    return 0;
+            }
+        }
+
+        public int AverageMinerSkill
+        {
+            get
+            {
+                int _pSkill = 0;
+                foreach (Region r in RegionList)
+                {
+                    foreach (Pops p in r.PopsInTile)
+                    {
+                        if (p.PopClass == Pops.ePopClass.Miner)
+                        {
+                            _pSkill += p.MiningSkill;
+                        }
+                    }
+                }
+
+                if (TotalMiners > 0)
+                    return _pSkill / TotalMiners;
+                else
+                    return 0;
+            }
+        }
+
+        public int AverageEngineerSkill
+        {
+            get
+            {
+                int _pSkill = 0;
+                foreach (Region r in RegionList)
+                {
+                    foreach (Pops p in r.PopsInTile)
+                    {
+                        if (p.PopClass == Pops.ePopClass.Engineer)
+                        {
+                            _pSkill += p.HighTechSkill;
+                        }
+                    }
+                }
+
+                if (TotalEngineers > 0)
+                    return _pSkill / TotalEngineers;
+                else
+                    return 0;
+            }
+        }
+
+        public int AverageAcademicSkill
+        {
+            get
+            {
+                int _pSkill = 0;
+                foreach (Region r in RegionList)
+                {
+                    foreach (Pops p in r.PopsInTile)
+                    {
+                        if (p.PopClass == Pops.ePopClass.Academics)
+                        {
+                            _pSkill += p.AcademicSkill;
+                        }
+                    }
+                }
+
+                if (TotalAcademics > 0)
+                    return _pSkill / TotalAcademics;
+                else
+                    return 0;
+            }
+        }
+
+        public int AverageAdminSkill
+        {
+            get
+            {
+                int _pSkill = 0;
+                foreach (Region r in RegionList)
+                {
+                    foreach (Pops p in r.PopsInTile)
+                    {
+                        if (p.PopClass == Pops.ePopClass.Administrators)
+                        {
+                            _pSkill += p.AdminSkill;
+                        }
+                    }
+                }
+
+                if (TotalAdministrators > 0)
+                    return _pSkill / TotalAdministrators;
                 else
                     return 0;
             }
@@ -2753,11 +2891,11 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         {
             get
             {
-                return TotalAlphaMaterialsGenerated - TotalAlphaMaterialsConsumed + AlphaImported;
+                return TotalAlphaMaterialsGenerated - TotalAlphaMaterialsConsumed + BasicImported;
             }
         }
 
-        public float AlphaTotalDifference
+        public float BasicTotalDifference
         {
             get
             {
@@ -2820,7 +2958,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         {
             get
             {
-                return AlphaImported - AlphaExported;
+                return BasicImported - AlphaExported;
             }
         }
 
@@ -2846,7 +2984,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         public float EnergyExported { get; set; }
         
 
-        public float AlphaImported
+        public float BasicImported
         {
             get
             {
@@ -2966,7 +3104,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
             }
         }
 
-        public int ManufacturingLevel
+        public int FactoryLevel
         {
             get
             {
@@ -3018,7 +3156,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
             }
         }
 
-        public int HighTechLevel
+        public int EnergyFacilityLevel
         {
             get
             {
@@ -3031,7 +3169,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
             }
         }
 
-        public float HighTechFacilitiesStaffed
+        public float EnergyFacilitiesStaffed
         {
             get
             {
@@ -3044,7 +3182,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
             }
         }
 
-        public int ScienceLevel
+        public int AcademyLevel
         {
             get
             {
@@ -3057,7 +3195,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
             }
         }
 
-        public float LabsStaffed
+        public float AcademiesStaffed
         {
             get
             {
@@ -3070,7 +3208,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
             }
         }
 
-        public int GovernmentLevel
+        public int AdminLevel
         {
             get
             {
@@ -3083,7 +3221,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
             }
         }
 
-        public float GovernmentFacilitiesStaffed
+        public float AdminFacilitiesStaffed
         {
             get
             {
@@ -3365,9 +3503,9 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
             {
                 float farmingDevelopmentLevel = FarmingLevel * Constants.Constant.FarmingDevelopmentModifier;
                 float miningDevelopmentLevel = MiningLevel * Constants.Constant.MiningDevelopmentModifier;
-                float highTechDevelopmentLevel = HighTechLevel * Constants.Constant.HighTechDevelopmentModifier;
-                float scienceDevelopmentLevel = ScienceLevel * Constants.Constant.ScienceDevelopmentModifier;
-                float manufacturingDevelopmentLevel = ManufacturingLevel * Constants.Constant.ManufacturingDevelopmentModifier;
+                float highTechDevelopmentLevel = EnergyFacilityLevel * Constants.Constant.HighTechDevelopmentModifier;
+                float scienceDevelopmentLevel = AcademyLevel * Constants.Constant.ScienceDevelopmentModifier;
+                float manufacturingDevelopmentLevel = FactoryLevel * Constants.Constant.ManufacturingDevelopmentModifier;
                 float governmentDevelopmentLevel = TotalAdmin * Constants.Constant.GovernmentDevelopmentModifier;
 
                 int developedRegions = RegionList.FindAll(p => p.PopsInTile.Count > 0).Count;

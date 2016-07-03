@@ -702,11 +702,26 @@ public class GenerateGameObject
         newChar.Piety = UnityEngine.Random.Range(5, 95);
 
         newChar.BaseInfluence = UnityEngine.Random.Range(0, 15); // base influence before calculation
-        newChar.Admin = UnityEngine.Random.Range(1,5); // AP points
+        newChar.ADM = UnityEngine.Random.Range(1,5); // AP points
         if (newChar.CivID == "CIV0")
             newChar.IntelLevel = UnityEngine.Random.Range(0, 5) + (newChar.Age / 25); // older characters are more well-known
         else
             newChar.IntelLevel = 0; // base no knowledge of other civ's characters
+
+        // Step 3a: Generate skills
+        int baseAdmin = UnityEngine.Random.Range(1, 4);
+        if (baseAdmin == 4) // roll for 1D6 if admin is a 4, and each time that you roll a 6, the admin goes up by 1
+        {
+            int skillRoll = 0;
+            do
+            {
+               skillRoll = UnityEngine.Random.Range(1, 6);
+                if (skillRoll < 4)
+                    baseAdmin += 1;
+
+            } while (skillRoll == 6 && baseAdmin < 10);
+        }
+        newChar.Administration = baseAdmin;
 
         // Step 3a: Generate AI tendencies
         newChar.AdminTendency = UnityEngine.Random.Range(-90, 90);
@@ -1045,7 +1060,7 @@ public class GenerateGameObject
         
         // assign the final skill totals
         newPop.FarmingSkill = farmSkill;
-        newPop.ScienceSkill = scienceSkill;
+        newPop.AcademicSkill = scienceSkill;
         newPop.MiningSkill = miningSkill;
         newPop.HighTechSkill = highTechSkill;
         newPop.ManufacturingSkill = manufacturingSkill;

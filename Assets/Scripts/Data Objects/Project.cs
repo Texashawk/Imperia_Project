@@ -27,6 +27,7 @@ namespace Projects
         public string Name { get; set; }
         public eProjectType Type { get; set; } // the type of Project (military, economic, astrographic, demographic)
         public string ID { get; set; }
+        public string AdministratorID { get; set; }
         public string Description { get; set; }
         public string IconName { get; set; } // the icon name used for this Project
         public string ProjectHouseID { get; set; } // which house the project is being created for
@@ -40,7 +41,7 @@ namespace Projects
         public float BasePrestige { get; set; } // how prestigious this project is; translates to power gain
         public float TyrannicalEffect { get; set; }
         public float BenevolentEffect { get; set; }
-        public Dictionary<string, float> CharactersInProject = new Dictionary<string, float>();
+        public List<string> CharacterIDsInProject = new List<string>();
 
         public bool IsActionValid(ViewManager.eViewLevel viewMode)
         {

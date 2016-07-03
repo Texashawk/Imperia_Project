@@ -13,6 +13,8 @@ TagManager:
   - Region Tile
   - Exploration Callout
   - 3D Star
+  - Empty Slot
+  - Filled Slot
   layers:
   - Default
   - TransparentFX
@@ -23,8 +25,8 @@ TagManager:
   - 
   - 
   - Modal Box
-  - Planets
-  - 
+  - PlanetsFill
+  - Draggable Objects
   - 
   - 
   - 

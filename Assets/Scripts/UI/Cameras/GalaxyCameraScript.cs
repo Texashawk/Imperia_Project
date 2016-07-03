@@ -339,7 +339,7 @@ namespace CameraScripts
             {
                 if (!planetToSystemZoom)
                 {
-                    tgtPosition = new Vector3(target.position.x + (leftCameraMove * (Screen.width / 1920f)) + (target.localScale.x / 2), target.position.y + 75 * (Screen.height / 1080f), systemZValue);
+                    tgtPosition = new Vector3(target.position.x + (leftCameraMove * (Screen.width / 1920f)) + (target.localScale.x / 2), target.position.y + 120 * (Screen.height / 1080f), systemZValue);
                     zoom = systemMinZoomLevel; // set system view zoom level
                     targetCameraXPosition = tgtPosition.x;
                     targetCameraYPosition = tgtPosition.y;
@@ -347,7 +347,7 @@ namespace CameraScripts
                 }            
                 else
                 {
-                    tgtPosition = new Vector3(target.position.x + (leftCameraMove * (Screen.width / 1920f)) + (target.localScale.x / 2), target.position.y + 75 * (Screen.height / 1080f), systemZValue);
+                    tgtPosition = new Vector3(target.position.x + (leftCameraMove * (Screen.width / 1920f)) + (target.localScale.x / 2), target.position.y + 120 * (Screen.height / 1080f), systemZValue);
                     transform.position = new Vector3 (cameraPlanetPosition.x,cameraPlanetPosition.y, cameraPlanetPosition.z);
                     
                     zoom = systemMinZoomLevel; // set system view zoom level

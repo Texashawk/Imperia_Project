@@ -68,9 +68,9 @@ public static class PlanetDevelopmentAI
                     }
                 }
 
-                if (pData.ManufacturingLevel < 10)
+                if (pData.FactoryLevel < 10)
                 {
-                    factoryPriority += (10 - pData.ManufacturingLevel) / 2f; 
+                    factoryPriority += (10 - pData.FactoryLevel) / 2f; 
                 }
 
                 if (pData.BasicPreProductionDifference < 0)
@@ -145,12 +145,12 @@ public static class PlanetDevelopmentAI
                 pData.BuildPlan.FarmsAllocation = farmPriority / sumPriorities;
                 pData.BuildPlan.HighTechAllocation = highTechPriority / sumPriorities;
                 pData.BuildPlan.MineAllocation = minePriority / sumPriorities;
-                pData.BuildPlan.LabsAllocation = labPriority / sumPriorities;
+                pData.BuildPlan.AcademyAllocation = labPriority / sumPriorities;
                 pData.BuildPlan.AdminAllocation = adminPriority / sumPriorities;
                 pData.BuildPlan.InfraAllocation = infrastructurePriority / sumPriorities;
                 pData.BuildPlan.FactoryAllocation = factoryPriority / sumPriorities;
                 pData.BuildPlan.GroundMilitaryAllocation = militaryGroundPriority / sumPriorities;
-                pData.BuildPlan.StarshipAllocation = militarySpacePriority / sumPriorities;
+                pData.BuildPlan.ShipyardAllocation = militarySpacePriority / sumPriorities;
                 pData.BuildPlan.Status = BuildPlan.eBuildPlanStatus.Pending;
 
                 if (pData.BuildPlan.InfraAllocation > 0f && !targetRegionSelected)

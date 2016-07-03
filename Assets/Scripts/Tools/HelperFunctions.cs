@@ -359,6 +359,238 @@ namespace HelperFunctions
             return pColor;
         }
 
+        public static float DetermineContributionToProject(Character cData, Project pData)
+        {
+            float moneyAvail = cData.Wealth; // money available
+            Relationship attitude = cData.Relationships[cData.Civ.LeaderID]; // relationship with you 
+            float baseContribution = 0f; // the base contribution (25%)
+            float adminAdjustment = 0f; // the adjustment made with the type of admin selected
+
+            baseContribution = .25f; // the base contribution of all characters
+
+            // step 1: determine their base contribution based on their traits
+            if (cData.Traits.Exists(p => p.Name == "Traditionalist"))
+                baseContribution -= .3f;
+
+            if (cData.Traits.Exists(p => p.Name == "Reformist"))
+                baseContribution += .7f;
+
+            if (cData.Traits.Exists(p => p.Name == "Egoist"))
+                baseContribution += .3f;
+
+            if (cData.Traits.Exists(p => p.Name == "Ascetic"))
+                baseContribution -= .3f;
+
+            if (cData.Traits.Exists(p => p.Name == "Avaricious"))
+                baseContribution += .3f;
+
+            if (cData.Traits.Exists(p => p.Name == "Generous"))
+                if (pData.BenevolentEffect > 5)
+                    baseContribution += .7f;
+                else if (pData.TyrannicalEffect > 5)
+                    baseContribution -= .6f;
+
+            if (cData.Traits.Exists(p => p.Name == "Spender"))
+                baseContribution = 1f; // spending to the max
+
+            if (cData.Traits.Exists(p => p.Name == "Populist"))
+                if (pData.BenevolentEffect > 5)
+                    baseContribution += .7f;
+                else if (pData.TyrannicalEffect > 5)
+                    baseContribution -= .6f;
+
+            if (cData.Traits.Exists(p => p.Name == "Technophile"))
+                if (pData.Type == Project.eProjectType.Demographic)
+                    baseContribution += .8f;
+                else
+                    baseContribution -= .2f;
+
+            if (cData.Traits.Exists(p => p.Name == "Cruel"))
+                if (pData.BenevolentEffect > 5)
+                    baseContribution -= .7f;
+                else if (pData.TyrannicalEffect > 5)
+                    baseContribution += .6f;
+
+            if (cData.Traits.Exists(p => p.Name == "Psychopath"))
+                if (pData.BenevolentEffect > 5)
+                    baseContribution -= 1f;
+                else if (pData.TyrannicalEffect > 5)
+                    baseContribution += 1f;
+
+            if (cData.Traits.Exists(p => p.Name == "Erratic"))
+                baseContribution = UnityEngine.Random.Range(0, 1f);
+
+            if (cData.Traits.Exists(p => p.Name == "Bureaucrat"))
+                baseContribution += .5f;
+
+            if (cData.Traits.Exists(p => p.Name == "Sybarite"))
+                if (pData.BenevolentEffect > 2)
+                    baseContribution -= .3f;
+                else if (pData.TyrannicalEffect > 2)
+                    baseContribution += .4f;
+
+            // step 2: Now adjust based on their relationship towards you
+            float charAdjustment = DetermineMoneyContributionRelationshipAdjustment(attitude);
+
+            // step 3: Now adjust based on their attributes (specifically power)
+            baseContribution += (cData.Power - 50) / 100;
+            baseContribution += (cData.Drive - 50) / 150;
+
+            // step 4: determine based on the administrator
+            if (pData.AdministratorID != null)
+            {
+                Relationship adminAttitude = cData.Relationships[pData.AdministratorID];
+                adminAdjustment = DetermineMoneyContributionRelationshipAdjustment(adminAttitude);
+            }
+
+            // step 4: final calculation and return
+            baseContribution = baseContribution + charAdjustment + adminAdjustment;
+
+            // normalize for actual wealth
+            if (cData.Wealth > 0f)
+            {
+                if ((baseContribution * pData.BaseCostReq) > cData.Wealth)
+                    baseContribution = (cData.Wealth / pData.BaseCostReq);
+            }
+            else
+                baseContribution = 0f;          
+
+            // normalize for below 0 contributions
+            if (baseContribution < 0f)
+                baseContribution = 0f;
+
+            if (baseContribution > 1f)
+                baseContribution = 1f;        
+
+            return baseContribution;
+
+        }
+
+        private static float DetermineMoneyContributionRelationshipAdjustment(Relationship attitude)
+        {
+            float charAdjustment = 0f;
+            switch (attitude.RelationshipState)
+            {
+                case Relationship.eRelationshipState.None:
+                    break;
+                case Relationship.eRelationshipState.Allies:
+                    charAdjustment += .15f;
+                    break;
+                case Relationship.eRelationshipState.Friends:
+                    charAdjustment += .25f;
+                    break;
+                case Relationship.eRelationshipState.Superior:
+                    charAdjustment += .2f;
+                    break;
+                case Relationship.eRelationshipState.Inferior:
+                    charAdjustment += .8f;
+                    break;
+                case Relationship.eRelationshipState.Challenger:
+                    charAdjustment -= .2f;
+                    break;
+                case Relationship.eRelationshipState.Challenged:
+                    charAdjustment -= .3f;
+                    break;
+                case Relationship.eRelationshipState.Rival:
+                    charAdjustment = -1f;
+                    break;
+                case Relationship.eRelationshipState.Shunning:
+                    charAdjustment = -.5f;
+                    break;
+                case Relationship.eRelationshipState.Shunned:
+                    charAdjustment = .5f;
+                    break;
+                case Relationship.eRelationshipState.SwornVengeance:
+                    charAdjustment = -1f;
+                    break;
+                case Relationship.eRelationshipState.ObjectOfVengeance:
+                    charAdjustment = -1f;
+                    break;
+                case Relationship.eRelationshipState.Vendetta:
+                    charAdjustment = -1f;
+                    break;
+                case Relationship.eRelationshipState.Married:
+                    charAdjustment = 1f;
+                    break;
+                case Relationship.eRelationshipState.Lovers:
+                    charAdjustment = 1f;
+                    break;
+                case Relationship.eRelationshipState.HangerOn:
+                    charAdjustment += .6f;
+                    break;
+                case Relationship.eRelationshipState.HungUpon:
+                    charAdjustment += .1f;
+                    break;
+                case Relationship.eRelationshipState.Patron:
+                    charAdjustment = .8f;
+                    break;
+                case Relationship.eRelationshipState.Protegee:
+                    charAdjustment = .8f;
+                    break;
+                case Relationship.eRelationshipState.Predator:
+                    charAdjustment = -1f;
+                    break;
+                case Relationship.eRelationshipState.Prey:
+                    charAdjustment = -1f;
+                    break;
+                case Relationship.eRelationshipState.Spouse:
+                    charAdjustment = 1f;
+                    break;
+                default:
+                    break;
+            }
+            return charAdjustment;
+        }
+
+        public static float DetermineAdminAvailable(Character cData)
+        {
+            GameData gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
+            float baseADM = 0f;
+            int adminRating = cData.Administration;
+
+            if (cData.Role == Character.eRole.Viceroy)
+            {
+                baseADM = cData.PlanetAssigned.TotalAdmin * (adminRating / 10f);
+            }
+            else if (cData.Role == Character.eRole.SystemGovernor)
+            {
+                foreach (PlanetData pData in cData.SystemAssigned.PlanetList)
+                {
+                    if (pData.Owner != null)
+                    {
+                        if (pData.Owner.ID == cData.AssignedHouse.SwornFealtyCivID)
+                        {
+                            if (!pData.Viceroy.HasActiveProject)
+                                baseADM += pData.TotalAdmin;
+                        }
+                    }
+                }
+
+                baseADM = baseADM * (adminRating / 10f);
+            }
+            else if (cData.Role == Character.eRole.ProvinceGovernor)
+            {
+                foreach (StarData sData in cData.ProvinceAssigned.SystemList)
+                {
+                    foreach (PlanetData pData in sData.PlanetList)
+                    {
+                        if (pData.Owner != null)
+                        {
+                            if (pData.Owner.ID == cData.AssignedHouse.SwornFealtyCivID)
+                            {
+                                if (!pData.Viceroy.HasActiveProject)
+                                    baseADM += pData.TotalAdmin;
+                            }
+                        }
+                    }
+                }
+
+                baseADM = baseADM * (adminRating / 10f);
+            }
+
+            return baseADM;
+        }
+
         public static Project GetProjectData(string pID)
         {
             GameData gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();

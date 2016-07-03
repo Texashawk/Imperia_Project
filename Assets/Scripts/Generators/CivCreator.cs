@@ -32,8 +32,7 @@ namespace CivCreator
             GenerateHouseStats(); // generate the other house status
             GenerateCharacters(); // generate characters for the global pool           
             AssignHouses(); // assign houses
-            GenerateCivLeaders();
-            GenerateRelationships(); // determine everyone's relationship to everyone else
+            GenerateCivLeaders();         
             GenerateProvinces(); // generate provinces for each civilization
             DetermineSystemCapitals();
             GenerateStellarObjectLeaders(); // test; put back after generate primes if needed
@@ -41,6 +40,7 @@ namespace CivCreator
             SetPlanetTaxes();
             GeneratePrimes();                  
             GeneratePlanetIntelLevels(gameDataRef.CivList.Find(p => p.HumanCiv == true));
+            GenerateRelationships(); // determine everyone's relationship to everyone else
             gameDataRef.CivsGenerated = true; // sends flag to move to the galaxy screen
         }
 
@@ -62,6 +62,14 @@ namespace CivCreator
                 for (int x = 0; x < poolCount; x++)
                 {
                     gameDataRef.CharacterList.Add(GenerateGameObject.GenerateNewCharacter(Character.eRole.Pool, civ.ID)); // assign the character to the global list
+                }
+
+                // randomly assign planets for now - leaders will be reassigned to their capital planet later
+                int planetsInEmpire = gameDataRef.CivList[0].PlanetList.Count;
+                foreach (Character cData in gameDataRef.CharacterList)
+                {
+                    int planetLocation = Random.Range(0, planetsInEmpire);
+                    cData.PlanetLocationID = gameDataRef.CivList[0].PlanetIDList[planetLocation];
                 }
             }
         }
@@ -255,7 +263,7 @@ namespace CivCreator
                         {
                             if (baseTrust > 70)
                             {
-                                int chance = Random.Range(0,15);
+                                int chance = Random.Range(0, 15);
                                 if (chance <= 2)
                                     newRelationship.RelationshipState = Relationship.eRelationshipState.Allies;
                                 else if (chance <= 7)
@@ -292,14 +300,16 @@ namespace CivCreator
                         }
 
                         newRelationship.Trust = baseTrust;
-                        newRelationship.Fear = baseFear;                   
+                        newRelationship.Fear = baseFear;
                         cData.Relationships.Add(otherCData.ID, newRelationship);
-                    }                   
+                    }
+                    else
+                        cData.Relationships.Add(cData.ID, newRelationship);       
                 }
             }
         }
 
-        House CreatePlayerHouse()
+        public House CreatePlayerHouse()
         {
             House pHouse = new House();
             pHouse.Name = "Orthos"; // temp name
@@ -390,7 +400,7 @@ namespace CivCreator
                     comHouse.Name = name;
                     comHouse.ID = "COM" + houseNumber.ToString("N0");
                     comHouse.Rank = House.eHouseRank.Common;
-                    
+                    comHouse.SwornFealtyCivID = "CIV0";
                     comHouse.Power = Random.Range(0, 10); // power from 1-10
                     comHouse.Influence = Random.Range(0, 10); // influence from 1-10
                     comHouse.Age = Random.Range(20, 500); // age of the house
@@ -414,23 +424,21 @@ namespace CivCreator
         {
             //Civilization humanCiv = gameDataRef.CivList[0]; // only the player empire has Houses
             List<House> greatHouseList = gameDataRef.HouseList.FindAll(p => p.Rank == House.eHouseRank.Great);
+            List<House> minorHouseList = gameDataRef.HouseList.FindAll(p => p.Rank == House.eHouseRank.Minor);
 
             foreach (House gHouse in greatHouseList)
             {
                 gHouse.Influence = Random.Range(40, 80); // temporary code; will be derived once Holdings and house Wealth are generated
                 gHouse.IsRulingHouse = false; // initially set all houses to false
+                gHouse.SwornFealtyCivID = "CIV0";
             }
 
-            House leadingHouse = new House();
-
-            foreach (House gHouse in greatHouseList)
+            foreach (House mHouse in minorHouseList)
             {
-                if (gHouse.Influence > leadingHouse.Influence)
-                    leadingHouse = gHouse;
+                mHouse.Influence = Random.Range(15, 30); // temporary code; will be derived once Holdings and house Wealth are generated
+                mHouse.IsRulingHouse = false; // initially set all houses to false
+                mHouse.SwornFealtyCivID = "CIV0";
             }
-
-            leadingHouse.IsRulingHouse = true; // set the highest influence House to be the ruling House
-
 
         }
 
@@ -451,19 +459,19 @@ namespace CivCreator
                 {
                     int houseAssignment = Random.Range(0, commonHouseList.Count);
                     cData.HouseID = commonHouseList[houseAssignment].ID;
-                    cData.Wealth = ((int)(commonHouseList[houseAssignment].Wealth + 1) * Random.Range(1, 4)) / 25; // set wealth based on house
+                    cData.Wealth = ((int)(commonHouseList[houseAssignment].Wealth + 1) * Random.Range(1, 4)) / 15; // set wealth based on house
                 }
                 else if (houseTypeChance < Constants.Constant.MinorHouseChance + Constants.Constant.CommonHouseChance)
                 {
                     int houseAssignment = Random.Range(0, minorHouseList.Count);
                     cData.HouseID = minorHouseList[houseAssignment].ID;
-                    cData.Wealth = ((int)(minorHouseList[houseAssignment].Wealth + 1) * Random.Range(1, 7)) / 25; // set wealth based on house
+                    cData.Wealth = ((int)(minorHouseList[houseAssignment].Wealth + 1) * Random.Range(1, 7)) / 15; // set wealth based on house
                 }
                 else
                 {
                     int houseAssignment = Random.Range(0, greatHouseList.Count);
                     cData.HouseID = greatHouseList[houseAssignment].ID;
-                    cData.Wealth = ((int)(greatHouseList[houseAssignment].Wealth + 1) * Random.Range(1, 15)) / 25; // set wealth based on house
+                    cData.Wealth = ((int)(greatHouseList[houseAssignment].Wealth + 1) * Random.Range(1, 15)) / 10; // set wealth based on house
                 }
                 string creationType = "born to";
                 if (cData.Lifeform == Character.eLifeformType.Machine || cData.Lifeform == Character.eLifeformType.Hybrid || cData.Lifeform == Character.eLifeformType.AI)
