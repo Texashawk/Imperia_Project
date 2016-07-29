@@ -14,10 +14,12 @@ using Actions;
 using GameEvents;
 using Projects;
 using ConversationAI;
+using HelpSystem;
 
     public class DataManager
     {
         public static List<House> houseDataList = new List<House>();
+        public static List<IconHelpItem> iconHelpList = new List<IconHelpItem>();
         public static List<CharacterAction> characterActionList = new List<CharacterAction>();
         public static List<PlanetTraits> planetTraitDataList = new List<PlanetTraits>();
         public static List<PlanetAttributeData> planetAttributeDataList = new List<PlanetAttributeData>();
@@ -47,6 +49,7 @@ using ConversationAI;
             planetAttributeDataList.Clear();
             CharacterTraitList.Clear();
             characterActionList.Clear();
+            iconHelpList.Clear();
             systemNameList.Clear();
             planetNameList.Clear();
             projectDataList.Clear();
@@ -61,6 +64,7 @@ using ConversationAI;
             ReadCharacterTraitXMLFiles();
             ReadActionXMLFiles();
             ReadHouseXMLFiles();
+            ReadIconHelpFiles();
             ReadProjectXMLFiles();
             ReadXMLTraitFiles();
             PopulateObjectNameLists();
@@ -465,6 +469,43 @@ using ConversationAI;
             gameDataRef.CharacterTraitList = CharacterTraitList;
         }
 
+        public static void ReadIconHelpFiles()
+        {
+            string path = Application.dataPath;
+            GameData gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
+
+            XmlDocument xmlDoc = new XmlDocument(); // creates the new document
+            TextAsset helpData = null;
+            helpData = Resources.Load("IconHelpXMLData") as TextAsset;  // load the XML file from the Resources folder
+            xmlDoc.LoadXml(helpData.text); // and add it to the xmldoc object
+            XmlNodeList IconHelpList = xmlDoc.GetElementsByTagName("Row"); // separate elements by type (trait, in this case)
+
+            foreach (XmlNode IconHelp in IconHelpList)
+            {
+                XmlNodeList helpContent = IconHelp.ChildNodes;
+                IconHelpItem currentHelpItem = new IconHelpItem();
+
+            foreach (XmlNode helpItem in helpContent)
+            {
+                if (helpItem.Name == "NAME")
+                {
+                    currentHelpItem.IconName = helpItem.InnerText;
+                }
+                if (helpItem.Name == "LABEL")
+                {
+                    currentHelpItem.IconLabel = helpItem.InnerText;
+                }
+                if (helpItem.Name == "DESCRIPTION")
+                {
+                    currentHelpItem.IconDescription = helpItem.InnerText;
+                }
+            }
+                // add the trait once done
+                iconHelpList.Add(currentHelpItem);
+            }
+            gameDataRef.IconHelpList = iconHelpList;
+        }
+
         public static void ReadHouseXMLFiles()
         {
             string path = Application.dataPath;
@@ -490,6 +531,14 @@ using ConversationAI;
                     if (house.Name == "NAME")
                     {
                         currentHouse.Name = house.InnerText;
+                    }
+                    if (house.Name == "ICON_FILE_NAME")
+                    {
+                        currentHouse.IconID = house.InnerText;
+                    }
+                    if (house.Name == "BANNER_FILE_NAME")
+                    {
+                        currentHouse.BannerID = house.InnerText;
                     }
                     if (house.Name == "RANK")
                     {

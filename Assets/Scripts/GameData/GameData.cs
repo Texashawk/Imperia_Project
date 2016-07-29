@@ -5,6 +5,7 @@ using CivObjects;
 using CharacterObjects;
 using EconomicObjects;
 using Tooltips;
+using HelpSystem;
 using Projects;
 using Actions;
 
@@ -59,6 +60,7 @@ public class GameData : MonoBehaviour
     public List<CharacterAction> CharacterActionList = new List<CharacterAction>();
     public List<CharacterTrait> CharacterTraitList = new List<CharacterTrait>();
     public List<House> HouseList = new List<House>(); // all houses generated in the game
+    public List<IconHelpItem> IconHelpList = new List<IconHelpItem>(); // icons that have static text
 
     // galaxy setup variables
     public int GalaxySizeHeight { get; set; }

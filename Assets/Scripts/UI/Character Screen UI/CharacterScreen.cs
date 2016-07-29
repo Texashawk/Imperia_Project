@@ -152,8 +152,8 @@ public class CharacterScreen : MonoBehaviour, IPointerClickHandler
         GenerateInitialConversation();
 
         // populate the lists (test for now, just populates the fellow house members)
-        aView.InitializeList(cData);
-        rView.InitializeList(cData);      
+        //aView.InitializeList(cData);
+        //rView.InitializeList(cData);      
     }
 
     void DrawStats()

@@ -60,7 +60,7 @@ public class RelationsButton : MonoBehaviour
             case Relationship.eRelationshipState.Rival:
                 RelationsText.color = Color.red;
                 break;
-            case Relationship.eRelationshipState.SwornVengeance:
+            case Relationship.eRelationshipState.Vengeance:
                 RelationsText.color = Color.red;
                 break;
             case Relationship.eRelationshipState.ObjectOfVengeance:

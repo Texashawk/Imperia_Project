@@ -19,6 +19,8 @@ public class SystemView : MonoBehaviour {
     private Canvas canvasRef;
     private GalaxyView gScreenRef;
     public GameObject EconomicPlanetSummaryPanel;
+    public GameObject DemographicPlanetSummaryPanel;
+    //public GameObject SystemChainOfCommand;
     //public GameObject houseShieldsPanel;
     public GameObject SystemResourcesPanel;
     public GameObject UninhabitedPlanetPanel;
@@ -52,11 +54,7 @@ public class SystemView : MonoBehaviour {
         noStellarObjectText = GameObject.Find("No Stellar Object Text").GetComponent<Text>();
         lowIntelLevelPlanetData.enabled = false;
         SystemResourcesPanel.SetActive(false); // initially off
-    }
-
-    void OnGUI()
-    {
-                    
+        //SystemChainOfCommand.SetActive(false);
     }
 
     void Update()
@@ -65,8 +63,6 @@ public class SystemView : MonoBehaviour {
         if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.System)
         {
             ShowSystemView();
-            if (DrawPanelSummary && alphaValue < 250f)
-                
 
             if (gameDataRef.RequestGraphicRefresh)
             {
@@ -87,7 +83,6 @@ public class SystemView : MonoBehaviour {
 
         if (!DrawPanelSummary && gScriptRef.systemZoomComplete && Mathf.Approximately(gScriptRef.TargetCameraPosition.x, Camera.main.transform.position.x) && Mathf.Approximately(gScriptRef.TargetCameraPosition.y, Camera.main.transform.position.y)
             && Mathf.Approximately(gScriptRef.TargetCameraPosition.z, Camera.main.transform.position.z))
-        //if (!DrawPanelSummary && (Math.Round(Camera.main.fieldOfView,2) < GalaxyCameraScript.systemMinZoomLevel + .05) && (Math.Round(Camera.main.fieldOfView,2) > GalaxyCameraScript.systemMinZoomLevel - .05))
         {
 
             if (selectedStarData.PlanetList.Count > 0)
@@ -178,13 +173,34 @@ public class SystemView : MonoBehaviour {
         GameObject selectedStar = gScreenRef.GetSelectedStar();
         StarData selectedStarData = selectedStar.GetComponent<Star>().starData;
         SystemResourcesPanel.SetActive(true);
+        //SystemChainOfCommand.SetActive(true);
     }
 
     void DrawPlanetSummaryPanels()
     {
         // test
         GameObject selectedStar = gScreenRef.GetSelectedStar();
+        GameObject selectedPanelType = new GameObject();
         StarData selectedStarData = selectedStar.GetComponent<Star>().starData;
+        
+        switch (uiManagerRef.PrimaryViewMode) // determine which panel to draw
+        {
+            case ViewManager.ePrimaryView.Economic:
+                selectedPanelType = EconomicPlanetSummaryPanel;
+                break;
+            case ViewManager.ePrimaryView.Political:
+                selectedPanelType = DemographicPlanetSummaryPanel;
+                break;
+            case ViewManager.ePrimaryView.Military:
+                selectedPanelType = DemographicPlanetSummaryPanel;
+                break;
+            case ViewManager.ePrimaryView.Demographic:
+                selectedPanelType = DemographicPlanetSummaryPanel;
+                break;
+            default:
+                break;
+        }
+
         int planetCount = 0;
         
             for (int x = 0; x < 5; x++)
@@ -198,8 +214,24 @@ public class SystemView : MonoBehaviour {
                     boxLocation = new Vector3(nameVector.x, nameVector.y - 125, 0); // where the text box is located
                     if (planetData.IsInhabited)
                     {
-                        pPanel = Instantiate(EconomicPlanetSummaryPanel, boxLocation, Quaternion.identity) as GameObject; // draw the panel
-                        pPanel.GetComponent<PlanetEconomicDataBox>().PopulateDataBox(planetData.ID); // populate the panel
+                        pPanel = Instantiate(selectedPanelType, boxLocation, Quaternion.identity) as GameObject; // draw the panel
+                        switch (uiManagerRef.PrimaryViewMode) // determine which panel to draw
+                        {
+                            case ViewManager.ePrimaryView.Economic:
+                                pPanel.GetComponent<PlanetEconomicDataBox>().PopulateDataBox(planetData.ID); // populate the panel
+                                break;
+                            case ViewManager.ePrimaryView.Political:
+                                //pPanel.GetComponent<PlanetPoliticalDataBox>().PopulateDataBox(planetData.ID); // populate the panel
+                                break;
+                            case ViewManager.ePrimaryView.Military:
+                                //pPanel.GetComponent<PlanetEconomicDataBox>().PopulateDataBox(planetData.ID); // populate the panel
+                                break;
+                            case ViewManager.ePrimaryView.Demographic:
+                                //pPanel.GetComponent<PlanetDemographicDataBox>().PopulateDataBox(planetData.ID); // populate the panel
+                                break;
+                            default:
+                                break;
+                        }                   
                     }
                     else
                     {
@@ -239,6 +271,7 @@ public class SystemView : MonoBehaviour {
         noIntelLevelPlanetData.enabled = false;
         noStellarObjectText.enabled = false;
         SystemResourcesPanel.SetActive(false);
+        //SystemChainOfCommand.SetActive(false);
         DrawPanelSummary = false; // reset all 'draw flags'
         
         for (int x = 0; x < systemObjectsDrawnList.Count; x++)

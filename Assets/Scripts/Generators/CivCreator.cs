@@ -41,6 +41,7 @@ namespace CivCreator
             GeneratePrimes();                  
             GeneratePlanetIntelLevels(gameDataRef.CivList.Find(p => p.HumanCiv == true));
             GenerateRelationships(); // determine everyone's relationship to everyone else
+            DetermineHouseHoldings();
             gameDataRef.CivsGenerated = true; // sends flag to move to the galaxy screen
         }
 
@@ -214,7 +215,7 @@ namespace CivCreator
                                 baseTrust -= 70;
                             }
 
-                            else if (otherCData.Relationships[cData.ID].RelationshipState == Relationship.eRelationshipState.SwornVengeance)
+                            else if (otherCData.Relationships[cData.ID].RelationshipState == Relationship.eRelationshipState.Vengeance)
                             {
                                 newRelationship.RelationshipState = Relationship.eRelationshipState.ObjectOfVengeance;
                                 baseTrust -= 40;
@@ -223,7 +224,7 @@ namespace CivCreator
 
                             else if (otherCData.Relationships[cData.ID].RelationshipState == Relationship.eRelationshipState.ObjectOfVengeance)
                             {
-                                newRelationship.RelationshipState = Relationship.eRelationshipState.SwornVengeance;
+                                newRelationship.RelationshipState = Relationship.eRelationshipState.Vengeance;
                                 baseTrust -= 90;
                             }
 
@@ -253,7 +254,7 @@ namespace CivCreator
                                     else if (chance == 1)
                                         newRelationship.RelationshipState = Relationship.eRelationshipState.Vendetta;
                                     else if (chance == 2)
-                                        newRelationship.RelationshipState = Relationship.eRelationshipState.SwornVengeance;
+                                        newRelationship.RelationshipState = Relationship.eRelationshipState.Vengeance;
                                 }
                                 else
                                     newRelationship.RelationshipState = Relationship.eRelationshipState.None;
@@ -289,7 +290,7 @@ namespace CivCreator
                                 else if (chance == 1)
                                     newRelationship.RelationshipState = Relationship.eRelationshipState.Vendetta;
                                 else if (chance == 2)
-                                    newRelationship.RelationshipState = Relationship.eRelationshipState.SwornVengeance;
+                                    newRelationship.RelationshipState = Relationship.eRelationshipState.Vengeance;
                                 else if (chance == 3)
                                     newRelationship.RelationshipState = Relationship.eRelationshipState.Shunning;
                                 else
@@ -313,13 +314,53 @@ namespace CivCreator
         {
             House pHouse = new House();
             pHouse.Name = "Orthos"; // temp name
+            pHouse.ID = "PLAYERHOUSE";
             pHouse.SwornFealtyCivID = "CIV0";
             pHouse.IsPlayerHouse = true;
             pHouse.IsRulingHouse = true;
             pHouse.Loyalty = 100; // your House is loyal to you to start
             pHouse.Power = 100; // the ruling House starts out with full Power
-            pHouse.BannerID = "HOUSE001";
+            pHouse.BannerID = "PLAYERHOUSE";
             return pHouse;
+        }
+
+        void DetermineHouseHoldings()
+        {
+            foreach(Civilization civ in gameDataRef.CivList)
+            {
+                if (civ.Type == Civilization.eCivType.PlayerEmpire)
+                {
+                    foreach (PlanetData pData in civ.PlanetList)
+                    {
+                        int holdingChance = 0;
+                        holdingChance = Random.Range(0, 100);
+                        if (holdingChance <= 90)
+                        {
+                            pData.HouseIDHolding = civ.RulingHouseID;
+                        }
+                        else
+                        {
+                            if (holdingChance <= 92)
+                                pData.HouseIDHolding = civ.HouseList[0].ID;
+                            else if (holdingChance <= 94)
+                                pData.HouseIDHolding = civ.HouseList[1].ID;
+                            else if (holdingChance <= 96)
+                                pData.HouseIDHolding = civ.HouseList[2].ID;
+                            else if (holdingChance <= 98)
+                                pData.HouseIDHolding = civ.HouseList[3].ID;
+                            else
+                                pData.HouseIDHolding = civ.HouseList[4].ID;
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (PlanetData pData in civ.PlanetList)
+                    {                       
+                       pData.HouseIDHolding = civ.RulingHouseID;                      
+                    }
+                }
+            }
         }
        
 
@@ -368,11 +409,12 @@ namespace CivCreator
             newEmp.BenevolentInfluence = Random.Range(1f, 5f);
             newEmp.PragmaticInfluence = Random.Range(5f, 10f);
             newEmp.TyrannicalInfluence = Random.Range(1f, 5f);
-            newEmp.Name = "STEVE I"; // temporary
+            newEmp.Name = "Steve I"; // temporary
             newEmp.Health = Character.eHealth.Perfect;
             newEmp.Age = 18;
             newEmp.ID = "EMP001";
             newEmp.CivID = gameDataRef.CivList[0].ID;
+            newEmp.PictureID = "ImpMY6";
             newEmp.Gender = Character.eSex.Male;
             newEmp.EmperorPower = Random.Range(5f, 10f); // will need to be an algorithm to show increase in power through Holdings, etc.
             newEmp.HouseID = gameDataRef.CivList[0].RulingHouseID;
@@ -806,7 +848,15 @@ namespace CivCreator
             newCiv.PlanetMinTolerance = 32; // lower since older world
             newCiv.AstronomyRating = Random.Range(6,11) * 1000; // not used
             newCiv.ID = "CIV0"; // use this to reference the player's civ
+            newCiv.CrestFile = "CREST0";
             newCiv.HumanCiv = true;
+            newCiv.EmperorBaseTaxCut = .75f; // default 75% cut of House-held proceeds
+
+            // these must equal to 1f (percent of 100)
+            newCiv.ViceroyTaxPercentage = .2f;
+            newCiv.SystemGovernorTaxPercentage = .3f;
+            newCiv.ProvinceGovernorTaxPercentage = .4f;
+            newCiv.DomesticPrimeTaxPercentage = .1f;
 
             PlanetData pData;
             List<PlanetData> terranSystemPlanetList = gData.GalaxyStarDataList.Find(p => p.Name == "Neo-Sirius").PlanetList;
@@ -966,7 +1016,8 @@ namespace CivCreator
                                         if (x == 1)
                                             sDataList[y].IsProvinceHub = true;               
                                     }
-                                    provinceValid = true;
+                                    if (newProvince.SystemList.Count > 0)
+                                        provinceValid = true;
                                 }                               
                             }
                          
@@ -979,7 +1030,7 @@ namespace CivCreator
                         while (x < provinceSize && !allSystemsChecked);
                         
                     }
-
+                    
                     foreach (StarData sData in sDataList) // if there are any singletons, assign a 'one shot' province AFTER generation has occured
                     {
                         if (sData.AssignedProvinceID == "")
@@ -1000,7 +1051,7 @@ namespace CivCreator
                             nProv.ID = "PRO" + Random.Range(0, 10000);
                             nProv.OwningCivID = civ.ID;
                             sData.AssignedProvinceID = nProv.ID;
-                            sData.IsProvinceHub = true;
+                            sData.IsProvinceHub = true; // need to change this
                             gData.AddProvinceToList(nProv);
                         }
                     }

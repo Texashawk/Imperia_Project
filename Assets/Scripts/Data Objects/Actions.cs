@@ -13,17 +13,27 @@ namespace Actions
     {
         public enum eType : int
         {
-            Political,
-            Military,
-            Economic,
+            Assignment,
             Personal,
             Psychic,
+            Hostile,
             IntelOps
+        }
+
+        public enum eResponseType : int
+        {
+            Location,
+            Text,
+            Character,
+            Resource,
+            Money,
+            None
         }
 
         public string Name { get; set; }
         public string ID { get; set; }
         public eType Category { get; set; }
+        public eResponseType ResponseType { get; set; }
         public string Description { get; set; }
         public List<Relationship.eRelationshipState> ValidRelationshipStates = new List<Relationship.eRelationshipState>(); // which relationship states are valid for this Action?
         public bool ViceroyValid { get; set; }
@@ -199,7 +209,7 @@ namespace Actions
                        // DataRetrivalFunctions.GetCharacter(cID).Relationships[eData.ID].Trust -= Random.Range(0, (speechEffectiveness / 10)); // distrusts slightly with the emperor
                     }
 
-                    if (cData.Relationships[cID].RelationshipState == Relationship.eRelationshipState.SwornVengeance)
+                    if (cData.Relationships[cID].RelationshipState == Relationship.eRelationshipState.Vengeance)
                     {
                         cData.Relationships[cID].Trust -= Random.Range(0, (speechEffectiveness / 6));
                        // DataRetrivalFunctions.GetCharacter(cID).Relationships[eData.ID].Trust -= Random.Range(0, (speechEffectiveness / 6)); // distrusts a lot with the emperor
@@ -254,7 +264,7 @@ namespace Actions
                         HelperFunctions.DataRetrivalFunctions.GetCharacter(cID).Relationships[reprimandingChar.ID].Trust += Random.Range(0, (speechEffectiveness / 10)); // distrusts slightly with the emperor
                     }
 
-                    if (reprimandedChar.Relationships[cID].RelationshipState == Relationship.eRelationshipState.SwornVengeance)
+                    if (reprimandedChar.Relationships[cID].RelationshipState == Relationship.eRelationshipState.Vengeance)
                     {
                         reprimandedChar.Relationships[cID].Trust -= Random.Range(0, (speechEffectiveness / 6));
                         HelperFunctions.DataRetrivalFunctions.GetCharacter(cID).Relationships[reprimandingChar.ID].Trust += Random.Range(0, (speechEffectiveness / 6)); // distrusts a lot with the emperor
@@ -483,7 +493,7 @@ namespace Actions
                 HelperFunctions.DataRetrivalFunctions.GetChallenge(activeChallengeID).InfluenceStakedOnChallenge += Random.Range(3, 7);
             }
 
-            if (secondCharacterInitialState.RelationshipState == Relationship.eRelationshipState.Spouse)
+            if (secondCharacterInitialState.RelationshipState == Relationship.eRelationshipState.Married)
             {
                 secondCharacterInitialState.BetrayalLevel = 1f; // betrayed!
                 actionResult += "BETRAYAL!";

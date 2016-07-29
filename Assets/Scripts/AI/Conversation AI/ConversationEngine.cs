@@ -17,6 +17,10 @@ namespace ConversationAI
         // lists of sentence types
         public static List<string> IntroGreetingSentences = new List<string>();
         public static List<string> IntroGenericSentences = new List<string>();
+        public static List<string> FriendlyGreetings = new List<string>();
+        public static List<string> NeutralGreetings = new List<string>();
+        public static List<string> UnfriendlyGreetings = new List<string>();
+        public static List<string> HostileGreetings = new List<string>();
         public static List<string> PositiveResponses = new List<string>();
         public static List<string> NegativeResponses = new List<string>();
         public static List<string> BetrayedResponses = new List<string>();
@@ -28,17 +32,17 @@ namespace ConversationAI
         public static List<string> Colors = new List<string>();
         public static List<string> PositiveAdjectives = new List<string>();
         public static List<string> NegativeAdjectives = new List<string>();
-
+        public static List<string> Rooms = new List<string>();
         // constants
-        private const int sentenceMax = 3;
+        private const int sentenceMax = 2;
 
         public static void ReadConversationData()
         {
-            Colors.Add("Blue");
-            Colors.Add("Green");
-            Colors.Add("Orange");
-            Colors.Add("Yellow");
-            Colors.Add("White");
+            Colors.Add("blue");
+            Colors.Add("green");
+            Colors.Add("orange");
+            Colors.Add("yellow");
+            Colors.Add("white");
             PositiveAdjectives.Add("awesome");
             PositiveAdjectives.Add("amazing");
             PositiveAdjectives.Add("wonderful");
@@ -49,6 +53,14 @@ namespace ConversationAI
             SportsTeamNames.Add("Crushers");
             SportsTeamNames.Add("Demolishers");
             SportsTeamNames.Add("Devestators");
+            Rooms.Add("foyer");
+            Rooms.Add("living room");
+            Rooms.Add("bedroom");
+            Rooms.Add("rumpus room");
+            Rooms.Add("study");
+            Rooms.Add("bathroom");
+            Rooms.Add("dining room");
+            Rooms.Add("office");
 
             ReadGenericSentenceData();
         }
@@ -126,7 +138,26 @@ namespace ConversationAI
                     {
                         string desc = "";
                         desc = line;
-                        IntroGreetingSentences.Add(desc);
+                        if (desc.Contains("[FRIENDLY]"))
+                        {
+                            desc = desc.Remove(0, 10);
+                            FriendlyGreetings.Add(desc);
+                        }
+                        else if (desc.Contains("[NEUTRAL]"))
+                        {
+                            desc = desc.Remove(0, 9);
+                            NeutralGreetings.Add(desc);
+                        }
+                        else if (desc.Contains("[UNFRIENDLY]"))
+                        {
+                            desc = desc.Remove(0, 12);
+                            UnfriendlyGreetings.Add(desc);
+                        }
+                        else if (desc.Contains("[HOSTILE]"))
+                        {
+                            desc = desc.Remove(0, 9);
+                            HostileGreetings.Add(desc);
+                        }
                     }
                     else
                         fileEmpty = true;
@@ -405,14 +436,112 @@ namespace ConversationAI
             
             // get initial sentence first
             choice = UnityEngine.Random.Range(0, IntroGreetingSentences.Count);
+            string relationshipType = "";
+            switch (cData.Relationships[cData.Civ.LeaderID].RelationshipState)
+            {
+                case Relationship.eRelationshipState.None:
+                    relationshipType = "NEUTRAL";
+                    break;
+                case Relationship.eRelationshipState.Allies:
+                    relationshipType = "FRIENDLY";
+                    break;
+                case Relationship.eRelationshipState.Friends:
+                    relationshipType = "FRIENDLY";
+                    break;
+                case Relationship.eRelationshipState.Superior:
+                    relationshipType = "FRIENDLY";
+                    break;
+                case Relationship.eRelationshipState.Inferior:
+                    relationshipType = "UNFRIENDLY";
+                    break;
+                case Relationship.eRelationshipState.Challenger:
+                    relationshipType = "UNFRIENDLY";
+                    break;
+                case Relationship.eRelationshipState.Challenged:
+                    relationshipType = "UNFRIENDLY";
+                    break;
+                case Relationship.eRelationshipState.Rival:
+                    relationshipType = "UNFRIENDLY";
+                    break;
+                case Relationship.eRelationshipState.Shunning:
+                    relationshipType = "UNFRIENDLY";
+                    break;
+                case Relationship.eRelationshipState.Shunned:
+                    relationshipType = "UNFRIENDLY";
+                    break;
+                case Relationship.eRelationshipState.Vengeance:
+                    relationshipType = "HOSTILE";
+                    break;
+                case Relationship.eRelationshipState.ObjectOfVengeance:
+                    relationshipType = "HOSTILE";
+                    break;
+                case Relationship.eRelationshipState.Vendetta:
+                    relationshipType = "HOSTILE";
+                    break;
+                case Relationship.eRelationshipState.Married:
+                    relationshipType = "FRIENDLY";
+                    break;
+                case Relationship.eRelationshipState.Lovers:
+                    relationshipType = "FRIENDLY";
+                    break;
+                case Relationship.eRelationshipState.HangerOn:
+                    relationshipType = "FRIENDLY";
+                    break;
+                case Relationship.eRelationshipState.HungUpon:
+                    relationshipType = "NEUTRAL";
+                    break;
+                case Relationship.eRelationshipState.Patron:
+                    relationshipType = "FRIENDLY";
+                    break;
+                case Relationship.eRelationshipState.Protegee:
+                    relationshipType = "FRIENDLY";
+                    break;
+                case Relationship.eRelationshipState.Predator:
+                    relationshipType = "HOSTILE";
+                    break;
+                case Relationship.eRelationshipState.Prey:
+                    relationshipType = "HOSTILE";
+                    break;
+                default:
+                    break;
+            }
 
-            activeString = IntroGreetingSentences[choice];
+            if (relationshipType == "FRIENDLY")
+            {
+                choice = UnityEngine.Random.Range(0, FriendlyGreetings.Count);
+                activeString = FriendlyGreetings[choice];
+                sentenceCount = UnityEngine.Random.Range(0, sentenceMax + 1);
+            }
+            else if (relationshipType == "NEUTRAL")
+            {
+                choice = UnityEngine.Random.Range(0, NeutralGreetings.Count);
+                activeString = NeutralGreetings[choice];
+                sentenceCount = UnityEngine.Random.Range(0, 2);
+            }
+            else if (relationshipType == "UNFRIENDLY")
+            {
+                choice = UnityEngine.Random.Range(0, UnfriendlyGreetings.Count);
+                activeString = UnfriendlyGreetings[choice];
+                sentenceCount = 0;
+            }
+            else if (relationshipType == "HOSTILE")
+            {
+                choice = UnityEngine.Random.Range(0, UnfriendlyGreetings.Count);
+                activeString = HostileGreetings[choice];
+                sentenceCount = 0;
+            }
+            else
+            {
+                choice = UnityEngine.Random.Range(0, NeutralGreetings.Count);
+                activeString = NeutralGreetings[choice];
+                sentenceCount = UnityEngine.Random.Range(0, 2);
+            }
+
             activeString = ParseSentence(activeString, cData);
-
             completeString += activeString + " ";
 
             List<int> choiceList = new List<int>();
-            sentenceCount = UnityEngine.Random.Range(1, sentenceMax);
+            //sentenceCount = UnityEngine.Random.Range(0, sentenceMax);
 
             for (int x = 0; x < sentenceCount; x++)
             {        
@@ -468,6 +597,13 @@ namespace ConversationAI
             {
                 string newString;
                 newString = activeString.Replace("[HOUSE]", cData.AssignedHouse.Name);
+                activeString = newString;
+            }
+
+            if (activeString.Contains("[ROOM]"))
+            {
+                string newString;
+                newString = activeString.Replace("[ROOM]", Rooms[UnityEngine.Random.Range(0, Rooms.Count)]);
                 activeString = newString;
             }
 

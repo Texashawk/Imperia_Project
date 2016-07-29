@@ -190,6 +190,20 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
             
         }
 
+        public int TotalADM(Civilization civ)
+        {
+            GameData gData;
+            gData = GameObject.Find("GameManager").GetComponent<GameData>();
+            int ADMTotal = 0;
+            foreach (PlanetData pData in PlanetList)
+            {
+                if (pData.Owner == civ)
+                    ADMTotal += pData.TotalAdmin;
+            }
+
+            return ADMTotal;
+        }
+
         public bool SystemIsTradeHub { get; set; }
 
         public PlanetData.eTradeHubType LargestTradeHub
@@ -741,7 +755,8 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
                 imports = YearlyImportExpenses;
                 retail = RetailRevenue;
                 totalGPP = baseGPP + retail + exports - imports;
-
+                if (totalGPP < 0)
+                    totalGPP = 0;
                 return totalGPP;                      
             }
         }
@@ -750,7 +765,7 @@ namespace StellarObjects //group all stellar objects into this namespace (may ch
         {
             get
             {
-                return AverageDevelopmentLevel * TotalPopulation * Constant.BaseEconFactor;
+                return (AverageDevelopmentLevel * TotalPopulation * Constant.BaseEconFactor * ((float)Viceroy.Administration / 3f)) * ((float)AdjustedBio / 100f);
             }
         }
 

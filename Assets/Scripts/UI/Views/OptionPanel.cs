@@ -52,8 +52,8 @@ public class OptionPanel : MonoBehaviour {
         panelInitialWidth = gameObject.transform.localScale.x;
         panelRect = gameObject.GetComponent<Transform>();
         mainGamePanel = GameObject.Find("Main Game Panel");
-        mainHeader = GameObject.Find("Imperia Game Heading");
-        subHeader = GameObject.Find("Imperia Game Sub Heading");
+        mainHeader = GameObject.Find("Game Name Heading");
+        subHeader = GameObject.Find("Game Name SubHeading");
         panelCanvas = GameObject.Find("Panel UI Canvas").GetComponent<Canvas>();
         cubeMaterial = gameObject.GetComponent<MeshRenderer>().material;      
         newGameButton = GameObject.Find("New Game Button").GetComponent<Button>();

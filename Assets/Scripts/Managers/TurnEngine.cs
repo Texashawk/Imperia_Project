@@ -5,6 +5,7 @@ using PlanetObjects;
 using StellarObjects;
 using CivObjects;
 using EconomicObjects;
+using Projects;
 using GameEvents;
 using Managers;
 
@@ -19,7 +20,7 @@ public class TurnEngine : MonoBehaviour {
     public string EngineID = "";
     public bool GameGenerationComplete = false;
     public bool TurnGenerationActive {get; set;} // to lock out the controls while a turn is being generated
-    public string InitializationStatus = "GENERATING THE GALAXY...";
+    public string InitializationStatus = "Generating the galaxy...";
 
 	// Use this for initialization
 	void Start () 
@@ -93,19 +94,20 @@ public class TurnEngine : MonoBehaviour {
         foreach (Civilization civ in gDataRef.CivList)
         {
             yield return StartCoroutine(UpdatePopularSupport(civ)); // advance popular support
-            InitializationStatus = "CREATING NEW " + civ.Name.ToUpper() + " PLANETS....";
+            InitializationStatus = "Creating new " + civ.Name + " planets....";
             yield return StartCoroutine(UpdatePlanets(civ)); // advance economy, move pops to same planet, update unrest/popular support levels, etc
-            InitializationStatus = "CREATING NEW " + civ.Name.ToUpper() + " EVENTS...";
+            InitializationStatus = "Creating new " + civ.Name + " events...";
             yield return StartCoroutine(UpdateEvents(civ));
             //yield return new WaitForSeconds(2.0f);
             //if (GameGenerationComplete)
             //{
-                InitializationStatus = "GENERATING TRADES BETWEEN " + civ.Name.ToUpper() + " WORLDS...";
+                InitializationStatus = "Generating trades between " + civ.Name + " worlds...";
                 yield return StartCoroutine(UpdateTrades(civ));
                 
             //}
-            //CheckForMigration(civ); // check for intraplanet migration                     
-            //MigratePopsBetweenPlanets(civ); // and if there are any pops who want to leave, check for where                     
+            yield return StartCoroutine(CheckForMigration(civ)); // check for intraplanet migration                     
+            yield return StartCoroutine(MigratePopsBetweenPlanets(civ)); // and if there are any pops who want to leave, check for where
+            yield return StartCoroutine(UpdateProjectStatus(civ)); // update project status and execute if completed                     
         }
         tManagerRef.RemoveCompletedTradeRuns();
         yield return 0;
@@ -148,6 +150,18 @@ public class TurnEngine : MonoBehaviour {
             }
         }
 
+        yield return 0;
+    }
+
+    private IEnumerator UpdateProjectStatus(Civilization civ)
+    {
+        foreach (Project projData in civ.ActiveProjects)
+        {
+            if (projData.PercentComplete < 1)
+                projData.TotalADMAccumulation += projData.ADMAllocatedPerTurn;
+            if (projData.PercentComplete >= 1f)
+                projData.ActivateProject = true;    
+        }
         yield return 0;
     }
     
@@ -194,15 +208,16 @@ public class TurnEngine : MonoBehaviour {
         }
     }
 
-    private void CheckForMigration(Civilization civ)
+    private IEnumerator CheckForMigration(Civilization civ)
     {
         foreach (PlanetData pData in civ.PlanetList)
         {
             pData.UpdateMigrationStatus();
+            yield return 0;
         }
     }
 
-    private void MigratePopsBetweenPlanets(Civilization civ)
+    private IEnumerator MigratePopsBetweenPlanets(Civilization civ)
     {
         foreach (PlanetData pData in civ.PlanetList)
         {
@@ -216,6 +231,7 @@ public class TurnEngine : MonoBehaviour {
                     }
                 }
             }
+            yield return 0;
         }
     }
 

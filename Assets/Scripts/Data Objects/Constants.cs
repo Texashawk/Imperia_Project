@@ -10,6 +10,7 @@ namespace Constants
 
         // AP costs
         public const int APsRequiredForProject = 2;
+        public const int APsRequiredForAction = 1;
 
         // resource needs constants (to start)
         public const float FarmingBaseAlphaUsage = .03f;

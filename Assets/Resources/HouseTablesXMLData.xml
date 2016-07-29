@@ -3,6 +3,8 @@
 	<Row>
 		<ID>HAWK01</ID>
 		<NAME>Hawken</NAME>
+    <ICON_FILE_NAME>Icon_House_Hawken</ICON_FILE_NAME>
+    <BANNER_FILE_NAME></BANNER_FILE_NAME>
 		<RANK>0</RANK>
 		<LEADER_TITLE>Grand Duke</LEADER_TITLE>
 		<YEAR>2940</YEAR>
@@ -31,6 +33,8 @@
 	<Row>
 		<ID>HALY01</ID>
 		<NAME>Halcyon-Musharraf</NAME>
+    <ICON_FILE_NAME></ICON_FILE_NAME>
+    <BANNER_FILE_NAME></BANNER_FILE_NAME>
 		<RANK>0</RANK>
 		<LEADER_TITLE>Lord Augur</LEADER_TITLE>
 		<YEAR>2605</YEAR>
@@ -47,6 +51,8 @@
 	<Row>
 		<ID>VANR01</ID>
 		<NAME>Van Rigel</NAME>
+    <ICON_FILE_NAME></ICON_FILE_NAME>
+    <BANNER_FILE_NAME></BANNER_FILE_NAME>
 		<RANK>0</RANK>
 		<LEADER_TITLE>High Star</LEADER_TITLE>
 		<YEAR>2355</YEAR>
@@ -74,6 +80,8 @@
 	<Row>
 		<ID>HORL001</ID>
 		<NAME>Horlock</NAME>
+    <ICON_FILE_NAME>Icon_House_Horlock</ICON_FILE_NAME>
+    <BANNER_FILE_NAME></BANNER_FILE_NAME>
 		<RANK>0</RANK>
 		<LEADER_TITLE>Grand Captain</LEADER_TITLE>
 		<YEAR>2415</YEAR>
@@ -102,6 +110,8 @@
 	<Row>
 		<ID>KIRA001</ID>
 		<NAME>Kiraly-Finn</NAME>
+    <ICON_FILE_NAME></ICON_FILE_NAME>
+    <BANNER_FILE_NAME></BANNER_FILE_NAME>
 		<RANK>0</RANK>
 		<LEADER_TITLE>Lord Almarch</LEADER_TITLE>
 		<YEAR>2390</YEAR>
@@ -123,6 +133,8 @@
 	<Row>
 		<ID>IOGA001</ID>
 		<NAME>Iogarajah - High</NAME>
+    <ICON_FILE_NAME></ICON_FILE_NAME>
+    <BANNER_FILE_NAME></BANNER_FILE_NAME>
 		<RANK>0</RANK>
 		<YEAR>2556</YEAR>
 		<HISTORY>House Iogarajah's greatest crisis came in 2885 with the 'High' branch's wholesale conversion to Asceticism. Seeing their cousins as abandoning their familial responsibilities, the Low branch's influential neuter second child and admiral Vladi Seraf Iogarajah took it upon themself, with the tacit backing of the Low patriarch Matall, to reclaim the High branch's worlds for the greater honour of the Family. It took the intervention of the Imperial fleet prevented a devastating civil war, the Admiral standing down only at the very brink of open insurrection. The scars from that near-miss have yet to heal, even now, almost two centuries later...</HISTORY>
@@ -144,6 +156,8 @@
 	<Row>
 		<ID>IOGA002</ID>
 		<NAME>Iogarajah - Low</NAME>
+    <ICON_FILE_NAME></ICON_FILE_NAME>
+    <BANNER_FILE_NAME></BANNER_FILE_NAME>
 		<RANK>0</RANK>
 		<YEAR>2556</YEAR>
 		<HISTORY>House Iogarajah's greatest crisis came in 2885 with the 'High' branch's wholesale conversion to Asceticism. Seeing their cousins as abandoning their familial responsibilities, the Low branch's influential neuter second child and admiral Vladi Seraf Iogarajah took it upon themself, with the tacit backing of the Low patriarch Matall, to reclaim the High branch's worlds for the greater honour of the Family. It took the intervention of the Imperial fleet prevented a devastating civil war, the Admiral standing down only at the very brink of open insurrection. The scars from that near-miss have yet to heal, even now, almost two centuries later...</HISTORY>
@@ -165,6 +179,8 @@
 	<Row>
 		<ID>WALD001</ID>
 		<NAME>Waldegrave</NAME>
+    <ICON_FILE_NAME></ICON_FILE_NAME>
+    <BANNER_FILE_NAME></BANNER_FILE_NAME>
 		<RANK>0</RANK>
 		<YEAR>2744</YEAR>
 		<HISTORY>One of the numerous Houses tracing their station to their role in Pierce's Revolution, the Waldegrave clan's carefully-maintained martial traditions evoke ancient Earth's Spartans as much as any modern dynasty's drill program. Nurtured in the harsh worlds of the Outer Rim, their austerely vigorous way of life was always ill-suited to governance, and as a result - to their great shame - Maarten Waldegrave lost the family's throneworld to a popular revolt in what they refer to as the Catastrophe of 2744. Since that day, the family have repeatedly sought Imperial permission to retake the world, without success - and no child of theirs has been named Maarten.</HISTORY>
@@ -185,6 +201,8 @@
 	<Row>
 		<ID>BARW001</ID>
 		<NAME>Barwon </NAME>
+    <ICON_FILE_NAME></ICON_FILE_NAME>
+    <BANNER_FILE_NAME></BANNER_FILE_NAME>
 		<RANK>0</RANK>
 		<LEADER_TITLE>First Lord</LEADER_TITLE>
 		<YEAR>2723</YEAR>
@@ -206,6 +224,8 @@
 	<Row>
 		<ID>MILA001</ID>
 		<NAME>Milak</NAME>
+    <ICON_FILE_NAME></ICON_FILE_NAME>
+    <BANNER_FILE_NAME></BANNER_FILE_NAME>
 		<RANK>1</RANK>
 		<LEADER_TITLE>Lord</LEADER_TITLE>
 		<YEAR>2915</YEAR>

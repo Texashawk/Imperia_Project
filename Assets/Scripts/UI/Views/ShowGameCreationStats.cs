@@ -1,36 +1,33 @@
 ﻿using UnityEngine;
-using System.Collections;
-using UnityEngine.UI;
+using TMPro;
 
 public class ShowGameCreationStats : MonoBehaviour
 {
-
     GalaxyData gData;
     GameData gameData;
-    Text planetsGenerated;
-    Text housesGenerated;
-    Text charactersGenerated;
-    Text statusText;
+    TextMeshProUGUI planetsGenerated;
+    TextMeshProUGUI housesGenerated;
+    TextMeshProUGUI charactersGenerated;
+    TextMeshProUGUI statusText;
     TurnEngine tEngineData;
 
-    // Use this for initialization
     void Start()
     {
         gData = GameObject.Find("GameManager").GetComponent<GalaxyData>();
-        statusText = GameObject.Find("Status Text").GetComponent<Text>();
+        statusText = GameObject.Find("Status Text").GetComponent<TextMeshProUGUI>();
         gameData = GameObject.Find("GameManager").GetComponent<GameData>();
-        planetsGenerated = GameObject.Find("Planets Generated").GetComponent<Text>();
-        housesGenerated = GameObject.Find("Houses Generated").GetComponent<Text>();
-        charactersGenerated = GameObject.Find("Characters Generated").GetComponent<Text>();
+        planetsGenerated = GameObject.Find("Planets Generated").GetComponent<TextMeshProUGUI>();
+        housesGenerated = GameObject.Find("Houses Generated").GetComponent<TextMeshProUGUI>();
+        charactersGenerated = GameObject.Find("Characters Generated").GetComponent<TextMeshProUGUI>();
         tEngineData = GameObject.Find("GameManager").GetComponent<TurnEngine>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        planetsGenerated.text = "STARS GENERATED: " + gData.GalaxyStarDataList.Count.ToString("N0"); // test to see if it draws star counts
-        housesGenerated.text = "HOUSES GENERATED: " + gameData.HouseList.Count.ToString("N0"); // test to see if it draws planet counts
-        charactersGenerated.text = "CHARACTERS GENERATED: " + gameData.CharacterList.Count.ToString("N0"); // test to see if it draws planet counts
+        planetsGenerated.text = "Stars Generated: " + gData.GalaxyStarDataList.Count.ToString("N0"); // test to see if it draws star counts
+        housesGenerated.text = "Houses Founded: " + gameData.HouseList.Count.ToString("N0"); // test to see if it draws planet counts
+        charactersGenerated.text = "Characters Born: " + gameData.CharacterList.Count.ToString("N0"); // test to see if it draws planet counts
         statusText.text = tEngineData.InitializationStatus;
     }
 }

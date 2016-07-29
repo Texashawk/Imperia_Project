@@ -24,7 +24,7 @@ class ProjectButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public bool IsHovering = false;
     public bool IsExpanded = false;
 
-    private const float ExpandRate = 30f;
+    private const float ExpandRate = 35f;
 
     public void Awake()
     {
@@ -62,7 +62,7 @@ class ProjectButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         IsHovering = true;
         if (!uiManagerRef.ModalIsActive)
-            ButtonExpand();
+            StartCoroutine(ButtonExpand());
     }
 
     public void OnPointerExit(PointerEventData eData)
@@ -133,14 +133,17 @@ class ProjectButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
                 currentButtonWidth = maxButtonWidth;
             gameObject.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, currentButtonWidth); // will change to constant later;
             yield return null;
+            
         }
-        hoverContent.SetActive(true);
+        
     }
 
-    private void ButtonExpand()
+    private IEnumerator ButtonExpand()
     {
+        hoverContent.SetActive(false);
         IsExpanded = true;       
-        StartCoroutine(ExpandButtonWidth());      
+        yield return StartCoroutine(ExpandButtonWidth());
+        hoverContent.SetActive(true);
     }
 
     private void ButtonRetract()

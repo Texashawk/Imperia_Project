@@ -132,10 +132,11 @@ namespace CharacterObjects
         {
             get
             {
-                if (DataRetrivalFunctions.GetPlanet(PlanetLocationID) != null)
-                    return DataRetrivalFunctions.GetPlanet(PlanetLocationID);
-                else
-                    return null;
+                return DataRetrivalFunctions.GetPlanet(PlanetAssignedID);
+                //if (DataRetrivalFunctions.GetPlanet(PlanetLocationID) != null)
+                //    return DataRetrivalFunctions.GetPlanet(PlanetLocationID);
+                //else
+                //    return null;
             }
         }
 
@@ -186,6 +187,26 @@ namespace CharacterObjects
         public eHealth Health { get; set; }
         public int Age { get; set; }
         public string History { get; set; }
+        public float AssignedLove
+        {
+            get
+            {
+                if (PlanetAssigned != null)
+                {
+                    List<Pops> PopList = new List<Pops>();
+                    PopList = DataRetrivalFunctions.GetCivPopList("CIV0").FindAll(p => p.PlanetLocated.ID == PlanetAssignedID);
+                    float totalSupport = 0f;
+
+                    foreach (Pops popData in PopList)
+                    {
+                        totalSupport += popData.PopSupport;
+                    }
+                    return totalSupport / PopList.Count;
+                }
+                else
+                    return -1f;
+            }
+        }
 
         // Project variables
         public bool HasActiveProject = false;
@@ -400,7 +421,7 @@ namespace CharacterObjects
             Rival, // 7
             Shunning, // 8
             Shunned, // 9
-            SwornVengeance, // 10
+            Vengeance, // 10
             ObjectOfVengeance, // 11
             Vendetta, // 12
             Married, // 13
@@ -410,8 +431,7 @@ namespace CharacterObjects
             Patron, // 17
             Protegee, // 18
             Predator, // 19
-            Prey, // 20
-            Spouse // 21
+            Prey, // 20         
         }
 
         public enum eSecretRelationshipState : int
@@ -421,6 +441,14 @@ namespace CharacterObjects
             HasGrudge,
             WouldBetray,
             IsThreat
+        }
+
+        public string RelationshipIcon
+        {
+            get
+            {
+                return "Icon_Status_" + RelationshipState.ToString();
+            }
         }
 
         private const int maxTrust = 100;
@@ -537,6 +565,7 @@ namespace CharacterObjects
         // basic stats common to all Houses
         public string Name { get; set; }
         public string ID { get; set; }
+
         public string SwornFealtyCivID { get; set; }
         public eHouseRank Rank { get; set; }
         public eHouseSpecialty Specialty { get; set; }
@@ -573,6 +602,7 @@ namespace CharacterObjects
         // history stats
         public int Age { get; set; }
         public string BannerID { get; set; }
+        public string IconID { get; set; }
         public Color PrimaryColor { get; set; }
         public Color SecondaryColor { get; set; }
         public string LeaderID { get; set; }

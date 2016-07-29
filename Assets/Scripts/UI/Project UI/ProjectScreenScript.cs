@@ -54,7 +54,13 @@ public class ProjectScreenScript : MonoBehaviour, IHasBeenDeleted, IAdminUpdated
     Button executeButton;
     Button admToggleButton;
     Button wealthToggleButton;
+    Button skillSortButton;
+    Button admSortButton;
+    Button wealthSortButton;
     GameObject dropDownContent;
+    public GameObject tab1;
+    public GameObject tab2;
+    public GameObject tab3;
 
     TextMeshProUGUI energyRequired;
     TextMeshProUGUI basicRequired;
@@ -83,12 +89,17 @@ public class ProjectScreenScript : MonoBehaviour, IHasBeenDeleted, IAdminUpdated
 
     // UI variables
     private int currentPage = 0;
+    private int maxPages = 1;
     private int unlockedContributorSlots = 0;
+    private Color selectedTabColor = new Color(0f, .35f, .71f, .8f);
+    private Color baseTabColor = new Color(0f, .24f, .37f, .5f);
 
     // filter variables
     private bool ADMNotZero = false;
     private bool WealthNotZero = false;
-
+    private bool SortBySkill = false;
+    private bool SortByADM = false;
+    private bool SortByWealth = false;
 
 	// Use this for initialization
 	void Awake ()
@@ -118,6 +129,10 @@ public class ProjectScreenScript : MonoBehaviour, IHasBeenDeleted, IAdminUpdated
         dropDownContent = GameObject.Find("Character_Selection/Filter_Bar/Filters_Container_Grid/Range/Dropdown_Content");
         admToggleButton = transform.Find("Character_Selection/Filter_Bar/Sort_Container_Grid/ADM_Above_Zero").GetComponent<Button>();
         wealthToggleButton = transform.Find("Character_Selection/Filter_Bar/Sort_Container_Grid/Wealth_Above_Zero").GetComponent<Button>();
+        skillSortButton = transform.Find("Character_Selection/Filter_Bar/Sort_Container_Grid/Sort_By_Skill").GetComponent<Button>();
+        admSortButton = transform.Find("Character_Selection/Filter_Bar/Sort_Container_Grid/Sort_By_ADM").GetComponent<Button>();
+        wealthSortButton = transform.Find("Character_Selection/Filter_Bar/Sort_Container_Grid/Sort_By_Money").GetComponent<Button>();
+
 
         // delegates
         cancelButton.onClick.AddListener(delegate { ExitScreen(); }); // button is clicked, so activate the Project Screen
@@ -128,6 +143,9 @@ public class ProjectScreenScript : MonoBehaviour, IHasBeenDeleted, IAdminUpdated
         empireRangeButton.onClick.AddListener(delegate { SetRangeToEmpire(); }); // sort buttons
         admToggleButton.onClick.AddListener(delegate { SetADMThreshold(); });
         wealthToggleButton.onClick.AddListener(delegate { SetWealthThreshold(); });
+        skillSortButton.onClick.AddListener(delegate { SetSkillSortToggle(); }); // sort buttons
+        admSortButton.onClick.AddListener(delegate { SetADMSortToggle(); });
+        wealthSortButton.onClick.AddListener(delegate { SetWealthSortToggle(); });
     }
 
     void Start()
@@ -176,6 +194,33 @@ public class ProjectScreenScript : MonoBehaviour, IHasBeenDeleted, IAdminUpdated
             executeButton.interactable = false;
         }
 
+    }
+
+    public void SetToPage1()
+    {
+        currentPage = 0;
+        tab1.GetComponent<Image>().color = selectedTabColor;
+        tab2.GetComponent<Image>().color = baseTabColor;
+        tab3.GetComponent<Image>().color = baseTabColor;
+        RedrawCharacterCards();
+    }
+
+    public void SetToPage2()
+    {
+        currentPage = 1;
+        tab2.GetComponent<Image>().color = selectedTabColor;
+        tab1.GetComponent<Image>().color = baseTabColor;
+        tab3.GetComponent<Image>().color = baseTabColor;
+        RedrawCharacterCards();
+    }
+
+    public void SetToPage3()
+    {
+        currentPage = 2;
+        tab3.GetComponent<Image>().color = selectedTabColor;
+        tab2.GetComponent<Image>().color = baseTabColor;
+        tab1.GetComponent<Image>().color = baseTabColor;
+        RedrawCharacterCards();
     }
 
     private void CheckForMaxFunding()
@@ -294,7 +339,11 @@ public class ProjectScreenScript : MonoBehaviour, IHasBeenDeleted, IAdminUpdated
                 DataRetrivalFunctions.GetCharacter(cID).HasActiveProject = true;
                 float percentToRemove = DataRetrivalFunctions.DetermineContributionToProject(DataRetrivalFunctions.GetCharacter(cID), activeProject);
                 DataRetrivalFunctions.GetCharacter(cID).Wealth -= DataRetrivalFunctions.GetCharacter(cID).Wealth * percentToRemove;
+                activeProject.ADMAllocatedPerTurn += DataRetrivalFunctions.DetermineAdminAvailable(DataRetrivalFunctions.GetCharacter(cID));
             }
+            activeProject.UniqueID = "PROJ" + Random.Range(0, 9999999).ToString("N0");
+            activeProject.ActivateProject = false;
+            activeProject.TotalADMAccumulation = 0;
             gDataRef.CivList[0].ActiveProjects.Add(activeProject);
             gDataRef.CivList[0].PlayerEmperor.ActionPoints -= Constants.Constant.APsRequiredForProject;
             
@@ -302,6 +351,7 @@ public class ProjectScreenScript : MonoBehaviour, IHasBeenDeleted, IAdminUpdated
             DataRetrivalFunctions.GetPlanet(gDataRef.CivList[0].CapitalPlanetID).BasicStored -= activeProject.BaseBasicReq;
             DataRetrivalFunctions.GetPlanet(gDataRef.CivList[0].CapitalPlanetID).HeavyStored -= activeProject.BaseHeavyReq;
             DataRetrivalFunctions.GetPlanet(gDataRef.CivList[0].CapitalPlanetID).RareStored -= activeProject.BaseRareReq;
+
             ExitScreen();
         }
     }
@@ -309,24 +359,91 @@ public class ProjectScreenScript : MonoBehaviour, IHasBeenDeleted, IAdminUpdated
     void SetRangeToPlanet()
     {
         rangeFilter = eRangeFilter.Planet;
+        planetRangeButton.image.color = Color.green;
+        systemRangeButton.image.color = Color.white;
+        provinceRangeButton.image.color = Color.white;
+        empireRangeButton.image.color = Color.white;
         RedrawCharacterCards();
     }
 
     void SetRangeToSystem()
     {
         rangeFilter = eRangeFilter.System;
+        planetRangeButton.image.color = Color.white;
+        systemRangeButton.image.color = Color.green;
+        provinceRangeButton.image.color = Color.white;
+        empireRangeButton.image.color = Color.white;
         RedrawCharacterCards();
     }
 
     void SetRangeToProvince()
     {
         rangeFilter = eRangeFilter.Province;
+        planetRangeButton.image.color = Color.white;
+        systemRangeButton.image.color = Color.white;
+        provinceRangeButton.image.color = Color.green;
+        empireRangeButton.image.color = Color.white;
         RedrawCharacterCards();
     }
 
     void SetRangeToEmpire()
     {
         rangeFilter = eRangeFilter.Empire;
+        planetRangeButton.image.color = Color.white;
+        systemRangeButton.image.color = Color.white;
+        provinceRangeButton.image.color = Color.white;
+        empireRangeButton.image.color = Color.green;
+        RedrawCharacterCards();
+    }
+
+    void SetSkillSortToggle()
+    {
+
+        if (SortBySkill == true)
+        {
+            SortBySkill = false;
+            skillSortButton.image.color = Color.white;
+        }
+        else
+        {
+            SortBySkill = true;
+            skillSortButton.image.color = Color.green;
+        }
+
+        RedrawCharacterCards();
+    }
+
+    void SetADMSortToggle()
+    {
+
+        if (SortByADM == true)
+        {
+            SortByADM = false;
+            admSortButton.image.color = Color.white;
+        }
+        else
+        {
+            SortByADM = true;
+            admSortButton.image.color = Color.green;
+        }
+
+        RedrawCharacterCards();
+    }
+
+    void SetWealthSortToggle()
+    {
+
+        if (SortByWealth == true)
+        {
+            SortByWealth = false;
+            wealthSortButton.image.color = Color.white;
+        }
+        else
+        {
+            SortByWealth = true;
+            wealthSortButton.image.color = Color.green;
+        }
+
         RedrawCharacterCards();
     }
 
@@ -421,9 +538,25 @@ public class ProjectScreenScript : MonoBehaviour, IHasBeenDeleted, IAdminUpdated
 
     private void DrawCharacterCards()
     {
-        int pages = 0;
-        pages = Mathf.CeilToInt(CharacterCards.Count / 12);
-        for (int x = currentPage * 12; x < currentPage + 1 * 12; x++)
+        // set all the tabs inactive to start
+        tab1.SetActive(false);
+        tab2.SetActive(false);
+        tab3.SetActive(false);
+
+        maxPages = 0; // reset
+        
+        maxPages = Mathf.CeilToInt(CharacterCards.Count / 12f);
+        if (maxPages > 0)
+            tab1.SetActive(true);
+        if (maxPages > 1)
+            tab2.SetActive(true);
+        if (maxPages > 2)
+            tab3.SetActive(true);
+
+        if (currentPage > (maxPages - 1)) // to prevent overflow and stay on a page that doesn't exist
+            currentPage = (maxPages - 1);
+
+        for (int x = currentPage * 12; x < (currentPage + 1) * 12; x++)
         {
             if (x < CharacterCards.Count)
             {
@@ -485,6 +618,9 @@ public class ProjectScreenScript : MonoBehaviour, IHasBeenDeleted, IAdminUpdated
 
         }
 
+        
+        
+
         // more filters will go here
         foreach (Character checkChar in tempCharacterList.ToArray())
         {
@@ -502,12 +638,37 @@ public class ProjectScreenScript : MonoBehaviour, IHasBeenDeleted, IAdminUpdated
         { 
             if (WealthNotZero)
             {
-                if (checkChar.Wealth == 0)
+                if (DataRetrivalFunctions.DetermineContributionToProject(checkChar,activeProject) == 0)
                 {
                     tempCharacterList.Remove(checkChar);
                     tempCharacterList.TrimExcess();
                 }
             }
+        }
+
+        // sorters are here
+        if (SortBySkill)
+        {
+            tempCharacterList.Sort(delegate (Character i1, Character i2)
+            {
+                return i2.Administration.CompareTo(i1.Administration);
+            });
+        }
+
+        if (SortByADM)
+        {
+            tempCharacterList.Sort(delegate (Character i1, Character i2)
+            {
+                return DataRetrivalFunctions.DetermineAdminAvailable(i2).CompareTo(DataRetrivalFunctions.DetermineAdminAvailable(i1));
+            });
+        }
+
+        if (SortByWealth)
+        {
+            tempCharacterList.Sort(delegate (Character i1, Character i2)
+            {
+                return DataRetrivalFunctions.DetermineContributionToProject(i2, activeProject).CompareTo(DataRetrivalFunctions.DetermineContributionToProject(i1, activeProject));
+            });
         }
 
 

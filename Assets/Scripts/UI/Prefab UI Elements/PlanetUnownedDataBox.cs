@@ -49,6 +49,15 @@ public class PlanetUnownedDataBox : MonoBehaviour {
         
     }
 
+    void Start()
+    {
+        if (pData != null && !boxIsInitialized)
+        {
+            UpdatePlanetBox();
+            boxIsInitialized = true;
+        }
+    }
+
     public void PopulateDataBox(string pID)
     {
         pData = DataRetrivalFunctions.GetPlanet(pID);

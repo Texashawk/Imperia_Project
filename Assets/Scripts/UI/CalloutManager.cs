@@ -8,13 +8,13 @@ using CameraScripts;
 
 namespace Managers
 {
-    class CalloutManager : MonoBehaviour
+    public class CalloutManager : MonoBehaviour
     {
         // the prefabs for each callout type
         public GameObject ExplorationCallout;
         public GameObject MilitaryCallout;
         public GameObject PoliticalCallout;
-
+     
         private List<GameObject> listCalloutsCreated = new List<GameObject>(); // list of all callouts created (lines, range circles, etc)
         private GameData gameDataRef; // game data reference
         private TradeManager tManagerRef; // trade manager data reference;
@@ -23,6 +23,8 @@ namespace Managers
         private bool calloutsGenerated = false;
         private Canvas galaxyPlanetInfoCanvas; // where the trade info is drawn (not the 3D objects)
         private GraphicAssets graphicAssets;
+
+        private const float ZoomLevelForCallouts = 20f;
 
         void Awake()
         {
@@ -54,7 +56,7 @@ namespace Managers
                 GenerateCallouts();
 
             // show if in galaxy mode, otherwise hide
-            if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.Galaxy)
+            if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.Galaxy && uiManagerRef.cameraFOV < ZoomLevelForCallouts)
             {
                 ShowCallouts();
                 UpdateCalloutLocations();

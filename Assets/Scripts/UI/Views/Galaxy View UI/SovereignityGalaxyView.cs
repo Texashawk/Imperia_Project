@@ -24,6 +24,8 @@ public class SovereignityGalaxyView : MonoBehaviour {
     private bool sovInfoDrawn = false;
     private bool showRangeCircles = false;
 
+    private const float ZoomLevelToShowStarBlocks = 50f;
+
     void Awake()
     {
         gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>(); // get global game data (date, location, version, etc)
@@ -45,8 +47,15 @@ public class SovereignityGalaxyView : MonoBehaviour {
                 UpdateSovereignityView();
                 uiManagerRef.RequestSovViewGraphicRefresh = false;
             }
-            //ShowCivilizationRangeCircles();
-            //ShowSovDataBlocks();
+            ShowCivilizationRangeCircles();
+            if (uiManagerRef.cameraFOV < ZoomLevelToShowStarBlocks)
+            {
+                ShowSovDataBlocks();
+            }
+            else
+            {
+                HideSovDataBlocks();
+            }
             UpdateSovDataBlocks();
         }
         else
@@ -54,6 +63,7 @@ public class SovereignityGalaxyView : MonoBehaviour {
             HideCivilizationRangeCircles();
             HideSovDataBlocks();
         }
+
             //ClearView(); // destroy all objects so that they can be rebuilt on new view                  
     }
 
@@ -69,27 +79,30 @@ public class SovereignityGalaxyView : MonoBehaviour {
             GenerateSovDataBlocks();
         }
 
-        //ShowCivilizationRangeCircles();
-
-        if (uiManagerRef.SecondaryViewMode == ViewManager.eSecondaryView.Sovereignity)
+        if (uiManagerRef.cameraFOV < 50f)
         {
-            ShowCivilizationRangeCircles();
-            ShowSovDataBlocks();
+            if (uiManagerRef.SecondaryViewMode == ViewManager.eSecondaryView.Sovereignity)
+            {
+                ShowCivilizationRangeCircles();
+                ShowSovDataBlocks();
+            }
+            else
+            {
+                DimCivilizationRangeCircles();
+                ShowSovDataBlocks();
+            }
+
+            if (uiManagerRef.PrimaryViewMode != ViewManager.ePrimaryView.Political) // show as an underlay for trade
+            {
+                ShowCivilizationRangeCircles();
+                DimCivilizationRangeCircles();
+            }
+
+            if (uiManagerRef.PrimaryViewMode == ViewManager.ePrimaryView.Economic)
+                HideSovDataBlocks(); // they get in the way of the trade blocks
         }
         else
-        {
-            DimCivilizationRangeCircles();
-            ShowSovDataBlocks();
-        }
-                   
-        if (uiManagerRef.PrimaryViewMode != ViewManager.ePrimaryView.Political) // show as an underlay for trade
-        {
-            ShowCivilizationRangeCircles();
-            DimCivilizationRangeCircles();              
-        }
-        
-        if (uiManagerRef.PrimaryViewMode == ViewManager.ePrimaryView.Economic)          
-            HideSovDataBlocks(); // they get in the way of the trade blocks     
+            HideSovDataBlocks();     
     }
 
     void ClearView()
@@ -127,7 +140,7 @@ public class SovereignityGalaxyView : MonoBehaviour {
                     float civRange = 0;
 
                     // determine scale of circle
-                    civRange = sData.CivPopulation(civ) * 6; // using the population value for now
+                    civRange = (sData.CivPopulation(civ) + sData.TotalADM(civ)) * 7; // using the population value for now
                     
                     // generate the range circle
                     GameObject rangeCircle = Instantiate(Resources.Load("Galaxy View Assets/Empire Range Circle", typeof(GameObject)), cirLocation, Quaternion.Euler(new Vector3(90, 0, 0))) as GameObject;
@@ -213,21 +226,6 @@ public class SovereignityGalaxyView : MonoBehaviour {
                         textColor = sysData.ownerColor;
                     else
                         textColor = Color.grey;
-                    //if (starData.OwningCiv == gameDataRef.CivList[0])
-                    //{
-                    //    int totalADM = 0;
-                    //    foreach (PlanetData pData in starData.PlanetList)
-                    //    {
-                    //        if (pData.IsInhabited)
-                    //        {
-                    //            if (pData.Owner == gameDataRef.CivList[0])
-                    //            {
-                    //                totalADM += pData.TotalAdmin;
-                    //            }
-                    //        }
-                    //    }
-                    //    sovBlock.transform.Find("ADM Value").GetComponent<TextMeshProUGUI>().text = totalADM.ToString("N0");
-                    //}
                 }
                 else
                 {

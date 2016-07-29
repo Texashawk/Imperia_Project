@@ -47,6 +47,39 @@ namespace CivObjects
         public float Expenses { get; set; }
         public Vector2 Range { get; set; }
         public Emperor PlayerEmperor { get; set; }
+        public float ViceroyBaseTaxCut
+        {
+            get
+            {
+                return (1 - EmperorBaseTaxCut) * ViceroyTaxPercentage;
+            }
+        }
+        public float ViceroyTaxPercentage { get; set; }
+        public float SystemGovernorBaseTaxCut
+        {
+            get
+            {
+                return (1 - EmperorBaseTaxCut) * SystemGovernorTaxPercentage;
+            }
+        }
+        public float SystemGovernorTaxPercentage { get; set; }
+        public float ProvinceGovernorBaseTaxCut
+        {
+            get
+            {
+                return (1 - EmperorBaseTaxCut) * ProvinceGovernorTaxPercentage;
+            }
+        }
+        public float ProvinceGovernorTaxPercentage { get; set; }      
+        public float DomesticPrimeBaseTaxCut
+        {
+            get
+            {
+                return (1 - EmperorBaseTaxCut) * DomesticPrimeTaxPercentage;
+            }
+        }
+        public float DomesticPrimeTaxPercentage { get; set; }
+        public float EmperorBaseTaxCut { get; set; }
         public List<Project> ActiveProjects = new List<Project>();
         public Character Leader
         {

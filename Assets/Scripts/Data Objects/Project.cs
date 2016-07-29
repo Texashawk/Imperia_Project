@@ -1,6 +1,7 @@
 ﻿using CharacterObjects;
 using CivObjects;
 using ConversationAI;
+using UnityEngine;
 using Managers;
 using System.Collections.Generic;
 
@@ -27,6 +28,7 @@ namespace Projects
         public string Name { get; set; }
         public eProjectType Type { get; set; } // the type of Project (military, economic, astrographic, demographic)
         public string ID { get; set; }
+        public string UniqueID { get; set; } // this is a 'key' for the project that will identify it
         public string AdministratorID { get; set; }
         public string Description { get; set; }
         public string IconName { get; set; } // the icon name used for this Project
@@ -41,7 +43,24 @@ namespace Projects
         public float BasePrestige { get; set; } // how prestigious this project is; translates to power gain
         public float TyrannicalEffect { get; set; }
         public float BenevolentEffect { get; set; }
+        public bool ActivateProject { get; set; }
         public List<string> CharacterIDsInProject = new List<string>();
+        public int TurnsRemaining
+        {
+            get
+            {
+                return Mathf.FloorToInt((BaseADMReq - TotalADMAccumulation) / ADMAllocatedPerTurn);
+            }
+        }
+        public float PercentComplete
+        {
+            get
+            {
+                return (TotalADMAccumulation / BaseADMReq);
+            }
+        }
+        public float ADMAllocatedPerTurn { get; set; }
+        public float TotalADMAccumulation { get; set; }
 
         public bool IsActionValid(ViewManager.eViewLevel viewMode)
         {

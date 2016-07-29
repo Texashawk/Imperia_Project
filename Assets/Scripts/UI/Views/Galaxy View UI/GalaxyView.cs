@@ -32,7 +32,7 @@ namespace Screens.Galaxy
         private UnityAction myCancelAction;
 
         // Star Data Block properties
-        public GameObject starNameObject;
+        public GameObject ProvinceNameObject;
 
         // planet prefab variables
         public GameObject[] barrenPlanets;
@@ -81,6 +81,7 @@ namespace Screens.Galaxy
         private bool systemNameDrawn = false; // system names are drawn?
         private bool systemGridCreated = false; // is system grid created?
         private bool provinceLinesDrawn = false; // are province lines drawn?
+        private bool provinceNamesGenerated = false; // are province names generated?
         private bool systemTrailCreated = false; // is background trail created?
         private bool mapInOverviewMode = false; // is the map in province or galaxy mode?
         public bool EventPanelActive = true; // set visibilty
@@ -160,6 +161,11 @@ namespace Screens.Galaxy
             if ((uiManagerRef.ViewLevel == ViewManager.eViewLevel.Galaxy || zoomLevel == ViewManager.eViewLevel.Province))
             {
                 DrawGalaxyMapUI();
+                if (!provinceNamesGenerated)
+                {
+                    GenerateProvinceNames();
+                    provinceNamesGenerated = true;
+                }
                 // hide all other stars
                 if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.Province)
                 {
@@ -169,7 +175,9 @@ namespace Screens.Galaxy
                 else
                 {
                     ShowStellarObjects();               
-                    ShowProvinceLines();                   
+                    ShowProvinceLines();
+                    UpdateProvinceBlocks();
+                    ShowProvinceNames();                  
                     selectedUnitInfoCanvas.SetActive(false);                   
                 }
             }
@@ -183,6 +191,7 @@ namespace Screens.Galaxy
                 planetSelected = false;
                 DisplaySystemData();
                 HideProvinceLines();
+                HideProvinceNames();
                 if (GetSelectedStar().GetComponent<LineRenderer>() != null)
                 {
                     GetSelectedStar().GetComponent<LineRenderer>().enabled = false;
@@ -197,6 +206,28 @@ namespace Screens.Galaxy
             if (!provinceLinesDrawn)
             {
                 DrawProvinceLines();
+            }
+        }
+
+        void HideProvinceNames()
+        {
+            if (provinceNamesGenerated)
+            {
+                foreach (GameObject provBlock in listGalaxyUIObjectsCreated)
+                {
+                    provBlock.SetActive(false);
+                }
+            }
+        }
+
+        void ShowProvinceNames()
+        {
+            if (provinceNamesGenerated)
+            {
+                foreach (GameObject provBlock in listGalaxyUIObjectsCreated)
+                {
+                    provBlock.SetActive(true);
+                }
             }
         }
 
@@ -323,22 +354,23 @@ namespace Screens.Galaxy
             if (zoomLevel == ViewManager.eViewLevel.Province || zoomLevel == ViewManager.eViewLevel.Galaxy)
             {
                 mapInOverviewMode = true;
+
+                // draw civ range circles if debug mode changes
+                if (gameDataRef.RequestGraphicRefresh)
+                {
+                    foreach (GameObject uiObject in listGalaxyUIObjectsCreated)
+                    {
+                        GameObject.Destroy(uiObject);
+                    }
+                    listGalaxyUIObjectsCreated.Clear(); // clear out any range circles, lines, system pips, etc
+                    provinceNamesGenerated = false;
+                    DrawGalaxyMapUI(); // refresh UI
+                    gameDataRef.RequestGraphicRefresh = false;
+                }
             }
             else
             {
                 mapInOverviewMode = false;
-            }
-
-            // draw civ range circles if debug mode changes
-            if (gameDataRef.RequestGraphicRefresh)
-            {
-                foreach (GameObject uiObject in listGalaxyUIObjectsCreated)
-                {
-                    GameObject.Destroy(uiObject);
-                }
-                listGalaxyUIObjectsCreated.Clear(); // clear out any range circles, lines, system pips, etc            
-                DrawGalaxyMapUI(); // refresh UI
-                gameDataRef.RequestGraphicRefresh = false;
             }
 
             //test for a modal window
@@ -485,22 +517,24 @@ namespace Screens.Galaxy
             {
                               
                 // turn off/on the event window but always turn off if there are no events to show
-                if (gameDataRef.CivList[0].LastTurnEvents.Count > 0)                 
-                    eventScrollView.SetActive(true);            
-                else
-                    eventScrollView.SetActive(false);
-                    
+                //if (gameDataRef.CivList[0].LastTurnEvents.Count > 0)                 
+                //   // eventScrollView.SetActive(true);            
+                //else
+                //    eventScrollView.SetActive(false);
+                   
             }
             else
             {
                 eventScrollView.GetComponent<EventScrollView>().InitializeList(); // clear the list when made active
                 eventScrollView.SetActive(false);              
-            }         
+            }
+
+            eventScrollView.SetActive(false);         
         }
 
         void HideGalaxyMapUI()
         {
-            //eventScrollView.SetActive(false);
+            eventScrollView.SetActive(false);
         }
 
         void CheckForStarSelection()
@@ -551,29 +585,64 @@ namespace Screens.Galaxy
             //uiManagerRef.RequestProjectBarRefresh();
         }
 
-        //void GenerateProvinceNames()
-        //{
-        //    foreach (Province pData in galaxyDataRef.ProvinceList)
-        //    {
-        //        Vector3 textLocation = new Vector3(pData.ProvinceCenter.x, pData.ProvinceCenter.y, 0); // where the text box is located
-        //        GameObject provinceName = Instantiate(starNameObject, pData.ProvinceCenter, Quaternion.identity) as GameObject;
-        //        StellarObjectDataBlock starDataBlock = new StellarObjectDataBlock();  // create a new star data block
+        void GenerateProvinceNames()
+        {
+            foreach (Province pData in galaxyDataRef.ProvinceList)
+            {
+                Vector3 textLocation = new Vector3(pData.ProvinceCenter.x, pData.ProvinceCenter.y, 0); // where the text box is located
+                GameObject provinceName = Instantiate(ProvinceNameObject, pData.ProvinceCenter, Quaternion.Euler(new Vector3(0, 180, 180))) as GameObject;
+                ProvinceData provinceDataBlock = provinceName.GetComponent<ProvinceData>();  // create a new star data block
 
-        //        provinceName.transform.SetParent(galaxyPlanetInfoCanvas.transform.Find("Galaxy Data Panel"), true); // attach the blocks to the panel
-        //        provinceName.transform.localPosition = textLocation; //new Vector3(textLocation.x - (Screen.width / 2), textLocation.y - (Screen.height / 2), 0); // reset after making a parent to canvas relative coordinates (pivot in center)
-        //        provinceName.transform.localScale = new Vector3(1, 1, 1); // do not scale
-        //        provinceName.tag = "Province"; // tag for selection
-        //        provinceName.name = pData.ID;
-        //        starDataBlock.objectRotation = 0f;
-        //        starDataBlock.ownerName = pData.Name.ToUpper() + " PROVINCE";
-        //        starDataBlock.provinceBounds = pData.ProvinceBounds; // to set the size of the label
-        //        starDataBlock.provinceObjectLocation = textLocation; // provinceName.transform.localPosition;
-        //        starDataBlock.ownerColor = HelperFunctions.DataRetrivalFunctions.FindProvinceOwnerColor(pData);
-        //        starDataBlock.blockType = StellarObjectDataBlock.eBlockType.Province;
-        //        starDataBlock.textObject = provinceName;
-        //        listTextObjectsCreated.Add(starDataBlock);
-        //    }
-        //}
+                //provinceName.transform.SetParent(galaxyPlanetInfoCanvas.transform.Find("Galaxy Data Panel"), true); // attach the blocks to the panel
+                //provinceName.transform.localPosition = textLocation; //new Vector3(textLocation.x - (Screen.width / 2), textLocation.y - (Screen.height / 2), 0); // reset after making a parent to canvas relative coordinates (pivot in center)
+                
+                provinceName.transform.localScale = new Vector3(10, 10, 10); // do not scale
+                provinceName.tag = "Province"; // tag for selection
+                provinceName.name = pData.ID;
+                provinceDataBlock.ProvinceInfo = pData;
+                provinceDataBlock.ObjectRotation = 0f;
+                provinceDataBlock.OwnerName = pData.Name.ToUpper() + " PROVINCE";
+                provinceDataBlock.ProvinceBounds = pData.ProvinceBounds; // to set the size of the label
+                provinceDataBlock.ProvinceObjectLocation = textLocation; // provinceName.transform.localPosition;
+                provinceDataBlock.OwnerColor = HelperFunctions.DataRetrivalFunctions.FindProvinceOwnerColor(pData);
+                
+                listGalaxyUIObjectsCreated.Add(provinceName);
+            }
+        }
+
+        void UpdateProvinceBlocks()
+        {
+            //Vector3 blockLocation;
+            ProvinceData provBlockData;
+            Province pData;
+            foreach (GameObject provBlock in listGalaxyUIObjectsCreated)
+            {
+                if (provBlock.activeSelf)
+                {
+                    Color textColor = new Color();
+                    provBlockData = provBlock.GetComponent<ProvinceData>();
+                    pData = provBlockData.ProvinceInfo;
+                    if (!gameDataRef.DebugMode)
+                    {
+                        provBlock.GetComponentInChildren<TextMeshPro>().text = pData.Name.ToUpper();
+                        if (pData.OwningCiv.Type == Civilization.eCivType.PlayerEmpire)
+                            textColor = provBlockData.OwnerColor;
+                        else
+                            textColor = Color.grey;
+                    }
+
+                    provBlock.GetComponentInChildren<TextMeshPro>().color = textColor; // change text to color of the owning civ
+
+                    // reset location of data line blocks
+                    //Vector3 nameVector;
+
+                    //nameVector = Camera.main.WorldToScreenPoint(provBlockData.ProvinceObjectLocation);
+                    //blockLocation = nameVector;
+                    //provBlock.transform.localPosition = new Vector3(blockLocation.x - (Screen.width / 2), blockLocation.y - (Screen.height / 2), 0); // reset after making a parent to canvas relative coordinates (pivot in center)
+
+                }
+            }
+        }
 
         void CheckForPlanetSelection()
         {

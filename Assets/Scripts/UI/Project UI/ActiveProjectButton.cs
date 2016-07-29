@@ -2,14 +2,17 @@
 using UnityEngine.UI;
 using Managers;
 using UnityEngine.EventSystems;
+using HelperFunctions;
 using System.Collections;
 using TMPro;
 
 class ActiveProjectButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     private string buttonID;
+    private string pUID { get; set; } // unique identifier for the project
     private string iconName;
     private GraphicAssets gAssets;
+    private GameData gDataRef;
     private TextMeshProUGUI ButtonText;
     private Image ButtonImage;
     private GameObject hoverContent;
@@ -18,6 +21,7 @@ class ActiveProjectButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     private GridLayoutGroup buttonGrid;
     private Image hoverMaxObject;
     private Button thisButton;
+    private Image progressRadial;
     private float currentButtonWidth = 0f;
     private float maxButtonWidth = 420f;
     private float minButtonWidth = 0f;
@@ -30,13 +34,15 @@ class ActiveProjectButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     {
         gAssets = GameObject.Find("GameManager").GetComponent<GraphicAssets>();
         uiManagerRef = GameObject.Find("GameManager").GetComponent<UIManager>();
+        gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
         thisButton = gameObject.GetComponent<Button>();
         hoverContent = GameObject.Find("Active_Hover_Content");
         hoverMaxObject = transform.Find("Active_Hover_Content/Hover_Maximize").GetComponent<Image>();
         hoverText = transform.Find("Active_Hover_Content/Hover_Text_Status").GetComponent<TextMeshProUGUI>();
         ButtonImage = transform.Find("BTN_Small_Create").GetComponent<Image>();
         ButtonText = transform.Find("Text").GetComponent<TextMeshProUGUI>();
-        hoverContent.SetActive(false);
+        progressRadial = transform.Find("Progress_Background_Bar").GetComponent<Image>();
+        //hoverContent.SetActive(false);
         thisButton.onClick.AddListener(delegate { ButtonClicked(buttonID); }); // button is clicked, so activate the Project Screen               
     }
 
@@ -54,21 +60,28 @@ class ActiveProjectButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         else
             gameObject.GetComponent<Button>().interactable = true;
 
-        if (!IsHovering)
-            hoverContent.SetActive(false);
+        //if (!IsHovering)
+        //    hoverContent.SetActive(false);
+
+        progressRadial.fillAmount = gDataRef.CivList[0].ActiveProjects.Find(p => p.UniqueID == pUID).PercentComplete;
     }
 
     public void OnPointerEnter(PointerEventData eData)
     {
-        IsHovering = true;
-        if (!uiManagerRef.ModalIsActive)
-            ButtonExpand();
+        //IsHovering = true;
+        //if (!uiManagerRef.ModalIsActive)
+        //    ButtonExpand();
     }
 
     public void OnPointerExit(PointerEventData eData)
     {
-        IsHovering = false;
-        ButtonRetract();
+        //IsHovering = false;
+        //ButtonRetract();
+    }
+
+    public void SetProjectUID(string uID)
+    {
+        pUID = uID;
     }
 
     public void SetName(string name)

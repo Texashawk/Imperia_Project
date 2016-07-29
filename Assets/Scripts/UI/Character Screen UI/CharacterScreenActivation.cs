@@ -29,11 +29,12 @@ public class CharacterScreenActivation : MonoBehaviour, IPointerClickHandler
 
     public void ActivateWindow()
     {
-        gDataRef.CharacterWindowActive = true;
+        //gDataRef.CharacterWindowActive = true;
         gDataRef.SelectedCharacter = cData;
         uiManagerRef.ModalIsActive = true;
-        cScreen.CharacterDataLoaded = false;
-        cScreen.InitializeData(cData);
+        uiManagerRef.ActivateCharacterScreen(cData.ID);
+        //cScreen.CharacterDataLoaded = false;
+        //cScreen.InitializeData(cData);
     }
 
     public void InitializeData(Character characterData)

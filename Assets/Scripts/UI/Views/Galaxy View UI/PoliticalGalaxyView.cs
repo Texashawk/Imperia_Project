@@ -44,7 +44,7 @@ public class PoliticalGalaxyView : MonoBehaviour {
         if (uiManagerRef.ViewLevel == ViewManager.eViewLevel.Galaxy)
         {
             UpdateTradeView();
-            UpdateTradeDataBlocks();
+            UpdatePoliticalDataBlocks();
         }
         else
             ClearView(); // destroy all objects so that they can be rebuilt on new view      
@@ -59,18 +59,21 @@ public class PoliticalGalaxyView : MonoBehaviour {
             GenerateTradeRadiusCircles();
 
         if (!tradeInfoDrawn || uiManagerRef.RequestPoliticalViewGraphicRefresh) // if circles are not yet generated, create them
-            GenerateTradeDataBlocks();
+            GeneratePoliticalDataBlocks();
 
         // show if in economic mode, trade view, otherwise hide
         if (uiManagerRef.PrimaryViewMode == ViewManager.ePrimaryView.Economic && uiManagerRef.SecondaryViewMode == ViewManager.eSecondaryView.Trade)
         {
             ShowTradeHubRanges();
-            ShowTradeDataBlocks();
+            if (uiManagerRef.cameraFOV < 50f)
+                ShowPoliticalDataBlocks();
+            else
+                HidePoliticalDataBlocks();
         }
         else
         {
             HideTradeHubRanges();
-            HideTradeDataBlocks();
+            HidePoliticalDataBlocks();
         }
     }
 
@@ -202,7 +205,7 @@ public class PoliticalGalaxyView : MonoBehaviour {
         }
     }
 
-    void HideTradeDataBlocks()
+    void HidePoliticalDataBlocks()
     {
         foreach (GameObject star in listTradeTextBlocksCreated)
         {
@@ -210,7 +213,7 @@ public class PoliticalGalaxyView : MonoBehaviour {
         }
     }
 
-    void ShowTradeDataBlocks()
+    void ShowPoliticalDataBlocks()
     {
         foreach (GameObject star in listTradeTextBlocksCreated)
         {
@@ -218,7 +221,7 @@ public class PoliticalGalaxyView : MonoBehaviour {
         }
     }
 
-    void UpdateTradeDataBlocks()
+    void UpdatePoliticalDataBlocks()
     {
         Vector3 textLocation;
         TradeViewSystemData sysData;
@@ -261,7 +264,7 @@ public class PoliticalGalaxyView : MonoBehaviour {
         }
     }
 
-    void GenerateTradeDataBlocks()
+    void GeneratePoliticalDataBlocks()
     {
         Vector3 textLocation;
         Vector3 textLocation2;

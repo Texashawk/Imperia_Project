@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
+using TMPro;
 
 // Use for any slot where a droppable object will be 'dropped' into
 public class ContributorSlot : MonoBehaviour, IDropHandler {
@@ -12,15 +13,30 @@ public class ContributorSlot : MonoBehaviour, IDropHandler {
             }           
             return null;
         }
+
+        
+    }
+
+    public GameObject PowerBar;
+
+    public void Awake()
+    {
+        
     }
 
     public void Update()
     {
         if (transform.tag == "Empty Slot")
+        {
             transform.Find("Portrait_Container").gameObject.SetActive(true);
+            PowerBar.SetActive(false);
+        }
 
         if (transform.tag == "Filled Slot")
-            transform.Find("Portrait_Container").gameObject.SetActive(false);
+        {
+            PowerBar.SetActive(true);
+            transform.Find("Portrait_Container").gameObject.SetActive(false);         
+        }
 
         if (transform.childCount < 2) // needs the child for the card and one for the empty container
         {
@@ -44,10 +60,13 @@ public class ContributorSlot : MonoBehaviour, IDropHandler {
             HelperFunctions.DataRetrivalFunctions.GetCharacter(DragHandler.itemBeingDragged.transform.GetComponent<CharacterCard>().CharID).HasActiveProject = true;
             DragHandler.itemBeingDragged.transform.GetComponent<CharacterCard>().isContributor = true; // set the card status to contributor
             DragHandler.itemBeingDragged.transform.GetComponent<CharacterCard>().isAdminstrator = false; // but not an administrator!
+            DragHandler.itemBeingDragged.transform.Find("Portrait_Container").transform.localPosition = new Vector2(0,0);
             DragHandler.itemBeingDragged.transform.localPosition = new Vector2(0, 0);
             DragHandler.itemBeingDragged.transform.localScale = new Vector2(.7f, .7f);
             transform.tag = "Filled Slot";
             ExecuteEvents.ExecuteHierarchy<IContributorUpdated>(gameObject, null, (x, y) => x.UpdateContributor(DragHandler.itemBeingDragged.transform.GetComponent<CharacterCard>().CharID));
+            PowerBar.SetActive(true);
+            PowerBar.transform.Find("Counter_Funding").GetComponent<TextMeshProUGUI>().text = "+5"; // test
         }
     }
 

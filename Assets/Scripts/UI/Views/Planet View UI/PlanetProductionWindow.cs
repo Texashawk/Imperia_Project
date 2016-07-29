@@ -9,6 +9,7 @@ public class PlanetProductionWindow : MonoBehaviour {
     // references
     GameData gDataRef;
     UIManager uiManagerRef;
+    PlanetView planetViewRef;
     GalaxyView gScreenRef;
     PlanetData pData;
 
@@ -43,6 +44,11 @@ public class PlanetProductionWindow : MonoBehaviour {
     public GameObject MineStaffing;
     public GameObject AcademyStaffing;
     public GameObject AdminStaffing;
+    public GameObject FarmerEmployment;
+    public GameObject MinerEmployment;
+    public GameObject AdminEmployment;
+    public GameObject EngineerEmployment;
+    public GameObject AcademicEmployment;
 
     // private components
     TextMeshProUGUI farmPops;
@@ -69,12 +75,20 @@ public class PlanetProductionWindow : MonoBehaviour {
     TextMeshProUGUI heavyBalance;
     TextMeshProUGUI rareBalance;
     TextMeshProUGUI adminOutput;
+
+    // bar graphs
     Image farmStaffing;
     Image energyFacilityStaffing;
     Image factoryStaffing;
     Image mineStaffing;
     Image academyStaffing;
     Image adminStaffing;
+    Image farmEmployment;
+    Image minerEmployment;
+    Image adminEmployment;
+    Image engineerEmployment;
+    Image academicEmployment;
+    Button viceroyChat;
     
 
     void Awake()
@@ -82,6 +96,7 @@ public class PlanetProductionWindow : MonoBehaviour {
         gDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
         uiManagerRef = GameObject.Find("GameManager").GetComponent<UIManager>();
         gScreenRef = GameObject.Find("GameEngine").GetComponent<GalaxyView>();
+        planetViewRef = GameObject.Find("UI Engine").GetComponent<PlanetView>();
         farmPops = FarmPops.GetComponent<TextMeshProUGUI>();
         minePops = MinePops.GetComponent<TextMeshProUGUI>();
         adminPops = AdminPops.GetComponent<TextMeshProUGUI>();
@@ -112,6 +127,13 @@ public class PlanetProductionWindow : MonoBehaviour {
         mineStaffing = MineStaffing.GetComponent<Image>();
         academyStaffing = AcademyStaffing.GetComponent<Image>();
         adminStaffing = AdminStaffing.GetComponent<Image>();
+        farmEmployment = FarmerEmployment.GetComponent<Image>();
+        minerEmployment = MinerEmployment.GetComponent<Image>();
+        adminEmployment = AdminEmployment.GetComponent<Image>();
+        engineerEmployment = EngineerEmployment.GetComponent<Image>();
+        academicEmployment = AcademicEmployment.GetComponent<Image>();
+        viceroyChat = gameObject.transform.Find("Title_Bar/Hover_Icon_Talk").GetComponent<Button>();
+        viceroyChat.onClick.AddListener(delegate { planetViewRef.ToggleViceroyMode(name); });
     }
 
     void Update()
@@ -136,7 +158,7 @@ public class PlanetProductionWindow : MonoBehaviour {
         }
     }
 
-    void UpdateProductionWindowInfo()
+    public void UpdateProductionWindowInfo()
     {
         // pop numbers
         farmPops.text = pData.TotalFarmers.ToString("N0");
@@ -169,6 +191,12 @@ public class PlanetProductionWindow : MonoBehaviour {
         mineStaffing.fillAmount = pData.MinesStaffed / pData.MiningLevel;
         academyStaffing.fillAmount = pData.AcademiesStaffed / pData.AcademyLevel;
         adminStaffing.fillAmount = pData.AdminFacilitiesStaffed / pData.AdminLevel;
+
+        farmEmployment.fillAmount = 1 - (pData.FarmsStaffed / pData.TotalFarmers);
+        minerEmployment.fillAmount = 1 - (pData.MinesStaffed / pData.TotalMiners);
+        adminEmployment.fillAmount = 1 - (pData.AdminFacilitiesStaffed / pData.TotalAdministrators);
+        engineerEmployment.fillAmount = 1 - (pData.FactoriesStaffed / pData.TotalEngineers);
+        academicEmployment.fillAmount = 1 - (pData.AcademiesStaffed / pData.TotalAcademics);
 
 
         // balances

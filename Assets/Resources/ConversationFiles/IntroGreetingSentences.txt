@@ -1,17 +1,28 @@
-Hello, Emperor [EMPEROR]. 
-Greetings, Emperor [EMPEROR].
-Pleasant tidings, Emperor [EMPEROR].
-How are you today, Emperor [EMPEROR]?
-I hope all is well with you and yours, Emperor [EMPEROR].
-Hello!
-How are you this fine morning, Your Excellence?
-What's up, doc? Er... I mean, Emperor [EMPEROR]. Sorry. Old Terran Empire humor.
-Ola!
-And... here you go again, messaging me. Hopefully for something worth my time, eh?
-Nice weather today on New Terra, I hope?
-It's a fine time to be alive. Although, the way our Empire is going, perhaps that won't be for much longer... eh?
-Anything new since last we talked?
-Greetings and salutations, Emperor [EMPEROR]!
-It is a wonderful day to be part of the Celestial Empire, Your Excellence!
-Hello.
-It is logical that I should wish you a pleasant morning.
+[NEUTRAL]Hello, [EMPEROR]. 
+[NEUTRAL]Greetings, [EMPEROR].
+[NEUTRAL]Pleasant tidings, [EMPEROR].
+[NEUTRAL]How are you today, [EMPEROR]?
+[FRIENDLY]I hope all is well with you and yours, [EMPEROR].
+[FRIENDLY]Hello!
+[FRIENDLY]How are you this fine morning, Your Excellence?
+[FRIENDLY]What's up, doc? Er... I mean, [EMPEROR]. Sorry. Old Terran Empire humor.
+[FRIENDLY]Ola!
+[UNFRIENDLY]And... here you go again, messaging me. Hopefully for something worth my time, eh?
+[FRIENDLY]Nice weather today on New Terra, I hope?
+[NEUTRAL]It's a fine time to be alive. Although, the way our Empire is going, perhaps that won't be for much longer... eh?
+[NEUTRAL]Anything new since last we talked?
+[FRIENDLY]Greetings and salutations, [EMPEROR]!
+[FRIENDLY]It is a wonderful day to be part of the Celestial Empire, Your Excellence!
+[NEUTRAL]Hello.
+[FRIENDLY]It is logical that I should wish you a pleasant morning.
+[UNFRIENDLY]Well, well, if it isn't the new young bastard in charge.
+[UNFRIENDLY]What do you want?
+[UNFRIENDLY]Yes?
+[UNFRIENDLY]You called, 'Emperor'?
+[UNFRIENDLY]And just why do you feel the need to interrupt my morning?
+[HOSTILE]Can I help you, Your Excellence, or did you just fat-finger the comm button again?
+[HOSTILE]You dare to holo me? What guts you demonstrate.
+[HOSTILE]For a child, you have bravery to look for me here.
+[HOSTILE]It is only because I must answer that I do. You have me. What?
+[HOSTILE]For what trivial matter must I put up with your homely visage darkening my holo now?
+[HOSTILE]Incredible. After what you have done to me, you DARE summon me?

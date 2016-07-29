@@ -11,20 +11,20 @@ public class ActionScrollView : MonoBehaviour
     public GameObject Button_Template;
     //private List<Character> ActionList = new List<Character>();
     private GameData gameDataRef;
-    private CharacterScreen characterScreen;
     private List<GameObject> buttonList = new List<GameObject>();
     public bool listIsInitialized = false;
     private Character activeChar;
+    private NewCharacterScreen.eActionPanelMode activeMode;
 
     void Awake()
     {
         gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
-        characterScreen = GameObject.Find("Character Window Canvas").GetComponent<CharacterScreen>();
     }
     
-    public void InitializeList(Character cData)
+    public void InitializeList(Character cData, NewCharacterScreen.eActionPanelMode mode)
     {
-        activeChar = cData; 
+        activeChar = cData;
+        listIsInitialized = false; 
         if (!listIsInitialized)
         {
             ClearList(); // clear out the list
@@ -35,7 +35,8 @@ public class ActionScrollView : MonoBehaviour
                 {
                     if (action.IsActionValid(activeChar, cData.Civ)) // don't populate yourself!
                     {
-                        AddButton(action, activeChar);
+                        if (action.Category.ToString() == mode.ToString())
+                            AddButton(action, activeChar);
                     }
                 }
             }
@@ -52,7 +53,8 @@ public class ActionScrollView : MonoBehaviour
         ActionButton TB = go.GetComponent<ActionButton>();
         TB.SetName(action.Name.ToUpper());
         TB.SetID(action.ID);
-        TB.SetCharacter(activeChar.ID); // attaches button to character
+        TB.SetType(action.Category); // sets the type and the color
+        //TB.SetCharacter(activeChar.ID); // attaches button to character
         //TB.SetPicture(cha.PictureID);
         go.transform.SetParent(Button_Template.transform.parent);
         go.transform.localScale = new Vector3(1, 1, 1); // to offset canvas scaling
@@ -66,6 +68,7 @@ public class ActionScrollView : MonoBehaviour
         {
             Destroy(go);
         }
+        listIsInitialized = false;
     }
 
     public void ButtonClicked(string str, Character cData)
@@ -112,8 +115,6 @@ public class ActionScrollView : MonoBehaviour
             default:
                 break;
         }
-
-        characterScreen.CommText.text = response; // send the text of the response to the character's screen
     }
 } 
 

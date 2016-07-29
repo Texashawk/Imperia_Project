@@ -709,17 +709,17 @@ public class GenerateGameObject
             newChar.IntelLevel = 0; // base no knowledge of other civ's characters
 
         // Step 3a: Generate skills
-        int baseAdmin = UnityEngine.Random.Range(1, 4);
+        int baseAdmin = UnityEngine.Random.Range(1, 5);
         if (baseAdmin == 4) // roll for 1D6 if admin is a 4, and each time that you roll a 6, the admin goes up by 1
         {
             int skillRoll = 0;
             do
             {
-               skillRoll = UnityEngine.Random.Range(1, 6);
-                if (skillRoll < 4)
+               skillRoll = UnityEngine.Random.Range(1, 7);
+                if (skillRoll > 4)
                     baseAdmin += 1;
 
-            } while (skillRoll == 6 && baseAdmin < 10);
+            } while (skillRoll > 4 && baseAdmin < 10);
         }
         newChar.Administration = baseAdmin;
 

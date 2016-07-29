@@ -9,7 +9,8 @@ public class PlanetEconomicDataBox : MonoBehaviour {
 
     PlanetData pData; // reference for planet data
     GameData gameDataRef; // to determine mode
-    GraphicAssets graphicsDataRef; // for character pictures and other global pictures
+    GraphicAssets gAssetData; // for character pictures and other global pictures
+
     public GameObject PlanetName;
     public GameObject PlanetType;
     public GameObject PlanetPopulation;
@@ -20,11 +21,13 @@ public class PlanetEconomicDataBox : MonoBehaviour {
     public GameObject ViceroyName;
     public GameObject ViceroyRevenue;
     public GameObject ViceroyADM;
+    public GameObject ViceroyHouse;
     public GameObject EnergyImportNeed;
     public GameObject BasicImportNeed;
     public GameObject HeavyImportNeed;
     public GameObject RareImportNeed;
     public GameObject FoodImportNeed;
+    public GameObject Rank;
 
     private TextMeshProUGUI planetName;
     private TextMeshProUGUI planetType;
@@ -32,6 +35,8 @@ public class PlanetEconomicDataBox : MonoBehaviour {
     private TextMeshProUGUI planetGPP;
     private Image viceroyPortrait;
     private Image developmentBar;
+    private Image rank;
+    private Image house;
     private TextMeshProUGUI aDevelopmentLevel;
     private TextMeshProUGUI viceroyName;
     private TextMeshProUGUI viceroyRevenue;
@@ -48,7 +53,7 @@ public class PlanetEconomicDataBox : MonoBehaviour {
     void Awake()
     {
         gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
-        graphicsDataRef = GameObject.Find("GameManager").GetComponent<GraphicAssets>();
+        gAssetData = GameObject.Find("GameManager").GetComponent<GraphicAssets>();
 
         planetName = PlanetName.GetComponent<TextMeshProUGUI>();
         planetType = PlanetType.GetComponent<TextMeshProUGUI>();
@@ -64,13 +69,23 @@ public class PlanetEconomicDataBox : MonoBehaviour {
         basicImportNeed = BasicImportNeed.GetComponent<TextMeshProUGUI>();
         heavyImportNeed = HeavyImportNeed.GetComponent<TextMeshProUGUI>();
         rareImportNeed = RareImportNeed.GetComponent<TextMeshProUGUI>();
-        foodImportNeed = FoodImportNeed.GetComponent<TextMeshProUGUI>(); 
-
+        foodImportNeed = FoodImportNeed.GetComponent<TextMeshProUGUI>();
+        rank = Rank.GetComponent<Image>();
+        house = ViceroyHouse.GetComponent<Image>();
     }
 
     public void PopulateDataBox(string pID)
     {
         pData = DataRetrivalFunctions.GetPlanet(pID);
+    }
+
+    public void Start()
+    {
+        if (pData != null && !boxIsInitialized)
+        {
+            UpdatePlanetBox();
+            boxIsInitialized = true;
+        }
     }
 
     public void Update()
@@ -89,7 +104,7 @@ public class PlanetEconomicDataBox : MonoBehaviour {
         planetType.text = pData.Type.ToString();
         planetPopulation.text = pData.TotalPopulation.ToString("N0") + "M";
         planetGPP.text = pData.GrossPlanetaryProduct.ToString("N0") + "Bn";
-        viceroyPortrait.sprite = graphicsDataRef.CharacterList.Find(p => p.name == vID);
+        viceroyPortrait.sprite = gAssetData.CharacterList.Find(p => p.name == vID);
         developmentBar.fillAmount = (pData.AverageDevelopmentLevel / 100f);
         aDevelopmentLevel.text = pData.AverageDevelopmentLevel.ToString("N0");
         viceroyName.text = pData.Viceroy.Name;
@@ -100,5 +115,23 @@ public class PlanetEconomicDataBox : MonoBehaviour {
         heavyImportNeed.text = pData.HeavyImportance.ToString("N0");
         rareImportNeed.text = pData.RareImportance.ToString("N0");
         foodImportNeed.text = pData.FoodImportance.ToString("N0");
+
+        // populate the planet rank
+        if (pData.Rank == PlanetData.ePlanetRank.EstablishedColony)
+            rank.sprite = gAssetData.PlanetRankList.Find(p => p.name == "Icon_Rank_Viceroy");
+        else if (pData.Rank == PlanetData.ePlanetRank.SystemCapital)
+            rank.sprite = gAssetData.PlanetRankList.Find(p => p.name == "Icon_Rank_SY_Governor");
+        else if (pData.Rank == PlanetData.ePlanetRank.ProvinceCapital)
+            rank.sprite = gAssetData.PlanetRankList.Find(p => p.name == "Icon_Rank_PR_Governor");
+        else if (pData.Rank == PlanetData.ePlanetRank.ImperialCapital)
+            rank.sprite = gAssetData.PlanetRankList.Find(p => p.name == "Icon_Rank_Emperor");
+        else
+            rank.enabled = false;
+
+        // populate the house icons
+        if (gAssetData.HouseIconList.Exists(p => p.name == pData.Viceroy.AssignedHouse.IconID))
+            house.sprite = gAssetData.HouseIconList.Find(p => p.name == pData.Viceroy.AssignedHouse.IconID);
+        else
+            house.sprite = gAssetData.HouseIconList.Find(p => p.name == "Icon_House_Hawken");
     }
 }

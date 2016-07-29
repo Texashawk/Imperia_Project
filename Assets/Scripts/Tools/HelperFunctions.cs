@@ -71,23 +71,37 @@ namespace HelperFunctions
         public static string ConvertValueToDescription(int number)
         {
             if (number == 0)
-                return "impossible";
+                return "Impossible";
             else if (number < 15)
-                return "abysmal";
+                return "Abysmal";
             else if (number < 30)
-                return "very low";
+                return "Very Low";
             else if (number < 40)
-                return "low";
+                return "Low";
             else if (number < 55)
-                return "medium";
+                return "Medium";
             else if (number < 70)
-                return "high";
+                return "High";
             else if (number < 85)
-                return "very high";
+                return "Very High";
             else if (number < 101)
-                return "fantastic";
+                return "Fantastic";
             else
-                return "extraordinary";
+                return "Extraordinary";
+        }
+
+        public static string ConvertIntelValueToDescription(int number)
+        {
+            if (number == 0)
+                return "None";
+            else if (number < Constants.Constant.LowIntelLevelMax)
+                return "Low Intel";
+            else if (number < Constants.Constant.MediumIntelLevelMax)
+                return "Moderate Intel";
+            else if (number < Constants.Constant.HighIntelMax)
+                return "High Intel";
+            else 
+                return "Max Intel";
         }
 
         public static string ConvertCharacterValueToDescription(int number, int intelLevel)
@@ -95,50 +109,50 @@ namespace HelperFunctions
             if (intelLevel < Constants.Constant.LowIntelLevelMax)
             {
                 if (number < 50)
-                    return "low";
+                    return "Low";
                 else 
-                    return "high";
+                    return "High";
             }
             else if (intelLevel < Constants.Constant.MediumIntelLevelMax)
             {
                 if (number < 40)
-                    return "low";
+                    return "Low";
                 else if (number < 70)
-                    return "average";
+                    return "Average";
                 else
-                    return "high";
+                    return "High";
             }
             else if (intelLevel < Constants.Constant.HighIntelMax)
             {
                 if (number < 20)
-                    return "poor";
+                    return "Poor";
                 else if (number < 40)
-                    return "low";
+                    return "Low";
                 else if (number < 60)
-                    return "average";
+                    return "Average";
                 else if (number < 80)
-                    return "high";
+                    return "High";
                 else
-                    return "very high";
+                    return "Very High";
             }
             else
             {
                 if (number == 0)
-                    return "none";
+                    return "None";
                 else if (number < 15)
-                    return "abysmal";
+                    return "Abysmal";
                 else if (number < 30)
-                    return "very low";
+                    return "Very Low";
                 else if (number < 40)
-                    return "low";
+                    return "Low";
                 else if (number < 55)
-                    return "medium";
+                    return "Medium";
                 else if (number < 70)
-                    return "high";
+                    return "High";
                 else if (number < 85)
-                    return "very high";
+                    return "Very High";
                 else
-                    return "exceptional";
+                    return "Exceptional";
             }
         }
 
@@ -500,7 +514,7 @@ namespace HelperFunctions
                 case Relationship.eRelationshipState.Shunned:
                     charAdjustment = .5f;
                     break;
-                case Relationship.eRelationshipState.SwornVengeance:
+                case Relationship.eRelationshipState.Vengeance:
                     charAdjustment = -1f;
                     break;
                 case Relationship.eRelationshipState.ObjectOfVengeance:
@@ -532,9 +546,6 @@ namespace HelperFunctions
                     break;
                 case Relationship.eRelationshipState.Prey:
                     charAdjustment = -1f;
-                    break;
-                case Relationship.eRelationshipState.Spouse:
-                    charAdjustment = 1f;
                     break;
                 default:
                     break;
@@ -627,7 +638,7 @@ namespace HelperFunctions
             return cData;
         }
 
-        public static string GetPrime(Character.eRole charRole)
+        public static Character GetPrime(Character.eRole charRole)
         {
             GameData gameDataRef = GameObject.Find("GameManager").GetComponent<GameData>();
 
@@ -635,11 +646,11 @@ namespace HelperFunctions
             {
                 if (charData.Role == charRole)
                 {
-                    return charData.ID;
+                    return charData;
                 }
             }
 
-            return "none"; 
+            return null; 
         }
 
         public static List<House> GetHouseList()

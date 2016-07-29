@@ -126,7 +126,8 @@ class ProjectBar : MonoBehaviour
             List<Project> activeProjectList = gameDataRef.CivList[0].ActiveProjects;
             foreach (Project pData in activeProjectList)
             {
-                AddActiveProjectButton(pData);
+                if (pData.ActivateProject == false)
+                    AddActiveProjectButton(pData);
             }
         }
         else
@@ -180,6 +181,7 @@ class ProjectBar : MonoBehaviour
         ActiveProjectButton PB = go.GetComponent<ActiveProjectButton>();
         PB.SetName(pData.Name);
         PB.SetID(pData.ID);
+        PB.SetProjectUID(pData.UniqueID);
         PB.SetIcon(pData.IconName);
         PB.SetDescription(pData.Description);
         go.transform.SetParent(ActiveProjectButton.transform.parent);

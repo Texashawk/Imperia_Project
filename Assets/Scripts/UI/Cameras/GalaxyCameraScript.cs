@@ -56,7 +56,7 @@ namespace CameraScripts
 
         public const int galaxyMinZoomLevel = 15;
         public const int systemMinZoomLevel = 12;
-        public const int planetMinZoomLevel = 2;
+        public const int planetMinZoomLevel = 1;
         public const int maxZoomLevel = 60; // 60 normal
         public const int minZoomLevel = 12;
 
@@ -368,12 +368,14 @@ namespace CameraScripts
         {       
             if (!planetZoomComplete)
             {                
-                Vector3 tgtPosition = new Vector3(planet.position.x, planet.position.y - (55f * scaleRatio), systemZValue);
+                Vector3 tgtPosition = new Vector3(planet.position.x, planet.position.y - (35f * scaleRatio), systemZValue);
                 if (planet.GetComponent<MeshRenderer>() != null)
-                    planet.localScale = new Vector3(120 * scaleRatio, 120 * scaleRatio, 120 * scaleRatio); // then normalize the size of the planet to show close-up (number is the nominal scale)
+                {
+                    //planet.localScale = new Vector3(120 * scaleRatio, 120 * scaleRatio, 120 * scaleRatio); // then normalize the size of the planet to show close-up (number is the nominal scale)
+                }
                 else
                 {
-                    planet.localScale = new Vector3(25 * scaleRatio, 25 * scaleRatio, 25 * scaleRatio); // then normalize the size of the planet to show close-up (number is the nominal scale)
+                    // planet.localScale = new Vector3(25 * scaleRatio, 25 * scaleRatio, 25 * scaleRatio); // then normalize the size of the planet to show close-up (number is the nominal scale)
                     planet.Rotate(0, 0, -90);
                 }
                 zoom = planetMinZoomLevel; // set planet view zoom level

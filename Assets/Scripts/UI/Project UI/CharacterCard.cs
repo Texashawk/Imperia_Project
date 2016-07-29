@@ -47,8 +47,17 @@ public class CharacterCard : MonoBehaviour {
         adminSkill.text = cData.Administration.ToString("N0");
         ADM.text = DataRetrivalFunctions.DetermineAdminAvailable(cData).ToString("N0");
         portrait.sprite = gAssetData.CharacterList.Find(p => p.name == cData.PictureID);
+        if (gAssetData.RelationshipIconList.Find(p => p.name == cData.Relationships[cData.Civ.LeaderID].RelationshipIcon) != null)
+        {
+            relationship.enabled = true;
+            relationship.sprite = gAssetData.RelationshipIconList.Find(p => p.name == cData.Relationships[cData.Civ.LeaderID].RelationshipIcon);
+        }
+        else
+        {
+            relationship.enabled = false;
+        }
         funding.text = DataRetrivalFunctions.DetermineContributionToProject(cData, pData).ToString("P0");
-        transform.GetComponent<CharacterTooltip>().InitializeTooltipData(cData, -13f); // set up the tooltip
+        transform.GetComponent<CharacterTooltip>().InitializeTooltipData(cData, -(transform.GetComponent<RectTransform>().rect.width / 9f)); // set up the tooltip
         transform.GetComponent<CharacterScreenActivation>().InitializeData(cData); // set up the window
     }
 

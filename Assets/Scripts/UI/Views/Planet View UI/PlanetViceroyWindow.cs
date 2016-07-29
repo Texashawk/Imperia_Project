@@ -6,6 +6,7 @@ using Screens.Galaxy;
 using Managers;
 using CharacterObjects;
 using Tooltips;
+using ConversationAI;
 using TMPro;
 
 public class PlanetViceroyWindow : MonoBehaviour {
@@ -24,6 +25,7 @@ public class PlanetViceroyWindow : MonoBehaviour {
     public GameObject RevenueCounter;
     public GameObject ShareCounter;
     public GameObject ChatWindow;
+    public GameObject Relationship;
     
 
     // private components
@@ -32,6 +34,7 @@ public class PlanetViceroyWindow : MonoBehaviour {
     TextMeshProUGUI revenueCounter;
     TextMeshProUGUI shareCounter;
     TextMeshProUGUI chatWindow;
+    Image relationship;
     Image viceroyImage;
 
     List<string> ChatLog = new List<string>(); // will probably need to be with the character object
@@ -50,6 +53,7 @@ public class PlanetViceroyWindow : MonoBehaviour {
         revenueCounter = RevenueCounter.GetComponent<TextMeshProUGUI>();
         shareCounter = ShareCounter.GetComponent<TextMeshProUGUI>();
         viceroyImage = Portrait.GetComponent<Image>();
+        relationship = Relationship.GetComponent<Image>();
         chatWindow = ChatWindow.GetComponent<TextMeshProUGUI>();
     }
 	
@@ -59,6 +63,7 @@ public class PlanetViceroyWindow : MonoBehaviour {
         // check for updated planet data
         if (uiManagerRef.selectedPlanet != null)
         {
+            pData = uiManagerRef.selectedPlanet;
             if (viceroy == null)
             {
                 viceroy = gScreenRef.GetSelectedPlanet().GetComponent<Planet>().planetData.Viceroy;
@@ -81,11 +86,14 @@ public class PlanetViceroyWindow : MonoBehaviour {
         // build points
         viceroyName.text = viceroy.Name;
         adminCounter.text = viceroy.PlanetAssigned.TotalAdmin.ToString("N0");
-        revenueCounter.text = (viceroy.PlanetAssigned.GrossPlanetaryProduct / 25f).ToString("N0") + "bn"; // update
-        shareCounter.text = "25%";
+        shareCounter.text = pData.Owner.ViceroyBaseTaxCut.ToString("P0");
+        revenueCounter.text = (pData.GrossPlanetaryProduct * pData.Owner.ViceroyBaseTaxCut).ToString("N0") + "bn";
         viceroyImage.sprite = gAssetData.CharacterList.Find(p => p.name == viceroy.PictureID);
-        Portrait.transform.GetComponent<CharacterTooltip>().InitializeTooltipData(viceroy, -(Portrait.GetComponent<RectTransform>().rect.width / 4f)); // set up the tooltip
+        Portrait.transform.GetComponent<CharacterTooltip>().InitializeTooltipData(viceroy, -(Portrait.GetComponent<RectTransform>().rect.width / 5f)); // set up the tooltip
         Portrait.transform.GetComponent<CharacterScreenActivation>().InitializeData(viceroy);
-        chatWindow.text = viceroy.Name + "_" + "\n" + "Welcome, Emperor, what can I do for you ?";
+        string introText = ConversationEngine.GenerateInitialDialogue(viceroy);
+        relationship.sprite = gAssetData.RelationshipIconList.Find(p => p.name == viceroy.Relationships[pData.Owner.LeaderID].RelationshipIcon);
+
+        chatWindow.text = viceroy.Name + "_" + "\n" + introText;
     }
 }

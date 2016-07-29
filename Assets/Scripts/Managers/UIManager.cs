@@ -25,6 +25,7 @@ namespace Managers
         public UIManager uiManagerRef;
 
         public GameObject ProjectScreen; // the Project Screen Prefab goes here
+        public GameObject CharacterScreen; // the Character Screen Prefab goes here
 
         // constants for zoom levels 
         public const int galaxyMinZoomLevel = 120;
@@ -104,6 +105,15 @@ namespace Managers
         {
             viewManagerRef.ViewLevel = viewMode;
             ViewLevel = viewManagerRef.ViewLevel;
+        }
+
+        public void ActivateCharacterScreen(string cID)
+        {
+            GameObject cScreen = Instantiate(CharacterScreen, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+            Canvas canvasRef = GameObject.Find("Main UI Overlay").GetComponent<Canvas>();
+            uiManagerRef.ModalIsActive = true; // set modal
+            cScreen.transform.SetParent(canvasRef.transform);
+            cScreen.transform.localScale = new Vector3(.6f, .6f, .6f);
         }
 
         public void ActivateProjectScreen(string pID, string lID)

@@ -22,8 +22,9 @@ public class PlanetView : MonoBehaviour {
     public GameObject TradePanel;
     public GameObject ProductionPanel;
     public GameObject ViceroyPanel;
-    public GameObject ChainOfCommandPanel;
+    //public GameObject ChainOfCommandPanel;
     public GameObject GPPPanel;
+    public GameObject ViceroyIntermediatePanel;
 
     public GameObject TradeButton;
     public GameObject BuildPlanButton;
@@ -62,6 +63,8 @@ public class PlanetView : MonoBehaviour {
     private bool showBuildPlanWindow = false;
     private bool showProductionWindow = false;
     private bool showGPPWindow = false;
+    private bool showViceroyIntermediateWindow = false;
+    private string activeChatWindow = "";
 
     // tile panel movement vars
     private float tilePanelCurrentAngle = 0f;
@@ -86,8 +89,9 @@ public class PlanetView : MonoBehaviour {
 	void Start () 
     {
         gScriptRef = GameObject.Find("Main Camera").GetComponent<GalaxyCameraScript>(); // tie the game camera script to the data
-        gScreen = GameObject.Find("GameEngine").GetComponent<GalaxyView>();           
-        tileMapPanel.SetActive(false);     
+        gScreen = GameObject.Find("GameEngine").GetComponent<GalaxyView>();
+        tileMapPanel.SetActive(false);
+        ViceroyIntermediatePanel.SetActive(false);     
         tilePanelOriginalRotation = tileMapPanel.transform.rotation;
 	}
 
@@ -122,6 +126,25 @@ public class PlanetView : MonoBehaviour {
             ResetDrawStates();
             planetCanvas.SetActive(false);
         }      
+    }
+
+    public void ToggleViceroyMode(string windowName)
+    {
+       
+        if (!showViceroyIntermediateWindow || activeChatWindow != windowName)
+        {
+            ViceroyIntermediatePanel.SetActive(true);
+            ViceroyPanel.SetActive(false);
+            showViceroyIntermediateWindow = true;
+            activeChatWindow = windowName;
+            ViceroyIntermediatePanel.GetComponent<PlanetViceroyIntermediateWindow>().ShowViceroyIntermediateInfo(windowName); // may change to enum, sends message to the game object like a delegate
+        }
+        else
+        {
+            ViceroyIntermediatePanel.SetActive(false);
+            ViceroyPanel.SetActive(true);
+            showViceroyIntermediateWindow = false;
+        }
     }
 
     void UpdateUIPanels()
@@ -186,7 +209,10 @@ public class PlanetView : MonoBehaviour {
     void ToggleProductionPanel()
     {
         if (!showProductionWindow)
+        {
             showProductionWindow = true;
+            ProductionPanel.GetComponent<PlanetProductionWindow>().UpdateProductionWindowInfo(); // one-time update
+        }
 
         else
             showProductionWindow = false;
@@ -216,7 +242,7 @@ public class PlanetView : MonoBehaviour {
         planetInfoInitialized = false;
         tileMapPanel.SetActive(false);
 
-        ChainOfCommandPanel.SetActive(false);
+        //ChainOfCommandPanel.SetActive(false);
         ViceroyPanel.SetActive(false);
 
         // delete all other objects in scene
@@ -243,7 +269,7 @@ public class PlanetView : MonoBehaviour {
         {
             if (pData.IsInhabited)
             {
-                ChainOfCommandPanel.SetActive(true);
+                //ChainOfCommandPanel.SetActive(true);
                 ViceroyPanel.SetActive(true);
             }
         }   
@@ -329,6 +355,7 @@ public class PlanetView : MonoBehaviour {
             if (showProductionWindow)
             {
                 ProductionPanel.SetActive(true);
+                
                 productionButtonBar.enabled = true;
             }
             else
